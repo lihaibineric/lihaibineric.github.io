@@ -79,14 +79,15 @@
 <li><p>车道中心是平面上一条平滑有向的曲线 $r$ ,其中所有部分可以表示为 $r^{(1)},…,r^{(k)}$ 即可以是线性的，也可以是弧形的</p>
 </li>
 <li><p>具体的映射的方式可以表示为如下：</p>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915172406204.png" alt="道路映射的方式"></p>
+<img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915172406204.png" referrerpolicy="no-referrer" alt="道路映射的方式">
 </li>
 <li><p>横纵速度&#x2F;加速度 的计算就可以通过这样的坐标系定义之下得到的一阶&#x2F;二阶的导数计算得到</p>
 </li>
 </ul>
 <h5 id="3-3-Longitudinal-Safe-Distance-and-Proper-Response-纵向约束"><a href="#3-3-Longitudinal-Safe-Distance-and-Proper-Response-纵向约束" class="headerlink" title="3.3 Longitudinal Safe Distance and Proper Response 纵向约束"></a><strong>3.3 Longitudinal Safe Distance and Proper Response 纵向约束</strong></h5><ul>
 <li><p>给出安全距离的定义：</p>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915172437378.png" alt="Definition 2"></p>
+<img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915172437378.png" referrerpolicy="no-referrer" alt="Definition 2">
+
 <p>安全距离定义的想法是，如果两辆车都能对违反安全距离的行为做出“适当”反应，那么就不会发生碰撞。如果其中一个没有“正确”反应，那么它就应对事故负责。</p>
 </li>
 <li><p>那么我们需要知道危险发生的时间，定义这样一个时刻<strong>Dangerous Longitudinal Situation and Danger Threshold</strong> </p>
