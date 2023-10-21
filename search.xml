@@ -19,9 +19,9 @@
 ]]></content>
   </entry>
   <entry>
-    <title>RSS Model</title>
+    <title>RSS Model for Autonomous Driving</title>
     <url>/2023/10/21/RSS-Model/</url>
-    <content><![CDATA[<h2 id="On-a-Formal-Model-of-Safe-and-Scalable-Self-driving-Cars"><a href="#On-a-Formal-Model-of-Safe-and-Scalable-Self-driving-Cars" class="headerlink" title="On a Formal Model of Safe and Scalable Self-driving Cars"></a><strong>On a Formal Model of Safe and Scalable Self-driving Cars</strong></h2><h4 id="Contribution："><a href="#Contribution：" class="headerlink" title="Contribution："></a><strong>Contribution：</strong></h4><ul>
+    <content><![CDATA[<h2 id="RSS-Model-for-Autonomous-Driving"><a href="#RSS-Model-for-Autonomous-Driving" class="headerlink" title="RSS Model for Autonomous Driving"></a><strong>RSS Model for Autonomous Driving</strong></h2><h4 id="论文：《On-a-Formal-Model-of-Safe-and-Scalable-Self-driving-Cars》"><a href="#论文：《On-a-Formal-Model-of-Safe-and-Scalable-Self-driving-Cars》" class="headerlink" title="论文：《On a Formal Model of Safe and Scalable Self-driving Cars》"></a>论文：《On a Formal Model of Safe and Scalable Self-driving Cars》</h4><h4 id="Contribution："><a href="#Contribution：" class="headerlink" title="Contribution："></a><strong>Contribution：</strong></h4><ul>
 <li>Safety (RSS model) Reasonable care, Responsibility, agile driving policy</li>
 <li>Semantic (Semantic language) :Defined Q function over the Semantic space </li>
 <li>PAC sensing model：Safety and Comfort of driving ；tied to the Q function</li>
