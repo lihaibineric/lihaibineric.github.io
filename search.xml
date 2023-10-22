@@ -16,7 +16,7 @@ policy</li>
 <li>Semantic (Semantic language) :Defined Q function over the Semantic
 space</li>
 <li>PAC sensing model：Safety and Comfort of driving ；tied to the Q
-function</li>
+function;</li>
 </ul>
 <h4 id="safety-concept"><strong>1. Safety Concept</strong></h4>
 <p>Functional versus nominal safety 功能安全与名义安全</p>
