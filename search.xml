@@ -1,27 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2023/10/21/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>RSS Model for Autonomous Driving</title>
     <url>/2023/10/21/RSS-Model/</url>
-    <content><![CDATA[<h2 id="RSS-Model-for-Autonomous-Driving"><a href="#RSS-Model-for-Autonomous-Driving" class="headerlink" title="RSS Model for Autonomous Driving"></a><strong>RSS Model for Autonomous Driving</strong></h2><h4 id="论文：《On-a-Formal-Model-of-Safe-and-Scalable-Self-driving-Cars》"><a href="#论文：《On-a-Formal-Model-of-Safe-and-Scalable-Self-driving-Cars》" class="headerlink" title="论文：《On a Formal Model of Safe and Scalable Self-driving Cars》"></a>论文：《On a Formal Model of Safe and Scalable Self-driving Cars》</h4><h4 id="Contribution："><a href="#Contribution：" class="headerlink" title="Contribution："></a><strong>Contribution：</strong></h4><ul>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<h2 id="RSS-Model-for-Autonomous-Driving"><a href="#RSS-Model-for-Autonomous-Driving" class="headerlink" title="RSS Model for Autonomous Driving"></a><strong>RSS Model for Autonomous Driving</strong></h2><h4 id="论文：《On-a-Formal-Model-of-Safe-and-Scalable-Self-driving-Cars》"><a href="#论文：《On-a-Formal-Model-of-Safe-and-Scalable-Self-driving-Cars》" class="headerlink" title="论文：《On a Formal Model of Safe and Scalable Self-driving Cars》"></a>论文：《On a Formal Model of Safe and Scalable Self-driving Cars》</h4><h4 id="Contribution："><a href="#Contribution：" class="headerlink" title="Contribution："></a><strong>Contribution：</strong></h4><ul>
 <li>Safety (RSS model) Reasonable care, Responsibility, agile driving policy</li>
 <li>Semantic (Semantic language) :Defined Q function over the Semantic space </li>
 <li>PAC sensing model：Safety and Comfort of driving ；tied to the Q function</li>
@@ -251,7 +235,7 @@
 <li>明确智能体责任</li>
 <li>发生碰撞那么有可能是其中一个智能体没有遵守适当的响应约束，那么需要对事故负责</li>
 </ul>
-<h5 id="3-11-Utopia"><a href="#3-11-Utopia" class="headerlink" title="**3.11 Utopia **"></a>**3.11 Utopia **</h5><ul>
+<h5 id="3-11-Utopia"><a href="#3-11-Utopia" class="headerlink" title="3.11 Utopia"></a>3.11 Utopia</h5><ul>
 <li>Lemma 5证明如果所有汽车都遵循基本的响应规则，那么不会发生碰撞</li>
 <li>Lemma 6证明如果对于遮挡的问题都能做出合理的响应规则，那么就不会发生事故（反证法）</li>
 </ul>
