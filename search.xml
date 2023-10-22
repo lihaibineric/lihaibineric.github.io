@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>RSS Model for Autonomous Driving</title>
+    <title>【自动驾驶】RSS Model for Autonomous Driving</title>
     <url>/2023/10/21/RSS-Model/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
 <h2 id="rss-model-for-autonomous-driving"><strong>RSS Model for
@@ -663,6 +663,103 @@ system，能够产生极高的精度；直接测量速度和距离，这进一�
       <tags>
         <tag>人工智能</tag>
         <tag>智能安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【多智能体强化学习】Pymarl环境配置</title>
+    <url>/2023/10/22/pymarl%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<p>SMAC是WhiRL在基于暴雪星际争霸II
+RTS游戏的协作多智能体强化学习(MARL)领域的研究环境。SMAC利用暴雪的《星际争霸2》机器学习API和DeepMind的PySC2为自主代理提供了一个方便的接口，让它们与《星际争霸2》互动，获得观察结果并执行动作。</p>
+<p>主要介绍在多智能体强化学习中的验证平台SAMC和Pymarl的配置和安装过程</p>
+<p>环境地址：https://github.com/oxwhirl/pymarl</p>
+<p>依赖环境：https://github.com/oxwhirl/smac</p>
+<p>主要针对Ubuntu下的Pymarl环境的配置（MAC和Windows类似）</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022145734342.png"
+alt="image-20231022145734342" />
+<figcaption aria-hidden="true">image-20231022145734342</figcaption>
+</figure>
+<h2 id="安装starcraftii">安装StarCraftII</h2>
+<h3 id="windowsmac">Windows/Mac</h3>
+<p>直接在官网下载安装最新版，需要加速器或者更换亚服：https://sc2.blizzard.cn/landing</p>
+<p>安装地图：https://link.zhihu.com/?target=https%3A//github.com/oxwhirl/smac/releases/download/v0.1-beta1/SMAC_Maps.zip</p>
+<p>将地图放在Maps文件夹下</p>
+<h3 id="ubuntu">Ubuntu</h3>
+<p>在Ubuntu系统中，安装需要版本的SCII即可https://github.com/Blizzard/s2client-proto#downloads</p>
+<p>下载压缩包之后安装并解压放到用户名文件夹下：～/StarCraftII/</p>
+<p>如果没有把SCII安装到用户名之下，这个地方的路径可以根据放置的位置来进行更改：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim ~/.bashrc<br></code></pre></td></tr></table></figure>
+<p>在最后一行增加环境变量，这里可以更改星际争霸的位置索引到任何想要放置的位置</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">SC2PATH</span>=~/StarCraftII/<br></code></pre></td></tr></table></figure>
+<p>添加完之后更新环境</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.bashrc<br></code></pre></td></tr></table></figure>
+<p>添加SAMC的地图：Linux系统在下载SCII的时候就自带了地图</p>
+<h2 id="安装smac">安装SMAC</h2>
+<p>创建虚拟环境并安装pytorch</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n pymarl python=<span class="hljs-number">3.8</span> -y<br>conda activate pymarl   <br><span class="hljs-comment"># CUDA 10.2 例子具体的的CUDA版本根据自己的服务器来定</span><br>conda install pytorch==<span class="hljs-number">1.10</span><span class="hljs-number">.0</span> torchvision==<span class="hljs-number">0.11</span><span class="hljs-number">.0</span> torchaudio==<span class="hljs-number">0.10</span><span class="hljs-number">.0</span> cudatoolkit=<span class="hljs-number">10.2</span> -c pytorch<br></code></pre></td></tr></table></figure>
+<p>直接利用虚拟环境中的pip来安装</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install git+https://github.com/oxwhirl/smac.git<br></code></pre></td></tr></table></figure>
+<p>或者可以利用git进行安装，先git
+clone下载下来然后进入文件夹中进行安装</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">git clone https://github.com/oxwhirl/smac.git<br>pip install -e smac/<br></code></pre></td></tr></table></figure>
+<p>如果pip install安装失败可以考虑升级pip：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install --upgrade pip<br></code></pre></td></tr></table></figure>
+<p>如果安装的内容失败了可以手动安装，比如pymarl运行所依赖的包有以下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install sacred numpy scipy matplotlib seaborn pyyaml pygame pytest probscale imageio snakeviz tensorboard-logger<br><br></code></pre></td></tr></table></figure>
+<p>或者根据https://github.com/oxwhirl/pymarl/tree/master/docker中的bash脚本中Dockerfile依赖内容进行安装</p>
+<h2 id="pymarl与scii">Pymarl与SCII</h2>
+<h3 id="采用上述安装步骤">采用上述安装步骤</h3>
+<p>对于上述的操作完成操作之后，下载pymarl的环境包并进入</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">git clone git@github.com:oxwhirl/pymarl.git<br>cd pymarl<br></code></pre></td></tr></table></figure>
+<p>将上述安装的SCII文件夹复制到pymarl的src的3dparty之下</p>
+<h3 id="如果利用docker安装">如果利用Docker安装</h3>
+<p>或者根据pymarl中的内容对上述环境进行自动配置（需要Docker）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> docker<br>bash build.sh<br></code></pre></td></tr></table></figure>
+<p>同时安装SCII和SMAC</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">bash install_sc2.sh<br></code></pre></td></tr></table></figure>
+<h2 id="测试环境">测试环境</h2>
+<h3 id="测试地图信息">测试地图信息</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python -m smac.<span class="hljs-built_in">bin</span>.map_list <br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153907123.png" alt="image-20231022153907123" style="zoom:67%;" /></p>
+<h3 id="测试环境信息">测试环境信息</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python -m smac.examples.random_agents<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153709693.png"
+alt="image-20231022153709693" />
+<figcaption aria-hidden="true">image-20231022153709693</figcaption>
+</figure>
+<h3 id="测试pymarl环境">测试Pymarl环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python src/main.py --config=qmix --env-config=sc2 <span class="hljs-keyword">with</span> env_args.map_name=2s3z<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153651418.png"
+alt="image-20231022153651418" />
+<figcaption aria-hidden="true">image-20231022153651418</figcaption>
+</figure>
+<h2 id="额外设置">额外设置</h2>
+<p>在利用pymarl进行实验的过程中可能会出现</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022154059365.png"
+alt="image-20231022154059365" />
+<figcaption aria-hidden="true">image-20231022154059365</figcaption>
+</figure>
+<p>需要进行设置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim torch/_tensor.py<br></code></pre></td></tr></table></figure>
+<p>将757行的内容进行修改</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">-: self.numpy()<br>+: self.cpu().numpy()<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>人工智能</category>
+        <category>强化学习</category>
+      </categories>
+      <tags>
+        <tag>人工智能</tag>
+        <tag>深度学习</tag>
+        <tag>强化学习</tag>
       </tags>
   </entry>
 </search>
