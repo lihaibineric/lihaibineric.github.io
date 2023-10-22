@@ -22,7 +22,8 @@
 <li>proprietary approaches</li>
 </ul>
 <h4 id="3-RSS-Responsibility-Sensitive-Safety-Model-for-Multi-agent-Safety"><a href="#3-RSS-Responsibility-Sensitive-Safety-Model-for-Multi-agent-Safety" class="headerlink" title="3. RSS(Responsibility-Sensitive-Safety) Model for Multi-agent Safety"></a><strong>3. RSS(Responsibility-Sensitive-Safety) Model for Multi-agent Safety</strong></h4><ul>
-<li>目标：<ul>
+<li><p>目标：</p>
+<ul>
 <li>做不到绝对安全，需要有Reasonable的响应</li>
 <li>遵循RSS能做到乌托邦Utopia</li>
 <li>敏捷而非防御，不应当过于谨慎而影响其他驾驶</li>
@@ -45,9 +46,8 @@
 <li><p>$c_r$表示前车，$c_f$表示后车，$\rho$表示的是前车的反应时间，$a_{max,break}$表示的是前车的最大加速度，$a_{max,accel}$表示的是最多的加速制动，$a_{min,break}$表示的是后车的最小制动加速度来保证不会撞到前车</p>
 </li>
 <li><p><strong>同方向行驶</strong>的安全距离</p>
-<p>给出最小的安全纵向距离：</p>
-<script type="math/tex; mode=display">
-d_{min}=max\{v_r\rho+1/2a_{max,accel}\rho^2+((v_r+\rho a_{max,accel})^2)/2a_{min,break}-v_f^2/2a_{max,break},0\}</script></li>
+<p>给出最小的安全纵向距离：<br>$$<br>d_{min}&#x3D;max\left(v_r\rho+1&#x2F;2a_{max,accel}\rho^2+((v_r+\rho a_{max,accel})^2)&#x2F;2a_{min,break}-v_f^2&#x2F;2a_{max,break},0\right)<br>$$</p>
+</li>
 <li><p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915172320331.png" alt="Definition 1"></p>
 </li>
 <li><p>$t_b$ dangerous time；$[t_b,t_b+\rho]$ 表示一定的反应时间 在这个范围之内在给定的加速度范围之内 执行proper response</p>
@@ -62,17 +62,12 @@ d_{min}=max\{v_r\rho+1/2a_{max,accel}\rho^2+((v_r+\rho a_{max,accel})^2)/2a_{min
 <h5 id="3-2-A-Lane-Based-Coordinate-System-基于车道的坐标系"><a href="#3-2-A-Lane-Based-Coordinate-System-基于车道的坐标系" class="headerlink" title="3.2 A Lane-Based Coordinate System 基于车道的坐标系"></a><strong>3.2 A Lane-Based Coordinate System 基于车道的坐标系</strong></h5><ul>
 <li><p>车道中心是平面上一条平滑有向的曲线 $r$ ,其中所有部分可以表示为 $r^{(1)},…,r^{(k)}$ 即可以是线性的，也可以是弧形的</p>
 </li>
-<li><p>车道中的点的子集</p>
-<p><img src="../../../../../didi/Library/Application Support/typora-user-images/image-20230728135146460.png" alt="image-20230728135146460" style="zoom: 50%;" /></p>
-<p>r表示的是纵向的的曲线坐标，w表示的是道路的宽度，曲线的法向量可以表示出横向</p>
-</li>
 <li><p>构造 $R-&gt;R^2$的变换为 $\phi$ 就是横纵坐标，从而来保证在逻辑上的前后车辆的关系</p>
-<p><img src="../../../../../didi/Library/Application Support/typora-user-images/image-20230728135542919.png" alt="image-20230728135542919" style="zoom:50%;" /></p>
 </li>
 <li><p>具体的映射的方式可以表示为如下：</p>
 <p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915172406204.png" alt="道路映射的方式"></p>
 </li>
-<li><p>横纵速度/加速度 的计算就可以通过这样的坐标系定义之下得到的一阶/二阶的导数计算得到</p>
+<li><p>横纵速度&#x2F;加速度 的计算就可以通过这样的坐标系定义之下得到的一阶&#x2F;二阶的导数计算得到</p>
 </li>
 </ul>
 <h5 id="3-3-Longitudinal-Safe-Distance-and-Proper-Response-纵向约束"><a href="#3-3-Longitudinal-Safe-Distance-and-Proper-Response-纵向约束" class="headerlink" title="3.3 Longitudinal Safe Distance and Proper Response 纵向约束"></a><strong>3.3 Longitudinal Safe Distance and Proper Response 纵向约束</strong></h5><ul>
@@ -91,9 +86,8 @@ d_{min}=max\{v_r\rho+1/2a_{max,accel}\rho^2+((v_r+\rho a_{max,accel})^2)/2a_{min
 </li>
 </ul>
 <h5 id="3-4-Lateral-Safe-Distance-and-Proper-Response-横向的约束"><a href="#3-4-Lateral-Safe-Distance-and-Proper-Response-横向的约束" class="headerlink" title="3.4 Lateral Safe Distance and Proper Response 横向的约束"></a><strong>3.4 Lateral Safe Distance and Proper Response 横向的约束</strong></h5><ul>
-<li><p>稳健侧向速度 $\mu$：汽车总是存在横向的一个微小摆动:</p>
-<script type="math/tex; mode=display">
-\mu-lateral-v=(l_{out}-l)/(t_{out}-t)</script></li>
+<li><p>稳健侧向速度 $\mu$：汽车总是存在横向的一个微小摆动:<br>$$<br>\mu-lateral-v&#x3D;(l_{out}-l)&#x2F;(t_{out}-t)<br>$$</p>
+</li>
 <li><p>横向安全距离：</p>
 <p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915172633796.png" alt="Definition 6"></p>
 <p>对于双方而言都有一个加速度，同时有一个最小的制动加速度</p>
@@ -117,7 +111,8 @@ d_{min}=max\{v_r\rho+1/2a_{max,accel}\rho^2+((v_r+\rho a_{max,accel})^2)/2a_{min
 <li><p><strong>Basic Proper response to dangerous situations 对于危险情况的正确反应处理</strong></p>
 <p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915173218415.png" alt="Definition 10"></p>
 <p>对于危险的阈值速度进行分析，如果分别为纵向的阈值速度和横向的阈值速度，那么分别根据前面所述的Definition 4和Definition 8 进行速度的限制</p>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20230915173251798-20231022115919728.png" alt="横向纵向情况" style="zoom:50%;" /></p>
+<img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20230915173251798-20231022115919728.png" alt="横向纵向情况" style="zoom:50%;" />
+
 <p>上面的这张图可以说明问题，当横纵的任意一个方向到达危险的阈值情况，分别作出Proper Response，那么就可以按照合理的方式来规避风险</p>
 </li>
 <li><p><strong>Lemma5 Utopia is possible</strong></p>
@@ -193,10 +188,8 @@ d_{min}=max\{v_r\rho+1/2a_{max,accel}\rho^2+((v_r+\rho a_{max,accel})^2)/2a_{min
 <p>（1）对于两车均停止之前的任意时刻，两车之间距离均大于epsilon。</p>
 <p>（2）在某车停车之前，两车之前距离均大于epsilon，且此时第二辆车的速度矢量指向第一辆车。即当前车停车，后车依然往前车方向开，后车需要与前车保持距离。</p>
 </li>
-</ol>
-<ol>
 <li><p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915173913570.png" alt="Definition 21"></p>
-<p>定义Constrains（C）下的轨迹T(C, c)，刹车/正常向前行驶的轨迹分别表示为T(Cb, c)和T(Cf,c).</p>
+<p>定义Constrains（C）下的轨迹T(C, c)，刹车&#x2F;正常向前行驶的轨迹分别表示为T(Cb, c)和T(Cf,c).</p>
 </li>
 <li><p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915173936523.png" alt="Definition 22"></p>
 <ol>
@@ -230,9 +223,9 @@ d_{min}=max\{v_r\rho+1/2a_{max,accel}\rho^2+((v_r+\rho a_{max,accel})^2)/2a_{min
 <li><p>具有道路优先级的汽车的最大速度优先级较高</p>
 </li>
 <li><p>速度的阈值范围根据具体的道路结构</p>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915174217869.png" alt="遮挡示意图"></p>
 </li>
 </ol>
+<p> <img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915174217869.png" alt="遮挡示意图"></p>
 </li>
 </ul>
 <p>相当于对于遮挡问题需要对双方的车辆有速度限制才能保证危险的发生</p>
@@ -243,7 +236,7 @@ d_{min}=max\{v_r\rho+1/2a_{max,accel}\rho^2+((v_r+\rho a_{max,accel})^2)/2a_{min
 <li>明确智能体责任</li>
 <li>发生碰撞那么有可能是其中一个智能体没有遵守适当的响应约束，那么需要对事故负责</li>
 </ul>
-<h5 id="3-11-Utopia"><a href="#3-11-Utopia" class="headerlink" title="3.11 Utopia "></a><strong>3.11 Utopia </strong></h5><ul>
+<h5 id="3-13-Utopia"><a href="#3-13-Utopia" class="headerlink" title="3.13 Utopia"></a>3.13 Utopia</h5><ul>
 <li>Lemma 5证明如果所有汽车都遵循基本的响应规则，那么不会发生碰撞</li>
 <li>Lemma 6证明如果对于遮挡的问题都能做出合理的响应规则，那么就不会发生事故（反证法）</li>
 </ul>
@@ -254,18 +247,18 @@ d_{min}=max\{v_r\rho+1/2a_{max,accel}\rho^2+((v_r+\rho a_{max,accel})^2)/2a_{min
 </li>
 <li><p>描述驾驶策略的语言：(利用强化学习的描述方法)</p>
 <ol>
-<li><p>$s_t$表示某一时刻的状态，$\pi$表示的是策略函数，$a_t$表示的是汽车能够选择的动作，根据策略函数来确定，得到一块序列 $<s_t,a_t>$</p>
+<li><p>$s_t$表示某一时刻的状态，$\pi$表示的是策略函数，$a_t$表示的是汽车能够选择的动作，根据策略函数来确定，得到一块序列 $&lt;s_t,a_t&gt;$</p>
 </li>
-<li><p>$P_{\pi}$表示的是根据 $\pi$ 选择产生的后面不同序列$<s_t,a_t>$的概率</p>
+<li><p>$P_{\pi}$表示的是根据 $\pi$ 选择产生的后面不同序列$&lt;s_t,a_t&gt;$的概率</p>
 </li>
 <li><p>$E_{s~P_\pi}[\rho(s)]$ 用于衡量当前策略的好坏程度，相当于对当下这个策略可能产生的不同奖励值选择期望，同时 $\rho(s)$表示的是当前状态下的奖励</p>
 </li>
-<li><p>在实际的实现过程中，$a_t$表示的是本车与其他道路使用者的位置、速度和加速度等问题，$s_{t+1}$表示的是下一时刻的状态，同时取决于当前时刻的动作以及其他智能体的行为，奖励函数$\rho(s)$ 取决于当前环境中的其他智能体的相对位置速度等信息</p>
+<li><p>在实际的实现过程中，$a_t$表示的是本车与其他道路使用者的位置、速度和加速度等问题，$s_{t+1}$表示的是下一时刻的状态，同时取决于当前时刻的动作以及其他智能体的行为，奖励函数$\rho(s)$ 取决于当前环境中的其他智能体的相对位置速度等信息。</p>
 </li>
-<li><p>价值函数 $Q$表示的是当前智能体执行某一个动作所能造成的长期回报 ,由此来选择最好的策略函数来保证$\pi(s)=argmax Q(s,a)$ </p>
+<li><p>价值函数 $Q$表示的是当前智能体执行某一个动作所能造成的长期回报 ,由此来选择最好的策略函数来保证$\pi(s)&#x3D;argmax Q(s,a)$ </p>
 </li>
-<li><script type="math/tex; mode=display">
-Q(s, a)=\max _{\left(a_t, \ldots, a_{t+T}\right)} \sum_{\tau=t}^T \rho\left(s_\tau, a_\tau\right) \quad \text { s.t. } \quad s_t=s, a_t=a, \forall \tau, s_{\tau+1}=f\left(s_\tau, a_\tau\right)</script><p>定义价值函数的计算方式，根据每个时刻汇总得到的奖励值进行求和得到的总的价值</p>
+<li><p>$$<br>Q(s, a)&#x3D;\max {(a_t, \ldots, a_{t+T})} \sum_{\tau&#x3D;t}^T \rho(s_\tau, a_\tau )  \quad  {  s.t. } \quad s_t&#x3D;s, a_t&#x3D;a, \forall \tau, s_{\tau+1}&#x3D;f(s_\tau, a_\tau)<br>$$</p>
+<p>定义价值函数的计算方式，根据每个时刻汇总得到的奖励值进行求和得到的总的价值</p>
 </li>
 <li><p>参数 $T$ 表示的是“规划时间范围” 控制计算时间和评估质量之间的自然权衡，如果 $T$越大那么说明当前的动作评估效果越好</p>
 </li>
@@ -303,7 +296,7 @@ Q(s, a)=\max _{\left(a_t, \ldots, a_{t+T}\right)} \sum_{\tau=t}^T \rho\left(s_\t
 </li>
 <li><p><strong>Constructing an evaluation function for semantic actions</strong> 构建<strong>语义动作的评估</strong>函数</p>
 <ul>
-<li>定义语义动作 $A^s$空间，通过当前的状态 $s$,选择最好的动作 $a^s\in A^s$, 根据一些列的几何轨迹 $(s_1,a_1),…,(s_T,a_T)$，同时认为新的下一时刻的状态有一个新的函数给出 $s_{t+1}=f(s_t,a_t)$ 同时继续根据奖励函数的值来评估执行的语义动作的好坏程度 $\frac{1}{T} \sum_{t=1}^T\rho(s_t,a_t)$ </li>
+<li>定义语义动作 $A^s$空间，通过当前的状态 $s$,选择最好的动作 $a^s\in A^s$, 根据一些列的几何轨迹 $(s_1,a_1),…,(s_T,a_T)$，同时认为新的下一时刻的状态有一个新的函数给出 $s_{t+1}&#x3D;f(s_t,a_t)$ 同时继续根据奖励函数的值来评估执行的语义动作的好坏程度 $\frac{1}{T} \sum_{t&#x3D;1}^T\rho(s_t,a_t)$ </li>
 <li>利用语义动作来评估能规避信噪比低等问题</li>
 <li>利用机器学习来泛化，在不同类型的道路上进行训练，推广到不同的道路</li>
 <li>语义动作空间：<strong>资源高效利用同时很准确地进行评估</strong></li>
@@ -311,7 +304,7 @@ Q(s, a)=\max _{\left(a_t, \ldots, a_{t+T}\right)} \sum_{\tau=t}^T \rho\left(s_\t
 </li>
 <li><p><strong>The dynamics of the other agents 其他智能体的动态</strong></p>
 <ul>
-<li>$s_{t+1}=f(s_t,a_t)$ 这样的确定性函数与现实不符合，多个智能体之间会相互影响</li>
+<li>$s_{t+1}&#x3D;f(s_t,a_t)$ 这样的确定性函数与现实不符合，多个智能体之间会相互影响</li>
 <li>通过高频次地重新应用决策，不断调整策略来适应新的环境</li>
 </ul>
 </li>
@@ -330,15 +323,13 @@ Q(s, a)=\max _{\left(a_t, \ldots, a_{t+T}\right)} \sum_{\tau=t}^T \rho\left(s_\t
 </li>
 </ol>
 <h5 id="Comfort"><a href="#Comfort" class="headerlink" title="Comfort"></a><strong>Comfort</strong></h5><ul>
-<li>相当于利用传感器函数来近似估计 $s$ ,如果 $\pi(\hat{s}(x))=\pi(s)$ 也就是说$\pi(\hat{s}(x))=argmaxQ(\hat{s}(x),a)$，那么就说明当前这个传感器是可以的，同时允许有一定的误差范围： $Q(\hat{s}(x),a)\ge Q(s,\pi(s))-\epsilon$，这个时候可以说是 $\epsilon -$准确的，同时也允许传感器有小概率发生故障 $\delta$</li>
+<li>相当于利用传感器函数来近似估计 $s$ ,如果 $\pi(\hat{s}(x))&#x3D;\pi(s)$ 也就是说$\pi(\hat{s}(x))&#x3D;argmaxQ(\hat{s}(x),a)$，那么就说明当前这个传感器是可以的，同时允许有一定的误差范围： $Q(\hat{s}(x),a)\ge Q(s,\pi(s))-\epsilon$，这个时候可以说是 $\epsilon -$准确的，同时也允许传感器有小概率发生故障 $\delta$</li>
 <li>For example, we can choose three thresholds, $\epsilon $1 &lt; $\epsilon $2 &lt;$\epsilon $3 to represent mild, medium, and gross mistakes，表示传感器的错误程度，轻中重</li>
 </ul>
 <h5 id="PAC-sensing-system"><a href="#PAC-sensing-system" class="headerlink" title="PAC sensing system"></a><strong>PAC sensing system</strong></h5><ol>
-<li><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915174341417.png" alt="Definition 28"></li>
-</ol>
-<p>   <strong>Probably-Approximately-Correct (PAC)</strong> X表示的是原始的数据与映射的数据域，从期望的角度给出误差率的平均值：</p>
-<script type="math/tex; mode=display">
-   \mathbb{P}_{(x, s) \sim D}\left[Q(s, \pi(\hat{s}(x))) \geq Q(s, \pi(s))-\epsilon_i\right] \geq 1-\delta_i</script><ol>
+<li><p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915174341417.png" alt="Definition 28"></p>
+<p><strong>Probably-Approximately-Correct (PAC)</strong> X表示的是原始的数据与映射的数据域，从期望的角度给出误差率的平均值：<br>$$<br>\mathbb{P}_{(x, s) \sim D}\left[Q(s, \pi(\hat{s}(x))) \geq Q(s, \pi(s))-\epsilon_i\right] \geq 1-\delta_i<br>$$</p>
+</li>
 <li><p>通过记录许多人类驾驶员的数据来构建此分布，而不是遵循自动驾驶车辆的特定策略（不切实际），由于任何合理策略对 D 的影响都很小，通过应用简单的数据增强技术，我们可以构建适当的分布，然后在传感系统的每次重大更新后执行离线验证。</p>
 </li>
 <li><p>重点关注经常发生的“测量不准确”类型的错误</p>
@@ -350,9 +341,6 @@ Q(s, a)=\max _{\left(a_t, \ldots, a_{t+T}\right)} \sum_{\tau=t}^T \rho\left(s_\t
 </li>
 <li><p>表明$\epsilon-ego-accurate$ 并不能保证我们的传感系统是PAC。是否还有其他属性足以满足 PAC 传感系统的要求</p>
 <p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20230915174411587-20231022115924657.png" alt="Definition 29"></p>
-</li>
-<li><p><img src="../../../../../didi/Desktop/lihaibin/DDRSS/image-20230727144706863.png" alt="image-20230727144706863"></p>
-<p>横向和纵向语义速度的误差的定义类似</p>
 </li>
 <li><p><img src="https://gitee.com/lihaibineric/picgo/raw/master/img/image-20230915174449633.png" alt="Definition 31"></p>
 <p>给出价值函数合理的L-语义-$Lipschitz$条件</p>
