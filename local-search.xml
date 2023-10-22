@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>【Pytorch】Basics基本操作</title>
+    <link href="/2023/10/22/pytorch_1/"/>
+    <url>/2023/10/22/pytorch_1/</url>
+    
+    <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><p>本文主要介绍pytorch中的基本使用，包括基础知识，线性回归，逻辑回归等内容</p><h2 id="basics">Basics</h2><h4 id="计算梯度例子">计算梯度例子</h4><p>引入基本需要用到的包，深度学习中torch处理大部分张量的运算，而torch.nn则是对torch的网络中的一些运算，这些都是必须用到的包</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch <br><span class="hljs-keyword">import</span> torchvision<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> torchvision.transforms <span class="hljs-keyword">as</span> transforms<br></code></pre></td></tr></table></figure><p>在深度学习中，一般使用张量进行运算，此时会涉及到计算张量的梯度等问题，我们这里给出一个例子来展示如何使用张量来进行梯度计算：</p><p>初始化定义张量</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">x = torch.tensor(<span class="hljs-number">1.</span>, requires_grad=<span class="hljs-literal">True</span>)<br>w = torch.tensor(<span class="hljs-number">2.</span>, requires_grad=<span class="hljs-literal">True</span>)<br>b = torch.tensor(<span class="hljs-number">3.</span>, requires_grad=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure><p>建立<strong>计算图 computational graph</strong></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">y = w * x + b    <span class="hljs-comment"># y = 2 * x + 3</span><br></code></pre></td></tr></table></figure><p>计算梯度</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">y.backward()<br><span class="hljs-built_in">print</span>(x.grad)    <span class="hljs-comment"># x.grad = 2 </span><br><span class="hljs-built_in">print</span>(w.grad)    <span class="hljs-comment"># w.grad = 1 </span><br><span class="hljs-built_in">print</span>(b.grad)    <span class="hljs-comment"># b.grad = 1 </span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>人工智能</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>人工智能</tag>
+      
+      <tag>深度学习</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【多智能体强化学习】Pymarl环境配置</title>
     <link href="/2023/10/22/pymarl%E7%8E%AF%E5%A2%83/"/>
     <url>/2023/10/22/pymarl%E7%8E%AF%E5%A2%83/</url>
