@@ -669,9 +669,9 @@ system，能够产生极高的精度；直接测量速度和距离，这进一�
     <title>【多智能体强化学习】Pymarl环境配置</title>
     <url>/2023/10/22/pymarl%E7%8E%AF%E5%A2%83/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<p>SMAC是WhiRL在基于暴雪星际争霸II
-RTS游戏的协作多智能体强化学习(MARL)领域的研究环境。SMAC利用暴雪的《星际争霸2》机器学习API和DeepMind的PySC2为自主代理提供了一个方便的接口，让它们与《星际争霸2》互动，获得观察结果并执行动作。</p>
-<p>主要介绍在多智能体强化学习中的验证平台SAMC和Pymarl的配置和安装过程</p>
+<p>SMAC是基于暴雪星际争霸II
+RTS游戏的协作多智能体强化学习领域的研究环境。SMAC利用星际争霸2机器学习API和DeepMind的PySC2为自主代理提供了一个方便的接口。</p>
+<p>本文主要介绍在多智能体强化学习中的验证平台SAMC和Pymarl的配置和安装过程</p>
 <p>环境地址：<a
 href="https://github.com/oxwhirl/pymarl">https://github.com/oxwhirl/pymarl</a></p>
 <p>依赖环境：<a
