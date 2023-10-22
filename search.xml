@@ -685,8 +685,10 @@ alt="SMAC" />
 </figure>
 <h2 id="安装starcraftii">安装StarCraftII</h2>
 <h3 id="windowsmac">Windows/Mac</h3>
-<p>直接在官网下载安装最新版，需要加速器或者更换亚服：https://sc2.blizzard.cn/landing</p>
-<p>安装地图：https://link.zhihu.com/?target=https%3A//github.com/oxwhirl/smac/releases/download/v0.1-beta1/SMAC_Maps.zip</p>
+<p>直接在官网下载安装最新版，需要加速器或者更换亚服：<a
+href="https://sc2.blizzard.cn/landing">https://sc2.blizzard.cn/landing</a></p>
+<p>安装地图：<a
+href="https://link.zhihu.com/?target=https%3A//github.com/oxwhirl/smac/releases/download/v0.1-beta1/SMAC_Maps.zip">https://link.zhihu.com/?target=https%3A//github.com/oxwhirl/smac/releases/download/v0.1-beta1/SMAC_Maps.zip</a></p>
 <p>将地图放在Maps文件夹下</p>
 <h3 id="ubuntu">Ubuntu</h3>
 <p>在Ubuntu系统中，安装需要版本的SCII即可<a
@@ -767,7 +769,7 @@ alt="some bug" />
 <p>本文主要介绍pytorch中的基本使用，包括基础知识，线性回归，逻辑回归等内容</p>
 <h2 id="basics">Basics</h2>
 <h4 id="计算梯度例子">计算梯度例子</h4>
-<p>引入基本需要用到的包，深度学习中torch处理大部分张量的运算，而torch.nn则是对torch的网络中的一些运算，这些都是必须用到的包</p>
+<p>引入基本需要用到的包，深度学习中torch处理大部分张量的运算，而torch.nn则是对torch的网络中的一些运算，这些都是必须用到的包。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch <br><span class="hljs-keyword">import</span> torchvision<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> torchvision.transforms <span class="hljs-keyword">as</span> transforms<br></code></pre></td></tr></table></figure>
 <p>在深度学习中，一般使用张量进行运算，此时会涉及到计算张量的梯度等问题，我们这里给出一个例子来展示如何使用张量来进行梯度计算：</p>
 <p>初始化定义张量</p>
