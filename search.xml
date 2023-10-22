@@ -689,7 +689,8 @@ alt="SMAC" />
 <p>安装地图：https://link.zhihu.com/?target=https%3A//github.com/oxwhirl/smac/releases/download/v0.1-beta1/SMAC_Maps.zip</p>
 <p>将地图放在Maps文件夹下</p>
 <h3 id="ubuntu">Ubuntu</h3>
-<p>在Ubuntu系统中，安装需要版本的SCII即可https://github.com/Blizzard/s2client-proto#downloads</p>
+<p>在Ubuntu系统中，安装需要版本的SCII即可<a
+href="https://github.com/Blizzard/s2client-proto#downloads">https://github.com/Blizzard/s2client-proto#downloads</a></p>
 <p>下载压缩包之后安装并解压放到用户名文件夹下：～/StarCraftII/</p>
 <p>如果没有把SCII安装到用户名之下，这个地方的路径可以根据放置的位置来进行更改：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim ~/.bashrc<br></code></pre></td></tr></table></figure>
