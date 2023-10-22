@@ -752,7 +752,6 @@ alt="some bug" />
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">-: self.numpy()<br>+: self.cpu().numpy()<br></code></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>人工智能</category>
         <category>强化学习</category>
       </categories>
       <tags>
