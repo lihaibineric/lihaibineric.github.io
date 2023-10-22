@@ -672,14 +672,16 @@ system，能够产生极高的精度；直接测量速度和距离，这进一�
 <p>SMAC是WhiRL在基于暴雪星际争霸II
 RTS游戏的协作多智能体强化学习(MARL)领域的研究环境。SMAC利用暴雪的《星际争霸2》机器学习API和DeepMind的PySC2为自主代理提供了一个方便的接口，让它们与《星际争霸2》互动，获得观察结果并执行动作。</p>
 <p>主要介绍在多智能体强化学习中的验证平台SAMC和Pymarl的配置和安装过程</p>
-<p>环境地址：https://github.com/oxwhirl/pymarl</p>
-<p>依赖环境：https://github.com/oxwhirl/smac</p>
+<p>环境地址：<a
+href="https://github.com/oxwhirl/pymarl">https://github.com/oxwhirl/pymarl</a></p>
+<p>依赖环境：<a
+href="https://github.com/oxwhirl/smac">https://github.com/oxwhirl/smac</a></p>
 <p>主要针对Ubuntu下的Pymarl环境的配置（MAC和Windows类似）</p>
 <figure>
 <img
 src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022145734342.png"
-alt="image-20231022145734342" />
-<figcaption aria-hidden="true">image-20231022145734342</figcaption>
+alt="SMAC" />
+<figcaption aria-hidden="true">SMAC</figcaption>
 </figure>
 <h2 id="安装starcraftii">安装StarCraftII</h2>
 <h3 id="windowsmac">Windows/Mac</h3>
@@ -708,7 +710,8 @@ clone下载下来然后进入文件夹中进行安装</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install --upgrade pip<br></code></pre></td></tr></table></figure>
 <p>如果安装的内容失败了可以手动安装，比如pymarl运行所依赖的包有以下：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install sacred numpy scipy matplotlib seaborn pyyaml pygame pytest probscale imageio snakeviz tensorboard-logger<br><br></code></pre></td></tr></table></figure>
-<p>或者根据https://github.com/oxwhirl/pymarl/tree/master/docker中的bash脚本中Dockerfile依赖内容进行安装</p>
+<p>或者根据<a
+href="https://github.com/oxwhirl/pymarl/tree/master/docker">https://github.com/oxwhirl/pymarl/tree/master/docker</a>中的bash脚本中Dockerfile依赖内容进行安装</p>
 <h2 id="pymarl与scii">Pymarl与SCII</h2>
 <h3 id="采用上述安装步骤">采用上述安装步骤</h3>
 <p>对于上述的操作完成操作之后，下载pymarl的环境包并进入</p>
@@ -722,30 +725,25 @@ clone下载下来然后进入文件夹中进行安装</p>
 <h2 id="测试环境">测试环境</h2>
 <h3 id="测试地图信息">测试地图信息</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python -m smac.<span class="hljs-built_in">bin</span>.map_list <br></code></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153907123.png" alt="image-20231022153907123" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153907123.png" alt="Maps show" style="zoom:67%;" /></p>
 <h3 id="测试环境信息">测试环境信息</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python -m smac.examples.random_agents<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153709693.png"
-alt="image-20231022153709693" />
-<figcaption aria-hidden="true">image-20231022153709693</figcaption>
-</figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153709693.png" alt="test agents" style="zoom: 50%;" /></p>
 <h3 id="测试pymarl环境">测试Pymarl环境</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python src/main.py --config=qmix --env-config=sc2 <span class="hljs-keyword">with</span> env_args.map_name=2s3z<br></code></pre></td></tr></table></figure>
 <figure>
 <img
 src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153651418.png"
-alt="image-20231022153651418" />
-<figcaption aria-hidden="true">image-20231022153651418</figcaption>
+alt="test pymarl" />
+<figcaption aria-hidden="true">test pymarl</figcaption>
 </figure>
 <h2 id="额外设置">额外设置</h2>
 <p>在利用pymarl进行实验的过程中可能会出现</p>
 <figure>
 <img
 src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022154059365.png"
-alt="image-20231022154059365" />
-<figcaption aria-hidden="true">image-20231022154059365</figcaption>
+alt="some bug" />
+<figcaption aria-hidden="true">some bug</figcaption>
 </figure>
 <p>需要进行设置</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim torch/_tensor.py<br></code></pre></td></tr></table></figure>
