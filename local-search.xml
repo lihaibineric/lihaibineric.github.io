@@ -4,16 +4,41 @@
   
   
   <entry>
-    <title>【Pytorch】Basics基本操作</title>
-    <link href="/2023/10/22/pytorch_1/"/>
-    <url>/2023/10/22/pytorch_1/</url>
+    <title>【计算机基础】Anaconda命令集</title>
+    <link href="/2023/10/22/conda_list/"/>
+    <url>/2023/10/22/conda_list/</url>
     
-    <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><p>本文主要介绍pytorch中的基本使用，包括基础知识，线性回归，逻辑回归等内容</p><h2 id="basics">Basics</h2><h4 id="计算梯度例子">计算梯度例子</h4><p>引入基本需要用到的包，深度学习中torch处理大部分张量的运算，而torch.nn则是对torch的网络中的一些运算，这些都是必须用到的包。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch <br><span class="hljs-keyword">import</span> torchvision<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> torchvision.transforms <span class="hljs-keyword">as</span> transforms<br></code></pre></td></tr></table></figure><p>在深度学习中，一般使用张量进行运算，此时会涉及到计算张量的梯度等问题，我们这里给出一个例子来展示如何使用张量来进行梯度计算：</p><p>初始化定义张量</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">x = torch.tensor(<span class="hljs-number">1.</span>, requires_grad=<span class="hljs-literal">True</span>)<br>w = torch.tensor(<span class="hljs-number">2.</span>, requires_grad=<span class="hljs-literal">True</span>)<br>b = torch.tensor(<span class="hljs-number">3.</span>, requires_grad=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure><p>建立<strong>计算图 computational graph</strong></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">y = w * x + b    <span class="hljs-comment"># y = 2 * x + 3</span><br></code></pre></td></tr></table></figure><p>计算梯度</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">y.backward()<br><span class="hljs-built_in">print</span>(x.grad)    <span class="hljs-comment"># x.grad = 2 </span><br><span class="hljs-built_in">print</span>(w.grad)    <span class="hljs-comment"># w.grad = 1 </span><br><span class="hljs-built_in">print</span>(b.grad)    <span class="hljs-comment"># b.grad = 1 </span><br></code></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><h2 id="conda-命令集合">Conda 命令集合</h2><ol type="1"><li><p>查看conda版本：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">conda --version/ conda -V<br></code></pre></td></tr></table></figure></li><li><p>查看已有环境：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">conda info --envs<br>conda env <span class="hljs-built_in">list</span><br>conda info -e<br></code></pre></td></tr></table></figure></li></ol><p>创建</p><p>新的环境：conda create -n *** python=0</p><p>5、删除环境：conda remove -n old_name --all # 删除环境old_name</p><p>6、激活环境：conda activate xxxx #激活xxxx环境</p><p>7、关闭环境：conda deactivate #关闭环境</p><p>8、克隆环境：conda create -n new_name --clone old_name</p><p>9、升级版本：conda update -n base conda#update最新版本的conda；更新所有的包：conda update --all #更新所有包</p><p><strong>==下载东西的时候加镜像：下载使用清华源加上： -ihttps://pypi.tuna.tsinghua.edu.cn/simple ==</strong></p><p>10、镜像安装包：</p><p>清华：<code>https://pypi.tuna.tsinghua.edu.cn/simple/</code></p><p>阿里云：<code>http://mirrors.aliyun.com/pypi/simple/</code></p><p>中国科技大学：<code>https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/</code></p><p>豆瓣：<code>http://pypi.doubanio.com/simple/</code></p><p>11、pip 管理的常用包</p><p>pip search package_name ｜｜pip show package_name ｜｜pipuninstall｜｜package_name｜｜pip list</p><p>12、删除环境中的包：conda remove package #删除当前环境中的包</p><p>13、在指定环境中安装包：conda install --name env_namepackage_name</p><p>14、删除指定环境中的包：conda remove -- name env_name package</p><p>15、使用虚拟环境没有正常推出终端解决方法：<em># 重新进入虚拟环境</em>source activate <em># 退出虚拟环境</em> conda deactivate</p><p>16、conda中一旦进入python之后需要退出的时候输入exit（）</p><h2 id="必要的情况下要加上sudo">必要的情况下要加上sudo</h2><figure><imgsrc="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20230902140125567.png"alt="image-20230902140125567" /><figcaption aria-hidden="true">image-20230902140125567</figcaption></figure>]]></content>
     
     
     <categories>
       
-      <category>人工智能</category>
+      <category>计算机基础</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【深度学习】PyTorch使用手册</title>
+    <link href="/2023/10/22/pytorch/"/>
+    <url>/2023/10/22/pytorch/</url>
+    
+    <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><p>本文主要介绍pytorch中的基本使用，包括如何导入数据集，如何搭建并训练网络以及可视化的内容，基本涵盖了深度学习中经典算法的使用以及相关的例子</p><h2 id="basics">Basics</h2><h4 id="计算梯度例子">计算梯度例子</h4><p>引入基本需要用到的包，深度学习中torch处理大部分张量的运算，而torch.nn则是对torch的网络中的一些运算，这些都是必须用到的包。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch <br><span class="hljs-keyword">import</span> torchvision<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> torchvision.transforms <span class="hljs-keyword">as</span> transforms<br></code></pre></td></tr></table></figure><p>在深度学习中，一般使用张量进行运算，此时会涉及到计算张量的梯度等问题，我们这里给出一个例子来展示如何使用张量来进行梯度计算：</p><p>初始化定义张量</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">x = torch.tensor(<span class="hljs-number">1.</span>, requires_grad=<span class="hljs-literal">True</span>)<br>w = torch.tensor(<span class="hljs-number">2.</span>, requires_grad=<span class="hljs-literal">True</span>)<br>b = torch.tensor(<span class="hljs-number">3.</span>, requires_grad=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure><p>建立<strong>计算图 computational graph</strong></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">y = w * x + b    <span class="hljs-comment"># y = 2 * x + 3</span><br></code></pre></td></tr></table></figure><p>计算梯度</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">y.backward()<br><span class="hljs-built_in">print</span>(x.grad)    <span class="hljs-comment"># x.grad = 2 </span><br><span class="hljs-built_in">print</span>(w.grad)    <span class="hljs-comment"># w.grad = 1 </span><br><span class="hljs-built_in">print</span>(b.grad)    <span class="hljs-comment"># b.grad = 1 </span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>深度学习</category>
       
     </categories>
     
