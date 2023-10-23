@@ -834,4 +834,67 @@ alt="some bug" />
         <tag>深度学习</tag>
       </tags>
   </entry>
+  <entry>
+    <title>【计算机基础】Git命令集</title>
+    <url>/2023/10/23/git/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<p>Git
+是一个版本控制系统，是任何软件开发项目中的主要内容。通常有两个主要用途：代码备份和代码版本控制。使用Git可以逐步处理代码，在需要回滚到备份副本的过程中保存每一步的进度。</p>
+<h2 id="git的安装与配置">Git的安装与配置</h2>
+<h2 id="git的基本控制">Git的基本控制</h2>
+<h4 id="初始化git仓库">初始化Git仓库</h4>
+<p>当完成上述的配置之后，就能开始初始化Git仓库，进入需要创建<strong>工作区</strong>的文件夹</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> workspace<br>git init<br></code></pre></td></tr></table></figure>
+<p>创建一个名为 .git
+的新子目录（该目录为隐藏的），其中包含所有必需的存储库文件（Git
+存储库框架）；注意区分<strong>工作区</strong>和<strong>暂存区</strong>，在没有add之前我们都是在<strong>工作区</strong></p>
+<p>【Vscode】考虑Git graph插件来可视化git分支目录的全貌</p>
+<h4 id="添加文件和备注">添加文件和备注</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git add . <br>git add &lt;file&gt;<br></code></pre></td></tr></table></figure>
+<p>执行上述命令之后将会将当前的file或者是工作区中的所有文件都上传到暂存区</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git commit -m<span class="hljs-string">&quot;【test】XXX更改信息提示&quot;</span><br><span class="hljs-comment">#如果多次提交想覆盖到同一个提交的备注上执行下面</span><br>git commit --amend<br></code></pre></td></tr></table></figure>
+<p>上述的命令是将本次的提交添加描述，分布式协作的时候能看清</p>
+<h4 id="状态与日志">状态与日志</h4>
+<p>查看默认配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --list<br></code></pre></td></tr></table></figure>
+<p>查看当前所在的分支位置信息</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git status<br></code></pre></td></tr></table></figure>
+<p>查看当前分支下的更改日志</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+<h4 id="推送与拉取">推送与拉取</h4>
+<p>将本地暂存区中的更改内容推送到远端</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git push<br>git push -f <span class="hljs-comment">#强行推出</span><br></code></pre></td></tr></table></figure>
+<p>将远端所在的分支内容拉到本地</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git pull<br></code></pre></td></tr></table></figure>
+<p>更新所在分支的最新内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch --all <br></code></pre></td></tr></table></figure>
+<h4 id="复制分支">复制分支</h4>
+<p>获取git连接git@ XXX.git之后执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> git@ XXX.git<br></code></pre></td></tr></table></figure>
+<p>如果觉得git的内容太大，可以选择内部的分支进行下载</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> -b feature/xxx git@ XXX.git<br></code></pre></td></tr></table></figure>
+<p>feature/xxx为具体的分支内容</p>
+<h4 id="分支操作">分支操作</h4>
+<p>查看分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch -a <span class="hljs-comment">#查看所有的分支</span><br>git branch -r <span class="hljs-comment">#查看远端的分支</span><br></code></pre></td></tr></table></figure>
+<p>切换不同的分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout [branch] <span class="hljs-comment">#切换到分支</span><br></code></pre></td></tr></table></figure>
+<p>创建新的分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch [branch] <span class="hljs-comment">#创建新的分支</span><br></code></pre></td></tr></table></figure>
+<p>创建新的分支并切换到上面</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout -b [branch] <span class="hljs-comment">#创建并切换新的分支</span><br></code></pre></td></tr></table></figure>
+<h4 id="分支冲突">分支冲突</h4>
+<p><strong>问题描述：</strong>如果当前修改的版本基于旧版，但是远端已经是新版origin/master，<strong>此时修改基于的内容和远端不同不能强行推</strong>。</p>
+<p><strong>解决方法1：</strong>通过换基的方法解决，通过将当前的修改的旧版换到最新的基上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#先将文件提交到暂存区</span><br>git add . <span class="hljs-comment">#保存在暂存区</span><br>git commit -m <span class="hljs-string">&quot;XXX&quot;</span><br><span class="hljs-comment">#进行换基操作</span><br>git rebase -i origin/master<br><span class="hljs-comment">#再次提交</span><br>git add .<br><span class="hljs-comment">#继续换基</span><br>git rebase --<span class="hljs-built_in">continue</span><br><span class="hljs-comment">#换基成功后,只需要一次备注（覆盖）</span><br>git commit --amend<br><span class="hljs-comment">#最后退出</span><br>git push<br>git push -f <span class="hljs-comment">#或者强行推出</span><br></code></pre></td></tr></table></figure>
+<p><strong>解决方法2：</strong> 暴力覆盖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch --all <span class="hljs-comment">#获取远端的全部内容</span><br>git reset --hard origin/master <span class="hljs-comment">#强行将远端的内容覆盖到本地的文件中</span><br>git commit --amend <br>git push -f <span class="hljs-comment">#强行推出</span><br><br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>计算机基础</category>
+      </categories>
+      <tags>
+        <tag>后端开发</tag>
+      </tags>
+  </entry>
 </search>
