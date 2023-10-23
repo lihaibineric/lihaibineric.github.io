@@ -666,6 +666,53 @@ system，能够产生极高的精度；直接测量速度和距离，这进一�
       </tags>
   </entry>
   <entry>
+    <title>【计算机基础】Anaconda命令集</title>
+    <url>/2023/10/22/conda_list/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h2 id="conda-常用命令">Conda 常用命令</h2>
+<h4 id="查看conda版本">查看conda版本</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda --version/ conda -V<br></code></pre></td></tr></table></figure>
+<h4 id="查看已有环境">查看已有环境</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda info --envs<br>conda env <span class="hljs-built_in">list</span><br>conda info -e<br></code></pre></td></tr></table></figure>
+<h4 id="进退环境">进退环境</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate  [name]<span class="hljs-comment"># 重新进入虚拟环境</span><br>conda deactivate  <span class="hljs-comment"># 退出虚拟环境</span><br></code></pre></td></tr></table></figure>
+<h4 id="创建新的环境">创建新的环境</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n *** python=<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<h4 id="删除环境">删除环境</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove -n old_name --<span class="hljs-built_in">all</span> <span class="hljs-comment"># 删除环境old_name</span><br></code></pre></td></tr></table></figure>
+<h4 id="激活环境">激活环境</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate xxxx <span class="hljs-comment"># 激活xxxx环境</span><br></code></pre></td></tr></table></figure>
+<h4 id="关闭环境">关闭环境</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda deactivate <span class="hljs-comment"># 关闭环境</span><br></code></pre></td></tr></table></figure>
+<h4 id="克隆环境">克隆环境</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n [new_name] --clone [old_name]<br></code></pre></td></tr></table></figure>
+<h4 id="升级版本">升级版本</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda update -n base conda <span class="hljs-comment">#update最新版本的conda；</span><br>更新所有的包：conda update --<span class="hljs-built_in">all</span> <span class="hljs-comment">#更新所有包</span><br></code></pre></td></tr></table></figure>
+<h4 id="pip管理的常用包">Pip管理的常用包</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip search package_name <br>pip show package_name <br>pip uninstall｜｜package_name<br>pip <span class="hljs-built_in">list</span><br></code></pre></td></tr></table></figure>
+<h4 id="删除环境中的包">删除环境中的包</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove package <span class="hljs-comment">#删除当前环境中的包</span><br>conda remove -- name env_name package <span class="hljs-comment">#删除指定环境中的包</span><br></code></pre></td></tr></table></figure>
+<h4 id="指定环境中安装包">指定环境中安装包</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda install --name env_name package_name <br></code></pre></td></tr></table></figure>
+<h4 id="镜像源安装">镜像源安装</h4>
+<p><strong>下载使用清华源加上： -i
+https://pypi.tuna.tsinghua.edu.cn/simple</strong></p>
+<blockquote>
+<p><strong>清华：<code>https://pypi.tuna.tsinghua.edu.cn/simple/</code></strong></p>
+<p><strong>阿里云：<code>http://mirrors.aliyun.com/pypi/simple/</code></strong></p>
+<p><strong>中国科技大学
+：<code>https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/</code></strong></p>
+<p><strong>豆瓣：<code>http://pypi.doubanio.com/simple/</code></strong></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>计算机基础</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【多智能体强化学习】Pymarl环境配置</title>
     <url>/2023/10/22/pymarl%E7%8E%AF%E5%A2%83/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
@@ -785,58 +832,6 @@ alt="some bug" />
       <tags>
         <tag>人工智能</tag>
         <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【计算机基础】Anaconda命令集</title>
-    <url>/2023/10/22/conda_list/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<h2 id="conda-命令集合">Conda 命令集合</h2>
-<ol type="1">
-<li><p>查看conda版本：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda --version/ conda -V<br></code></pre></td></tr></table></figure></li>
-<li><p>查看已有环境：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda info --envs<br>conda env <span class="hljs-built_in">list</span><br>conda info -e<br></code></pre></td></tr></table></figure></li>
-</ol>
-<p>创建</p>
-<p>新的环境：conda create -n *** python=0</p>
-<p>5、删除环境：conda remove -n old_name --all # 删除环境old_name</p>
-<p>6、激活环境：conda activate xxxx #激活xxxx环境</p>
-<p>7、关闭环境：conda deactivate #关闭环境</p>
-<p>8、克隆环境：conda create -n new_name --clone old_name</p>
-<p>9、升级版本：conda update -n base conda
-#update最新版本的conda；更新所有的包：conda update --all #更新所有包</p>
-<p><strong>==下载东西的时候加镜像：下载使用清华源加上： -i
-https://pypi.tuna.tsinghua.edu.cn/simple ==</strong></p>
-<p>10、镜像安装包：</p>
-<p>清华：<code>https://pypi.tuna.tsinghua.edu.cn/simple/</code></p>
-<p>阿里云：<code>http://mirrors.aliyun.com/pypi/simple/</code></p>
-<p>中国科技大学
-：<code>https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/</code></p>
-<p>豆瓣：<code>http://pypi.doubanio.com/simple/</code></p>
-<p>11、pip 管理的常用包</p>
-<p>pip search package_name ｜｜pip show package_name ｜｜pip
-uninstall｜｜package_name｜｜pip list</p>
-<p>12、删除环境中的包：conda remove package #删除当前环境中的包</p>
-<p>13、在指定环境中安装包：conda install --name env_name
-package_name</p>
-<p>14、删除指定环境中的包：conda remove -- name env_name package</p>
-<p>15、使用虚拟环境没有正常推出终端解决方法：<em># 重新进入虚拟环境</em>
-source activate <em># 退出虚拟环境</em> conda deactivate</p>
-<p>16、conda中一旦进入python之后需要退出的时候输入exit（）</p>
-<h2 id="必要的情况下要加上sudo">必要的情况下要加上sudo</h2>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20230902140125567.png"
-alt="image-20230902140125567" />
-<figcaption aria-hidden="true">image-20230902140125567</figcaption>
-</figure>
-]]></content>
-      <categories>
-        <category>计算机基础</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
       </tags>
   </entry>
 </search>
