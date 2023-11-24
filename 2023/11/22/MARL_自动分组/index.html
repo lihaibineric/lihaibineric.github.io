@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231122222736852.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231122225119182.png">
 <meta property="article:published_time" content="2023-11-22T12:16:39.000Z">
-<meta property="article:modified_time" content="2023-11-23T12:21:05.198Z">
+<meta property="article:modified_time" content="2023-11-23T12:24:56.631Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="深度学习">
@@ -216,7 +216,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.9k words
+          5.1k words
         
       </span>
     
@@ -227,7 +227,7 @@
         
         
         
-          41 mins
+          43 mins
         
       </span>
     
@@ -491,17 +491,21 @@ class="math inline">\(f_d\)</span>将提取的智能体信息e集成到策略梯
 <h4 id="整体的训练框架">整体的训练框架</h4>
 <h6 id="双层混合网络">双层混合网络</h6>
 <ul>
-<li><p>群体状态下的群体行动价值信息</p></li>
+<li><p>群体状态下的群体行动价值信息，将全局的状态分解成局部的状态信息用于训练，这部分的局部状态信息是基于群组划分之后的状态信息</p></li>
 <li><p><span class="math inline">\(s^{g_j}\)</span> 是分组后<span
-class="math inline">\(e_t^i (a_i∈g_j )\)</span>按组别融合</p></li>
-<li><p>建立分组器映射</p>
+class="math inline">\(e_t^i (a_i∈g_j
+)\)</span>按组别融合，建立分组器映射</p>
 <p><span class="math display">\[
 f_{w_2}(s^g )：s^g→w_2^g
 \]</span></p></li>
-<li><p>集中到策略梯度中： <span class="math display">\[
-ℒ(𝜃)=ℒ_𝑇𝐷 (𝜃)+𝜆_𝑔 ℒ_𝑔 (𝜃_(w_1 ) )+𝜆_𝑆𝐷 ℒ_𝑆𝐷 (𝜃_𝑒 )
+<li><p>集中到策略梯度中，内嵌群组状态信息潜在促进组内合作： <span
+class="math display">\[
+𝜕𝑄^{𝑡𝑜𝑡}/(𝜕𝜃_ℎ )=(𝜕𝑄^{𝑡𝑜𝑡})/(𝜕𝑄^𝑎 )  (𝜕𝑄^𝑎)/(𝜕𝜃_ℎ )=(𝜕𝑄^{𝑡𝑜𝑡})/(𝜕𝑄^𝑎
+)  (𝜕𝑄^𝑎)/(𝜕𝑣_ℎ^𝑎 )  (𝜕𝑣_ℎ^𝑎)/(𝜕𝜃_ℎ )=𝑓_𝑑 (𝑒^𝑎 )⋅(𝜕𝑄^{𝑡𝑜𝑡})/(𝜕𝑄^𝑎
+)  (𝜕𝑣_ℎ^𝑎)/(𝜕𝜃_ℎ )
 \]</span></p></li>
-<li><p>全局分解目标： <span class="math display">\[
+<li><p>按照全文的总共方法的总述可以得到全局分解目标： <span
+class="math display">\[
 ℒ(𝜃)=ℒ_𝑇𝐷 (𝜃)+𝜆_𝑔 ℒ_𝑔 (𝜃_(w_1 ) )+𝜆_𝑆𝐷 ℒ_𝑆𝐷 (𝜃_𝑒 )
 \]</span></p></li>
 </ul>
