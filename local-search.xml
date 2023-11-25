@@ -33,7 +33,7 @@
   
   
   <entry>
-    <title>【计算机基础】Git命令集</title>
+    <title>【基础工具】Git命令集</title>
     <link href="/2023/10/23/git/"/>
     <url>/2023/10/23/git/</url>
     
@@ -42,7 +42,7 @@
     
     <categories>
       
-      <category>计算机基础</category>
+      <category>基础工具</category>
       
     </categories>
     
@@ -58,7 +58,7 @@
   
   
   <entry>
-    <title>【计算机基础】Anaconda命令集</title>
+    <title>【基础工具】Anaconda命令集</title>
     <link href="/2023/10/22/conda_list/"/>
     <url>/2023/10/22/conda_list/</url>
     
@@ -67,14 +67,39 @@
     
     <categories>
       
-      <category>计算机基础</category>
+      <category>基础工具</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>Python</tag>
+      <tag>基础工具</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【基础工具】VScode远程和免密</title>
+    <link href="/2023/10/22/vscode-remote/"/>
+    <url>/2023/10/22/vscode-remote/</url>
+    
+    <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/>]]></content>
+    
+    
+    <categories>
+      
+      <category>基础工具</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>基础工具</tag>
       
     </tags>
     
