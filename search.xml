@@ -339,166 +339,6 @@ https://pypi.tuna.tsinghua.edu.cn/simple</strong></p>
       </tags>
   </entry>
   <entry>
-    <title>【多智能体强化学习】Pymarl环境配置</title>
-    <url>/2023/10/22/pymarl%E7%8E%AF%E5%A2%83/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<p>SMAC是基于暴雪星际争霸II
-RTS游戏的协作多智能体强化学习领域的研究环境。SMAC利用星际争霸2机器学习API和DeepMind的PySC2为自主代理提供了一个方便的接口。</p>
-<p>本文主要介绍在多智能体强化学习中的验证平台SAMC和Pymarl的配置和安装过程</p>
-<p>环境地址：<a
-href="https://github.com/oxwhirl/pymarl">https://github.com/oxwhirl/pymarl</a></p>
-<p>依赖环境：<a
-href="https://github.com/oxwhirl/smac">https://github.com/oxwhirl/smac</a></p>
-<p>主要针对Ubuntu下的Pymarl环境的配置（MAC和Windows类似）</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022145734342.png"
-alt="SMAC" />
-<figcaption aria-hidden="true">SMAC</figcaption>
-</figure>
-<h2 id="安装starcraftii">安装StarCraftII</h2>
-<h3 id="windowsmac">Windows/Mac</h3>
-<p>直接在官网下载安装最新版，需要加速器或者更换亚服：<a
-href="https://sc2.blizzard.cn/landing">https://sc2.blizzard.cn/landing</a></p>
-<p>安装地图：<a
-href="https://link.zhihu.com/?target=https%3A//github.com/oxwhirl/smac/releases/download/v0.1-beta1/SMAC_Maps.zip">https://link.zhihu.com/?target=https%3A//github.com/oxwhirl/smac/releases/download/v0.1-beta1/SMAC_Maps.zip</a></p>
-<p>将地图放在Maps文件夹下</p>
-<h3 id="ubuntu">Ubuntu</h3>
-<p>在Ubuntu系统中，安装需要版本的SCII即可<a
-href="https://github.com/Blizzard/s2client-proto#downloads">https://github.com/Blizzard/s2client-proto#downloads</a></p>
-<p>下载压缩包之后安装并解压放到用户名文件夹下：～/StarCraftII/</p>
-<p>如果没有把SCII安装到用户名之下，这个地方的路径可以根据放置的位置来进行更改：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim ~/.bashrc<br></code></pre></td></tr></table></figure>
-<p>在最后一行增加环境变量，这里可以更改星际争霸的位置索引到任何想要放置的位置</p>
-<figure class="highlight routeros"><table><tr><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">SC2PATH</span>=~/StarCraftII/<br></code></pre></td></tr></table></figure>
-<p>添加完之后更新环境</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.bashrc<br></code></pre></td></tr></table></figure>
-<p>添加SAMC的地图：Linux系统在下载SCII的时候就自带了地图</p>
-<h2 id="安装smac">安装SMAC</h2>
-<p>创建虚拟环境并安装pytorch</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n pymarl python=<span class="hljs-number">3.8</span> -y<br>conda activate pymarl   <br><span class="hljs-comment"># CUDA 10.2 例子具体的的CUDA版本根据自己的服务器来定</span><br>conda install pytorch==<span class="hljs-number">1.10</span><span class="hljs-number">.0</span> torchvision==<span class="hljs-number">0.11</span><span class="hljs-number">.0</span> torchaudio==<span class="hljs-number">0.10</span><span class="hljs-number">.0</span> cudatoolkit=<span class="hljs-number">10.2</span> -c pytorch<br></code></pre></td></tr></table></figure>
-<p>直接利用虚拟环境中的pip来安装</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install git+https://github.com/oxwhirl/smac.git<br></code></pre></td></tr></table></figure>
-<p>或者可以利用git进行安装，先git
-clone下载下来然后进入文件夹中进行安装</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">git clone https://github.com/oxwhirl/smac.git<br>pip install -e smac/<br></code></pre></td></tr></table></figure>
-<p>如果pip install安装失败可以考虑升级pip：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install --upgrade pip<br></code></pre></td></tr></table></figure>
-<p>如果安装的内容失败了可以手动安装，比如pymarl运行所依赖的包有以下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install sacred numpy scipy matplotlib seaborn pyyaml pygame pytest probscale imageio snakeviz tensorboard-logger<br><br></code></pre></td></tr></table></figure>
-<p>或者根据<a
-href="https://github.com/oxwhirl/pymarl/tree/master/docker">https://github.com/oxwhirl/pymarl/tree/master/docker</a>中的bash脚本中Dockerfile依赖内容进行安装</p>
-<h2 id="pymarl与scii">Pymarl与SCII</h2>
-<h3 id="采用上述安装步骤">采用上述安装步骤</h3>
-<p>对于上述的操作完成操作之后，下载pymarl的环境包并进入</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">git clone git@github.com:oxwhirl/pymarl.git<br>cd pymarl<br></code></pre></td></tr></table></figure>
-<p>将上述安装的SCII文件夹复制到pymarl的src的3dparty之下</p>
-<h3 id="如果利用docker安装">如果利用Docker安装</h3>
-<p>或者根据pymarl中的内容对上述环境进行自动配置（需要Docker）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> docker<br>bash build.sh<br></code></pre></td></tr></table></figure>
-<p>同时安装SCII和SMAC</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">bash install_sc2.sh<br></code></pre></td></tr></table></figure>
-<h2 id="测试环境">测试环境</h2>
-<h3 id="测试地图信息">测试地图信息</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python -m smac.<span class="hljs-built_in">bin</span>.map_list <br></code></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153907123.png" alt="Maps show" style="zoom:67%;" /></p>
-<h3 id="测试环境信息">测试环境信息</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python -m smac.examples.random_agents<br></code></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153709693.png" alt="test agents" style="zoom: 50%;" /></p>
-<h3 id="测试pymarl环境">测试Pymarl环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python src/main.py --config=qmix --env-config=sc2 <span class="hljs-keyword">with</span> env_args.map_name=2s3z<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153651418.png"
-alt="test pymarl" />
-<figcaption aria-hidden="true">test pymarl</figcaption>
-</figure>
-<h2 id="额外设置">额外设置</h2>
-<p>在利用pymarl进行实验的过程中可能会出现</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022154059365.png"
-alt="some bug" />
-<figcaption aria-hidden="true">some bug</figcaption>
-</figure>
-<p>需要进行设置</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim torch/_tensor.py<br></code></pre></td></tr></table></figure>
-<p>将757行的内容进行修改</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">-: self.numpy()<br>+: self.cpu().numpy()<br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>强化学习</category>
-      </categories>
-      <tags>
-        <tag>人工智能</tag>
-        <tag>深度学习</tag>
-        <tag>强化学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【基础工具】Git命令集</title>
-    <url>/2023/10/23/git/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<p>Git
-是一个版本控制系统，是任何软件开发项目中的主要内容。通常有两个主要用途：代码备份和代码版本控制。使用Git可以逐步处理代码，在需要回滚到备份副本的过程中保存每一步的进度。</p>
-<h2 id="git的安装与配置">Git的安装与配置</h2>
-<h2 id="git的基本控制">Git的基本控制</h2>
-<h3 id="初始化git仓库">初始化Git仓库</h3>
-<p>当完成上述的配置之后，就能开始初始化Git仓库，进入需要创建<strong>工作区</strong>的文件夹</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> workspace<br>git init<br></code></pre></td></tr></table></figure>
-<p>创建一个名为 .git
-的新子目录（该目录为隐藏的），其中包含所有必需的存储库文件（Git
-存储库框架）；注意区分<strong>工作区</strong>和<strong>暂存区</strong>，在没有add之前我们都是在<strong>工作区</strong></p>
-<p>【Vscode】考虑Git graph插件来可视化git分支目录的全貌</p>
-<h3 id="添加文件和备注">添加文件和备注</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git add . <br>git add &lt;file&gt;<br></code></pre></td></tr></table></figure>
-<p>执行上述命令之后将会将当前的file或者是工作区中的所有文件都上传到暂存区</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git commit -m<span class="hljs-string">&quot;【test】XXX更改信息提示&quot;</span><br><span class="hljs-comment">#如果多次提交想覆盖到同一个提交的备注上执行下面</span><br>git commit --amend<br></code></pre></td></tr></table></figure>
-<p>上述的命令是将本次的提交添加描述，分布式协作的时候能看清</p>
-<h3 id="状态与日志">状态与日志</h3>
-<p>查看默认配置</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --list<br></code></pre></td></tr></table></figure>
-<p>查看当前所在的分支位置信息</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git status<br></code></pre></td></tr></table></figure>
-<p>查看当前分支下的更改日志</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
-<h3 id="推送与拉取">推送与拉取</h3>
-<p>将本地暂存区中的更改内容推送到远端</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git push<br>git push -f <span class="hljs-comment">#强行推出</span><br></code></pre></td></tr></table></figure>
-<p>将远端所在的分支内容拉到本地</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git pull<br></code></pre></td></tr></table></figure>
-<p>更新所在分支的最新内容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch --all <br></code></pre></td></tr></table></figure>
-<h3 id="复制分支">复制分支</h3>
-<p>获取git连接git@ XXX.git之后执行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> git@ XXX.git<br></code></pre></td></tr></table></figure>
-<p>如果觉得git的内容太大，可以选择内部的分支进行下载</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> -b feature/xxx git@ XXX.git<br></code></pre></td></tr></table></figure>
-<p>feature/xxx为具体的分支内容</p>
-<h3 id="分支操作">分支操作</h3>
-<p>查看分支</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch -a <span class="hljs-comment">#查看所有的分支</span><br>git branch -r <span class="hljs-comment">#查看远端的分支</span><br></code></pre></td></tr></table></figure>
-<p>切换不同的分支</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout [branch] <span class="hljs-comment">#切换到分支</span><br></code></pre></td></tr></table></figure>
-<p>创建新的分支</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch [branch] <span class="hljs-comment">#创建新的分支</span><br></code></pre></td></tr></table></figure>
-<p>创建新的分支并切换到上面</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout -b [branch] <span class="hljs-comment">#创建并切换新的分支</span><br></code></pre></td></tr></table></figure>
-<h3 id="分支冲突">分支冲突</h3>
-<p><strong>问题描述：</strong>如果当前修改的版本基于旧版，但是远端已经是新版origin/master，<strong>此时修改基于的内容和远端不同不能强行推</strong>。</p>
-<p><strong>解决方法1：</strong>通过换基的方法解决，通过将当前的修改的旧版换到最新的基上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#先将文件提交到暂存区</span><br>git add . <span class="hljs-comment">#保存在暂存区</span><br>git commit -m <span class="hljs-string">&quot;XXX&quot;</span><br><span class="hljs-comment">#进行换基操作</span><br>git rebase -i origin/master<br><span class="hljs-comment">#再次提交</span><br>git add .<br><span class="hljs-comment">#继续换基</span><br>git rebase --<span class="hljs-built_in">continue</span><br><span class="hljs-comment">#换基成功后,只需要一次备注（覆盖）</span><br>git commit --amend<br><span class="hljs-comment">#最后退出</span><br>git push<br>git push -f <span class="hljs-comment">#或者强行推出</span><br></code></pre></td></tr></table></figure>
-<p><strong>解决方法2：</strong> 暴力覆盖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch --all <span class="hljs-comment">#获取远端的全部内容</span><br>git reset --hard origin/master <span class="hljs-comment">#强行将远端的内容覆盖到本地的文件中</span><br>git commit --amend <br>git push -f <span class="hljs-comment">#强行推出</span><br><br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>基础工具</category>
-      </categories>
-      <tags>
-        <tag>后端开发</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【自动驾驶】RSS Model for Autonomous Driving</title>
     <url>/2023/10/21/RSS-Model/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
@@ -1161,6 +1001,281 @@ system，能够产生极高的精度；直接测量速度和距离，这进一�
       <tags>
         <tag>人工智能</tag>
         <tag>智能安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【基础工具】Git命令集</title>
+    <url>/2023/10/23/git/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<p>Git
+是一个版本控制系统，是任何软件开发项目中的主要内容。通常有两个主要用途：代码备份和代码版本控制。使用Git可以逐步处理代码，在需要回滚到备份副本的过程中保存每一步的进度。</p>
+<h2 id="git的安装与配置">Git的安装与配置</h2>
+<h2 id="git的基本控制">Git的基本控制</h2>
+<h3 id="初始化git仓库">初始化Git仓库</h3>
+<p>当完成上述的配置之后，就能开始初始化Git仓库，进入需要创建<strong>工作区</strong>的文件夹</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> workspace<br>git init<br></code></pre></td></tr></table></figure>
+<p>创建一个名为 .git
+的新子目录（该目录为隐藏的），其中包含所有必需的存储库文件（Git
+存储库框架）；注意区分<strong>工作区</strong>和<strong>暂存区</strong>，在没有add之前我们都是在<strong>工作区</strong></p>
+<p>【Vscode】考虑Git graph插件来可视化git分支目录的全貌</p>
+<h3 id="添加文件和备注">添加文件和备注</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git add . <br>git add &lt;file&gt;<br></code></pre></td></tr></table></figure>
+<p>执行上述命令之后将会将当前的file或者是工作区中的所有文件都上传到暂存区</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git commit -m<span class="hljs-string">&quot;【test】XXX更改信息提示&quot;</span><br><span class="hljs-comment">#如果多次提交想覆盖到同一个提交的备注上执行下面</span><br>git commit --amend<br></code></pre></td></tr></table></figure>
+<p>上述的命令是将本次的提交添加描述，分布式协作的时候能看清</p>
+<h3 id="状态与日志">状态与日志</h3>
+<p>查看默认配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --list<br></code></pre></td></tr></table></figure>
+<p>查看当前所在的分支位置信息</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git status<br></code></pre></td></tr></table></figure>
+<p>查看当前分支下的更改日志</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+<h3 id="推送与拉取">推送与拉取</h3>
+<p>将本地暂存区中的更改内容推送到远端</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git push<br>git push -f <span class="hljs-comment">#强行推出</span><br></code></pre></td></tr></table></figure>
+<p>将远端所在的分支内容拉到本地</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git pull<br></code></pre></td></tr></table></figure>
+<p>更新所在分支的最新内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch --all <br></code></pre></td></tr></table></figure>
+<h3 id="复制分支">复制分支</h3>
+<p>获取git连接git@ XXX.git之后执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> git@ XXX.git<br></code></pre></td></tr></table></figure>
+<p>如果觉得git的内容太大，可以选择内部的分支进行下载</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> -b feature/xxx git@ XXX.git<br></code></pre></td></tr></table></figure>
+<p>feature/xxx为具体的分支内容</p>
+<h3 id="分支操作">分支操作</h3>
+<p>查看分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch -a <span class="hljs-comment">#查看所有的分支</span><br>git branch -r <span class="hljs-comment">#查看远端的分支</span><br></code></pre></td></tr></table></figure>
+<p>切换不同的分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout [branch] <span class="hljs-comment">#切换到分支</span><br></code></pre></td></tr></table></figure>
+<p>创建新的分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch [branch] <span class="hljs-comment">#创建新的分支</span><br></code></pre></td></tr></table></figure>
+<p>创建新的分支并切换到上面</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout -b [branch] <span class="hljs-comment">#创建并切换新的分支</span><br></code></pre></td></tr></table></figure>
+<h3 id="分支冲突">分支冲突</h3>
+<p><strong>问题描述：</strong>如果当前修改的版本基于旧版，但是远端已经是新版origin/master，<strong>此时修改基于的内容和远端不同不能强行推</strong>。</p>
+<p><strong>解决方法1：</strong>通过换基的方法解决，通过将当前的修改的旧版换到最新的基上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#先将文件提交到暂存区</span><br>git add . <span class="hljs-comment">#保存在暂存区</span><br>git commit -m <span class="hljs-string">&quot;XXX&quot;</span><br><span class="hljs-comment">#进行换基操作</span><br>git rebase -i origin/master<br><span class="hljs-comment">#再次提交</span><br>git add .<br><span class="hljs-comment">#继续换基</span><br>git rebase --<span class="hljs-built_in">continue</span><br><span class="hljs-comment">#换基成功后,只需要一次备注（覆盖）</span><br>git commit --amend<br><span class="hljs-comment">#最后退出</span><br>git push<br>git push -f <span class="hljs-comment">#或者强行推出</span><br></code></pre></td></tr></table></figure>
+<p><strong>解决方法2：</strong> 暴力覆盖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch --all <span class="hljs-comment">#获取远端的全部内容</span><br>git reset --hard origin/master <span class="hljs-comment">#强行将远端的内容覆盖到本地的文件中</span><br>git commit --amend <br>git push -f <span class="hljs-comment">#强行推出</span><br><br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>基础工具</category>
+      </categories>
+      <tags>
+        <tag>后端开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【基础工具】Linux指令集</title>
+    <url>/2023/11/25/linux/</url>
+    <content><![CDATA[<h2 id="linux命令集">Linux命令集</h2>
+<h4 id="查看当前路径的位置-pwd">查看当前路径的位置 pwd</h4>
+<h4 id="当前目录下的文件">当前目录下的文件</h4>
+<ul>
+<li>当前目录下的文件 ls</li>
+<li>ls -l；ls-h；都是用来显示文件的详细信息</li>
+<li>ls -a 来显示所有的文件（包含隐藏文件）</li>
+<li>组合使用 ls -lha 显示所有并包含的隐藏文件且显示详细信息</li>
+<li>使用dir显示当前文件夹下的文件名*</li>
+</ul>
+<h4 id="切换文件夹">切换文件夹</h4>
+<ul>
+<li><p>cd .. <em>#返回父级目录</em></p></li>
+<li><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">cd</th>
+<th>切换到当前用户的主目录(/home/用户目录)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">cd ~</td>
+<td>切换到当前用户的主目录(/home/用户目录)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">cd .</td>
+<td>保持在当前目录不变</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">cd …</td>
+<td>切换到上级目录</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">cd -</td>
+<td>可以在最近两次工作目录之间来回切换</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>相对路径 在输入路径时，最前面不是 / 或者 ~，表示相对 当前目录
+所在的目录位置 绝对路径 在输入路径时，最前面是 / 或者 ~，表示从
+<strong>根目录/家目录</strong> 开始的具体目录位置</p></li>
+</ul>
+<h4 id="移动文件到指定位置-mv">移动文件到指定位置 mv</h4>
+<ul>
+<li><p>mv <u>文件名</u> <u>指定的路径位置</u> -i 用于提示</p></li>
+<li><p>修改文件夹名称：mv 原来的文件夹名称 后来的文件夹名称</p></li>
+<li><h6 id="拷贝某个文件夹到指定路径">拷贝某个文件夹到指定路径</h6>
+<ul>
+<li><p>cp <u>当前文件夹下某个文件名</u>（带后缀） <u>目标路径</u> -i
+用于提示</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>命令</th>
+<th>对应英文</th>
+<th>作用</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>tree [目录名]</td>
+<td>tree</td>
+<td>以树状图列出文件目录结构</td>
+</tr>
+<tr class="even">
+<td>02</td>
+<td>cp 源文件目标文件</td>
+<td>copy</td>
+<td>复制文件或者目录</td>
+</tr>
+<tr class="odd">
+<td>03</td>
+<td>mv 源文件 目标文件</td>
+<td>move</td>
+<td>移动文件或者目录／文件或者目录重命名</td>
+</tr>
+</tbody>
+</table></li>
+</ul></li>
+</ul>
+<h4 id="创建文件夹">创建文件夹</h4>
+<ul>
+<li>进入路径的位置 mkdir <u>需要创建的文件夹的名称</u></li>
+<li>递归创建文件夹 mkdir -p 123/456
+<u>在123文件夹下递归创建文件夹456</u></li>
+</ul>
+<h4 id="新建某个文件">新建某个文件</h4>
+<ul>
+<li>```bash touch 123.txt <figure class="highlight gherkin"><table><tr><td class="code"><pre><code class="hljs gherkin"><br><span class="hljs-comment">#### 删除文件夹</span><br><br>- rmdir+ 需要删除的文件名<br><br><span class="hljs-comment">#### 删除某个文件</span><br><br>- 使用rm来对文件进行删除 -i  进行删除前的查询<br><br>- |<span class="hljs-string"> 选项 </span>|<span class="hljs-string"> 含义                                                  </span>|<br>  |<span class="hljs-string"> ---- </span>|<span class="hljs-string"> ----------------------------------------------------- </span>|<br>  |<span class="hljs-string"> -f   </span>|<span class="hljs-string"> 强制删除，忽略不存在的文件，无需提示                  </span>|<br>  |<span class="hljs-string"> -r   </span>|<span class="hljs-string"> 递归地删除目录下的内容，**删除文件夹 时必须加此参数** </span>|<br><br><span class="hljs-comment">#### 解压缩文件的指令</span><br><br>- <span class="hljs-comment">##### 对于ZIP文件的操作</span><br><br>  - 解压操作：进入需要解压的文件的位置：<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>unzip filename.zip<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br>  - 压缩文件：同理进入需要解压的文件夹的上一级 zip filename.zip<br><br><span class="hljs-comment">#### Linux中查看系统使用情况</span><br><br>- Top 来显示CPU的占用情况：<br><br>  &gt; |<span class="hljs-string"> PID       </span>|<span class="hljs-string"> 进程的ID                                                 </span>|<span class="hljs-string"> USER        </span>|<span class="hljs-string"> 进程所有者                                                   </span>|<br>  &gt; |<span class="hljs-string"> --------- </span>|<span class="hljs-string"> -------------------------------------------------------- </span>|<span class="hljs-string"> ----------- </span>|<span class="hljs-string"> ------------------------------------------------------------ </span>|<br>  &gt; |<span class="hljs-string"> **PR**    </span>|<span class="hljs-string"> 进程的优先级别，越小越优先被执行                         </span>|<span class="hljs-string"> **NInice**  </span>|<span class="hljs-string"> 值                                                           </span>|<br>  &gt; |<span class="hljs-string"> **VIRT**  </span>|<span class="hljs-string"> 进程占用的虚拟内存                                       </span>|<span class="hljs-string"> **RES**     </span>|<span class="hljs-string"> 进程占用的物理内存                                           </span>|<br>  &gt; |<span class="hljs-string"> **SHR**   </span>|<span class="hljs-string"> 进程使用的共享内存                                       </span>|<span class="hljs-string"> S           </span>|<span class="hljs-string"> 进程的状态。S表示休眠，R表示正在运行，Z表示僵死状态，N表示该进程优先值为负数 </span>|<br>  &gt; |<span class="hljs-string"> **%CPU**  </span>|<span class="hljs-string"> 进程占用CPU的使用率                                      </span>|<span class="hljs-string"> **%MEM**    </span>|<span class="hljs-string"> 进程使用的物理内存和总内存的百分比                           </span>|<br>  &gt; |<span class="hljs-string"> **TIME+** </span>|<span class="hljs-string"> 该进程启动后占用的总的CPU时间，即占用CPU使用时间的累加值 </span>|<span class="hljs-string"> **COMMAND** </span>|<span class="hljs-string"> 进程启动命令名称                                             </span>|<br><br>- <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>top<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>退出方式是==用q进行退出==<br><br>- <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>free<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>查看内存的使用情况<br><br>  &gt; |<span class="hljs-string"> total              </span>|<span class="hljs-string"> 总计物理内存的大小 </span>|<span class="hljs-string"> used       </span>|<span class="hljs-string"> 已使用多大             </span>|<br>  &gt; |<span class="hljs-string"> ------------------ </span>|<span class="hljs-string"> ------------------ </span>|<span class="hljs-string"> ---------- </span>|<span class="hljs-string"> ---------------------- </span>|<br>  &gt; |<span class="hljs-string"> **free**           </span>|<span class="hljs-string"> 可用有多少         </span>|<span class="hljs-string"> **Shared** </span>|<span class="hljs-string"> 多个进程共享的内存总额 </span>|<br>  &gt; |<span class="hljs-string"> **Buffers/cached** </span>|<span class="hljs-string"> 磁盘缓存的大小     </span>|<span class="hljs-string">            </span>|<span class="hljs-string">                        </span>|<br><br>- <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>vmstat<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>指令也是用于查看内存的使用<br><br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>Procs(进程)<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>： r: 运行队列中进程数量，这个值也可以判断是否需要增加CPU。(长期大于1)    b: 等待IO的进程数量<br>  &gt;<br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>Memory(内存)<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>：swpd: 使用虚拟内存大小；free: 空闲物理内存大小；buff: 用作缓冲的内存大小；cache: 用作缓存的内存大小<br>  &gt;<br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>Swap<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>： si: 每秒从交换区写到内存的大小，由磁盘调入内存；so: 每秒写入交换区的内存大小，由内存调入磁盘<br>  &gt;<br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>IO<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>：bi: 每秒读取的块数，bo: 每秒写入的块数<br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>系统<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>： in: 每秒中断数，包括时钟中断。 cs: 每秒上下文切换数。<br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>CPU(以百分比表示)<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>：us: 用户进程执行时间百分比(user time)<br>  &gt;   sy: 内核系统进程执行时间百分比(system time) ；wa: IO等待时间百分比； id: 空闲时间百分比<br><br><span class="hljs-comment">#### 查看GPU：**nvidia-smi**</span><br><br>watch -n 1 nvidia-smi 实时查看GPU使用情况<br><br>行代码的意思是只选择指定标号GPU进行使用，执行完该行代码之后python环境无法检测到指定GPU之外的其他<br><br><br><br><span class="hljs-comment">#### 显示Linux系统的其他信息</span><br><br><span class="hljs-comment">##### 时间和日期</span><br><br>|<span class="hljs-string"> 序号 </span>|<span class="hljs-string"> 命令 </span>|<span class="hljs-string"> 作用                                          </span>|<br>|<span class="hljs-string"> ---- </span>|<span class="hljs-string"> ---- </span>|<span class="hljs-string"> --------------------------------------------- </span>|<br>|<span class="hljs-string"> 01   </span>|<span class="hljs-string"> date </span>|<span class="hljs-string"> 查看系统时间                                  </span>|<br>|<span class="hljs-string"> 02   </span>|<span class="hljs-string"> cal  </span>|<span class="hljs-string"> calendar 查看日历， -y 选项可以查看一年的日历 </span>|<br><br><span class="hljs-comment">##### 磁盘信息</span><br><br>|<span class="hljs-string"> 序号 </span>|<span class="hljs-string"> 命令           </span>|<span class="hljs-string"> 作用                            </span>|<br>|<span class="hljs-string"> ---- </span>|<span class="hljs-string"> -------------- </span>|<span class="hljs-string"> ------------------------------- </span>|<br>|<span class="hljs-string"> 01   </span>|<span class="hljs-string"> df -h          </span>|<span class="hljs-string"> disk free 显示磁盘剩余空间      </span>|<br>|<span class="hljs-string"> 02   </span>|<span class="hljs-string"> du -h [目录名] </span>|<span class="hljs-string"> disk usage 显示目录下的文件大小 </span>|<br><br><span class="hljs-comment">##### 	进程信息</span><br><br>​	所谓<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>进程<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>，通俗地说就是 <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>当前正在执行的一个程序<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br><br>|<span class="hljs-string"> 序号 </span>|<span class="hljs-string"> 命令               </span>|<span class="hljs-string"> 作用                                 </span>|<br>|<span class="hljs-string"> ---- </span>|<span class="hljs-string"> ------------------ </span>|<span class="hljs-string"> ------------------------------------ </span>|<br>|<span class="hljs-string"> 01   </span>|<span class="hljs-string"> ps aux             </span>|<span class="hljs-string"> process status 查看进程的详细状况    </span>|<br>|<span class="hljs-string"> 02   </span>|<span class="hljs-string"> top                </span>|<span class="hljs-string"> 动态显示运行中的进程并且排序         </span>|<br>|<span class="hljs-string"> 03   </span>|<span class="hljs-string"> kill [-9] 进程代号 </span>|<span class="hljs-string"> 终止指定代号的进程， -9 表示强行终止 </span>|<br><br><span class="hljs-comment">### ping检测当前服务器的网络是否通畅</span><br><br>​	ping 一般用于检测当前计算机到目标计算机之间的网络 <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>是否通畅，数值越大，速度越慢<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br><br>```c<span class="hljs-comment">#</span><br><span class="hljs-comment"># 检测到目标主机是否连接正常</span><br>$ ping IP地址 www.baidu.com<br><span class="hljs-comment"># 检测本地网卡工作正常</span><br>$ ping 127.0.0.1<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="指定代码在哪个gpu上跑">指定代码在哪个GPU上跑</h4>
+<ol type="1">
+<li><p>首先先查看对应的GPU内存：<strong>nvidia-smi</strong></p></li>
+<li><p>然后在终端输出代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">CUDA_VISIBLE_DEVICES=<span class="hljs-number">1</span> python your_model.py <br></code></pre></td></tr></table></figure>
+<p>再或者使用
+<code>**torch.cuda.set_device()**函数</code>指定gpu使用编号：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br>torch.cuda.set_device(<span class="hljs-number">2</span>) <span class="hljs-comment"># 使用2号GPU</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>基础工具</category>
+      </categories>
+      <tags>
+        <tag>基础工具</tag>
+        <tag>后端开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【多智能体强化学习】Pymarl环境配置</title>
+    <url>/2023/10/22/pymarl%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<p>SMAC是基于暴雪星际争霸II
+RTS游戏的协作多智能体强化学习领域的研究环境。SMAC利用星际争霸2机器学习API和DeepMind的PySC2为自主代理提供了一个方便的接口。</p>
+<p>本文主要介绍在多智能体强化学习中的验证平台SAMC和Pymarl的配置和安装过程</p>
+<p>环境地址：<a
+href="https://github.com/oxwhirl/pymarl">https://github.com/oxwhirl/pymarl</a></p>
+<p>依赖环境：<a
+href="https://github.com/oxwhirl/smac">https://github.com/oxwhirl/smac</a></p>
+<p>主要针对Ubuntu下的Pymarl环境的配置（MAC和Windows类似）</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022145734342.png"
+alt="SMAC" />
+<figcaption aria-hidden="true">SMAC</figcaption>
+</figure>
+<h2 id="安装starcraftii">安装StarCraftII</h2>
+<h3 id="windowsmac">Windows/Mac</h3>
+<p>直接在官网下载安装最新版，需要加速器或者更换亚服：<a
+href="https://sc2.blizzard.cn/landing">https://sc2.blizzard.cn/landing</a></p>
+<p>安装地图：<a
+href="https://link.zhihu.com/?target=https%3A//github.com/oxwhirl/smac/releases/download/v0.1-beta1/SMAC_Maps.zip">https://link.zhihu.com/?target=https%3A//github.com/oxwhirl/smac/releases/download/v0.1-beta1/SMAC_Maps.zip</a></p>
+<p>将地图放在Maps文件夹下</p>
+<h3 id="ubuntu">Ubuntu</h3>
+<p>在Ubuntu系统中，安装需要版本的SCII即可<a
+href="https://github.com/Blizzard/s2client-proto#downloads">https://github.com/Blizzard/s2client-proto#downloads</a></p>
+<p>下载压缩包之后安装并解压放到用户名文件夹下：～/StarCraftII/</p>
+<p>如果没有把SCII安装到用户名之下，这个地方的路径可以根据放置的位置来进行更改：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim ~/.bashrc<br></code></pre></td></tr></table></figure>
+<p>在最后一行增加环境变量，这里可以更改星际争霸的位置索引到任何想要放置的位置</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">SC2PATH</span>=~/StarCraftII/<br></code></pre></td></tr></table></figure>
+<p>添加完之后更新环境</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.bashrc<br></code></pre></td></tr></table></figure>
+<p>添加SAMC的地图：Linux系统在下载SCII的时候就自带了地图</p>
+<h2 id="安装smac">安装SMAC</h2>
+<p>创建虚拟环境并安装pytorch</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n pymarl python=<span class="hljs-number">3.8</span> -y<br>conda activate pymarl   <br><span class="hljs-comment"># CUDA 10.2 例子具体的的CUDA版本根据自己的服务器来定</span><br>conda install pytorch==<span class="hljs-number">1.10</span><span class="hljs-number">.0</span> torchvision==<span class="hljs-number">0.11</span><span class="hljs-number">.0</span> torchaudio==<span class="hljs-number">0.10</span><span class="hljs-number">.0</span> cudatoolkit=<span class="hljs-number">10.2</span> -c pytorch<br></code></pre></td></tr></table></figure>
+<p>直接利用虚拟环境中的pip来安装</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install git+https://github.com/oxwhirl/smac.git<br></code></pre></td></tr></table></figure>
+<p>或者可以利用git进行安装，先git
+clone下载下来然后进入文件夹中进行安装</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">git clone https://github.com/oxwhirl/smac.git<br>pip install -e smac/<br></code></pre></td></tr></table></figure>
+<p>如果pip install安装失败可以考虑升级pip：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install --upgrade pip<br></code></pre></td></tr></table></figure>
+<p>如果安装的内容失败了可以手动安装，比如pymarl运行所依赖的包有以下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip install sacred numpy scipy matplotlib seaborn pyyaml pygame pytest probscale imageio snakeviz tensorboard-logger<br><br></code></pre></td></tr></table></figure>
+<p>或者根据<a
+href="https://github.com/oxwhirl/pymarl/tree/master/docker">https://github.com/oxwhirl/pymarl/tree/master/docker</a>中的bash脚本中Dockerfile依赖内容进行安装</p>
+<h2 id="pymarl与scii">Pymarl与SCII</h2>
+<h3 id="采用上述安装步骤">采用上述安装步骤</h3>
+<p>对于上述的操作完成操作之后，下载pymarl的环境包并进入</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">git clone git@github.com:oxwhirl/pymarl.git<br>cd pymarl<br></code></pre></td></tr></table></figure>
+<p>将上述安装的SCII文件夹复制到pymarl的src的3dparty之下</p>
+<h3 id="如果利用docker安装">如果利用Docker安装</h3>
+<p>或者根据pymarl中的内容对上述环境进行自动配置（需要Docker）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> docker<br>bash build.sh<br></code></pre></td></tr></table></figure>
+<p>同时安装SCII和SMAC</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">bash install_sc2.sh<br></code></pre></td></tr></table></figure>
+<h2 id="测试环境">测试环境</h2>
+<h3 id="测试地图信息">测试地图信息</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python -m smac.<span class="hljs-built_in">bin</span>.map_list <br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153907123.png" alt="Maps show" style="zoom:67%;" /></p>
+<h3 id="测试环境信息">测试环境信息</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python -m smac.examples.random_agents<br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153709693.png" alt="test agents" style="zoom: 50%;" /></p>
+<h3 id="测试pymarl环境">测试Pymarl环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python src/main.py --config=qmix --env-config=sc2 <span class="hljs-keyword">with</span> env_args.map_name=2s3z<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153651418.png"
+alt="test pymarl" />
+<figcaption aria-hidden="true">test pymarl</figcaption>
+</figure>
+<h2 id="额外设置">额外设置</h2>
+<p>在利用pymarl进行实验的过程中可能会出现</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022154059365.png"
+alt="some bug" />
+<figcaption aria-hidden="true">some bug</figcaption>
+</figure>
+<p>需要进行设置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim torch/_tensor.py<br></code></pre></td></tr></table></figure>
+<p>将757行的内容进行修改</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">-: self.numpy()<br>+: self.cpu().numpy()<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>强化学习</category>
+      </categories>
+      <tags>
+        <tag>人工智能</tag>
+        <tag>深度学习</tag>
+        <tag>强化学习</tag>
       </tags>
   </entry>
   <entry>
