@@ -16,15 +16,15 @@
   <meta name="author" content="Haibin Li">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux命令集 查看当前路径的位置 pwd 当前目录下的文件  当前目录下的文件 ls ls -l；ls-h；都是用来显示文件的详细信息 ls -a 来显示所有的文件（包含隐藏文件） 组合使用 ls -lha 显示所有并包含的隐藏文件且显示详细信息 使用dir显示当前文件夹下的文件名*  切换文件夹  cd .. #返回父级目录    cd 切换到当前用户的主目录(&#x2F;home&#x2F;用户目录)">
+    <meta name="description" content="Linux命令集 查看当前路径的位置 pwd 查看命令历史 终端中输入 1history 当前目录下的文件  当前目录下的文件 ls ls -l；ls-h；都是用来显示文件的详细信息 ls -a 来显示所有的文件（包含隐藏文件） 组合使用 ls -lha 显示所有并包含的隐藏文件且显示详细信息 使用dir显示当前文件夹下的文件名*  切换文件夹  cd .. #返回父级目录    cd 切换到当前">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【基础工具】Linux指令集">
 <meta property="og:url" content="https://lihaibineric.github.io/2023/11/25/linux/index.html">
 <meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
-<meta property="og:description" content="Linux命令集 查看当前路径的位置 pwd 当前目录下的文件  当前目录下的文件 ls ls -l；ls-h；都是用来显示文件的详细信息 ls -a 来显示所有的文件（包含隐藏文件） 组合使用 ls -lha 显示所有并包含的隐藏文件且显示详细信息 使用dir显示当前文件夹下的文件名*  切换文件夹  cd .. #返回父级目录    cd 切换到当前用户的主目录(&#x2F;home&#x2F;用户目录)">
+<meta property="og:description" content="Linux命令集 查看当前路径的位置 pwd 查看命令历史 终端中输入 1history 当前目录下的文件  当前目录下的文件 ls ls -l；ls-h；都是用来显示文件的详细信息 ls -a 来显示所有的文件（包含隐藏文件） 组合使用 ls -lha 显示所有并包含的隐藏文件且显示详细信息 使用dir显示当前文件夹下的文件名*  切换文件夹  cd .. #返回父级目录    cd 切换到当前">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-11-25T09:06:29.000Z">
-<meta property="article:modified_time" content="2023-11-25T09:15:19.869Z">
+<meta property="article:modified_time" content="2023-11-25T09:23:21.941Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="基础工具">
 <meta property="article:tag" content="后端开发">
@@ -209,7 +209,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.1k words
+          2.1k words
         
       </span>
     
@@ -220,7 +220,7 @@
         
         
         
-          26 mins
+          18 mins
         
       </span>
     
@@ -264,6 +264,9 @@
                 
                 <h2 id="linux命令集">Linux命令集</h2>
 <h4 id="查看当前路径的位置-pwd">查看当前路径的位置 pwd</h4>
+<h4 id="查看命令历史">查看命令历史</h4>
+<p>终端中输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">history</span><br></code></pre></td></tr></table></figure>
 <h4 id="当前目录下的文件">当前目录下的文件</h4>
 <ul>
 <li>当前目录下的文件 ls</li>
@@ -353,9 +356,225 @@
 <u>在123文件夹下递归创建文件夹456</u></li>
 </ul>
 <h4 id="新建某个文件">新建某个文件</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">touch</span> 123.txt<br></code></pre></td></tr></table></figure>
+<h4 id="删除文件夹">删除文件夹</h4>
 <ul>
-<li>```bash touch 123.txt <figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><code class="hljs gherkin"><br><span class="hljs-comment">#### 删除文件夹</span><br><br>- rmdir+ 需要删除的文件名<br><br><span class="hljs-comment">#### 删除某个文件</span><br><br>- 使用rm来对文件进行删除 -i  进行删除前的查询<br><br>- |<span class="hljs-string"> 选项 </span>|<span class="hljs-string"> 含义                                                  </span>|<br>  |<span class="hljs-string"> ---- </span>|<span class="hljs-string"> ----------------------------------------------------- </span>|<br>  |<span class="hljs-string"> -f   </span>|<span class="hljs-string"> 强制删除，忽略不存在的文件，无需提示                  </span>|<br>  |<span class="hljs-string"> -r   </span>|<span class="hljs-string"> 递归地删除目录下的内容，**删除文件夹 时必须加此参数** </span>|<br><br><span class="hljs-comment">#### 解压缩文件的指令</span><br><br>- <span class="hljs-comment">##### 对于ZIP文件的操作</span><br><br>  - 解压操作：进入需要解压的文件的位置：<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>unzip filename.zip<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br>  - 压缩文件：同理进入需要解压的文件夹的上一级 zip filename.zip<br><br><span class="hljs-comment">#### Linux中查看系统使用情况</span><br><br>- Top 来显示CPU的占用情况：<br><br>  &gt; |<span class="hljs-string"> PID       </span>|<span class="hljs-string"> 进程的ID                                                 </span>|<span class="hljs-string"> USER        </span>|<span class="hljs-string"> 进程所有者                                                   </span>|<br>  &gt; |<span class="hljs-string"> --------- </span>|<span class="hljs-string"> -------------------------------------------------------- </span>|<span class="hljs-string"> ----------- </span>|<span class="hljs-string"> ------------------------------------------------------------ </span>|<br>  &gt; |<span class="hljs-string"> **PR**    </span>|<span class="hljs-string"> 进程的优先级别，越小越优先被执行                         </span>|<span class="hljs-string"> **NInice**  </span>|<span class="hljs-string"> 值                                                           </span>|<br>  &gt; |<span class="hljs-string"> **VIRT**  </span>|<span class="hljs-string"> 进程占用的虚拟内存                                       </span>|<span class="hljs-string"> **RES**     </span>|<span class="hljs-string"> 进程占用的物理内存                                           </span>|<br>  &gt; |<span class="hljs-string"> **SHR**   </span>|<span class="hljs-string"> 进程使用的共享内存                                       </span>|<span class="hljs-string"> S           </span>|<span class="hljs-string"> 进程的状态。S表示休眠，R表示正在运行，Z表示僵死状态，N表示该进程优先值为负数 </span>|<br>  &gt; |<span class="hljs-string"> **%CPU**  </span>|<span class="hljs-string"> 进程占用CPU的使用率                                      </span>|<span class="hljs-string"> **%MEM**    </span>|<span class="hljs-string"> 进程使用的物理内存和总内存的百分比                           </span>|<br>  &gt; |<span class="hljs-string"> **TIME+** </span>|<span class="hljs-string"> 该进程启动后占用的总的CPU时间，即占用CPU使用时间的累加值 </span>|<span class="hljs-string"> **COMMAND** </span>|<span class="hljs-string"> 进程启动命令名称                                             </span>|<br><br>- <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>top<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>退出方式是==用q进行退出==<br><br>- <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>free<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>查看内存的使用情况<br><br>  &gt; |<span class="hljs-string"> total              </span>|<span class="hljs-string"> 总计物理内存的大小 </span>|<span class="hljs-string"> used       </span>|<span class="hljs-string"> 已使用多大             </span>|<br>  &gt; |<span class="hljs-string"> ------------------ </span>|<span class="hljs-string"> ------------------ </span>|<span class="hljs-string"> ---------- </span>|<span class="hljs-string"> ---------------------- </span>|<br>  &gt; |<span class="hljs-string"> **free**           </span>|<span class="hljs-string"> 可用有多少         </span>|<span class="hljs-string"> **Shared** </span>|<span class="hljs-string"> 多个进程共享的内存总额 </span>|<br>  &gt; |<span class="hljs-string"> **Buffers/cached** </span>|<span class="hljs-string"> 磁盘缓存的大小     </span>|<span class="hljs-string">            </span>|<span class="hljs-string">                        </span>|<br><br>- <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>vmstat<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>指令也是用于查看内存的使用<br><br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>Procs(进程)<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>： r: 运行队列中进程数量，这个值也可以判断是否需要增加CPU。(长期大于1)    b: 等待IO的进程数量<br>  &gt;<br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>Memory(内存)<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>：swpd: 使用虚拟内存大小；free: 空闲物理内存大小；buff: 用作缓冲的内存大小；cache: 用作缓存的内存大小<br>  &gt;<br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>Swap<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>： si: 每秒从交换区写到内存的大小，由磁盘调入内存；so: 每秒写入交换区的内存大小，由内存调入磁盘<br>  &gt;<br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>IO<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>：bi: 每秒读取的块数，bo: 每秒写入的块数<br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>系统<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>： in: 每秒中断数，包括时钟中断。 cs: 每秒上下文切换数。<br>  &gt; - <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>CPU(以百分比表示)<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>：us: 用户进程执行时间百分比(user time)<br>  &gt;   sy: 内核系统进程执行时间百分比(system time) ；wa: IO等待时间百分比； id: 空闲时间百分比<br><br><span class="hljs-comment">#### 查看GPU：**nvidia-smi**</span><br><br>watch -n 1 nvidia-smi 实时查看GPU使用情况<br><br>行代码的意思是只选择指定标号GPU进行使用，执行完该行代码之后python环境无法检测到指定GPU之外的其他<br><br><br><br><span class="hljs-comment">#### 显示Linux系统的其他信息</span><br><br><span class="hljs-comment">##### 时间和日期</span><br><br>|<span class="hljs-string"> 序号 </span>|<span class="hljs-string"> 命令 </span>|<span class="hljs-string"> 作用                                          </span>|<br>|<span class="hljs-string"> ---- </span>|<span class="hljs-string"> ---- </span>|<span class="hljs-string"> --------------------------------------------- </span>|<br>|<span class="hljs-string"> 01   </span>|<span class="hljs-string"> date </span>|<span class="hljs-string"> 查看系统时间                                  </span>|<br>|<span class="hljs-string"> 02   </span>|<span class="hljs-string"> cal  </span>|<span class="hljs-string"> calendar 查看日历， -y 选项可以查看一年的日历 </span>|<br><br><span class="hljs-comment">##### 磁盘信息</span><br><br>|<span class="hljs-string"> 序号 </span>|<span class="hljs-string"> 命令           </span>|<span class="hljs-string"> 作用                            </span>|<br>|<span class="hljs-string"> ---- </span>|<span class="hljs-string"> -------------- </span>|<span class="hljs-string"> ------------------------------- </span>|<br>|<span class="hljs-string"> 01   </span>|<span class="hljs-string"> df -h          </span>|<span class="hljs-string"> disk free 显示磁盘剩余空间      </span>|<br>|<span class="hljs-string"> 02   </span>|<span class="hljs-string"> du -h [目录名] </span>|<span class="hljs-string"> disk usage 显示目录下的文件大小 </span>|<br><br><span class="hljs-comment">##### 	进程信息</span><br><br>​	所谓<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>进程<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>，通俗地说就是 <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>当前正在执行的一个程序<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br><br>|<span class="hljs-string"> 序号 </span>|<span class="hljs-string"> 命令               </span>|<span class="hljs-string"> 作用                                 </span>|<br>|<span class="hljs-string"> ---- </span>|<span class="hljs-string"> ------------------ </span>|<span class="hljs-string"> ------------------------------------ </span>|<br>|<span class="hljs-string"> 01   </span>|<span class="hljs-string"> ps aux             </span>|<span class="hljs-string"> process status 查看进程的详细状况    </span>|<br>|<span class="hljs-string"> 02   </span>|<span class="hljs-string"> top                </span>|<span class="hljs-string"> 动态显示运行中的进程并且排序         </span>|<br>|<span class="hljs-string"> 03   </span>|<span class="hljs-string"> kill [-9] 进程代号 </span>|<span class="hljs-string"> 终止指定代号的进程， -9 表示强行终止 </span>|<br><br><span class="hljs-comment">### ping检测当前服务器的网络是否通畅</span><br><br>​	ping 一般用于检测当前计算机到目标计算机之间的网络 <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>是否通畅，数值越大，速度越慢<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br><br>```c<span class="hljs-comment">#</span><br><span class="hljs-comment"># 检测到目标主机是否连接正常</span><br>$ ping IP地址 www.baidu.com<br><span class="hljs-comment"># 检测本地网卡工作正常</span><br>$ ping 127.0.0.1<br></code></pre></td></tr></table></figure></li>
+<li>rmdir+ 需要删除的文件名</li>
 </ul>
+<h4 id="删除某个文件">删除某个文件</h4>
+<ul>
+<li><p>使用rm来对文件进行删除 -i 进行删除前的查询</p></li>
+<li><table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-f</td>
+<td>强制删除，忽略不存在的文件，无需提示</td>
+</tr>
+<tr class="even">
+<td>-r</td>
+<td>递归地删除目录下的内容，<strong>删除文件夹
+时必须加此参数</strong></td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<h4 id="解压缩文件的指令">解压缩文件的指令</h4>
+<ul>
+<li><h5 id="对于zip文件的操作">对于ZIP文件的操作</h5>
+<ul>
+<li>解压操作：进入需要解压的文件的位置：<strong>unzip
+filename.zip</strong></li>
+<li>压缩文件：同理进入需要解压的文件夹的上一级 zip filename.zip</li>
+</ul></li>
+</ul>
+<h4 id="linux中查看系统使用情况">Linux中查看系统使用情况</h4>
+<ul>
+<li><p>Top 来显示CPU的占用情况：</p>
+<blockquote>
+<table>
+
+<thead>
+<tr class="header">
+<th>PID</th>
+<th>进程的ID</th>
+<th>USER</th>
+<th>进程所有者</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>PR</strong></td>
+<td>进程的优先级别，越小越优先被执行</td>
+<td><strong>NInice</strong></td>
+<td>值</td>
+</tr>
+<tr class="even">
+<td><strong>VIRT</strong></td>
+<td>进程占用的虚拟内存</td>
+<td><strong>RES</strong></td>
+<td>进程占用的物理内存</td>
+</tr>
+<tr class="odd">
+<td><strong>SHR</strong></td>
+<td>进程使用的共享内存</td>
+<td>S</td>
+<td>进程的状态。S表示休眠，R表示正在运行，Z表示僵死状态，N表示该进程优先值为负数</td>
+</tr>
+<tr class="even">
+<td><strong>%CPU</strong></td>
+<td>进程占用CPU的使用率</td>
+<td><strong>%MEM</strong></td>
+<td>进程使用的物理内存和总内存的百分比</td>
+</tr>
+<tr class="odd">
+<td><strong>TIME+</strong></td>
+<td>该进程启动后占用的总的CPU时间，即占用CPU使用时间的累加值</td>
+<td><strong>COMMAND</strong></td>
+<td>进程启动命令名称</td>
+</tr>
+</tbody>
+</table>
+</blockquote></li>
+<li><p><strong>top</strong>退出方式是==用q进行退出==</p></li>
+<li><p><strong>free</strong>查看内存的使用情况</p>
+<blockquote>
+<table>
+
+<thead>
+<tr class="header">
+<th>total</th>
+<th>总计物理内存的大小</th>
+<th>used</th>
+<th>已使用多大</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>free</strong></td>
+<td>可用有多少</td>
+<td><strong>Shared</strong></td>
+<td>多个进程共享的内存总额</td>
+</tr>
+<tr class="even">
+<td><strong>Buffers/cached</strong></td>
+<td>磁盘缓存的大小</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</blockquote></li>
+<li><p><strong>vmstat</strong>指令也是用于查看内存的使用</p>
+<blockquote>
+<ul>
+<li><p><strong>Procs(进程)</strong>： r:
+运行队列中进程数量，这个值也可以判断是否需要增加CPU。(长期大于1) b:
+等待IO的进程数量</p></li>
+<li><p><strong>Memory(内存)</strong>：swpd: 使用虚拟内存大小；free:
+空闲物理内存大小；buff: 用作缓冲的内存大小；cache:
+用作缓存的内存大小</p></li>
+<li><p><strong>Swap</strong>： si:
+每秒从交换区写到内存的大小，由磁盘调入内存；so:
+每秒写入交换区的内存大小，由内存调入磁盘</p></li>
+<li><p><strong>IO</strong>：bi: 每秒读取的块数，bo:
+每秒写入的块数</p></li>
+<li><p><strong>系统</strong>： in: 每秒中断数，包括时钟中断。 cs:
+每秒上下文切换数。</p></li>
+<li><p><strong>CPU(以百分比表示)</strong>：us:
+用户进程执行时间百分比(user time) sy: 内核系统进程执行时间百分比(system
+time) ；wa: IO等待时间百分比； id: 空闲时间百分比</p></li>
+</ul>
+</blockquote></li>
+</ul>
+<h4 id="查看gpunvidia-smi">查看GPU：<strong>nvidia-smi</strong></h4>
+<p>实时查看GPU使用情况</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">watch -n 1 nvidia-smi <br></code></pre></td></tr></table></figure>
+<p>行代码的意思是只选择指定标号GPU进行使用，执行完该行代码之后python环境无法检测到指定GPU之外的其他</p>
+<h4 id="显示linux系统的其他信息">显示Linux系统的其他信息</h4>
+<h5 id="时间和日期">时间和日期</h5>
+<table>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>date</td>
+<td>查看系统时间</td>
+</tr>
+<tr class="even">
+<td>02</td>
+<td>cal</td>
+<td>calendar 查看日历， -y 选项可以查看一年的日历</td>
+</tr>
+</tbody>
+</table>
+<h5 id="磁盘信息">磁盘信息</h5>
+<table>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>df -h</td>
+<td>disk free 显示磁盘剩余空间</td>
+</tr>
+<tr class="even">
+<td>02</td>
+<td>du -h [目录名]</td>
+<td>disk usage 显示目录下的文件大小</td>
+</tr>
+</tbody>
+</table>
+<h5 id="进程信息">进程信息</h5>
+<p>​ 所谓<strong>进程</strong>，通俗地说就是
+<strong>当前正在执行的一个程序</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>ps aux</td>
+<td>process status 查看进程的详细状况</td>
+</tr>
+<tr class="even">
+<td>02</td>
+<td>top</td>
+<td>动态显示运行中的进程并且排序</td>
+</tr>
+<tr class="odd">
+<td>03</td>
+<td>kill [-9] 进程代号</td>
+<td>终止指定代号的进程， -9 表示强行终止</td>
+</tr>
+</tbody>
+</table>
+<h3
+id="ping检测当前服务器的网络是否通畅">ping检测当前服务器的网络是否通畅</h3>
+<p>​ ping 一般用于检测当前计算机到目标计算机之间的网络
+<strong>是否通畅，数值越大，速度越慢</strong></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-meta"># 检测到目标主机是否连接正常</span><br>$ ping IP地址 www.baidu.com<br><span class="hljs-meta"># 检测本地网卡工作正常</span><br>$ ping <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span><br></code></pre></td></tr></table></figure>
 <h4 id="指定代码在哪个gpu上跑">指定代码在哪个GPU上跑</h4>
 <ol type="1">
 <li><p>首先先查看对应的GPU内存：<strong>nvidia-smi</strong></p></li>
