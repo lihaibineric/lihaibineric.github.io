@@ -1523,44 +1523,37 @@ alt="some bug" />
       </tags>
   </entry>
   <entry>
-    <title>【基础工具】VScode远程和免密配置</title>
-    <url>/2023/10/22/vscode-remote/</url>
+    <title>【后端开发】golang基础</title>
+    <url>/2023/11/27/go-%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<h2 id="vscode远程连接与免密配置">VSCode远程连接与免密配置</h2>
-<h4 id="vscode远程连接">VSCode远程连接</h4>
-<p>在vscode中安装remote-ssh的插件</p>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231125164427793.png" alt="添加插件示意图" style="zoom:67%;" /></p>
-<p>加号的位置点击后在右侧框中输入远程服务器的ip地址与名称：==ssh
-ubuntu@3.14.15.926==</p>
-<p>而后选择包含.ssh的文件夹位置，需要注意的是在==remote-ssh的配置文件中需要的文件夹位置==
-<strong>/users/user/.ssh/config</strong></p>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231125164542420.png" alt="Remote插件配置设置" style="zoom:67%;" /></p>
-<h4 id="远程连接免密配置">远程连接免密配置</h4>
-<h6 id="电脑端"><strong>电脑端</strong></h6>
+<p>学习网站：<a
+href="https://www.bilibili.com/video/BV1gf4y1r79E/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">8小时转职Golang工程师</a></p>
+<h2 id="go的环境安装">Go的环境安装</h2>
+<h4 id="下载官网">下载官网：</h4>
+<p>go的官网下载网站，选择合适的系统版本进行安装<a
+href="https://go.dev/dl/">https://go.dev/dl/</a></p>
+<h4 id="安装步骤">安装步骤：</h4>
 <ol type="1">
-<li><p>生成本地<strong>私钥id_rsa，公钥id_rsa.pub</strong>文件，输入以下</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">ssh-keygen -t rsa -b 4096 <br></code></pre></td></tr></table></figure>
-<p>然后一路回车会在电脑用户目录下的.ssh生成上述的文件，并进入复制<strong>id_rsa.pub</strong>中的文件内容</p></li>
-<li><p>如果已经存在，那么只需要进入上述的.ssh文件中复制即可</p></li>
-</ol>
-<h6 id="服务器端">服务器端</h6>
-<ol type="1">
-<li><p>进入服务器端的用户名路径下的.ssh文件中，如果没有执行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> .ssh<br></code></pre></td></tr></table></figure></li>
-<li><p>在.ssh中新建<strong>authorized_keys文件</strong></p></li>
-<li><p>将复制的<strong>id_rsa.pub</strong>中的文件内容黏贴到<strong>authorized_keys文件</strong>中即可完成</p></li>
+<li><p>下载安装包并按照安装包的指引下载相关的内容</p></li>
+<li><p>对于Mac系统会直接配置好环境变量，根据官网的安装手册进行安装 <a
+href="https://go.dev/doc/install">https://go.dev/doc/install</a></p></li>
+<li><p>测试GO的版本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go version<br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204733470.png" alt="go version" style="zoom: 67%;" /></p></li>
+<li><p>测试GO的环境变量</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">env</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204804150.png" alt="go env" style="zoom: 50%;" /></p></li>
 </ol>
 <h4 id="section"></h4>
-<h4 id="登陆密码更改">登陆密码更改</h4>
-<p>在终端中输入</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">passwd<br></code></pre></td></tr></table></figure>
-<p>按照指引输入一次原来的密码和新的密码</p>
+<p>go语言没有异常，全部都用ERROR来表示</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> run hello.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> build hello.<span class="hljs-keyword">go</span><br>./ hello<br></code></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>基础工具</category>
+        <category>后端开发</category>
       </categories>
       <tags>
-        <tag>基础工具</tag>
+        <tag>后端开发</tag>
       </tags>
   </entry>
 </search>
