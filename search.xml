@@ -282,63 +282,6 @@ alt="GRF的训练结果与可视化" />
       </tags>
   </entry>
   <entry>
-    <title>【基础工具】Anaconda命令集</title>
-    <url>/2023/10/22/conda_list/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<h2 id="conda-常用命令">Conda 常用命令</h2>
-<h3 id="查看conda版本">查看conda版本</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda --version/ conda -V<br></code></pre></td></tr></table></figure>
-<h3 id="查看已有环境">查看已有环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda info --envs<br>conda env <span class="hljs-built_in">list</span><br>conda info -e<br></code></pre></td></tr></table></figure>
-<h3 id="进退环境">进退环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate  [name]<span class="hljs-comment"># 重新进入虚拟环境</span><br>conda deactivate  <span class="hljs-comment"># 退出虚拟环境</span><br></code></pre></td></tr></table></figure>
-<h3 id="创建新的环境">创建新的环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n *** python=<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
-<h3 id="删除环境">删除环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove -n old_name --<span class="hljs-built_in">all</span> <span class="hljs-comment"># 删除环境old_name</span><br></code></pre></td></tr></table></figure>
-<h3 id="激活环境">激活环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate xxxx <span class="hljs-comment"># 激活xxxx环境</span><br></code></pre></td></tr></table></figure>
-<h3 id="关闭环境">关闭环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda deactivate <span class="hljs-comment"># 关闭环境</span><br></code></pre></td></tr></table></figure>
-<h3 id="克隆环境">克隆环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n [new_name] --clone [old_name]<br></code></pre></td></tr></table></figure>
-<h3 id="升级版本">升级版本</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda update -n base conda <span class="hljs-comment">#update最新版本的conda；</span><br>conda update --<span class="hljs-built_in">all</span> <span class="hljs-comment">#更新所有包</span><br></code></pre></td></tr></table></figure>
-<h3 id="pip管理的常用包">Pip管理的常用包</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip search package_name <br>pip show package_name <br>pip uninstall｜｜package_name<br>pip <span class="hljs-built_in">list</span><br></code></pre></td></tr></table></figure>
-<h3 id="删除环境中的包">删除环境中的包</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove package <span class="hljs-comment">#删除当前环境中的包</span><br>conda remove -- name env_name package <span class="hljs-comment">#删除指定环境中的包</span><br></code></pre></td></tr></table></figure>
-<h3 id="指定环境中安装包">指定环境中安装包</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda install --name env_name package_name <br></code></pre></td></tr></table></figure>
-<h3 id="conda环境的python版本非指定">Conda环境的python版本非指定</h3>
-<p>指定虚拟环境x的python版本是3.8，base环境是3.11；conda
-activate激活x之后python版本仍为3.11。</p>
-<p><strong>原因：</strong>在base环境中修改了.zshrc文件中的python只定路径，让每次虚拟环境中的python找到的python都只能按照指定的python路径进行寻找，从而导致conda环境中的python版本不能制定。</p>
-<p><strong>修改方式：</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim .zshrc<br></code></pre></td></tr></table></figure>
-<p>进入
-.zshrc环境中进行修改，如果发现一类诸如其他python版本指定的路径的话，需要进行删除，只需要保留最原始的关于anaconda的命令初始化，完成之后输入</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.zshrc<br></code></pre></td></tr></table></figure>
-<p>解决问题</p>
-<h3 id="镜像源安装">镜像源安装</h3>
-<p><strong>下载使用清华源加上： -i
-https://pypi.tuna.tsinghua.edu.cn/simple</strong></p>
-<blockquote>
-<p><strong>清华：<code>https://pypi.tuna.tsinghua.edu.cn/simple/</code></strong></p>
-<p><strong>阿里云：<code>http://mirrors.aliyun.com/pypi/simple/</code></strong></p>
-<p><strong>中国科技大学
-：<code>https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/</code></strong></p>
-<p><strong>豆瓣：<code>http://pypi.doubanio.com/simple/</code></strong></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>基础工具</category>
-      </categories>
-      <tags>
-        <tag>基础工具</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>【自动驾驶】RSS Model for Autonomous Driving</title>
     <url>/2023/10/21/RSS-Model/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
@@ -996,11 +939,68 @@ system，能够产生极高的精度；直接测量速度和距离，这进一�
 </ul>
 ]]></content>
       <categories>
-        <category>人工智能</category>
+        <category>深度学习</category>
       </categories>
       <tags>
         <tag>人工智能</tag>
         <tag>智能安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【基础工具】Anaconda命令集</title>
+    <url>/2023/10/22/conda_list/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h2 id="conda-常用命令">Conda 常用命令</h2>
+<h3 id="查看conda版本">查看conda版本</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda --version/ conda -V<br></code></pre></td></tr></table></figure>
+<h3 id="查看已有环境">查看已有环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda info --envs<br>conda env <span class="hljs-built_in">list</span><br>conda info -e<br></code></pre></td></tr></table></figure>
+<h3 id="进退环境">进退环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate  [name]<span class="hljs-comment"># 重新进入虚拟环境</span><br>conda deactivate  <span class="hljs-comment"># 退出虚拟环境</span><br></code></pre></td></tr></table></figure>
+<h3 id="创建新的环境">创建新的环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n *** python=<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<h3 id="删除环境">删除环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove -n old_name --<span class="hljs-built_in">all</span> <span class="hljs-comment"># 删除环境old_name</span><br></code></pre></td></tr></table></figure>
+<h3 id="激活环境">激活环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate xxxx <span class="hljs-comment"># 激活xxxx环境</span><br></code></pre></td></tr></table></figure>
+<h3 id="关闭环境">关闭环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda deactivate <span class="hljs-comment"># 关闭环境</span><br></code></pre></td></tr></table></figure>
+<h3 id="克隆环境">克隆环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n [new_name] --clone [old_name]<br></code></pre></td></tr></table></figure>
+<h3 id="升级版本">升级版本</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda update -n base conda <span class="hljs-comment">#update最新版本的conda；</span><br>conda update --<span class="hljs-built_in">all</span> <span class="hljs-comment">#更新所有包</span><br></code></pre></td></tr></table></figure>
+<h3 id="pip管理的常用包">Pip管理的常用包</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip search package_name <br>pip show package_name <br>pip uninstall｜｜package_name<br>pip <span class="hljs-built_in">list</span><br></code></pre></td></tr></table></figure>
+<h3 id="删除环境中的包">删除环境中的包</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove package <span class="hljs-comment">#删除当前环境中的包</span><br>conda remove -- name env_name package <span class="hljs-comment">#删除指定环境中的包</span><br></code></pre></td></tr></table></figure>
+<h3 id="指定环境中安装包">指定环境中安装包</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda install --name env_name package_name <br></code></pre></td></tr></table></figure>
+<h3 id="conda环境的python版本非指定">Conda环境的python版本非指定</h3>
+<p>指定虚拟环境x的python版本是3.8，base环境是3.11；conda
+activate激活x之后python版本仍为3.11。</p>
+<p><strong>原因：</strong>在base环境中修改了.zshrc文件中的python只定路径，让每次虚拟环境中的python找到的python都只能按照指定的python路径进行寻找，从而导致conda环境中的python版本不能制定。</p>
+<p><strong>修改方式：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim .zshrc<br></code></pre></td></tr></table></figure>
+<p>进入
+.zshrc环境中进行修改，如果发现一类诸如其他python版本指定的路径的话，需要进行删除，只需要保留最原始的关于anaconda的命令初始化，完成之后输入</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.zshrc<br></code></pre></td></tr></table></figure>
+<p>解决问题</p>
+<h3 id="镜像源安装">镜像源安装</h3>
+<p><strong>下载使用清华源加上： -i
+https://pypi.tuna.tsinghua.edu.cn/simple</strong></p>
+<blockquote>
+<p><strong>清华：<code>https://pypi.tuna.tsinghua.edu.cn/simple/</code></strong></p>
+<p><strong>阿里云：<code>http://mirrors.aliyun.com/pypi/simple/</code></strong></p>
+<p><strong>中国科技大学
+：<code>https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/</code></strong></p>
+<p><strong>豆瓣：<code>http://pypi.doubanio.com/simple/</code></strong></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>基础工具</category>
+      </categories>
+      <tags>
+        <tag>基础工具</tag>
       </tags>
   </entry>
   <entry>
@@ -1061,6 +1061,40 @@ system，能够产生极高的精度；直接测量速度和距离，这进一�
 ]]></content>
       <categories>
         <category>基础工具</category>
+      </categories>
+      <tags>
+        <tag>后端开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【后端开发】golang基础</title>
+    <url>/2023/11/27/go-%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<p>学习网站：<a
+href="https://www.bilibili.com/video/BV1gf4y1r79E/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">8小时转职Golang工程师</a></p>
+<h2 id="go的环境安装">Go的环境安装</h2>
+<h4 id="下载官网">下载官网：</h4>
+<p>go的官网下载网站，选择合适的系统版本进行安装<a
+href="https://go.dev/dl/">https://go.dev/dl/</a></p>
+<h4 id="安装步骤">安装步骤：</h4>
+<ol type="1">
+<li><p>下载安装包并按照安装包的指引下载相关的内容</p></li>
+<li><p>对于Mac系统会直接配置好环境变量，根据官网的安装手册进行安装 <a
+href="https://go.dev/doc/install">https://go.dev/doc/install</a></p></li>
+<li><p>测试GO的版本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go version<br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204733470.png" alt="go version" style="zoom: 67%;" /></p></li>
+<li><p>测试GO的环境变量</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">env</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204804150.png" alt="go env" style="zoom: 50%;" /></p></li>
+</ol>
+<h4 id="section"></h4>
+<p>go语言没有异常，全部都用ERROR来表示</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> run hello.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> build hello.<span class="hljs-keyword">go</span><br>./ hello<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>后端开发</category>
       </categories>
       <tags>
         <tag>后端开发</tag>
@@ -1520,40 +1554,6 @@ alt="some bug" />
       <tags>
         <tag>人工智能</tag>
         <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【后端开发】golang基础</title>
-    <url>/2023/11/27/go-%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<p>学习网站：<a
-href="https://www.bilibili.com/video/BV1gf4y1r79E/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">8小时转职Golang工程师</a></p>
-<h2 id="go的环境安装">Go的环境安装</h2>
-<h4 id="下载官网">下载官网：</h4>
-<p>go的官网下载网站，选择合适的系统版本进行安装<a
-href="https://go.dev/dl/">https://go.dev/dl/</a></p>
-<h4 id="安装步骤">安装步骤：</h4>
-<ol type="1">
-<li><p>下载安装包并按照安装包的指引下载相关的内容</p></li>
-<li><p>对于Mac系统会直接配置好环境变量，根据官网的安装手册进行安装 <a
-href="https://go.dev/doc/install">https://go.dev/doc/install</a></p></li>
-<li><p>测试GO的版本</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go version<br></code></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204733470.png" alt="go version" style="zoom: 67%;" /></p></li>
-<li><p>测试GO的环境变量</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">env</span><br></code></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204804150.png" alt="go env" style="zoom: 50%;" /></p></li>
-</ol>
-<h4 id="section"></h4>
-<p>go语言没有异常，全部都用ERROR来表示</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> run hello.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> build hello.<span class="hljs-keyword">go</span><br>./ hello<br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>后端开发</category>
-      </categories>
-      <tags>
-        <tag>后端开发</tag>
       </tags>
   </entry>
 </search>
