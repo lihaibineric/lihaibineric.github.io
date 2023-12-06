@@ -282,134 +282,82 @@ alt="GRF的训练结果与可视化" />
       </tags>
   </entry>
   <entry>
-    <title>【基础工具】Git命令集</title>
-    <url>/2023/10/23/git/</url>
+    <title>【基础工具】Anaconda命令集</title>
+    <url>/2023/10/22/conda_list/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<p>Git
-是一个版本控制系统，是任何软件开发项目中的主要内容。通常有两个主要用途：代码备份和代码版本控制。使用Git可以逐步处理代码，在需要回滚到备份副本的过程中保存每一步的进度。</p>
+<h2 id="conda-常用命令">Conda 常用命令</h2>
+<h3 id="查看conda版本">查看conda版本</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda --version/ conda -V<br></code></pre></td></tr></table></figure>
+<h3 id="查看已有环境">查看已有环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda info --envs<br>conda env <span class="hljs-built_in">list</span><br>conda info -e<br></code></pre></td></tr></table></figure>
+<h3 id="进退环境">进退环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate  [name]<span class="hljs-comment"># 重新进入虚拟环境</span><br>conda deactivate  <span class="hljs-comment"># 退出虚拟环境</span><br></code></pre></td></tr></table></figure>
+<h3 id="创建新的环境">创建新的环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n *** python=<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<h3 id="删除环境">删除环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove -n old_name --<span class="hljs-built_in">all</span> <span class="hljs-comment"># 删除环境old_name</span><br></code></pre></td></tr></table></figure>
+<h3 id="激活环境">激活环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate xxxx <span class="hljs-comment"># 激活xxxx环境</span><br></code></pre></td></tr></table></figure>
+<h3 id="关闭环境">关闭环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda deactivate <span class="hljs-comment"># 关闭环境</span><br></code></pre></td></tr></table></figure>
+<h3 id="克隆环境">克隆环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n [new_name] --clone [old_name]<br></code></pre></td></tr></table></figure>
+<h3 id="升级版本">升级版本</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda update -n base conda <span class="hljs-comment">#update最新版本的conda；</span><br>conda update --<span class="hljs-built_in">all</span> <span class="hljs-comment">#更新所有包</span><br></code></pre></td></tr></table></figure>
+<h3 id="pip管理的常用包">Pip管理的常用包</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip search package_name <br>pip show package_name <br>pip uninstall｜｜package_name<br>pip <span class="hljs-built_in">list</span><br></code></pre></td></tr></table></figure>
+<h3 id="删除环境中的包">删除环境中的包</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove package <span class="hljs-comment">#删除当前环境中的包</span><br>conda remove -- name env_name package <span class="hljs-comment">#删除指定环境中的包</span><br></code></pre></td></tr></table></figure>
+<h3 id="指定环境中安装包">指定环境中安装包</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda install --name env_name package_name <br></code></pre></td></tr></table></figure>
+<h3 id="conda环境的python版本非指定">Conda环境的python版本非指定</h3>
+<p>指定虚拟环境x的python版本是3.8，base环境是3.11；conda
+activate激活x之后python版本仍为3.11。</p>
+<p><strong>原因：</strong>在base环境中修改了.zshrc文件中的python只定路径，让每次虚拟环境中的python找到的python都只能按照指定的python路径进行寻找，从而导致conda环境中的python版本不能制定。</p>
+<p><strong>修改方式：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim .zshrc<br></code></pre></td></tr></table></figure>
+<p>进入
+.zshrc环境中进行修改，如果发现一类诸如其他python版本指定的路径的话，需要进行删除，只需要保留最原始的关于anaconda的命令初始化，完成之后输入</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.zshrc<br></code></pre></td></tr></table></figure>
+<p>解决问题</p>
+<h3 id="镜像源安装">镜像源安装</h3>
+<p>在conda环境中改变默认的下载镜像源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">pip config <span class="hljs-built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple <br></code></pre></td></tr></table></figure>
+<p>加上这句话之后就会出现以下的写文件</p>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino">Writing to /home/user/.config/pip/pip.conf<br></code></pre></td></tr></table></figure>
+<p><strong>下载使用清华源加上： -i
+https://pypi.tuna.tsinghua.edu.cn/simple</strong></p>
+<blockquote>
+<p><strong>清华：<code>https://pypi.tuna.tsinghua.edu.cn/simple/</code></strong></p>
+<p><strong>阿里云：<code>http://mirrors.aliyun.com/pypi/simple/</code></strong></p>
+<p><strong>中国科技大学
+：<code>https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/</code></strong></p>
+<p><strong>豆瓣：<code>http://pypi.doubanio.com/simple/</code></strong></p>
+</blockquote>
+<p>如果是给conda添加镜像：清华源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --add channels http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/win-64/<br></code></pre></td></tr></table></figure>
+<p>添加阿里源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --add channels https://mirrors.aliyun.com/pypi/simple/<br></code></pre></td></tr></table></figure>
+<p>查看已经添加的镜像源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --show channels<br></code></pre></td></tr></table></figure>
+<p>移除其中的指定的镜像源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --remove channels + 镜像的名称<br></code></pre></td></tr></table></figure>
+<h3 id="conda无法自动更新">Conda无法自动更新</h3>
 <figure>
 <img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206220759363.png"
-alt="Git与GitHub" />
-<figcaption aria-hidden="true">Git与GitHub</figcaption>
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206113335958.png"
+alt="image-20231206113335958" />
+<figcaption aria-hidden="true">image-20231206113335958</figcaption>
 </figure>
-<h2 id="git的安装与配置">Git的安装与配置</h2>
-<h4 id="查看git中的配置">查看Git中的配置</h4>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --list<br></code></pre></td></tr></table></figure>
-<h2 id="git的基本控制">Git的基本控制</h2>
-<h3 id="初始化git仓库">初始化Git仓库</h3>
-<p>当完成上述的配置之后，就能开始初始化Git仓库，进入需要创建<strong>工作区</strong>workspace的文件夹输出git初始化的操作</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> workspace<br>git init<br></code></pre></td></tr></table></figure>
-<p>创建一个名为 .git
-的新子目录（该目录为隐藏的），其中包含所有必需的存储库文件（Git
-存储库框架）；注意区分<strong>工作区</strong>和<strong>暂存区</strong>，在没有add之前我们都是在<strong>工作区</strong></p>
-<p>【Vscode】考虑<strong>Git
-graph插件</strong>来可视化git分支目录的全貌</p>
-<ul>
-<li><h5 id="在github端新建仓库">在Github端新建仓库</h5>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206215455986.png"
-alt="Github端新建仓库" />
-<figcaption aria-hidden="true">Github端新建仓库</figcaption>
-</figure>
-<p>根据需要可以设置为公有的或者是私有的，最好不要设置README.md，因为初始化的国过程可能会出现冲突，设置也没关系</p></li>
-<li><h5
-id="本地的git和远端github的连接">本地的Git和远端github的连接</h5>
-<p>获取本地的SSH公钥匙，打开终端并输入</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">ssh-keygen -t rsa -C <span class="hljs-string">&quot;youremail@example.com&quot;</span><br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206221011696.png"
-alt="产生公钥的位置" />
-<figcaption aria-hidden="true">产生公钥的位置</figcaption>
-</figure>
-<p>进入.ssh中复制id_rsa.pub中的内容，并在Github中的如下位置复制改内容添加SSH🔗</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206221215856.png"
-alt="SSH链接" />
-<figcaption aria-hidden="true">SSH链接</figcaption>
-</figure>
-<p>完成连接之后再配置git的相关内容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --global user.email <span class="hljs-built_in">test</span>@163.com<br>git config --global user.name <span class="hljs-built_in">test</span><br><br></code></pre></td></tr></table></figure></li>
-<li><h5 id="本地工作区的设置">本地工作区的设置</h5>
-<p>首先进行初始化设置，使当前文件夹能够使用git</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git init<br></code></pre></td></tr></table></figure>
-<p>如果一开始没有设置README.md文件那么执行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git add README.md<br>git commit -m <span class="hljs-string">&quot;first commit&quot;</span><br>git branch -M master<br>git remote add origin git@github.com.....git<br>git push -u origin master<br></code></pre></td></tr></table></figure>
-<p>以上这些步骤，就能将本地的git和远端的仓库进行关联</p></li>
-<li><h5 id="本地和远端关联失败">本地和远端关联失败</h5>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206220359185.png"
-alt="推送出现错误" />
-<figcaption aria-hidden="true">推送出现错误</figcaption>
-</figure>
-<p>当然会出现本地和远端关联失败的情况，产生的原因可能如下：</p>
-<ol type="1">
-<li><p>在默认情况下，<code>git push</code>时一般会上传到<code>origin</code>下的<code>master</code>分支上，当<em>repository</em>和<em>branch</em>过多，又没有设置关联时，git就会产生疑问</p>
-<p>通过以下命令查看<strong>远端</strong>和<strong>本地</strong>的分支，并<strong>选择合适的</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch //本地<br>git branch -a //远端<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206220538190.png"
-alt="远端和本地的不同分支" />
-<figcaption aria-hidden="true">远端和本地的不同分支</figcaption>
-</figure></li>
-<li><p>如果本地初始化的内容和远端的内容不一样，那么无法判断本地和远端的内容差异，因此需要选择如下之一</p></li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git reset --hard origin/master<br></code></pre></td></tr></table></figure>
-<p>直接将远端的内容覆盖到本地</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git push -f -u origin master<br></code></pre></td></tr></table></figure>
-<p>强行将本地的内容覆盖到远端，那么就能形成统一，从而完成链接。</p></li>
-</ul>
-<h3 id="添加文件和备注">添加文件和备注</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git add . <br>git add &lt;file&gt;<br></code></pre></td></tr></table></figure>
-<p>执行上述命令之后将会将当前的file或者是工作区中的所有文件都上传到暂存区</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git commit -m<span class="hljs-string">&quot;【test】XXX更改信息提示&quot;</span><br><span class="hljs-comment">#如果多次提交想覆盖到同一个提交的备注上执行下面</span><br>git commit --amend<br></code></pre></td></tr></table></figure>
-<p>上述的命令是将本次的提交添加描述，分布式协作的时候能看清</p>
-<h3 id="状态与日志">状态与日志</h3>
-<p>查看默认配置</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --list<br></code></pre></td></tr></table></figure>
-<p>查看当前所在的分支位置信息</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git status<br></code></pre></td></tr></table></figure>
-<p>查看当前分支下的更改日志</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
-<h3 id="推送与拉取">推送与拉取</h3>
-<p>将本地暂存区中的更改内容推送到远端</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git push<br>git push -f <span class="hljs-comment">#强行推出</span><br></code></pre></td></tr></table></figure>
-<p>将远端所在的分支内容拉到本地</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git pull<br></code></pre></td></tr></table></figure>
-<p>更新所在分支的最新内容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch --all <br></code></pre></td></tr></table></figure>
-<h3 id="复制分支">复制分支</h3>
-<p>获取git连接git@ XXX.git之后执行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> git@ XXX.git<br></code></pre></td></tr></table></figure>
-<p>如果觉得git的内容太大，可以选择内部的分支进行下载</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> -b feature/xxx git@ XXX.git<br></code></pre></td></tr></table></figure>
-<p>feature/xxx为具体的分支内容</p>
-<h3 id="分支操作">分支操作</h3>
-<p>查看分支</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch -a <span class="hljs-comment">#查看所有的分支</span><br>git branch -r <span class="hljs-comment">#查看远端的分支</span><br></code></pre></td></tr></table></figure>
-<p>切换不同的分支</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout [branch] <span class="hljs-comment">#切换到分支</span><br></code></pre></td></tr></table></figure>
-<p>创建新的分支</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch [branch] <span class="hljs-comment">#创建新的分支</span><br></code></pre></td></tr></table></figure>
-<p>创建新的分支并切换到上面</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout -b [branch] <span class="hljs-comment">#创建并切换新的分支</span><br></code></pre></td></tr></table></figure>
-<h3 id="分支冲突">分支冲突</h3>
-<p><strong>问题描述：</strong>如果当前修改的版本基于旧版，但是远端已经是新版origin/master，<strong>此时修改基于的内容和远端不同不能强行推</strong>。</p>
-<p><strong>解决方法1：</strong>通过换基的方法解决，通过将当前的修改的旧版换到最新的基上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#先将文件提交到暂存区</span><br>git add . <span class="hljs-comment">#保存在暂存区</span><br>git commit -m <span class="hljs-string">&quot;XXX&quot;</span><br><span class="hljs-comment">#进行换基操作</span><br>git rebase -i origin/master<br><span class="hljs-comment">#再次提交</span><br>git add .<br><span class="hljs-comment">#继续换基</span><br>git rebase --<span class="hljs-built_in">continue</span><br><span class="hljs-comment">#换基成功后,只需要一次备注（覆盖）</span><br>git commit --amend<br><span class="hljs-comment">#最后退出</span><br>git push<br>git push -f <span class="hljs-comment">#或者强行推出</span><br></code></pre></td></tr></table></figure>
-<p><strong>解决方法2：</strong> 暴力覆盖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch --all <span class="hljs-comment">#获取远端的全部内容</span><br>git reset --hard origin/master <span class="hljs-comment">#强行将远端的内容覆盖到本地的文件中</span><br>git commit --amend <br>git push -f <span class="hljs-comment">#强行推出</span><br><br></code></pre></td></tr></table></figure>
+<p>原因：<a
+href="https://so.csdn.net/so/search?q=conda&amp;spm=1001.2101.3001.7020">conda</a>和pip等相关包的版本太低，自动更新不能用，解决方案：在命令行中输入以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda clean --all<br>conda update --all<br></code></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>基础工具</category>
       </categories>
       <tags>
-        <tag>后端开发</tag>
+        <tag>基础工具</tag>
       </tags>
   </entry>
   <entry>
@@ -1078,82 +1026,352 @@ system，能够产生极高的精度；直接测量速度和距离，这进一�
       </tags>
   </entry>
   <entry>
-    <title>【基础工具】Anaconda命令集</title>
-    <url>/2023/10/22/conda_list/</url>
+    <title>【基础工具】Git命令集</title>
+    <url>/2023/10/23/git/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<h2 id="conda-常用命令">Conda 常用命令</h2>
-<h3 id="查看conda版本">查看conda版本</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda --version/ conda -V<br></code></pre></td></tr></table></figure>
-<h3 id="查看已有环境">查看已有环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda info --envs<br>conda env <span class="hljs-built_in">list</span><br>conda info -e<br></code></pre></td></tr></table></figure>
-<h3 id="进退环境">进退环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate  [name]<span class="hljs-comment"># 重新进入虚拟环境</span><br>conda deactivate  <span class="hljs-comment"># 退出虚拟环境</span><br></code></pre></td></tr></table></figure>
-<h3 id="创建新的环境">创建新的环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n *** python=<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
-<h3 id="删除环境">删除环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove -n old_name --<span class="hljs-built_in">all</span> <span class="hljs-comment"># 删除环境old_name</span><br></code></pre></td></tr></table></figure>
-<h3 id="激活环境">激活环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate xxxx <span class="hljs-comment"># 激活xxxx环境</span><br></code></pre></td></tr></table></figure>
-<h3 id="关闭环境">关闭环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda deactivate <span class="hljs-comment"># 关闭环境</span><br></code></pre></td></tr></table></figure>
-<h3 id="克隆环境">克隆环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n [new_name] --clone [old_name]<br></code></pre></td></tr></table></figure>
-<h3 id="升级版本">升级版本</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda update -n base conda <span class="hljs-comment">#update最新版本的conda；</span><br>conda update --<span class="hljs-built_in">all</span> <span class="hljs-comment">#更新所有包</span><br></code></pre></td></tr></table></figure>
-<h3 id="pip管理的常用包">Pip管理的常用包</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip search package_name <br>pip show package_name <br>pip uninstall｜｜package_name<br>pip <span class="hljs-built_in">list</span><br></code></pre></td></tr></table></figure>
-<h3 id="删除环境中的包">删除环境中的包</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove package <span class="hljs-comment">#删除当前环境中的包</span><br>conda remove -- name env_name package <span class="hljs-comment">#删除指定环境中的包</span><br></code></pre></td></tr></table></figure>
-<h3 id="指定环境中安装包">指定环境中安装包</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda install --name env_name package_name <br></code></pre></td></tr></table></figure>
-<h3 id="conda环境的python版本非指定">Conda环境的python版本非指定</h3>
-<p>指定虚拟环境x的python版本是3.8，base环境是3.11；conda
-activate激活x之后python版本仍为3.11。</p>
-<p><strong>原因：</strong>在base环境中修改了.zshrc文件中的python只定路径，让每次虚拟环境中的python找到的python都只能按照指定的python路径进行寻找，从而导致conda环境中的python版本不能制定。</p>
-<p><strong>修改方式：</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim .zshrc<br></code></pre></td></tr></table></figure>
-<p>进入
-.zshrc环境中进行修改，如果发现一类诸如其他python版本指定的路径的话，需要进行删除，只需要保留最原始的关于anaconda的命令初始化，完成之后输入</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.zshrc<br></code></pre></td></tr></table></figure>
-<p>解决问题</p>
-<h3 id="镜像源安装">镜像源安装</h3>
-<p>在conda环境中改变默认的下载镜像源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">pip config <span class="hljs-built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple <br></code></pre></td></tr></table></figure>
-<p>加上这句话之后就会出现以下的写文件</p>
-<figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino">Writing to /home/user/.config/pip/pip.conf<br></code></pre></td></tr></table></figure>
-<p><strong>下载使用清华源加上： -i
-https://pypi.tuna.tsinghua.edu.cn/simple</strong></p>
-<blockquote>
-<p><strong>清华：<code>https://pypi.tuna.tsinghua.edu.cn/simple/</code></strong></p>
-<p><strong>阿里云：<code>http://mirrors.aliyun.com/pypi/simple/</code></strong></p>
-<p><strong>中国科技大学
-：<code>https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/</code></strong></p>
-<p><strong>豆瓣：<code>http://pypi.doubanio.com/simple/</code></strong></p>
-</blockquote>
-<p>如果是给conda添加镜像：清华源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --add channels http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/win-64/<br></code></pre></td></tr></table></figure>
-<p>添加阿里源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --add channels https://mirrors.aliyun.com/pypi/simple/<br></code></pre></td></tr></table></figure>
-<p>查看已经添加的镜像源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --show channels<br></code></pre></td></tr></table></figure>
-<p>移除其中的指定的镜像源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --remove channels + 镜像的名称<br></code></pre></td></tr></table></figure>
-<h3 id="conda无法自动更新">Conda无法自动更新</h3>
+<p>Git
+是一个版本控制系统，是任何软件开发项目中的主要内容。通常有两个主要用途：代码备份和代码版本控制。使用Git可以逐步处理代码，在需要回滚到备份副本的过程中保存每一步的进度。</p>
 <figure>
 <img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206113335958.png"
-alt="image-20231206113335958" />
-<figcaption aria-hidden="true">image-20231206113335958</figcaption>
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206220759363.png"
+alt="Git与GitHub" />
+<figcaption aria-hidden="true">Git与GitHub</figcaption>
 </figure>
-<p>原因：<a
-href="https://so.csdn.net/so/search?q=conda&amp;spm=1001.2101.3001.7020">conda</a>和pip等相关包的版本太低，自动更新不能用，解决方案：在命令行中输入以下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda clean --all<br>conda update --all<br></code></pre></td></tr></table></figure>
+<h2 id="git的安装与配置">Git的安装与配置</h2>
+<h4 id="安装git">安装Git</h4>
+<p>直接上官网下载安装</p>
+<p><a
+href="https://link.zhihu.com/?target=https%3A//git-scm.com/download">https://link.zhihu.com/?target=https%3A//git-scm.com/download</a></p>
+<p><a href="https://git-scm.com/">https://git-scm.com/</a></p>
+<p>或者MAC使用brew对git进行安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">brew install git<br></code></pre></td></tr></table></figure>
+<h4 id="查看git中的配置">查看Git中的配置</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --list<br>git config --global user.email <span class="hljs-built_in">test</span>@163.com<br>git config --global user.name <span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure>
+<h4 id="检查是否安装成功">检查是否安装成功</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git version<br></code></pre></td></tr></table></figure>
+<h2 id="git的基本控制">Git的基本控制</h2>
+<h3 id="初始化git仓库">初始化Git仓库</h3>
+<p>当完成上述的配置之后，就能开始初始化Git仓库，进入需要创建<strong>工作区</strong>workspace的文件夹输出git初始化的操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> workspace<br>git init<br></code></pre></td></tr></table></figure>
+<p>创建一个名为 .git
+的新子目录（该目录为隐藏的），其中包含所有必需的存储库文件（Git
+存储库框架）；注意区分<strong>工作区</strong>和<strong>暂存区</strong>，在没有add之前我们都是在<strong>工作区</strong></p>
+<p>【Vscode】考虑<strong>Git
+graph插件</strong>来可视化git分支目录的全貌</p>
+<ul>
+<li><h5 id="在github端新建仓库">在Github端新建仓库</h5>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206215455986.png"
+alt="Github端新建仓库" />
+<figcaption aria-hidden="true">Github端新建仓库</figcaption>
+</figure>
+<p>根据需要可以设置为公有的或者是私有的，最好不要设置README.md，因为初始化的国过程可能会出现冲突，设置也没关系</p></li>
+<li><h5
+id="本地的git和远端github的连接">本地的Git和远端github的连接</h5>
+<p>获取本地的SSH公钥匙，打开终端并输入</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">ssh-keygen -t rsa -C <span class="hljs-string">&quot;youremail@example.com&quot;</span><br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206221011696.png"
+alt="产生公钥的位置" />
+<figcaption aria-hidden="true">产生公钥的位置</figcaption>
+</figure>
+<p>进入.ssh中复制id_rsa.pub中的内容，并在Github中的如下位置复制改内容添加SSH🔗</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206221215856.png"
+alt="SSH链接" />
+<figcaption aria-hidden="true">SSH链接</figcaption>
+</figure>
+<p>完成连接之后再配置git的相关内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --global user.email <span class="hljs-built_in">test</span>@163.com<br>git config --global user.name <span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure></li>
+<li><h5 id="本地工作区的设置">本地工作区的设置</h5>
+<p>首先进行初始化设置，使当前文件夹能够使用git</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git init<br></code></pre></td></tr></table></figure>
+<p>如果一开始没有设置README.md文件那么执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git add README.md<br>git commit -m <span class="hljs-string">&quot;first commit&quot;</span><br>git branch -M master<br>git remote add origin git@github.com.....git<br>git push -u origin master<br></code></pre></td></tr></table></figure>
+<p>以上这些步骤，就能将本地的git和远端的仓库进行关联</p></li>
+<li><h5 id="本地和远端关联失败">本地和远端关联失败</h5>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206220359185.png"
+alt="推送出现错误" />
+<figcaption aria-hidden="true">推送出现错误</figcaption>
+</figure>
+<p>当然会出现本地和远端关联失败的情况，产生的原因可能如下：</p>
+<ol type="1">
+<li><p>在默认情况下，<code>git push</code>时一般会上传到<code>origin</code>下的<code>master</code>分支上，当<em>repository</em>和<em>branch</em>过多，又没有设置关联时，git就会产生疑问</p>
+<p>通过以下命令查看<strong>远端</strong>和<strong>本地</strong>的分支，并<strong>选择合适的</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch //本地<br>git branch -a //远端<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206220538190.png"
+alt="远端和本地的不同分支" />
+<figcaption aria-hidden="true">远端和本地的不同分支</figcaption>
+</figure></li>
+<li><p>如果本地初始化的内容和远端的内容不一样，那么无法判断本地和远端的内容差异，因此需要选择如下之一</p></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git reset --hard origin/master<br></code></pre></td></tr></table></figure>
+<p>直接将远端的内容覆盖到本地</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git push -f -u origin master<br></code></pre></td></tr></table></figure>
+<p>强行将本地的内容覆盖到远端，那么就能形成统一，从而完成链接。</p></li>
+</ul>
+<h3 id="添加文件和备注">添加文件和备注</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git add . <br>git add &lt;file&gt;<br></code></pre></td></tr></table></figure>
+<p>执行上述命令之后将会将当前的file或者是工作区中的所有文件都上传到暂存区</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git commit -m<span class="hljs-string">&quot;【test】XXX更改信息提示&quot;</span><br><span class="hljs-comment">#如果多次提交想覆盖到同一个提交的备注上执行下面</span><br>git commit --amend<br></code></pre></td></tr></table></figure>
+<p>上述的命令是将本次的提交添加描述，分布式协作的时候能看清</p>
+<h3 id="状态与日志">状态与日志</h3>
+<p>查看默认配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --list<br></code></pre></td></tr></table></figure>
+<p>查看当前所在的分支位置信息</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git status<br></code></pre></td></tr></table></figure>
+<p>查看当前分支下的更改日志</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+<h3 id="推送与拉取">推送与拉取</h3>
+<p>将本地暂存区中的更改内容推送到远端</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git push<br>git push -f <span class="hljs-comment">#强行推出</span><br></code></pre></td></tr></table></figure>
+<p>将远端所在的分支内容拉到本地</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git pull<br></code></pre></td></tr></table></figure>
+<p>更新所在分支的最新内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch --all <br></code></pre></td></tr></table></figure>
+<h3 id="复制分支">复制分支</h3>
+<p>获取git连接git@ XXX.git之后执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> git@ XXX.git<br></code></pre></td></tr></table></figure>
+<p>如果觉得git的内容太大，可以选择内部的分支进行下载</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> -b feature/xxx git@ XXX.git<br></code></pre></td></tr></table></figure>
+<p>feature/xxx为具体的分支内容</p>
+<h3 id="分支操作">分支操作</h3>
+<p>查看分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch -a <span class="hljs-comment">#查看所有的分支</span><br>git branch -r <span class="hljs-comment">#查看远端的分支</span><br></code></pre></td></tr></table></figure>
+<p>切换不同的分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout [branch] <span class="hljs-comment">#切换到分支</span><br></code></pre></td></tr></table></figure>
+<p>创建新的分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git branch [branch] <span class="hljs-comment">#创建新的分支</span><br></code></pre></td></tr></table></figure>
+<p>创建新的分支并切换到上面</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git checkout -b [branch] <span class="hljs-comment">#创建并切换新的分支</span><br></code></pre></td></tr></table></figure>
+<h3 id="分支冲突">分支冲突</h3>
+<p><strong>问题描述：</strong>如果当前修改的版本基于旧版，但是远端已经是新版origin/master，<strong>此时修改基于的内容和远端不同不能强行推</strong>。</p>
+<p><strong>解决方法1：</strong>通过换基的方法解决，通过将当前的修改的旧版换到最新的基上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#先将文件提交到暂存区</span><br>git add . <span class="hljs-comment">#保存在暂存区</span><br>git commit -m <span class="hljs-string">&quot;XXX&quot;</span><br><span class="hljs-comment">#进行换基操作</span><br>git rebase -i origin/master<br><span class="hljs-comment">#再次提交</span><br>git add .<br><span class="hljs-comment">#继续换基</span><br>git rebase --<span class="hljs-built_in">continue</span><br><span class="hljs-comment">#换基成功后,只需要一次备注（覆盖）</span><br>git commit --amend<br><span class="hljs-comment">#最后退出</span><br>git push<br>git push -f <span class="hljs-comment">#或者强行推出</span><br></code></pre></td></tr></table></figure>
+<p><strong>解决方法2：</strong> 暴力覆盖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git fetch --all <span class="hljs-comment">#获取远端的全部内容</span><br>git reset --hard origin/master <span class="hljs-comment">#强行将远端的内容覆盖到本地的文件中</span><br>git commit --amend <br>git push -f <span class="hljs-comment">#强行推出</span><br><br></code></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>基础工具</category>
       </categories>
       <tags>
-        <tag>基础工具</tag>
+        <tag>后端开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【后端开发】Golang基础</title>
+    <url>/2023/11/27/go-%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<p>学习网站：<a
+href="https://www.bilibili.com/video/BV1gf4y1r79E/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">8小时转职Golang工程师</a></p>
+<h2 id="go的环境安装">Go的环境安装</h2>
+<h4 id="下载官网">下载官网：</h4>
+<p>go的官网下载网站，选择合适的系统版本进行安装<a
+href="https://go.dev/dl/">https://go.dev/dl/</a></p>
+<h4 id="安装步骤">安装步骤：</h4>
+<ol type="1">
+<li><p>下载安装包并按照安装包的指引下载相关的内容</p></li>
+<li><p>对于Mac系统会直接配置好环境变量，根据官网的安装手册进行安装 <a
+href="https://go.dev/doc/install">https://go.dev/doc/install</a></p></li>
+<li><p>测试GO的版本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go version<br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204733470.png" alt="go version" style="zoom: 67%;" /></p></li>
+<li><p>测试GO的环境变量</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">env</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204804150.png" alt="go env" style="zoom: 50%;" /></p></li>
+</ol>
+<h4
+id="go语言没有异常全部都用error来表示">go语言没有异常，全部都用ERROR来表示</h4>
+<p>GOROOT 表示的是安装包所在的位置，一般不需要修改</p>
+<p>GOPATH表示的是运行文件所在的位置，表示的是workspace的文件位置，里面新建三个文件夹：bin
+pkg src，src一般用来表示工程文件所在的位置</p>
+<p>修改GOPATH的路径</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> GOPATH=<span class="hljs-string">&quot;/Users/lihaibin/workspace/golang&quot;</span><br></code></pre></td></tr></table></figure>
+<p>将文件查找的路径设置为GOROOT和GOPATH的并集合</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-variable">$GOROOT</span>/bin:<span class="hljs-variable">$GOPATH</span>/bin<br></code></pre></td></tr></table></figure>
+<p>注意这个地方不能将<strong>gomod设置为on</strong>，否则有问题</p>
+<p>将两个部分并在一起之后，就能从两个地方开始寻找定义的包</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203140236053.png"
+alt="image-20231203140236053" />
+<figcaption aria-hidden="true">image-20231203140236053</figcaption>
+</figure>
+<p>首先会从GOROOT进行搜索，接着从GOPATH进行搜索</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203140659058.png"
+alt="image-20231203140659058" />
+<figcaption aria-hidden="true">image-20231203140659058</figcaption>
+</figure>
+<h2 id="go基本语法">Go基本语法</h2>
+<h4 id="如何编译并运行一个go文件">如何编译并运行一个Go文件</h4>
+<p>对于已经写好的go文件，这里以hello.go作为例子，直接使用以下语句进行编译并运行</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> run hello.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
+<p>或者将编译和运行两个过程分开，先编译后运行：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> build hello.<span class="hljs-keyword">go</span><br>./ hello<br></code></pre></td></tr></table></figure>
+<h4 id="hello.go">hello.go</h4>
+<p>首先给出基本框架</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span>(<br>	<span class="hljs-string">&quot;fmt&quot;</span>,<br>  <span class="hljs-string">&quot;time&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>  fmt.Println(<span class="hljs-string">&quot;hello world!&quot;</span>)<br>  time.Sleep(<span class="hljs-number">1</span>*time.Second)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>程序的第一行声明了名为main的package。<strong>一个package会包含一个或多个.go源代码文件。每一个源文件都是以package开头。</strong>比如我们的例子里是package
+main。这行声明语句表示该文件是属于哪一个package。</p>
+<p>同时需要注意，一个程序的<code>main</code>入口函数必须不带任何输入参数和返回结果</p>
+<h4 id="参数">参数</h4>
+<h4 id="函数">函数</h4>
+<p>多个返回值初始化设置了函数的形参之后，初始值是0</p>
+<p>go每次设置一个变量值之后都有初始值，如果是数据就是0，如果是字符串那么就是空，防止出现一些野指针的情况</p>
+<h4 id="import和init">import和init</h4>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231202121630297.png"
+alt="image-20231202121630297" />
+<figcaption aria-hidden="true">image-20231202121630297</figcaption>
+</figure>
+<p>分别建不同的文件夹对应的就是package的名字，相应的在.go文件内部声明package的名字</p>
+<p><strong>注意：</strong>
+在包中设置接口的时候，函数名称必须第一个字母是大写，如果是小写的话将无法识别</p>
+<p>如果函数名第一个是大写就是对外开放的函数，认为是public</p>
+<p>如果函数名第一个是小写的话就认为是私有的函数，认为是private</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203140110880.png"
+alt="image-20231203140110880" />
+<figcaption aria-hidden="true">image-20231203140110880</figcaption>
+</figure>
+<p>init函数的调用过程，首先会对包中的init进行初始化再进行调用接口</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203140412429.png"
+alt="image-20231203140412429" />
+<figcaption aria-hidden="true">image-20231203140412429</figcaption>
+</figure>
+<p>如果你导入了包比如lib1，但是没有使用这个包里面的接口函数，仍然会报错</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203141038750.png"
+alt="image-20231203141038750" />
+<figcaption aria-hidden="true">image-20231203141038750</figcaption>
+</figure>
+<p>但是如果我不想调用lib1的函数接口，但是想使用lib1的init()函数怎么办呢，如果这个时候直接导入了包
+但是不调用接口，就会出现上述的错误</p>
+<p><strong>匿名导包方式</strong></p>
+<p>在导入的包前面加上下划线来认为这个包是匿名的，这样就能知进行init操作</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203141343859.png"
+alt="image-20231203141343859" />
+<figcaption aria-hidden="true">image-20231203141343859</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203141336299.png"
+alt="image-20231203141336299" />
+<figcaption aria-hidden="true">image-20231203141336299</figcaption>
+</figure>
+<p>给新导入的包起个别的名字，比如叫mylib作为新的别名</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203141500041.png"
+alt="image-20231203141500041" />
+<figcaption aria-hidden="true">image-20231203141500041</figcaption>
+</figure>
+<p>或者直接使用·来进行调用</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203141620428.png"
+alt="image-20231203141620428" />
+<figcaption aria-hidden="true">image-20231203141620428</figcaption>
+</figure>
+<p>最好别使用这种，如果两个包的函数名称一样那么可能会导致出现歧义的情况</p>
+<h4 id="go指针">GO指针</h4>
+<p>和C++以及C中的是一样的</p>
+<p>定义的时候 *int 传递变量的地址&amp;</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203171319969.png"
+alt="image-20231203171319969" />
+<figcaption aria-hidden="true">image-20231203171319969</figcaption>
+</figure>
+<h4 id="section"></h4>
+<h4 id="数组与切片">数组与切片</h4>
+<p>通过这种方式进行初始化数组以及进行切片操作，通过range关键字进行遍历数组，并给出index和value进行给出不同的下标和数值</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203174817927.png"
+alt="image-20231203174817927" />
+<figcaption aria-hidden="true">image-20231203174817927</figcaption>
+</figure>
+<p>固定数组传递的是一个值拷贝</p>
+<p><strong>动态数组 slice</strong></p>
+<p>但是动态数组或者是说切片是一个引用传递</p>
+<p>同时动态数组传递的过程中的参数形式是一致的，能够适配所有的slice参数类型，但是对于</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203205827787.png"
+alt="image-20231203205827787" />
+<figcaption aria-hidden="true">image-20231203205827787</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203205839072.png"
+alt="image-20231203205839072" />
+<figcaption aria-hidden="true">image-20231203205839072</figcaption>
+</figure>
+<p>这里面的下划线表示的是不需要考虑的index的数值，可以忽略</p>
+<p>这里是关于切片slice的声明和打印</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go">	<span class="hljs-comment">//声明切片之后的长度是3，同时初始化的值是1，2，3</span><br>	slice1 :=[]<span class="hljs-type">int</span>&#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>&#125;<br>	<span class="hljs-comment">//%v表示的是打印出全部的表示信息</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice1),slice1)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>打印的结果是</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203210558440.png"
+alt="image-20231203210558440" />
+<figcaption aria-hidden="true">image-20231203210558440</figcaption>
+</figure>
+<p>声明slice但是不一定声明了空间，因此需要注意的是声明的同时并给出空间大小，同时没办法中途增加空间</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span>  <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-comment">/* </span><br><span class="hljs-comment">	声明切片之后的长度是3，同时初始化的值是1，2，3</span><br><span class="hljs-comment">	 */</span><br>	slice1 :=[]<span class="hljs-type">int</span>&#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>&#125;<br>	<span class="hljs-comment">//%v表示的是打印出全部的表示信息</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice1),slice1)<br>	<span class="hljs-comment">//直接对没有赋予空间的位置修改会出现位置越界</span><br>	<span class="hljs-comment">//slice1[3]=999</span><br>	slice1 = <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>,<span class="hljs-number">4</span>)<br>	<span class="hljs-comment">//但是这个时候就只会重新赋予空间并复制0</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice1),slice1)<br><br><br>	<span class="hljs-comment">/* </span><br><span class="hljs-comment">	声明slice是切片,但是没有分配空间</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-keyword">var</span> slice2 []<span class="hljs-type">int</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice2),slice2)<br>	<br>	<span class="hljs-comment">//slice2[0]=2 //直接赋予数值会出现错误，越界</span><br>	slice2 = <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>,<span class="hljs-number">3</span>)<br>	<span class="hljs-comment">//开辟空间，但是默认值都是0</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice2),slice2)<br>	slice2[<span class="hljs-number">0</span>]=<span class="hljs-number">1000</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice2),slice2)<br>	<span class="hljs-comment">//此时就修改成功</span><br><br>	<span class="hljs-comment">/*  </span><br><span class="hljs-comment">	声明slice类型，同时分配空间</span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-keyword">var</span> slice3 =<span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>,<span class="hljs-number">5</span>)<br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice3),slice3)<br><br><br>	<span class="hljs-comment">/* </span><br><span class="hljs-comment">	判断一个slice切片是不是为0</span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-keyword">if</span> slice1 == <span class="hljs-literal">nil</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;slice1 is null&quot;</span>)<br>	&#125;<span class="hljs-keyword">else</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;slice1 is not null&quot;</span>)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注意if else的格式有要求</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203211744713.png"
+alt="image-20231203211744713" />
+<figcaption aria-hidden="true">image-20231203211744713</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203212832782.png"
+alt="image-20231203212832782" />
+<figcaption aria-hidden="true">image-20231203212832782</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203213134825.png"
+alt="image-20231203213134825" />
+<figcaption aria-hidden="true">image-20231203213134825</figcaption>
+</figure>
+<p>关于切片的截取操作</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-comment">/* </span><br><span class="hljs-comment">	切片的截取 </span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-keyword">var</span> slice6 = <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>,<span class="hljs-number">3</span>)<br>	slice6[<span class="hljs-number">0</span>]=<span class="hljs-number">1</span><br>	slice6[<span class="hljs-number">2</span>]=<span class="hljs-number">33</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, cap = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice6), <span class="hljs-built_in">cap</span>(slice6), slice6)<br>	<span class="hljs-comment">//截取的过程中是左闭右开</span><br>	s1:=slice6[<span class="hljs-number">0</span>:<span class="hljs-number">2</span>]<br>	<span class="hljs-comment">// s1:=slice6[:]//表示截取全部</span><br>	fmt.Println(s1)<br>	<span class="hljs-comment">//注意此时的s1的地址和slice6的位置一样了</span><br><br>	<span class="hljs-comment">//copy</span><br>	<span class="hljs-keyword">var</span> s2 = <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>,<span class="hljs-number">3</span>)<br>	<span class="hljs-built_in">copy</span>(s2,slice6)<br>	fmt.Println(s2)<span class="hljs-comment">// 只会从头开始截取s2长度的，如果长了那么就是0，</span><br>	<span class="hljs-comment">//否则就是选择slice6中相同长度的元素，从左到右边</span><br></code></pre></td></tr></table></figure>
+<h4 id="map的操作">map的操作</h4>
+<h4 id="反射">反射</h4>
+<p>变量结构</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231204222258311.png"
+alt="image-20231204222258311" />
+<figcaption aria-hidden="true">image-20231204222258311</figcaption>
+</figure>
+]]></content>
+      <categories>
+        <category>后端开发</category>
+      </categories>
+      <tags>
+        <tag>后端开发</tag>
       </tags>
   </entry>
   <entry>
@@ -1499,216 +1717,7 @@ time) ；wa: IO等待时间百分比； id: 空闲时间百分比</p></li>
         <category>基础工具</category>
       </categories>
       <tags>
-        <tag>后端开发</tag>
         <tag>基础工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【后端开发】Golang基础</title>
-    <url>/2023/11/27/go-%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<p>学习网站：<a
-href="https://www.bilibili.com/video/BV1gf4y1r79E/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">8小时转职Golang工程师</a></p>
-<h2 id="go的环境安装">Go的环境安装</h2>
-<h4 id="下载官网">下载官网：</h4>
-<p>go的官网下载网站，选择合适的系统版本进行安装<a
-href="https://go.dev/dl/">https://go.dev/dl/</a></p>
-<h4 id="安装步骤">安装步骤：</h4>
-<ol type="1">
-<li><p>下载安装包并按照安装包的指引下载相关的内容</p></li>
-<li><p>对于Mac系统会直接配置好环境变量，根据官网的安装手册进行安装 <a
-href="https://go.dev/doc/install">https://go.dev/doc/install</a></p></li>
-<li><p>测试GO的版本</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go version<br></code></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204733470.png" alt="go version" style="zoom: 67%;" /></p></li>
-<li><p>测试GO的环境变量</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">env</span><br></code></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204804150.png" alt="go env" style="zoom: 50%;" /></p></li>
-</ol>
-<h4
-id="go语言没有异常全部都用error来表示">go语言没有异常，全部都用ERROR来表示</h4>
-<p>GOROOT 表示的是安装包所在的位置，一般不需要修改</p>
-<p>GOPATH表示的是运行文件所在的位置，表示的是workspace的文件位置，里面新建三个文件夹：bin
-pkg src，src一般用来表示工程文件所在的位置</p>
-<p>修改GOPATH的路径</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> GOPATH=<span class="hljs-string">&quot;/Users/lihaibin/workspace/golang&quot;</span><br></code></pre></td></tr></table></figure>
-<p>将文件查找的路径设置为GOROOT和GOPATH的并集合</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-variable">$GOROOT</span>/bin:<span class="hljs-variable">$GOPATH</span>/bin<br></code></pre></td></tr></table></figure>
-<p>注意这个地方不能将<strong>gomod设置为on</strong>，否则有问题</p>
-<p>将两个部分并在一起之后，就能从两个地方开始寻找定义的包</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203140236053.png"
-alt="image-20231203140236053" />
-<figcaption aria-hidden="true">image-20231203140236053</figcaption>
-</figure>
-<p>首先会从GOROOT进行搜索，接着从GOPATH进行搜索</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203140659058.png"
-alt="image-20231203140659058" />
-<figcaption aria-hidden="true">image-20231203140659058</figcaption>
-</figure>
-<h2 id="go基本语法">Go基本语法</h2>
-<h4 id="如何编译并运行一个go文件">如何编译并运行一个Go文件</h4>
-<p>对于已经写好的go文件，这里以hello.go作为例子，直接使用以下语句进行编译并运行</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> run hello.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
-<p>或者将编译和运行两个过程分开，先编译后运行：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> build hello.<span class="hljs-keyword">go</span><br>./ hello<br></code></pre></td></tr></table></figure>
-<h4 id="hello.go">hello.go</h4>
-<p>首先给出基本框架</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span>(<br>	<span class="hljs-string">&quot;fmt&quot;</span>,<br>  <span class="hljs-string">&quot;time&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>  fmt.Println(<span class="hljs-string">&quot;hello world!&quot;</span>)<br>  time.Sleep(<span class="hljs-number">1</span>*time.Second)<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>程序的第一行声明了名为main的package。<strong>一个package会包含一个或多个.go源代码文件。每一个源文件都是以package开头。</strong>比如我们的例子里是package
-main。这行声明语句表示该文件是属于哪一个package。</p>
-<p>同时需要注意，一个程序的<code>main</code>入口函数必须不带任何输入参数和返回结果</p>
-<h4 id="参数">参数</h4>
-<h4 id="函数">函数</h4>
-<p>多个返回值初始化设置了函数的形参之后，初始值是0</p>
-<p>go每次设置一个变量值之后都有初始值，如果是数据就是0，如果是字符串那么就是空，防止出现一些野指针的情况</p>
-<h4 id="import和init">import和init</h4>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231202121630297.png"
-alt="image-20231202121630297" />
-<figcaption aria-hidden="true">image-20231202121630297</figcaption>
-</figure>
-<p>分别建不同的文件夹对应的就是package的名字，相应的在.go文件内部声明package的名字</p>
-<p><strong>注意：</strong>
-在包中设置接口的时候，函数名称必须第一个字母是大写，如果是小写的话将无法识别</p>
-<p>如果函数名第一个是大写就是对外开放的函数，认为是public</p>
-<p>如果函数名第一个是小写的话就认为是私有的函数，认为是private</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203140110880.png"
-alt="image-20231203140110880" />
-<figcaption aria-hidden="true">image-20231203140110880</figcaption>
-</figure>
-<p>init函数的调用过程，首先会对包中的init进行初始化再进行调用接口</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203140412429.png"
-alt="image-20231203140412429" />
-<figcaption aria-hidden="true">image-20231203140412429</figcaption>
-</figure>
-<p>如果你导入了包比如lib1，但是没有使用这个包里面的接口函数，仍然会报错</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203141038750.png"
-alt="image-20231203141038750" />
-<figcaption aria-hidden="true">image-20231203141038750</figcaption>
-</figure>
-<p>但是如果我不想调用lib1的函数接口，但是想使用lib1的init()函数怎么办呢，如果这个时候直接导入了包
-但是不调用接口，就会出现上述的错误</p>
-<p><strong>匿名导包方式</strong></p>
-<p>在导入的包前面加上下划线来认为这个包是匿名的，这样就能知进行init操作</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203141343859.png"
-alt="image-20231203141343859" />
-<figcaption aria-hidden="true">image-20231203141343859</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203141336299.png"
-alt="image-20231203141336299" />
-<figcaption aria-hidden="true">image-20231203141336299</figcaption>
-</figure>
-<p>给新导入的包起个别的名字，比如叫mylib作为新的别名</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203141500041.png"
-alt="image-20231203141500041" />
-<figcaption aria-hidden="true">image-20231203141500041</figcaption>
-</figure>
-<p>或者直接使用·来进行调用</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203141620428.png"
-alt="image-20231203141620428" />
-<figcaption aria-hidden="true">image-20231203141620428</figcaption>
-</figure>
-<p>最好别使用这种，如果两个包的函数名称一样那么可能会导致出现歧义的情况</p>
-<h4 id="go指针">GO指针</h4>
-<p>和C++以及C中的是一样的</p>
-<p>定义的时候 *int 传递变量的地址&amp;</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203171319969.png"
-alt="image-20231203171319969" />
-<figcaption aria-hidden="true">image-20231203171319969</figcaption>
-</figure>
-<h4 id="section"></h4>
-<h4 id="数组与切片">数组与切片</h4>
-<p>通过这种方式进行初始化数组以及进行切片操作，通过range关键字进行遍历数组，并给出index和value进行给出不同的下标和数值</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203174817927.png"
-alt="image-20231203174817927" />
-<figcaption aria-hidden="true">image-20231203174817927</figcaption>
-</figure>
-<p>固定数组传递的是一个值拷贝</p>
-<p><strong>动态数组 slice</strong></p>
-<p>但是动态数组或者是说切片是一个引用传递</p>
-<p>同时动态数组传递的过程中的参数形式是一致的，能够适配所有的slice参数类型，但是对于</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203205827787.png"
-alt="image-20231203205827787" />
-<figcaption aria-hidden="true">image-20231203205827787</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203205839072.png"
-alt="image-20231203205839072" />
-<figcaption aria-hidden="true">image-20231203205839072</figcaption>
-</figure>
-<p>这里面的下划线表示的是不需要考虑的index的数值，可以忽略</p>
-<p>这里是关于切片slice的声明和打印</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go">	<span class="hljs-comment">//声明切片之后的长度是3，同时初始化的值是1，2，3</span><br>	slice1 :=[]<span class="hljs-type">int</span>&#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>&#125;<br>	<span class="hljs-comment">//%v表示的是打印出全部的表示信息</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice1),slice1)<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>打印的结果是</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203210558440.png"
-alt="image-20231203210558440" />
-<figcaption aria-hidden="true">image-20231203210558440</figcaption>
-</figure>
-<p>声明slice但是不一定声明了空间，因此需要注意的是声明的同时并给出空间大小，同时没办法中途增加空间</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span>  <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-comment">/* </span><br><span class="hljs-comment">	声明切片之后的长度是3，同时初始化的值是1，2，3</span><br><span class="hljs-comment">	 */</span><br>	slice1 :=[]<span class="hljs-type">int</span>&#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>&#125;<br>	<span class="hljs-comment">//%v表示的是打印出全部的表示信息</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice1),slice1)<br>	<span class="hljs-comment">//直接对没有赋予空间的位置修改会出现位置越界</span><br>	<span class="hljs-comment">//slice1[3]=999</span><br>	slice1 = <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>,<span class="hljs-number">4</span>)<br>	<span class="hljs-comment">//但是这个时候就只会重新赋予空间并复制0</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice1),slice1)<br><br><br>	<span class="hljs-comment">/* </span><br><span class="hljs-comment">	声明slice是切片,但是没有分配空间</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-keyword">var</span> slice2 []<span class="hljs-type">int</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice2),slice2)<br>	<br>	<span class="hljs-comment">//slice2[0]=2 //直接赋予数值会出现错误，越界</span><br>	slice2 = <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>,<span class="hljs-number">3</span>)<br>	<span class="hljs-comment">//开辟空间，但是默认值都是0</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice2),slice2)<br>	slice2[<span class="hljs-number">0</span>]=<span class="hljs-number">1000</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice2),slice2)<br>	<span class="hljs-comment">//此时就修改成功</span><br><br>	<span class="hljs-comment">/*  </span><br><span class="hljs-comment">	声明slice类型，同时分配空间</span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-keyword">var</span> slice3 =<span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>,<span class="hljs-number">5</span>)<br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice3),slice3)<br><br><br>	<span class="hljs-comment">/* </span><br><span class="hljs-comment">	判断一个slice切片是不是为0</span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-keyword">if</span> slice1 == <span class="hljs-literal">nil</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;slice1 is null&quot;</span>)<br>	&#125;<span class="hljs-keyword">else</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;slice1 is not null&quot;</span>)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>注意if else的格式有要求</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203211744713.png"
-alt="image-20231203211744713" />
-<figcaption aria-hidden="true">image-20231203211744713</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203212832782.png"
-alt="image-20231203212832782" />
-<figcaption aria-hidden="true">image-20231203212832782</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203213134825.png"
-alt="image-20231203213134825" />
-<figcaption aria-hidden="true">image-20231203213134825</figcaption>
-</figure>
-<p>关于切片的截取操作</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-comment">/* </span><br><span class="hljs-comment">	切片的截取 </span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-keyword">var</span> slice6 = <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>,<span class="hljs-number">3</span>)<br>	slice6[<span class="hljs-number">0</span>]=<span class="hljs-number">1</span><br>	slice6[<span class="hljs-number">2</span>]=<span class="hljs-number">33</span><br>	fmt.Printf(<span class="hljs-string">&quot;len = %d, cap = %d, slice =%v\n&quot;</span>, <span class="hljs-built_in">len</span>(slice6), <span class="hljs-built_in">cap</span>(slice6), slice6)<br>	<span class="hljs-comment">//截取的过程中是左闭右开</span><br>	s1:=slice6[<span class="hljs-number">0</span>:<span class="hljs-number">2</span>]<br>	<span class="hljs-comment">// s1:=slice6[:]//表示截取全部</span><br>	fmt.Println(s1)<br>	<span class="hljs-comment">//注意此时的s1的地址和slice6的位置一样了</span><br><br>	<span class="hljs-comment">//copy</span><br>	<span class="hljs-keyword">var</span> s2 = <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>,<span class="hljs-number">3</span>)<br>	<span class="hljs-built_in">copy</span>(s2,slice6)<br>	fmt.Println(s2)<span class="hljs-comment">// 只会从头开始截取s2长度的，如果长了那么就是0，</span><br>	<span class="hljs-comment">//否则就是选择slice6中相同长度的元素，从左到右边</span><br></code></pre></td></tr></table></figure>
-<h4 id="map的操作">map的操作</h4>
-<h4 id="反射">反射</h4>
-<p>变量结构</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231204222258311.png"
-alt="image-20231204222258311" />
-<figcaption aria-hidden="true">image-20231204222258311</figcaption>
-</figure>
-]]></content>
-      <categories>
-        <category>后端开发</category>
-      </categories>
-      <tags>
         <tag>后端开发</tag>
       </tags>
   </entry>
