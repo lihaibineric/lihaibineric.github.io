@@ -24,7 +24,7 @@
 <meta property="og:description" content="Linux命令集 查看当前路径的位置 pwd 查看命令历史 终端中输入 1history 当前目录下的文件  当前目录下的文件 ls ls -l；ls-h；都是用来显示文件的详细信息 ls -a 来显示所有的文件（包含隐藏文件） 组合使用 ls -lha 显示所有并包含的隐藏文件且显示详细信息 使用dir显示当前文件夹下的文件名*  切换文件夹  cd .. #返回父级目录    cd 切换到当前">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-11-25T09:06:29.000Z">
-<meta property="article:modified_time" content="2023-11-25T09:23:21.941Z">
+<meta property="article:modified_time" content="2023-12-03T05:30:22.599Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="后端开发">
 <meta property="article:tag" content="基础工具">
@@ -209,7 +209,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.1k words
+          2.4k words
         
       </span>
     
@@ -220,7 +220,7 @@
         
         
         
-          18 mins
+          20 mins
         
       </span>
     
@@ -492,10 +492,24 @@ time) ；wa: IO等待时间百分比； id: 空闲时间百分比</p></li>
 </ul>
 </blockquote></li>
 </ul>
-<h4 id="查看gpunvidia-smi">查看GPU：<strong>nvidia-smi</strong></h4>
+<h4 id="查看系统的gpu">查看系统的GPU</h4>
 <p>实时查看GPU使用情况</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">watch -n 1 nvidia-smi <br></code></pre></td></tr></table></figure>
 <p>行代码的意思是只选择指定标号GPU进行使用，执行完该行代码之后python环境无法检测到指定GPU之外的其他</p>
+<h4 id="系统环境变量">系统环境变量</h4>
+<p>对于MACOS，用VIM进入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim ～/.zshrc<br></code></pre></td></tr></table></figure>
+<p>添加环境变量的语句是，这里以增加路径为例子</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> GOPATH=<span class="hljs-string">&quot;user/workspace/golang&quot;</span><br></code></pre></td></tr></table></figure>
+<p>添加完环境变量之后，激活一下设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.zshrc<br></code></pre></td></tr></table></figure>
+<p>同样对于Linux系统而言也是相同的步骤</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim ~/.bashrc<br></code></pre></td></tr></table></figure>
+<p>添加完成之后最后激活一下设定</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.bashrc<br></code></pre></td></tr></table></figure>
+<p>如果想直接查看当前某个环境变量的设置的值可以用以下的命令进行查看</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$GOPARH</span><br></code></pre></td></tr></table></figure>
+<p>输出的值是当前的这个环境变量设置的值，比如会输出：user/workspace/golang</p>
 <h4 id="显示linux系统的其他信息">显示Linux系统的其他信息</h4>
 <h5 id="时间和日期">时间和日期</h5>
 <table>
@@ -570,12 +584,11 @@ time) ；wa: IO等待时间百分比； id: 空闲时间百分比</p></li>
 </tr>
 </tbody>
 </table>
-<h3
-id="ping检测当前服务器的网络是否通畅">ping检测当前服务器的网络是否通畅</h3>
+<h4 id="网络测试">网络测试</h4>
 <p>​ ping 一般用于检测当前计算机到目标计算机之间的网络
 <strong>是否通畅，数值越大，速度越慢</strong></p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-meta"># 检测到目标主机是否连接正常</span><br>$ ping IP地址 www.baidu.com<br><span class="hljs-meta"># 检测本地网卡工作正常</span><br>$ ping <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span><br></code></pre></td></tr></table></figure>
-<h4 id="指定代码在哪个gpu上跑">指定代码在哪个GPU上跑</h4>
+<h4 id="gpu运行指定">GPU运行指定</h4>
 <ol type="1">
 <li><p>首先先查看对应的GPU内存：<strong>nvidia-smi</strong></p></li>
 <li><p>然后在终端输出代码：</p>
