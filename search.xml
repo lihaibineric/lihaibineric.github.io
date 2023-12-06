@@ -288,6 +288,8 @@ alt="GRF的训练结果与可视化" />
 <p>Git
 是一个版本控制系统，是任何软件开发项目中的主要内容。通常有两个主要用途：代码备份和代码版本控制。使用Git可以逐步处理代码，在需要回滚到备份副本的过程中保存每一步的进度。</p>
 <h2 id="git的安装与配置">Git的安装与配置</h2>
+<h4 id="查看git中的配置">查看Git中的配置</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --list<br></code></pre></td></tr></table></figure>
 <h2 id="git的基本控制">Git的基本控制</h2>
 <h3 id="初始化git仓库">初始化Git仓库</h3>
 <p>当完成上述的配置之后，就能开始初始化Git仓库，进入需要创建<strong>工作区</strong>的文件夹</p>
@@ -1049,6 +1051,10 @@ activate激活x之后python版本仍为3.11。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.zshrc<br></code></pre></td></tr></table></figure>
 <p>解决问题</p>
 <h3 id="镜像源安装">镜像源安装</h3>
+<p>在conda环境中改变默认的下载镜像源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">pip config <span class="hljs-built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple <br></code></pre></td></tr></table></figure>
+<p>加上这句话之后就会出现以下的写文件</p>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino">Writing to /home/user/.config/pip/pip.conf<br></code></pre></td></tr></table></figure>
 <p><strong>下载使用清华源加上： -i
 https://pypi.tuna.tsinghua.edu.cn/simple</strong></p>
 <blockquote>
