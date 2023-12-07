@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204733470.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204804150.png">
 <meta property="article:published_time" content="2023-11-27T12:41:11.000Z">
-<meta property="article:modified_time" content="2023-12-04T14:23:21.416Z">
+<meta property="article:modified_time" content="2023-12-07T14:06:55.253Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="后端开发">
 <meta name="twitter:card" content="summary_large_image">
@@ -211,7 +211,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.7k words
+          5.8k words
         
       </span>
     
@@ -222,7 +222,7 @@
         
         
         
-          31 mins
+          49 mins
         
       </span>
     
@@ -462,6 +462,33 @@ src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231204222258311
 alt="image-20231204222258311" />
 <figcaption aria-hidden="true">image-20231204222258311</figcaption>
 </figure>
+<h4 id="结构体标签">结构体标签</h4>
+<p>本质上是利用了reflect反射的机制</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;reflect&quot;</span><br>)<br><span class="hljs-keyword">type</span> resume <span class="hljs-keyword">struct</span>&#123;<br>	<span class="hljs-comment">/*  </span><br><span class="hljs-comment">	通过以下形式给结构体中的变量添加标签</span><br><span class="hljs-comment">	作用： 其他包在调用这个当前包的时候对于某个属性的一个说明，指示某个包在具体使用中的作用</span><br><span class="hljs-comment">	*/</span><br>	Name <span class="hljs-type">string</span> <span class="hljs-string">`info:&quot;name&quot; doc:&quot;我的名字&quot;`</span> <br>	Sex <span class="hljs-type">string</span> <span class="hljs-string">`info:&quot;sex&quot;`</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">findtag</span><span class="hljs-params">(str <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span>&#123;<br>	t :=reflect.TypeOf(str).Elem()<br><br>	<span class="hljs-keyword">for</span> i:=<span class="hljs-number">0</span>;i&lt;t.NumField();i++&#123;<br>		tagstring:=t.Field(i).Tag.Get(<span class="hljs-string">&quot;info&quot;</span>)<br>		tagdoc:=t.Field(i).Tag.Get(<span class="hljs-string">&quot;doc&quot;</span>)<br>		fmt.Println(<span class="hljs-string">&quot;info:&quot;</span>,tagstring,<span class="hljs-string">&quot;doc&quot;</span>,tagdoc)<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">var</span> re resume<br>	findtag(&amp;re) <span class="hljs-comment">//注意这里传递的是引用</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="结构体和json格式转换">结构体和json格式转换</h4>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231207215501791.png" srcset="/img/loading.gif" lazyload
+alt="image-20231207215501791" />
+<figcaption aria-hidden="true">image-20231207215501791</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231207215514980.png" srcset="/img/loading.gif" lazyload
+alt="image-20231207215514980" />
+<figcaption aria-hidden="true">image-20231207215514980</figcaption>
+</figure>
+<p>输出之后在json格式转换中可以看到如下，注意可以看到的是输出的内容是根据给定的tag来进行标题的命名的</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231207215859488.png" srcset="/img/loading.gif" lazyload
+alt="image-20231207215859488" />
+<figcaption aria-hidden="true">image-20231207215859488</figcaption>
+</figure>
+<p>利用反射取出元素查询</p>
+<p>利用编码和解码对struct 和json之间的转化</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;encoding/json&quot;</span><br>)<br><br><span class="hljs-comment">//如何将结构体转化成json</span><br><span class="hljs-keyword">type</span> Movie <span class="hljs-keyword">struct</span>&#123;<br>	Title <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;title&quot;`</span>  <span class="hljs-comment">//就是告诉json库对应的变量的标签名字是这个</span><br>	Year <span class="hljs-type">int</span> <span class="hljs-string">`json:&quot;year&quot;`</span><br>	Price <span class="hljs-type">int</span> <span class="hljs-string">`json:&quot;rmb&quot;`</span><br>	Actors []<span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;actors&quot;`</span> <span class="hljs-comment">//slice `json:&quot;actors&quot;`</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	movie :=Movie&#123;<span class="hljs-string">&quot;喜剧之王&quot;</span>,<span class="hljs-number">2000</span>,<span class="hljs-number">10</span>,[]<span class="hljs-type">string</span>&#123;<span class="hljs-string">&quot;zhouxingchi&quot;</span>,<span class="hljs-string">&quot;zhangbozhi&quot;</span>&#125;&#125;<br><br>	<span class="hljs-comment">//编码的过程就是将 struct--&gt;json</span><br><br>	jsonStr,err:=json.Marshal(movie)<br><br>	<span class="hljs-comment">//返回两个字段</span><br><br>	<span class="hljs-keyword">if</span> err!=<span class="hljs-literal">nil</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;json marshal error&quot;</span>,err)<br>		<span class="hljs-keyword">return</span><br>	&#125;<br>	fmt.Printf(<span class="hljs-string">&quot;jsonStr=%s\n&quot;</span>,jsonStr )<br>	<span class="hljs-comment">/* jsonStr=&#123;&quot;title&quot;:&quot;喜剧之王&quot;,&quot;year&quot;:2000,&quot;rmb&quot;:10,&quot;Actors&quot;:[&quot;zhouxingchi&quot;,&quot;zhangbozhi&quot;]&#125; */</span><br><br>	<span class="hljs-comment">//解码过程：json--&gt;struct</span><br>	<span class="hljs-comment">//jsonStr=&#123;&quot;title&quot;:&quot;喜剧之王&quot;,&quot;year&quot;:2000,&quot;rmb&quot;:10,&quot;actors&quot;:[&quot;zhouxingchi&quot;,&quot;zhangbozhi&quot;]&#125;</span><br><br>	myMovie:=Movie&#123;&#125;<br>	<span class="hljs-comment">//注意这个地方传递的参量是引用</span><br>	err=json.Unmarshal(jsonStr,&amp;myMovie)<br>	<span class="hljs-keyword">if</span> err!=<span class="hljs-literal">nil</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;json unmashal error&quot;</span>,err)<br>		<span class="hljs-keyword">return</span> <br>	&#125;<br>	fmt.Printf(<span class="hljs-string">&quot;%v\n&quot;</span>,myMovie)<br>	<span class="hljs-comment">//返回结构体</span><br>	<span class="hljs-comment">//&#123;喜剧之王 2000 10 [zhouxingchi zhangbozhi]&#125;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="goroutine基本模型">Goroutine基本模型</h4>
 
                 
               </div>
