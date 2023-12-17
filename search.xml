@@ -1171,11 +1171,53 @@ alt="远端和本地的不同分支" />
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
 <p>学习网站：<a
 href="https://www.bilibili.com/video/BV1gf4y1r79E/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">8小时转职Golang工程师</a></p>
+<hr />
+<h2 id="golang简介">Golang简介</h2>
+<h4 id="go语言的优势">go语言的优势</h4>
+<ol type="1">
+<li><strong>部署简单</strong>
+<ul>
+<li>可以直接编译成机器码可执行</li>
+<li>不依赖其他库</li>
+<li>直接运行即可部署</li>
+</ul></li>
+<li><strong>静态类型语言</strong>
+<ul>
+<li>编译的时候就能查出来大多数的问题</li>
+</ul></li>
+<li><strong>语言层面的并发</strong>
+<ul>
+<li>能够成分利用多核</li>
+</ul></li>
+<li><strong>强大的标准库</strong>
+<ul>
+<li>runtime系统调度机制</li>
+<li>丰富的标准库</li>
+</ul></li>
+<li><strong>简单易学</strong>
+<ul>
+<li>25个关键字，内嵌C语法支持</li>
+<li>面向对象的特征，能够跨平台</li>
+<li>go语言<strong>没有异常</strong>，全部都用ERROR来表示</li>
+</ul></li>
+</ol>
+<h4 id="go应用方向">go应用方向</h4>
+<ol type="1">
+<li><strong>云计算基础设施建设</strong>
+<ul>
+<li>Docker, kubernetes</li>
+<li>Consul, cloudflare CDN</li>
+</ul></li>
+<li><strong>基础后端软件</strong>：tide, influxdb, cockroachdb</li>
+<li><strong>微服务</strong>：go-kit, micro</li>
+<li><strong>互联网基础设施</strong>： 以太坊，hyperledger</li>
+</ol>
+<hr />
 <h2 id="go的环境安装">Go的环境安装</h2>
-<h4 id="下载官网">下载官网：</h4>
+<h4 id="下载官网">下载官网</h4>
 <p>go的官网下载网站，选择合适的系统版本进行安装<a
 href="https://go.dev/dl/">https://go.dev/dl/</a></p>
-<h4 id="安装步骤">安装步骤：</h4>
+<h4 id="安装步骤">安装步骤</h4>
 <ol type="1">
 <li><p>下载安装包并按照安装包的指引下载相关的内容</p></li>
 <li><p>对于Mac系统会直接配置好环境变量，根据官网的安装手册进行安装 <a
@@ -1187,42 +1229,105 @@ href="https://go.dev/doc/install">https://go.dev/doc/install</a></p></li>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">env</span><br></code></pre></td></tr></table></figure>
 <p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204804150.png" alt="go env" style="zoom: 50%;" /></p></li>
 </ol>
-<h4
-id="go语言没有异常全部都用error来表示">go语言没有异常，全部都用ERROR来表示</h4>
+<h2 id="go环境变量">GO环境变量</h2>
+<h4 id="goroot路径">GOROOT路径</h4>
 <p>GOROOT 表示的是安装包所在的位置，一般不需要修改</p>
-<p>GOPATH表示的是运行文件所在的位置，表示的是workspace的文件位置，里面新建三个文件夹：bin
-pkg src，src一般用来表示工程文件所在的位置</p>
+<h4 id="gopath路径">GOPATH路径</h4>
+<p>GOPATH表示的是运行文件所在的位置，表示的是workspace的文件位置，GOPATH是我们的工作空间，保存go项目代码和第三方依赖包<strong>GOPATH</strong>可以设置多个，其中，第一个将会是默认的包目录，使用
+go get 下载的包都会在第一个path中的src目录下，使用 go
+install时，在哪个GOPATH中找到了这个包，就会在哪个GOPATH下的bin目录生成可执行文件</p>
 <p>修改GOPATH的路径</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> GOPATH=<span class="hljs-string">&quot;/Users/lihaibin/workspace/golang&quot;</span><br></code></pre></td></tr></table></figure>
 <p>将文件查找的路径设置为GOROOT和GOPATH的并集合</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-variable">$GOROOT</span>/bin:<span class="hljs-variable">$GOPATH</span>/bin<br></code></pre></td></tr></table></figure>
-<p>注意这个地方不能将<strong>gomod设置为on</strong>，否则有问题</p>
 <p>将两个部分并在一起之后，就能从两个地方开始寻找定义的包</p>
 <figure>
 <img
 src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203140236053.png"
-alt="image-20231203140236053" />
-<figcaption aria-hidden="true">image-20231203140236053</figcaption>
+alt="查找文件的路径顺序" />
+<figcaption aria-hidden="true">查找文件的路径顺序</figcaption>
 </figure>
-<p>首先会从GOROOT进行搜索，接着从GOPATH进行搜索</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231203140659058.png"
-alt="image-20231203140659058" />
-<figcaption aria-hidden="true">image-20231203140659058</figcaption>
-</figure>
+<p>首先会从GOROOT进行搜索，接着从GOPATH进行搜索。</p>
+<p>GOPATH是开发时的工作目录。用于：</p>
+<ol type="1">
+<li>保存编译后的二进制文件。</li>
+<li><code>go get</code>和<code>go install</code>命令会下载go代码到GOPATH。</li>
+<li>import包时的搜索路径</li>
+</ol>
+<p>使用GOPATH时，GO会在以下目录中搜索包：</p>
+<ol type="1">
+<li><code>GOROOT/src</code>：该目录保存了Go标准库代码。</li>
+<li><code>GOPATH/src</code>：该目录保存了应用自身的代码和第三方依赖的代码。</li>
+</ol>
+<p><strong>GOPATH的弊端</strong></p>
+<p>在 GOPATH 的 <code>$GOPATH/src</code> 下进行 <code>.go</code>
+文件或源代码的存储，我们可以称其为 GOPATH
+的模式，这个模式拥有一些弊端.</p>
+<ul>
+<li><p><strong>无版本控制概念.</strong>
+在执行<code>go get</code>的时候，你无法传达任何的版本信息的期望，也就是说你也无法知道自己当前更新的是哪一个版本，也无法通过指定来拉取自己所期望的具体版本。</p></li>
+<li><p><strong>无法同步一致第三方版本号.</strong> 在运行 Go
+应用程序的时候，你无法保证其它人与你所期望依赖的第三方库是相同的版本，也就是说在项目依赖库的管理上，你无法保证所有人的依赖版本都一致。</p></li>
+<li><p><strong>无法指定当前项目引用的第三方版本号.</strong> 你没办法处理
+v1、v2、v3 等等不同版本的引用问题，因为 GOPATH
+模式下的导入路径都是一样的，都是<code>github.com/foo/bar</code>。</p></li>
+</ul>
+<h4 id="goproxy设置">GOPROXY设置</h4>
+<p>这个环境变量主要是用于设置 <strong>Go 模块代理（Go module
+proxy）,其作用是用于使 Go
+在后续拉取模块版本时直接通过镜像站点来快速拉取</strong>。</p>
+<p>GOPROXY
+的默认值是：<code>https://proxy.golang.org,direct</code>，<code>proxy.golang.org</code>国内访问不了,需要设置国内的代理</p>
+<ul>
+<li>阿里云 https://mirrors.aliyun.com/goproxy/</li>
+<li>七牛云 https://goproxy.cn,direct</li>
+</ul>
+<p>并通过以下的命令进行设置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">env</span> -w GOPROXY=https://goproxy.cn,direct<br></code></pre></td></tr></table></figure>
+<p>GOPROXY 的值是一个以英文逗号 “,” 分割的 Go
+模块代理列表，允许设置多个模块代理，假设你不想使用，也可以将其设置为
+“off” ，这将会禁止 Go 在后续操作中使用任何 Go 模块代理。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">env</span> -w GOPROXY=https://goproxy.cn,https://mirrors.aliyun.com/goproxy/,direct<br></code></pre></td></tr></table></figure>
+<h4 id="go111module">GO111MODULE</h4>
+<p>GO111MODULE 有三个值：off, on和auto（默认值）。</p>
+<ul>
+<li>GO111MODULE=off，go命令行将不会支持module功能，寻找依赖包的方式将会沿用旧版本那种通过vendor目录或者GOPATH模式来查找。</li>
+<li>GO111MODULE=on，go命令行会使用modules，而一点也不会去GOPATH目录下查找。</li>
+<li>GO111MODULE=auto，默认值，go命令行将会根据当前目录来决定是否启用module功能。这种情况下可以分为两种情形：
+当前目录在GOPATH/src之外且该目录包含go.mod文件
+当前文件在包含go.mod文件的目录下面。</li>
+</ul>
+<p>执行以下命令开启go mod管理</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">env</span> -w GO111MODULE=on<br></code></pre></td></tr></table></figure>
 <h2 id="go基本语法">Go基本语法</h2>
 <h4 id="如何编译并运行一个go文件">如何编译并运行一个Go文件</h4>
 <p>对于已经写好的go文件，这里以hello.go作为例子，直接使用以下语句进行编译并运行</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> run hello.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
 <p>或者将编译和运行两个过程分开，先编译后运行：</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> build hello.<span class="hljs-keyword">go</span><br>./ hello<br></code></pre></td></tr></table></figure>
-<h4 id="hello.go">hello.go</h4>
+<h4 id="写一个hello.go">写一个hello.go</h4>
 <p>首先给出基本框架</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span>(<br>	<span class="hljs-string">&quot;fmt&quot;</span>,<br>  <span class="hljs-string">&quot;time&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>  fmt.Println(<span class="hljs-string">&quot;hello world!&quot;</span>)<br>  time.Sleep(<span class="hljs-number">1</span>*time.Second)<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>程序的第一行声明了名为main的package。<strong>一个package会包含一个或多个.go源代码文件。每一个源文件都是以package开头。</strong>比如我们的例子里是package
 main。这行声明语句表示该文件是属于哪一个package。</p>
-<p>同时需要注意，一个程序的<code>main</code>入口函数必须不带任何输入参数和返回结果</p>
+<ul>
+<li>第一行代码<strong>package
+main</strong>定义了包名。你必须在源文件中非注释的第一行指明这个文件属于哪个包，如：package
+main。package main表示一个可独立执行的程序，每个 Go
+应用程序都包含一个名为 main 的包。</li>
+<li>下一行<strong>import "fmt"</strong>告诉 Go 编译器这个程序需要使用
+fmt 包（的函数，或其他元素），fmt 包实现了格式化
+IO（输入/输出）的函数。</li>
+<li>下一行func main()是程序开始执行的函数。main
+函数是每一个可执行程序所必须包含的，一般来说都是在启动后第一个执行的函数（如果有
+init() 函数则会先执行该函数）。</li>
+</ul>
+<blockquote>
+<p>一个程序的<code>main</code>入口函数必须不带任何输入参数和返回结果。而且go语言的语法，定义函数的时候，<strong>‘{’
+必须和函数名在同一行，不能另起一行</strong></p>
+</blockquote>
+<h4 id="变量的声明">变量的声明</h4>
+<p>声明变量的一般形式是使用 var 关键字</p>
 <h4 id="参数">参数</h4>
 <h4 id="函数">函数</h4>
 <p>多个返回值初始化设置了函数的形参之后，初始值是0</p>
@@ -1393,6 +1498,146 @@ alt="image-20231207215859488" />
 <p>利用编码和解码对struct 和json之间的转化</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;encoding/json&quot;</span><br>)<br><br><span class="hljs-comment">//如何将结构体转化成json</span><br><span class="hljs-keyword">type</span> Movie <span class="hljs-keyword">struct</span>&#123;<br>	Title <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;title&quot;`</span>  <span class="hljs-comment">//就是告诉json库对应的变量的标签名字是这个</span><br>	Year <span class="hljs-type">int</span> <span class="hljs-string">`json:&quot;year&quot;`</span><br>	Price <span class="hljs-type">int</span> <span class="hljs-string">`json:&quot;rmb&quot;`</span><br>	Actors []<span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;actors&quot;`</span> <span class="hljs-comment">//slice `json:&quot;actors&quot;`</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	movie :=Movie&#123;<span class="hljs-string">&quot;喜剧之王&quot;</span>,<span class="hljs-number">2000</span>,<span class="hljs-number">10</span>,[]<span class="hljs-type">string</span>&#123;<span class="hljs-string">&quot;zhouxingchi&quot;</span>,<span class="hljs-string">&quot;zhangbozhi&quot;</span>&#125;&#125;<br><br>	<span class="hljs-comment">//编码的过程就是将 struct--&gt;json</span><br><br>	jsonStr,err:=json.Marshal(movie)<br><br>	<span class="hljs-comment">//返回两个字段</span><br><br>	<span class="hljs-keyword">if</span> err!=<span class="hljs-literal">nil</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;json marshal error&quot;</span>,err)<br>		<span class="hljs-keyword">return</span><br>	&#125;<br>	fmt.Printf(<span class="hljs-string">&quot;jsonStr=%s\n&quot;</span>,jsonStr )<br>	<span class="hljs-comment">/* jsonStr=&#123;&quot;title&quot;:&quot;喜剧之王&quot;,&quot;year&quot;:2000,&quot;rmb&quot;:10,&quot;Actors&quot;:[&quot;zhouxingchi&quot;,&quot;zhangbozhi&quot;]&#125; */</span><br><br>	<span class="hljs-comment">//解码过程：json--&gt;struct</span><br>	<span class="hljs-comment">//jsonStr=&#123;&quot;title&quot;:&quot;喜剧之王&quot;,&quot;year&quot;:2000,&quot;rmb&quot;:10,&quot;actors&quot;:[&quot;zhouxingchi&quot;,&quot;zhangbozhi&quot;]&#125;</span><br><br>	myMovie:=Movie&#123;&#125;<br>	<span class="hljs-comment">//注意这个地方传递的参量是引用</span><br>	err=json.Unmarshal(jsonStr,&amp;myMovie)<br>	<span class="hljs-keyword">if</span> err!=<span class="hljs-literal">nil</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;json unmashal error&quot;</span>,err)<br>		<span class="hljs-keyword">return</span> <br>	&#125;<br>	fmt.Printf(<span class="hljs-string">&quot;%v\n&quot;</span>,myMovie)<br>	<span class="hljs-comment">//返回结构体</span><br>	<span class="hljs-comment">//&#123;喜剧之王 2000 10 [zhouxingchi zhangbozhi]&#125;</span><br>&#125;<br></code></pre></td></tr></table></figure>
 <h4 id="goroutine基本模型">Goroutine基本模型</h4>
+<p><img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231207223749991.png" /></p>
+<p>存在切换成本，存储当前的线程的状态</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231207223845618.png"
+alt="image-20231207223845618" />
+<figcaption aria-hidden="true">image-20231207223845618</figcaption>
+</figure>
+<p>线程数量越多会导致切换成本越大越容易造成浪费</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210220547247.png"
+alt="image-20231210220547247" />
+<figcaption aria-hidden="true">image-20231210220547247</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210220633895.png"
+alt="image-20231210220633895" />
+<figcaption aria-hidden="true">image-20231210220633895</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210220655104.png"
+alt="image-20231210220655104" />
+<figcaption aria-hidden="true">image-20231210220655104</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221404383.png"
+alt="image-20231210221404383" />
+<figcaption aria-hidden="true">image-20231210221404383</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221143475.png"
+alt="image-20231210221143475" />
+<figcaption aria-hidden="true">image-20231210221143475</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221320500.png"
+alt="image-20231210221320500" />
+<figcaption aria-hidden="true">image-20231210221320500</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221344687.png"
+alt="image-20231210221344687" />
+<figcaption aria-hidden="true">image-20231210221344687</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221511900.png"
+alt="image-20231210221511900" />
+<figcaption aria-hidden="true">image-20231210221511900</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221610094.png"
+alt="image-20231210221610094" />
+<figcaption aria-hidden="true">image-20231210221610094</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221717307.png"
+alt="image-20231210221717307" />
+<figcaption aria-hidden="true">image-20231210221717307</figcaption>
+</figure>
+<h4 id="channel">Channel</h4>
+<p>go语言之间的goroutine通信机制</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213150125899.png"
+alt="image-20231213150125899" />
+<figcaption aria-hidden="true">image-20231213150125899</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213150927632.png"
+alt="image-20231213150927632" />
+<figcaption aria-hidden="true">image-20231213150927632</figcaption>
+</figure>
+<p>这个channel在这个位置就已经隐含表示了先后执行的关系</p>
+<p>如果main.go在运行的时候如果找不到
+channel返回的值，那么就会channel让main.go产生阻塞，同理对于另一边的sub.go也是一样，如果没有另一个goroutine来接受发出的channel数据，那么就会一直处于等待接受的状态产生阻塞，
+<strong>相当于首先得握上手才能继续执行进程</strong></p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151022873.png"
+alt="image-20231213151022873" />
+<figcaption aria-hidden="true">image-20231213151022873</figcaption>
+</figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151129109.png"
+alt="image-20231213151129109" />
+<figcaption aria-hidden="true">image-20231213151129109</figcaption>
+</figure>
+<h4 id="channel的无缓冲情况">Channel的无缓冲情况</h4>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151511356.png"
+alt="image-20231213151511356" />
+<figcaption aria-hidden="true">image-20231213151511356</figcaption>
+</figure>
+<p>如果两个goroutine存在利用channel通信的情况，两个goroutine之间存在相互的消息传递，那么在无缓冲的情况下，存在隐含的先后同步关系，必须接收方到达了channel之后消息发送方才会持续发送消息并往下运行</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151822510.png"
+alt="image-20231213151822510" />
+<figcaption aria-hidden="true">image-20231213151822510</figcaption>
+</figure>
+<h4 id="channel的有缓冲情况">Channel的有缓冲情况</h4>
+<p>生产者消费者模型 消息队列模型</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151851675.png"
+alt="image-20231213151851675" />
+<figcaption aria-hidden="true">image-20231213151851675</figcaption>
+</figure>
+<h4 id="关闭channel">关闭Channel</h4>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213164750863.png"
+alt="image-20231213164750863" />
+<figcaption aria-hidden="true">image-20231213164750863</figcaption>
+</figure>
+<h4 id="channel的range和select">Channel的range和select</h4>
+<p>每个case表示监控不同的条件. 通过select来进行控制</p>
+<h4 id="channel-1">Channel</h4>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213174019548.png" alt="image-20231213174019548" style="zoom: 67%;" /></p>
+<ol type="1">
+<li><p>channel
+底层数据结构是队列，分别包含接收端和发送端的goroutine队列，阻塞模式就是读/写一个空/满的channel的情况，会出现阻塞；非阻塞模式就是会返回错误而不造成阻塞</p></li>
+<li><p>读写nil的channel会发生阻塞，单缓冲channel能存储一个元素，所以发送和接收操作会相互阻塞。多缓冲channel可以存储多个元素，所以在缓冲区未满的情况下，发送和接收操作可以非阻塞地进行,
+被关闭的chan读写都会发生错误panic.</p></li>
+<li></li>
+</ol>
 ]]></content>
       <categories>
         <category>后端开发</category>
@@ -1409,6 +1654,9 @@ alt="image-20231207215859488" />
 <h4 id="查看命令历史">查看命令历史</h4>
 <p>终端中输入</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">history</span><br></code></pre></td></tr></table></figure>
+<h4 id="指定查找关键字">指定查找关键字</h4>
+<p>通过增加grep来增加关键字的筛选</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">| grep GOPROXY<br></code></pre></td></tr></table></figure>
 <h4 id="当前目录下的文件">当前目录下的文件</h4>
 <ul>
 <li>当前目录下的文件 ls</li>

@@ -16,15 +16,15 @@
   <meta name="author" content="Haibin Li">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux命令集 查看当前路径的位置 pwd 查看命令历史 终端中输入 1history 当前目录下的文件  当前目录下的文件 ls ls -l；ls-h；都是用来显示文件的详细信息 ls -a 来显示所有的文件（包含隐藏文件） 组合使用 ls -lha 显示所有并包含的隐藏文件且显示详细信息 使用dir显示当前文件夹下的文件名*  切换文件夹  cd .. #返回父级目录    cd 切换到当前">
+    <meta name="description" content="Linux命令集 查看当前路径的位置 pwd 查看命令历史 终端中输入 1history 指定查找关键字 通过增加grep来增加关键字的筛选 1| grep GOPROXY 当前目录下的文件  当前目录下的文件 ls ls -l；ls-h；都是用来显示文件的详细信息 ls -a 来显示所有的文件（包含隐藏文件） 组合使用 ls -lha 显示所有并包含的隐藏文件且显示详细信息 使用dir显示当前文">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【基础工具】Linux指令集">
 <meta property="og:url" content="https://lihaibineric.github.io/2023/11/25/linux/index.html">
 <meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
-<meta property="og:description" content="Linux命令集 查看当前路径的位置 pwd 查看命令历史 终端中输入 1history 当前目录下的文件  当前目录下的文件 ls ls -l；ls-h；都是用来显示文件的详细信息 ls -a 来显示所有的文件（包含隐藏文件） 组合使用 ls -lha 显示所有并包含的隐藏文件且显示详细信息 使用dir显示当前文件夹下的文件名*  切换文件夹  cd .. #返回父级目录    cd 切换到当前">
+<meta property="og:description" content="Linux命令集 查看当前路径的位置 pwd 查看命令历史 终端中输入 1history 指定查找关键字 通过增加grep来增加关键字的筛选 1| grep GOPROXY 当前目录下的文件  当前目录下的文件 ls ls -l；ls-h；都是用来显示文件的详细信息 ls -a 来显示所有的文件（包含隐藏文件） 组合使用 ls -lha 显示所有并包含的隐藏文件且显示详细信息 使用dir显示当前文">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-11-25T09:06:29.000Z">
-<meta property="article:modified_time" content="2023-12-03T05:30:22.599Z">
+<meta property="article:modified_time" content="2023-12-13T14:32:19.406Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="基础工具">
 <meta property="article:tag" content="后端开发">
@@ -220,7 +220,7 @@
         
         
         
-          20 mins
+          21 mins
         
       </span>
     
@@ -267,6 +267,9 @@
 <h4 id="查看命令历史">查看命令历史</h4>
 <p>终端中输入</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">history</span><br></code></pre></td></tr></table></figure>
+<h4 id="指定查找关键字">指定查找关键字</h4>
+<p>通过增加grep来增加关键字的筛选</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">| grep GOPROXY<br></code></pre></td></tr></table></figure>
 <h4 id="当前目录下的文件">当前目录下的文件</h4>
 <ul>
 <li>当前目录下的文件 ls</li>
