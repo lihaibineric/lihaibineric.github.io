@@ -27,9 +27,14 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210220547247.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210220633895.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221404383.png">
-<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213174019548.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219213501210.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219214022511.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213150125899.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151022873.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151129109.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219220132461.png">
 <meta property="article:published_time" content="2023-12-19T13:02:10.000Z">
-<meta property="article:modified_time" content="2023-12-19T13:38:16.633Z">
+<meta property="article:modified_time" content="2023-12-19T14:16:28.364Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="后端开发">
 <meta name="twitter:card" content="summary_large_image">
@@ -214,7 +219,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.9k words
+          9k words
         
       </span>
     
@@ -225,7 +230,7 @@
         
         
         
-          25 mins
+          76 mins
         
       </span>
     
@@ -332,83 +337,168 @@ goroutine。</p>
 <h3 id="goroutine特性">Goroutine特性</h3>
 <p><strong>主goroutine退出后，其它的工作goroutine也会自动退出：</strong></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br> <br><span class="hljs-keyword">import</span> (<br><span class="hljs-string">&quot;fmt&quot;</span><br><span class="hljs-string">&quot;time&quot;</span><br>)<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">newTask</span><span class="hljs-params">()</span></span> &#123;<br>    i := <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> &#123;<br>        i++<br>        fmt.Printf(<span class="hljs-string">&quot;new goroutine: i = %d\n&quot;</span>, i)<br>        time.Sleep(<span class="hljs-number">1</span> * time.Second) <span class="hljs-comment">//延时1s</span><br>    &#125;<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">//创建一个 goroutine，启动另外一个任务</span><br>    <span class="hljs-keyword">go</span> newTask()<br> <br>    fmt.Println(<span class="hljs-string">&quot;main goroutine exit&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219213501210.png" srcset="/img/loading.gif" lazyload
-alt="主进程结束那么其余的goroutine结束" />
-<figcaption
-aria-hidden="true">主进程结束那么其余的goroutine结束</figcaption>
-</figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219213501210.png" srcset="/img/loading.gif" lazyload alt="主进程结束那么其余的goroutine结束" style="zoom:67%;" /></p>
+<h3 id="goexit函数">Goexit函数</h3>
+<p>调用 runtime.Goexit() 将立即终止当前 goroutine
+执⾏，调度器确保所有已注册 defer 延迟调用被执行。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br> <br><span class="hljs-keyword">import</span> (<br><span class="hljs-string">&quot;fmt&quot;</span><br><span class="hljs-string">&quot;runtime&quot;</span><br>)<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>        <span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;A.defer&quot;</span>)<br> <br>        <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>            <span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;B.defer&quot;</span>)<br>            runtime.Goexit() <span class="hljs-comment">// 终止当前 goroutine, import &quot;runtime&quot;</span><br>            fmt.Println(<span class="hljs-string">&quot;B&quot;</span>) <span class="hljs-comment">// 不会执行</span><br>        &#125;()<br> <br>        fmt.Println(<span class="hljs-string">&quot;A&quot;</span>) <span class="hljs-comment">// 不会执行</span><br>    &#125;()       <span class="hljs-comment">//不要忘记()</span><br> <br>    <span class="hljs-comment">//死循环，目的不让主goroutine结束</span><br>    <span class="hljs-keyword">for</span> &#123;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219214022511.png" srcset="/img/loading.gif" lazyload alt="image-20231219214022511" style="zoom:67%;" /></p>
+<p>对于goroutine的形式没办法拿到协程返回的值
+，从而阻塞了两个协程之间的通信，因此有必要研究如何让两个协程进行通信的机制因此这个地方引入了</p>
 <h2 id="channel管道">Channel管道</h2>
-<p>go语言之间的goroutine通信机制</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213150125899.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213150125899" />
-<figcaption aria-hidden="true">image-20231213150125899</figcaption>
-</figure>
+<p>channel是Go语言中的一个<strong>核心类型</strong>，可以把它看成管道。并发核心单元通过它就可以发送或者接收数据进行通讯</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213150125899.png" srcset="/img/loading.gif" lazyload alt="go语言之间的goroutine通信机制" style="zoom:80%;" /></p>
+<p>channel是一个数据类型，主要用来解决go程的同步问题以及go程之间数据共享（数据传递）的问题。引⽤类型
+channel可用于<strong>多个 goroutine
+通讯。其内部实现了同步，确保并发安全</strong>。</p>
 <figure>
 <img
 src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213150927632.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213150927632" />
-<figcaption aria-hidden="true">image-20231213150927632</figcaption>
+alt="基于channel的同步并发安全" />
+<figcaption aria-hidden="true">基于channel的同步并发安全</figcaption>
 </figure>
 <p>这个channel在这个位置就已经隐含表示了先后执行的关系</p>
-<p>如果main.go在运行的时候如果找不到
-channel返回的值，那么就会channel让main.go产生阻塞，同理对于另一边的sub.go也是一样，如果没有另一个goroutine来接受发出的channel数据，那么就会一直处于等待接受的状态产生阻塞，
-<strong>相当于首先得握上手才能继续执行进程</strong></p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151022873.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213151022873" />
-<figcaption aria-hidden="true">image-20231213151022873</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151129109.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213151129109" />
-<figcaption aria-hidden="true">image-20231213151129109</figcaption>
-</figure>
-<h4 id="channel的无缓冲情况">Channel的无缓冲情况</h4>
+<ul>
+<li>如果main.go在运行的时候如果找不到
+channel返回的值，那么就会channel让main.go产生阻塞，</li>
+<li>同理对于另一边的sub.go也是一样，如果没有另一个goroutine来接受发出的channel数据，那么就会一直处于等待接受的状态产生阻塞，</li>
+<li><strong>相当于首先得握上手才能继续执行进程</strong></li>
+</ul>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151022873.png" srcset="/img/loading.gif" lazyload alt="主goroutine发生阻塞" style="zoom:67%;" /></p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151129109.png" srcset="/img/loading.gif" lazyload alt="子进程发生阻塞" style="zoom:67%;" /></p>
+<h3 id="定义channel基本语法">定义channel基本语法</h3>
+<p>定义一个channel时，也需要定义发送到channel的值的类型。channel可以使用内置的<strong>make()函数</strong>来创建：</p>
+<p><strong>chan</strong>是创建channel所需使用的关键字。Type
+代表指定channel收发数据的类型。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> Type)  <span class="hljs-comment">//等价于make(chan Type, 0)</span><br><span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> Type, capacity)<br></code></pre></td></tr></table></figure>
+<p>当 参数<code>capacity= 0</code> 时，channel
+是<strong>无缓冲阻塞</strong>读写的；当<code>capacity &gt; 0</code>
+时，channel <strong>有缓冲非阻塞的</strong>，直到写满
+capacity个元素才阻塞写入。</p>
+<p>channel非常像生活中的管道，一边可以存放东西，另一边可以取出东西。channel通过操作符
+<code>&lt;-</code>
+来接收和发送数据，<strong>发送和接收</strong>数据语法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs go">channel &lt;- value      <span class="hljs-comment">//发送value到channel</span><br>&lt;-channel             <span class="hljs-comment">//接收并将其丢弃</span><br>x := &lt;-channel        <span class="hljs-comment">//从channel中接收数据，并赋值给x</span><br>x, ok := &lt;-channel    <span class="hljs-comment">//功能同上，同时检查通道是否已关闭或者是否为空</span><br></code></pre></td></tr></table></figure>
+<p>默认情况下，channel接收和发送数据都是阻塞的，除非另一端已经准备好，这样就使得goroutine同步变的更加的简单，而<strong>不需要显式的lock。</strong></p>
+<p>示例代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br> <br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;fmt&quot;</span><br>)<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    c := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br> <br>    <span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>        <span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;子go程结束&quot;</span>)<br> <br>        fmt.Println(<span class="hljs-string">&quot;子go程正在运行……&quot;</span>)<br> <br>        c &lt;- <span class="hljs-number">666</span> <span class="hljs-comment">//666发送到c</span><br>    &#125;()<br> <br>    num := &lt;-c <span class="hljs-comment">//从c中接收数据，并赋值给num</span><br> <br>    fmt.Println(<span class="hljs-string">&quot;num = &quot;</span>, num)<br>    fmt.Println(<span class="hljs-string">&quot;main go程结束&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">goroutine 正在运行...<br>goroutine结束<br>num =  666<br>main goroutine 结束...<br></code></pre></td></tr></table></figure>
+<p>分析：</p>
+<ul>
+<li>首先第一步会需要子进程将666放进channel中才不会发生阻塞，同时主进程会在
+<code>num := &lt;-c</code>的位置进行等待channel中传入数据</li>
+<li>当channel中出现了数据之后，那么下一步就是从中选择数据并进行赋值</li>
+<li>最后结束</li>
+</ul>
+<h3 id="channel的无缓冲阻塞">channel的无缓冲阻塞</h3>
+<p>无缓冲的通道（unbuffered
+channel）是指在接收前没有能力保存任何数据值的通道。</p>
+<p>这种类型的通道要求发送goroutine和接收goroutine同时准备好，才能完成发送和接收操作。否则，通道会导致先执行发送或接收操作的
+goroutine 阻塞等待。</p>
+<p><strong>阻塞：</strong>由于某种原因数据没有到达，当前go程（线程）持续处于等待状态，直到条件满足，才解除阻塞。</p>
+<p><strong>同步：</strong>在两个或多个go程（线程）间，保持数据内容一致性的机制。</p>
 <figure>
 <img
 src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151511356.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213151511356" />
-<figcaption aria-hidden="true">image-20231213151511356</figcaption>
+alt="无缓冲的channel同步" />
+<figcaption aria-hidden="true">无缓冲的channel同步</figcaption>
 </figure>
 <p>如果两个goroutine存在利用channel通信的情况，两个goroutine之间存在相互的消息传递，那么在无缓冲的情况下，存在隐含的先后同步关系，必须接收方到达了channel之后消息发送方才会持续发送消息并往下运行</p>
+<ul>
+<li>在第 1 步，两个 goroutine
+都到达通道，但哪个都没有开始执行发送或者接收。</li>
+<li>在第 2 步，左侧的 goroutine
+将它的手伸进了通道，这模拟了向通道发送数据的行为。这时，这个 goroutine
+会在通道中被锁住，直到交换完成。</li>
+<li>在第 3 步，右侧的 goroutine
+将它的手放入通道，这模拟了从通道里接收数据。这个 goroutine
+一样也会在通道中被锁住，直到交换完成。</li>
+<li>在第 4 步和第 5 步，进行交换，并最终，在第 6 步，两个 goroutine
+都将它们的手从通道里拿出来，这模拟了被锁住的 goroutine 得到释放。两个
+goroutine 现在都可以去做其他事情了。</li>
+</ul>
+<p>无缓冲的channel创建格式：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> Type)   <span class="hljs-comment">//等价于make(chan Type, 0)</span><br></code></pre></td></tr></table></figure>
+<p>如果<strong>没有指定缓冲区容量</strong>，那么该通道就是同步的，因此会阻塞到发送者准备好发送和接收者准备好接收。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br> <br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;fmt&quot;</span><br>    <span class="hljs-string">&quot;time&quot;</span><br>)<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    c := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>, <span class="hljs-number">0</span>) <span class="hljs-comment">//创建无缓冲的通道 c </span><br> <br>    <span class="hljs-comment">//内置函数 len 返回未被读取的缓冲元素数量，cap 返回缓冲区大小</span><br>    fmt.Printf(<span class="hljs-string">&quot;len(c)=%d, cap(c)=%d\n&quot;</span>, <span class="hljs-built_in">len</span>(c), <span class="hljs-built_in">cap</span>(c))<br> <br>    <span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>        <span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;子go程结束&quot;</span>)<br> <br>        <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++ &#123;<br>            c &lt;- i<br>            fmt.Printf(<span class="hljs-string">&quot;子go程正在运行[%d]: len(c)=%d, cap(c)=%d\n&quot;</span>, i, <span class="hljs-built_in">len</span>(c), <span class="hljs-built_in">cap</span>(c))<br>        &#125;<br>    &#125;()<br> <br>    time.Sleep(<span class="hljs-number">2</span> * time.Second) <span class="hljs-comment">//延时2s</span><br> <br>    <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++ &#123;<br>        num := &lt;-c <span class="hljs-comment">//从c中接收数据，并赋值给num</span><br>        fmt.Println(<span class="hljs-string">&quot;num = &quot;</span>, num)<br>    &#125;<br> <br>    fmt.Println(<span class="hljs-string">&quot;main进程结束&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>那么运行的结果是：</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219220132461.png" srcset="/img/loading.gif" lazyload alt="无缓冲channel的运行结果" style="zoom:67%;" /></p>
+<p>分析：</p>
+<ul>
+<li>本质上会出现阻塞，如果没有及时把数据拿出</li>
+<li>因此必须是其中一个放进去数据，另一个拿出数据才能能让进程执行下去，本质上保证了同步的进行</li>
+</ul>
+<h3 id="channel的有缓冲阻塞">channel的有缓冲阻塞</h3>
+<blockquote>
+<p><strong>本质上是生产者消费者模型 消息队列模型</strong></p>
+</blockquote>
+<p>这种类型的通道并不强制要求 goroutine
+之间必须同时完成发送和接收。通道会阻塞发送和接收动作的条件也不同。</p>
+<p>只有通道中没有要接收的值时，接收动作才会阻塞。只有通道没有可用缓冲区容纳被发送的值时，发送动作才会阻塞。</p>
 <figure>
 <img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151822510.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213151822510" />
-<figcaption aria-hidden="true">image-20231213151822510</figcaption>
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219220401111.png" srcset="/img/loading.gif" lazyload
+alt="有缓冲的通道在channe之间同步数据" />
+<figcaption
+aria-hidden="true">有缓冲的通道在channe之间同步数据</figcaption>
 </figure>
-<h4 id="channel的有缓冲情况">Channel的有缓冲情况</h4>
-<p>生产者消费者模型 消息队列模型</p>
+<ul>
+<li>在第 1 步，右侧的 goroutine 正在从通道接收一个值。</li>
+<li>在第 2 步，右侧的这个 goroutine独立完成了接收值的动作，而左侧的
+goroutine 正在发送一个新值到通道里。</li>
+<li>在第 3 步，左侧的goroutine 还在向通道发送新值，而右侧的 goroutine
+正在从通道接收另外一个值。这个步骤里的两个操作<strong>既不是同步的，也不会互相阻塞</strong>。</li>
+<li>最后，在第 4
+步，所有的发送和接收都完成，而通道里还有几个值，也有一些空间可以存更多的值。</li>
+</ul>
+<p><strong>有缓冲的channel创建格式：</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> Type, capacity)<br></code></pre></td></tr></table></figure>
+<p>如果给定了一个缓冲区容量，通道就是异步的。只要缓冲区有未使用空间用于发送数据，或还包含可以接收的数据，那么其通信就会无阻塞地进行。</p>
+<p><strong>函数 len(ch)求取缓冲区中剩余元素个数， cap(ch)
+求取缓冲区元素容量大小</strong></p>
+<p>示例代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span>  <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	c := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span> ,<span class="hljs-number">3</span>) <span class="hljs-comment">//带有缓冲的channel</span><br><br>	<span class="hljs-comment">//查看当前的channel中的缓冲的容量大小</span><br>	<span class="hljs-comment">//len表示的是元素数量 cap表示的是缓冲的容量大小</span><br>	fmt.Println(<span class="hljs-string">&quot;len(c) = &quot;</span>, <span class="hljs-built_in">len</span>(c), <span class="hljs-string">&quot;, cap(c)&quot;</span>, <span class="hljs-built_in">cap</span>(c))<br><br>	<span class="hljs-comment">//定义一个子goroutine</span><br>	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span>&#123;<br>		<span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;sub goroutine结束&quot;</span>)<br>		<br>		<span class="hljs-comment">// for i := 0; i&lt;3; i++&#123;</span><br>		<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i&lt;<span class="hljs-number">4</span>; i++&#123;<span class="hljs-comment">// 这种情况就会出现阻塞，因为超过了缓冲的容量</span><br>			c &lt;- i<br>			fmt.Println(<span class="hljs-string">&quot;sub goroutine 正在运行: len(c) = &quot;</span>, <span class="hljs-built_in">len</span>(c), <span class="hljs-string">&quot;, cap(c) =  &quot;</span>, <span class="hljs-built_in">cap</span>(c),<span class="hljs-string">&quot; 发送的元素是= &quot;</span>,i)<br>		&#125;<br>	&#125;()<br><br>	time.Sleep(<span class="hljs-number">1</span>*time.Second)<br><br>	<span class="hljs-comment">//有缓存的话就不会出现阻塞的情况</span><br><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>;i &lt; <span class="hljs-number">3</span>;i++&#123;<br>		num := &lt;-c <span class="hljs-comment">//从c中接受数据并赋值给num</span><br>		fmt.Println(<span class="hljs-string">&quot;num = &quot;</span>, num)<br>	&#125;<br>	fmt.Println(<span class="hljs-string">&quot;main 结束&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行结果：</p>
 <figure>
 <img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151851675.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213151851675" />
-<figcaption aria-hidden="true">image-20231213151851675</figcaption>
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219220650672.png" srcset="/img/loading.gif" lazyload
+alt="有缓冲通道的运行结果" />
+<figcaption aria-hidden="true">有缓冲通道的运行结果</figcaption>
 </figure>
-<h4 id="关闭channel">关闭Channel</h4>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213164750863.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213164750863" />
-<figcaption aria-hidden="true">image-20231213164750863</figcaption>
-</figure>
-<h4 id="channel的range和select">Channel的range和select</h4>
+<h3 id="关闭channel">关闭Channel</h3>
+<p>没有更多的值需要发送到channel的话，那么让接收者也能及时知道没有多余的值可接收将是有用的，因为接收者可以停止不必要的接收等待。这可以通过内置的<code>close</code>函数来关闭channel实现。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	c := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>) <span class="hljs-comment">//channel要通过make来触发，如果是nil channel 会发生阻塞</span><br><br>	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span>&#123;<br>		<span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;sub finished ...&quot;</span>)<br>		<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>;i&lt;<span class="hljs-number">5</span>;i++&#123;<br>			c &lt;- i<br>			<span class="hljs-comment">// close(c)</span><br>			<span class="hljs-comment">//如果向已经关闭的channel发送数据就会出现panic的错误</span><br>		&#125;<br>		<span class="hljs-comment">// close 关闭一个channel</span><br>		<span class="hljs-built_in">close</span>(c)<br>		<span class="hljs-comment">//如果去掉关闭channel这个开关，那么会出现死锁的情况，就是main的进程数据都在等待塞数据</span><br>	&#125;()<br><br>	<span class="hljs-keyword">for</span>&#123;<br>		<span class="hljs-comment">//如果ok为ture 那么channel没有关闭, 如果为false 那么已经被关闭</span><br>		<span class="hljs-keyword">if</span> data, ok := &lt;-c; ok&#123;<br>			fmt.Println(data)<br>		&#125;<span class="hljs-keyword">else</span>&#123;<br>			<span class="hljs-keyword">break</span><br>		&#125;<br>	&#125;<br><br>	fmt.Println(<span class="hljs-string">&quot;Main finished ...&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>输出的结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">/* 输出的值go run channel4.go<br>0<br>1<br>2<br>3<br>4<br>Main finished ...<br>sub finished ... */<br></code></pre></td></tr></table></figure>
+<p>注意：</p>
+<ul>
+<li>channel不像文件一样需要经常去关闭，只有当你确实没有任何发送数据了，或者你想显式的结束range循环之类的，才去关闭channel；</li>
+<li>如果向已经关闭的channel发送数据就会出现panic的错误</li>
+<li>关闭channel后，可以继续从channel接收数据；</li>
+<li>如果ok为ture 那么channel没有关闭, 如果为false 那么已经被关闭</li>
+<li>对于nil channel，无论收发都会被阻塞。</li>
+</ul>
+<h3 id="range操作channel">Range操作channel</h3>
+<p>可以使用 <strong>range</strong> 来迭代不断操作channel：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br> <br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;fmt&quot;</span><br>)<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    c := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br> <br>    <span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>        <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++ &#123;<br>            c &lt;- i<br>        &#125;<br>        <span class="hljs-built_in">close</span>(c)<br>    &#125;()<br> <br>    <span class="hljs-keyword">for</span> data := <span class="hljs-keyword">range</span> c &#123;<br>        fmt.Println(data)<br>    &#125;<br>    fmt.Println(<span class="hljs-string">&quot;Finished&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注意：</p>
+<ul>
+<li><p>利用range进行简写</p></li>
+<li><p>利用range不断迭代从channel中操作数据</p></li>
+</ul>
+<h3 id="单向channel">单向Channel</h3>
+<p>默认情况下，通道channel是双向的，也就是，既可以往里面发送数据也可以同里面接收数据。</p>
+<p>但是，我们经常见一个通道作为参数进行传递而只希望对方是单向使用的，要么只让它发送数据，要么只让它接收数据，这时候我们可以指定通道的方向。</p>
+<p>单向channel的定义：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> ch1 <span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>       <span class="hljs-comment">// ch1是一个正常的channel，是双向的</span><br><span class="hljs-keyword">var</span> ch2 <span class="hljs-keyword">chan</span>&lt;- <span class="hljs-type">float64</span> <span class="hljs-comment">// ch2是单向channel，只用于写float64数据</span><br><span class="hljs-keyword">var</span> ch3 &lt;-<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>     <span class="hljs-comment">// ch3是单向channel，只用于读int数据</span><br></code></pre></td></tr></table></figure>
+<p>可以将 channel 隐式转换为单向队列，只收或只发，不能将单向 channel
+转换为普通 channel：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs go">c := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>, <span class="hljs-number">3</span>)<br><span class="hljs-keyword">var</span> send <span class="hljs-keyword">chan</span>&lt;- <span class="hljs-type">int</span> = c <span class="hljs-comment">// send-only</span><br><span class="hljs-keyword">var</span> recv &lt;-<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span> = c <span class="hljs-comment">// receive-only</span><br>send &lt;- <span class="hljs-number">1</span><br><span class="hljs-comment">//&lt;-send //invalid operation: &lt;-send (receive from send-only type chan&lt;- int)</span><br>&lt;-recv<br><span class="hljs-comment">//recv &lt;- 2 //invalid operation: recv &lt;- 2 (send to receive-only type &lt;-chan int)</span><br> <br><span class="hljs-comment">//不能将单向 channel 转换为普通 channel</span><br>d1 := (<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)(send) <span class="hljs-comment">//cannot convert send (type chan&lt;- int) to type chan int</span><br>d2 := (<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)(recv) <span class="hljs-comment">//cannot convert recv (type &lt;-chan int) to type chan int</span><br></code></pre></td></tr></table></figure>
+<p>单向channel的示例代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">//   chan&lt;- //只写</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">counter</span><span class="hljs-params">(out <span class="hljs-keyword">chan</span>&lt;- <span class="hljs-type">int</span>)</span></span> &#123;<br>    <span class="hljs-keyword">defer</span> <span class="hljs-built_in">close</span>(out)<br>    <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++ &#123;<br>        out &lt;- i <span class="hljs-comment">//如果对方不读 会阻塞</span><br>    &#125;<br>&#125;<br> <br><span class="hljs-comment">//   &lt;-chan //只读</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">printer</span><span class="hljs-params">(in &lt;-<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)</span></span> &#123;<br>    <span class="hljs-keyword">for</span> num := <span class="hljs-keyword">range</span> in &#123;<br>        fmt.Println(num)<br>    &#125;<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    c := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>) <span class="hljs-comment">//   chan   //读写</span><br> <br>    <span class="hljs-keyword">go</span> counter(c) <span class="hljs-comment">//生产者</span><br>    printer(c)    <span class="hljs-comment">//消费者</span><br> <br>    fmt.Println(<span class="hljs-string">&quot;done&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="channel的select">Channel的Select</h2>
 <p>每个case表示监控不同的条件. 通过select来进行控制</p>
-<h4 id="channel">Channel</h4>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213174019548.png" srcset="/img/loading.gif" lazyload alt="image-20231213174019548" style="zoom: 67%;" /></p>
-<ol type="1">
-<li><p>channel
-底层数据结构是队列，分别包含接收端和发送端的goroutine队列，阻塞模式就是读/写一个空/满的channel的情况，会出现阻塞；非阻塞模式就是会返回错误而不造成阻塞</p></li>
-<li><p>读写nil的channel会发生阻塞，单缓冲channel能存储一个元素，所以发送和接收操作会相互阻塞。多缓冲channel可以存储多个元素，所以在缓冲区未满的情况下，发送和接收操作可以非阻塞地进行,
-被关闭的chan读写都会发生错误panic.</p></li>
-<li></li>
-</ol>
 
                 
               </div>
