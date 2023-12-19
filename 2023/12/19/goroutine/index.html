@@ -18,7 +18,7 @@
   
     <meta name="description" content="Golang进阶 这一部分主要介绍golang中的并发，并发是 golang 的优势之一，使用关键字 go 可以很方便的开启一个协程. go 语言中，常常用 go、chan、select 及 sync 库完成并发操作，处理同步、异步、阻塞、非阻塞任务 go 语言的并发编程，以下是需要了解的基础知识点  阻塞: 阻塞是进程(也可以是线程、协程)的状态之一（新建、就绪、运行、阻塞、终止). 指的是当">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【后端开发】Golang协程与channel">
+<meta property="og:title" content="【后端开发】Golang协程与Channel">
 <meta property="og:url" content="https://lihaibineric.github.io/2023/12/19/goroutine/index.html">
 <meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
 <meta property="og:description" content="Golang进阶 这一部分主要介绍golang中的并发，并发是 golang 的优势之一，使用关键字 go 可以很方便的开启一个协程. go 语言中，常常用 go、chan、select 及 sync 库完成并发操作，处理同步、异步、阻塞、非阻塞任务 go 语言的并发编程，以下是需要了解的基础知识点  阻塞: 阻塞是进程(也可以是线程、协程)的状态之一（新建、就绪、运行、阻塞、终止). 指的是当">
@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221404383.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213174019548.png">
 <meta property="article:published_time" content="2023-12-19T13:02:10.000Z">
-<meta property="article:modified_time" content="2023-12-19T13:29:26.146Z">
+<meta property="article:modified_time" content="2023-12-19T13:38:16.633Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="后端开发">
 <meta name="twitter:card" content="summary_large_image">
@@ -37,7 +37,7 @@
   
   
   
-  <title>【后端开发】Golang协程与channel - LIHAIBIN&#39;S BLOG</title>
+  <title>【后端开发】Golang协程与Channel - LIHAIBIN&#39;S BLOG</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -191,7 +191,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="【后端开发】Golang协程与channel"></span>
+            <span id="subtitle" data-typed-text="【后端开发】Golang协程与Channel"></span>
           
         </div>
 
@@ -214,7 +214,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k words
+          2.9k words
         
       </span>
     
@@ -225,7 +225,7 @@
         
         
         
-          15 mins
+          25 mins
         
       </span>
     
@@ -262,7 +262,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">【后端开发】Golang协程与channel</h1>
+            <h1 id="seo-header">【后端开发】Golang协程与Channel</h1>
             
             
               <div class="markdown-body">
@@ -317,25 +317,29 @@ alt="CPU切换造成的时间消耗" />
 导致频繁的线程阻塞和取消阻塞操作<strong>增加了系统开销</strong></li>
 </ul>
 <p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221404383.png" srcset="/img/loading.gif" lazyload alt="调度器设计的准则" style="zoom:67%;" /></p>
+<h3 id="goroutine的定义">Goroutine的定义</h3>
+<p>goroutine是Go语言并行设计的核心，有人称之为go程。
+Goroutine从量级上看很像协程，它比线程更小，十几个goroutine可能体现在底层就是五六个线程，Go语言内部帮你实现了这些goroutine之间的内存共享。执行goroutine只需极少的栈内存(大概是4~5KB)，当然会根据相应的数据伸缩。也正因为如此，可同时运行成千上万个并发任务。goroutine比thread更易用、更高效、更轻便。</p>
+<p>一般情况下，一个普通计算机跑几十个线程就有点负载过大了，但是同样的机器却可以轻松地让成百上千个goroutine进行资源竞争。</p>
+<h3 id="创建goroutine">创建Goroutine</h3>
+<p>只需在函数调⽤语句前添加 <strong>go</strong>
+关键字，就可创建并发执⾏单元。在并发编程中，我们通常想将一个过程切分成几块，然后让每个goroutine各自负责一块工作，当一个程序启动时，主函数在一个单独的goroutine中运行，我们叫它main
+goroutine。</p>
+<p>示例代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br> <br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;fmt&quot;</span><br>    <span class="hljs-string">&quot;time&quot;</span><br>)<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">newTask</span><span class="hljs-params">()</span></span> &#123;<br>    i := <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> &#123;<br>        i++<br>        fmt.Printf(<span class="hljs-string">&quot;new goroutine: i = %d\n&quot;</span>, i)<br>        time.Sleep(<span class="hljs-number">1</span>*time.Second) <span class="hljs-comment">//延时1s</span><br>    &#125;<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">//创建一个 goroutine，启动另外一个任务</span><br>    <span class="hljs-keyword">go</span> newTask()<br>    i := <span class="hljs-number">0</span><br>    <span class="hljs-comment">//main goroutine 循环打印</span><br>    <span class="hljs-keyword">for</span> &#123;<br>        i++<br>        fmt.Printf(<span class="hljs-string">&quot;main goroutine: i = %d\n&quot;</span>, i)<br>        time.Sleep(<span class="hljs-number">1</span> * time.Second) <span class="hljs-comment">//延时1s</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">main Goroutine: i=1<br>new Goroutine: i =2<br>new Goroutine: i =3<br>main Goroutine: i=2<br>main Goroutine: i=3<br>new Goroutine: i =4<br>new Goroutine: i =5<br></code></pre></td></tr></table></figure>
+<h3 id="goroutine特性">Goroutine特性</h3>
+<p><strong>主goroutine退出后，其它的工作goroutine也会自动退出：</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br> <br><span class="hljs-keyword">import</span> (<br><span class="hljs-string">&quot;fmt&quot;</span><br><span class="hljs-string">&quot;time&quot;</span><br>)<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">newTask</span><span class="hljs-params">()</span></span> &#123;<br>    i := <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> &#123;<br>        i++<br>        fmt.Printf(<span class="hljs-string">&quot;new goroutine: i = %d\n&quot;</span>, i)<br>        time.Sleep(<span class="hljs-number">1</span> * time.Second) <span class="hljs-comment">//延时1s</span><br>    &#125;<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">//创建一个 goroutine，启动另外一个任务</span><br>    <span class="hljs-keyword">go</span> newTask()<br> <br>    fmt.Println(<span class="hljs-string">&quot;main goroutine exit&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
 <figure>
 <img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221511900.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210221511900" />
-<figcaption aria-hidden="true">image-20231210221511900</figcaption>
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219213501210.png" srcset="/img/loading.gif" lazyload
+alt="主进程结束那么其余的goroutine结束" />
+<figcaption
+aria-hidden="true">主进程结束那么其余的goroutine结束</figcaption>
 </figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221610094.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210221610094" />
-<figcaption aria-hidden="true">image-20231210221610094</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221717307.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210221717307" />
-<figcaption aria-hidden="true">image-20231210221717307</figcaption>
-</figure>
-<h3 id="channel">Channel</h3>
+<h2 id="channel管道">Channel管道</h2>
 <p>go语言之间的goroutine通信机制</p>
 <figure>
 <img
@@ -396,7 +400,7 @@ alt="image-20231213164750863" />
 </figure>
 <h4 id="channel的range和select">Channel的range和select</h4>
 <p>每个case表示监控不同的条件. 通过select来进行控制</p>
-<h4 id="channel-1">Channel</h4>
+<h4 id="channel">Channel</h4>
 <p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213174019548.png" srcset="/img/loading.gif" lazyload alt="image-20231213174019548" style="zoom: 67%;" /></p>
 <ol type="1">
 <li><p>channel
@@ -450,7 +454,7 @@ alt="image-20231213164750863" />
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>【后端开发】Golang协程与channel</div>
+      <div>【后端开发】Golang协程与Channel</div>
       <div>https://lihaibineric.github.io/2023/12/19/goroutine/</div>
     </div>
     <div class="license-meta">
