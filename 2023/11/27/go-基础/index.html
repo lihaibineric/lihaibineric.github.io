@@ -16,12 +16,12 @@
   <meta name="author" content="Haibin Li">
   <meta name="keywords" content="">
   
-    <meta name="description" content="学习网站：8小时转职Golang工程师  Golang简介 go语言的优势  部署简单  可以直接编译成机器码可执行 不依赖其他库 直接运行即可部署  静态类型语言  编译的时候就能查出来大多数的问题  语言层面的并发  能够成分利用多核  强大的标准库  runtime系统调度机制 丰富的标准库  简单易学  25个关键字，内嵌C语法支持 面向对象的特征，能够跨平台 go语言没有异常，全部都用">
+    <meta name="description" content="Golang基础 参考学习资料：  8小时转职Golang工程师 Go语言101 Go程序员面试笔试宝典  Golang简介 go语言的优势  部署简单  可以直接编译成机器码可执行 不依赖其他库 直接运行即可部署  静态类型语言  编译的时候就能查出来大多数的问题  语言层面的并发  能够成分利用多核  强大的标准库  runtime系统调度机制 丰富的标准库  简单易学  25个关键字，内">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【后端开发】Golang基础">
 <meta property="og:url" content="https://lihaibineric.github.io/2023/11/27/go-%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
-<meta property="og:description" content="学习网站：8小时转职Golang工程师  Golang简介 go语言的优势  部署简单  可以直接编译成机器码可执行 不依赖其他库 直接运行即可部署  静态类型语言  编译的时候就能查出来大多数的问题  语言层面的并发  能够成分利用多核  强大的标准库  runtime系统调度机制 丰富的标准库  简单易学  25个关键字，内嵌C语法支持 面向对象的特征，能够跨平台 go语言没有异常，全部都用">
+<meta property="og:description" content="Golang基础 参考学习资料：  8小时转职Golang工程师 Go语言101 Go程序员面试笔试宝典  Golang简介 go语言的优势  部署简单  可以直接编译成机器码可执行 不依赖其他库 直接运行即可部署  静态类型语言  编译的时候就能查出来大多数的问题  语言层面的并发  能够成分利用多核  强大的标准库  runtime系统调度机制 丰富的标准库  简单易学  25个关键字，内">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204733470.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231127204804150.png">
@@ -41,9 +41,8 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231207215501791.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231207215514980.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231207215859488.png">
-<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213174019548.png">
 <meta property="article:published_time" content="2023-11-27T12:41:11.000Z">
-<meta property="article:modified_time" content="2023-12-19T13:00:41.788Z">
+<meta property="article:modified_time" content="2023-12-19T13:10:12.195Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="后端开发">
 <meta name="twitter:card" content="summary_large_image">
@@ -228,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          26k words
+          24k words
         
       </span>
     
@@ -239,7 +238,7 @@
         
         
         
-          213 mins
+          204 mins
         
       </span>
     
@@ -282,9 +281,16 @@
               <div class="markdown-body">
                 
                 <meta name="referrer" content="no-referrer"/>
-<p>学习网站：<a
-target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1gf4y1r79E/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">8小时转职Golang工程师</a></p>
 <hr />
+<h1 id="golang基础">Golang基础</h1>
+<p>参考学习资料：</p>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1gf4y1r79E/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">8小时转职Golang工程师</a></li>
+<li><a target="_blank" rel="noopener" href="https://gfw.go101.org/">Go语言101</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://golang.design/go-questions/">Go程序员面试笔试宝典</a></li>
+</ul>
 <h2 id="golang简介">Golang简介</h2>
 <h3 id="go语言的优势">go语言的优势</h3>
 <ol type="1">
@@ -772,147 +778,6 @@ alt="反射基本原理总结" />
 <p>利用反射取出元素查询</p>
 <p>利用编码和解码对struct 和json之间的转化</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;encoding/json&quot;</span><br>)<br><br><span class="hljs-comment">//如何将结构体转化成json</span><br><span class="hljs-keyword">type</span> Movie <span class="hljs-keyword">struct</span>&#123;<br>	Title <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;title&quot;`</span>  <span class="hljs-comment">//就是告诉json库对应的变量的标签名字是这个</span><br>	Year <span class="hljs-type">int</span> <span class="hljs-string">`json:&quot;year&quot;`</span><br>	Price <span class="hljs-type">int</span> <span class="hljs-string">`json:&quot;rmb&quot;`</span><br>	Actors []<span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;actors&quot;`</span> <span class="hljs-comment">//slice `json:&quot;actors&quot;`</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	movie :=Movie&#123;<span class="hljs-string">&quot;喜剧之王&quot;</span>,<span class="hljs-number">2000</span>,<span class="hljs-number">10</span>,[]<span class="hljs-type">string</span>&#123;<span class="hljs-string">&quot;zhouxingchi&quot;</span>,<span class="hljs-string">&quot;zhangbozhi&quot;</span>&#125;&#125;<br><br>	<span class="hljs-comment">//编码的过程就是将 struct--&gt;json</span><br><br>	jsonStr,err:=json.Marshal(movie)<br><br>	<span class="hljs-comment">//返回两个字段</span><br><br>	<span class="hljs-keyword">if</span> err!=<span class="hljs-literal">nil</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;json marshal error&quot;</span>,err)<br>		<span class="hljs-keyword">return</span><br>	&#125;<br>	fmt.Printf(<span class="hljs-string">&quot;jsonStr=%s\n&quot;</span>,jsonStr )<br>	<span class="hljs-comment">/* jsonStr=&#123;&quot;title&quot;:&quot;喜剧之王&quot;,&quot;year&quot;:2000,&quot;rmb&quot;:10,&quot;Actors&quot;:[&quot;zhouxingchi&quot;,&quot;zhangbozhi&quot;]&#125; */</span><br><br>	<span class="hljs-comment">//解码过程：json--&gt;struct</span><br>	<span class="hljs-comment">//jsonStr=&#123;&quot;title&quot;:&quot;喜剧之王&quot;,&quot;year&quot;:2000,&quot;rmb&quot;:10,&quot;actors&quot;:[&quot;zhouxingchi&quot;,&quot;zhangbozhi&quot;]&#125;</span><br><br>	myMovie:=Movie&#123;&#125;<br>	<span class="hljs-comment">//注意这个地方传递的参量是引用</span><br>	err=json.Unmarshal(jsonStr,&amp;myMovie)<br>	<span class="hljs-keyword">if</span> err!=<span class="hljs-literal">nil</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;json unmashal error&quot;</span>,err)<br>		<span class="hljs-keyword">return</span> <br>	&#125;<br>	fmt.Printf(<span class="hljs-string">&quot;%v\n&quot;</span>,myMovie)<br>	<span class="hljs-comment">//返回结构体</span><br>	<span class="hljs-comment">//&#123;喜剧之王 2000 10 [zhouxingchi zhangbozhi]&#125;</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="goroutine基本模型">Goroutine基本模型</h3>
-<p><img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231207223749991.png" srcset="/img/loading.gif" lazyload /></p>
-<p>存在切换成本，存储当前的线程的状态</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231207223845618.png" srcset="/img/loading.gif" lazyload
-alt="image-20231207223845618" />
-<figcaption aria-hidden="true">image-20231207223845618</figcaption>
-</figure>
-<p>线程数量越多会导致切换成本越大越容易造成浪费</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210220547247.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210220547247" />
-<figcaption aria-hidden="true">image-20231210220547247</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210220633895.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210220633895" />
-<figcaption aria-hidden="true">image-20231210220633895</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210220655104.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210220655104" />
-<figcaption aria-hidden="true">image-20231210220655104</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221404383.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210221404383" />
-<figcaption aria-hidden="true">image-20231210221404383</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221143475.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210221143475" />
-<figcaption aria-hidden="true">image-20231210221143475</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221320500.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210221320500" />
-<figcaption aria-hidden="true">image-20231210221320500</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221344687.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210221344687" />
-<figcaption aria-hidden="true">image-20231210221344687</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221511900.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210221511900" />
-<figcaption aria-hidden="true">image-20231210221511900</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221610094.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210221610094" />
-<figcaption aria-hidden="true">image-20231210221610094</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231210221717307.png" srcset="/img/loading.gif" lazyload
-alt="image-20231210221717307" />
-<figcaption aria-hidden="true">image-20231210221717307</figcaption>
-</figure>
-<h3 id="channel">Channel</h3>
-<p>go语言之间的goroutine通信机制</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213150125899.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213150125899" />
-<figcaption aria-hidden="true">image-20231213150125899</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213150927632.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213150927632" />
-<figcaption aria-hidden="true">image-20231213150927632</figcaption>
-</figure>
-<p>这个channel在这个位置就已经隐含表示了先后执行的关系</p>
-<p>如果main.go在运行的时候如果找不到
-channel返回的值，那么就会channel让main.go产生阻塞，同理对于另一边的sub.go也是一样，如果没有另一个goroutine来接受发出的channel数据，那么就会一直处于等待接受的状态产生阻塞，
-<strong>相当于首先得握上手才能继续执行进程</strong></p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151022873.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213151022873" />
-<figcaption aria-hidden="true">image-20231213151022873</figcaption>
-</figure>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151129109.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213151129109" />
-<figcaption aria-hidden="true">image-20231213151129109</figcaption>
-</figure>
-<h4 id="channel的无缓冲情况">Channel的无缓冲情况</h4>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151511356.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213151511356" />
-<figcaption aria-hidden="true">image-20231213151511356</figcaption>
-</figure>
-<p>如果两个goroutine存在利用channel通信的情况，两个goroutine之间存在相互的消息传递，那么在无缓冲的情况下，存在隐含的先后同步关系，必须接收方到达了channel之后消息发送方才会持续发送消息并往下运行</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151822510.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213151822510" />
-<figcaption aria-hidden="true">image-20231213151822510</figcaption>
-</figure>
-<h4 id="channel的有缓冲情况">Channel的有缓冲情况</h4>
-<p>生产者消费者模型 消息队列模型</p>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151851675.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213151851675" />
-<figcaption aria-hidden="true">image-20231213151851675</figcaption>
-</figure>
-<h4 id="关闭channel">关闭Channel</h4>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213164750863.png" srcset="/img/loading.gif" lazyload
-alt="image-20231213164750863" />
-<figcaption aria-hidden="true">image-20231213164750863</figcaption>
-</figure>
-<h4 id="channel的range和select">Channel的range和select</h4>
-<p>每个case表示监控不同的条件. 通过select来进行控制</p>
-<h4 id="channel-1">Channel</h4>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213174019548.png" srcset="/img/loading.gif" lazyload alt="image-20231213174019548" style="zoom: 67%;" /></p>
-<ol type="1">
-<li><p>channel
-底层数据结构是队列，分别包含接收端和发送端的goroutine队列，阻塞模式就是读/写一个空/满的channel的情况，会出现阻塞；非阻塞模式就是会返回错误而不造成阻塞</p></li>
-<li><p>读写nil的channel会发生阻塞，单缓冲channel能存储一个元素，所以发送和接收操作会相互阻塞。多缓冲channel可以存储多个元素，所以在缓冲区未满的情况下，发送和接收操作可以非阻塞地进行,
-被关闭的chan读写都会发生错误panic.</p></li>
-<li></li>
-</ol>
 
                 
               </div>
@@ -1002,6 +867,12 @@ alt="image-20231213164750863" />
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/12/19/goroutine/" title="【后端开发】Golang协程与channel">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【后端开发】Golang协程与channel</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
