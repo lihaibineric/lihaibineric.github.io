@@ -33,8 +33,10 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151022873.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231213151129109.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231219220132461.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231220211918321.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231220214320935.png">
 <meta property="article:published_time" content="2023-12-19T13:02:10.000Z">
-<meta property="article:modified_time" content="2023-12-19T14:16:28.364Z">
+<meta property="article:modified_time" content="2023-12-20T13:43:41.646Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="后端开发">
 <meta name="twitter:card" content="summary_large_image">
@@ -219,7 +221,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9k words
+          10k words
         
       </span>
     
@@ -230,7 +232,7 @@
         
         
         
-          76 mins
+          86 mins
         
       </span>
     
@@ -498,7 +500,28 @@ alt="有缓冲通道的运行结果" />
 <p>单向channel的示例代码：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">//   chan&lt;- //只写</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">counter</span><span class="hljs-params">(out <span class="hljs-keyword">chan</span>&lt;- <span class="hljs-type">int</span>)</span></span> &#123;<br>    <span class="hljs-keyword">defer</span> <span class="hljs-built_in">close</span>(out)<br>    <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++ &#123;<br>        out &lt;- i <span class="hljs-comment">//如果对方不读 会阻塞</span><br>    &#125;<br>&#125;<br> <br><span class="hljs-comment">//   &lt;-chan //只读</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">printer</span><span class="hljs-params">(in &lt;-<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)</span></span> &#123;<br>    <span class="hljs-keyword">for</span> num := <span class="hljs-keyword">range</span> in &#123;<br>        fmt.Println(num)<br>    &#125;<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    c := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>) <span class="hljs-comment">//   chan   //读写</span><br> <br>    <span class="hljs-keyword">go</span> counter(c) <span class="hljs-comment">//生产者</span><br>    printer(c)    <span class="hljs-comment">//消费者</span><br> <br>    fmt.Println(<span class="hljs-string">&quot;done&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
 <h2 id="channel的select">Channel的Select</h2>
-<p>每个case表示监控不同的条件. 通过select来进行控制</p>
+<h3 id="select基本定义">Select基本定义</h3>
+<p>Go里面提供了一个关键字select，通过select可以监听channel上的数据流动。每个case表示监控不同的条件.
+通过select来进行控制。</p>
+<p>select有比较多的限制，其中最大的一条限制就是每个<strong>case语句里必须是一个IO操作</strong>，大致的结构如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">select</span> &#123;<br><span class="hljs-keyword">case</span> &lt;- chan1:<br>    <span class="hljs-comment">// 如果chan1成功读到数据，则进行该case处理语句</span><br><span class="hljs-keyword">case</span> chan2 &lt;- <span class="hljs-number">1</span>:<br>    <span class="hljs-comment">// 如果成功向chan2写入数据，则进行该case处理语句</span><br><span class="hljs-keyword">default</span>:<br>    <span class="hljs-comment">// 如果上面都没有成功，则进入default处理流程</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在一个select语句中，Go语言会按顺序<strong>从头至尾</strong>评估每一个发送和接收的语句。如果其中的<strong>任意一语句可以继续执行</strong>(即没有被阻塞)，那么就从那些可以执行的语句中任意选择一条来使用。</p>
+<p>如果<strong>没有任意一条语句可以执行</strong>(即所有的通道都被阻塞)，那么有两种可能的情况：</p>
+<ol type="1">
+<li>如果给出了default语句，那么就会执行default语句，同时程序的执行会从select语句后的语句中恢复</li>
+<li>如果没有default语句，那么select语句将被阻塞，直到至少有一个通信可以进行下去</li>
+</ol>
+<p>下面是<strong>示例代码：</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br> <br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;fmt&quot;</span><br>)<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">fibonacci</span><span class="hljs-params">(c, quit <span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)</span></span> &#123;<br>    x, y := <span class="hljs-number">1</span>, <span class="hljs-number">1</span><br>    <span class="hljs-keyword">for</span> &#123;<br>        <span class="hljs-keyword">select</span> &#123;<br>        <span class="hljs-keyword">case</span> c &lt;- x:<br>            x, y = y, x+y<br>        <span class="hljs-keyword">case</span> &lt;-quit:<br>            fmt.Println(<span class="hljs-string">&quot;quit&quot;</span>)<br>            <span class="hljs-keyword">return</span><br>        &#125;<br>    &#125;<br>&#125;<br> <br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    c := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br>    quit := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br> <br>    <span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>        <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">6</span>; i++ &#123;<br>            fmt.Println(&lt;-c)<br>        &#125;<br>        quit &lt;- <span class="hljs-number">0</span><br>    &#125;()<br> <br>    fibonacci(c, quit)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行的结果：</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231220211918321.png" srcset="/img/loading.gif" lazyload alt="执行的结果" style="zoom:70%;" /></p>
+<h3 id="交替打印数字字母">交替打印数字字母</h3>
+<p>需求：反复打印数字1字母a-&gt;1a2b3c4d5e...依次类推</p>
+<p>思路：选择两个goroutine来实现这部分的内容，产生阻塞的条件是一个进程需要取数，一个goroutine需要存数来进行阻塞</p>
+<p>示例代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	c := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br><br>	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>		<span class="hljs-keyword">for</span> i := <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">26</span>; i++ &#123;<br>			&lt;-c<br>			fmt.Println(<span class="hljs-type">string</span>(<span class="hljs-number">96</span> + i))<br>			c &lt;- <span class="hljs-number">0</span><br>		&#125;<br>	&#125;()<br><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">26</span>; i++ &#123;<br>			fmt.Println(i)<br>			c &lt;- <span class="hljs-number">0</span><br>			&lt;-c<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>打印的结果是：</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231220214320935.png" srcset="/img/loading.gif" lazyload alt="数字字母交替打印" style="zoom:70%;" /></p>
 
                 
               </div>
