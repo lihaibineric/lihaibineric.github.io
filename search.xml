@@ -2383,6 +2383,16 @@ src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231022153651418
 alt="test pymarl" />
 <figcaption aria-hidden="true">test pymarl</figcaption>
 </figure>
+<h2 id="依赖包的版本问题">依赖包的版本问题</h2>
+<p>当运行pymarl的时候容易因为依赖包产生问题</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240104210308852.png"
+alt="image-20240104210308852" />
+<figcaption aria-hidden="true">image-20240104210308852</figcaption>
+</figure>
+<p>原因是
+<code>sacred</code>版本不对劲，只需要将版本降低到0.7.5这个问题就能解决</p>
 <h2 id="额外设置">额外设置</h2>
 <p>在利用pymarl进行实验的过程中可能会出现</p>
 <figure>
@@ -2424,6 +2434,88 @@ alt="some bug" />
       <tags>
         <tag>算法题</tag>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【深度学习】推荐系统算法</title>
+    <url>/2024/01/02/rec/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h1 id="推荐系统">推荐系统</h1>
+<ul>
+<li>搭建音视频系统</li>
+<li>数据收集对用户进行建模，对视频建模</li>
+<li>内嵌推荐系统算法</li>
+</ul>
+<h1 id="协同过滤算法">协同过滤算法</h1>
+<p>经典算法</p>
+<p>基本思想：<strong>根据用户之前的喜好以及其他兴趣相近的用户的选择来给用户推荐物品</strong></p>
+<p>分类：</p>
+<ul>
+<li><strong>基于用户的协同过滤算法(UserCF)</strong>:
+给用户推荐和他兴趣相似的其他用户喜欢的产品</li>
+<li><strong>基于物品的协同过滤算法(ItemCF)</strong>:
+给用户推荐和他之前喜欢的物品相似的物品、</li>
+</ul>
+<h2 id="基于用户的协同过滤算法">基于用户的协同过滤算法</h2>
+<h3 id="计算向量之间的相似性">计算向量之间的相似性</h3>
+<ol type="1">
+<li><p><strong>杰卡德相似性系数</strong></p>
+<p>衡量两个集合的相似度一种指标。
+两个集合A和B的交集元素在A，B的并集中所占的比例，称为两个集合的杰卡德相似系数</p></li>
+<li><p><strong>余弦相似度</strong></p>
+<p>用户向量i和j之间的向量夹角的大小， 夹角越小， 说明相似度越大，
+两个用户越相似</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.metrics.pairwise <span class="hljs-keyword">import</span> cosine_similarity<br>i = [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]<br>j = [<span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>]<br>consine_similarity([a, b])<br></code></pre></td></tr></table></figure></li>
+<li><p><strong>皮尔逊相关系数</strong></p>
+<p>相比余弦相似度，
+皮尔逊相关系数通过使用用户平均分对个独立评分进行修正，
+减少了用户评分偏置的影响（每个向量先进行处理，减去了向量之间的均值）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> scipy.stats <span class="hljs-keyword">import</span> pearsonr<br>i = [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]<br>j = [<span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>]<br>pearsonr(i, j)<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="最终结果预测">最终结果预测</h3>
+<ul>
+<li><strong>利用用户相似度和相似用户的评价加权平均获得用户的评价预测</strong></li>
+</ul>
+<p><span class="math display">\[
+\mathrm{R}_{\mathrm{u}, \mathrm{p}}=\frac{\sum_{\mathrm{s} \in
+\mathrm{S}}\left(\mathrm{w}_{\mathrm{u}, \mathrm{s}} \cdot
+\mathrm{R}_{\mathrm{s}, \mathrm{p}}\right)}{\sum_{\mathrm{s} \in
+\mathrm{S}} \mathrm{w}_{\mathrm{u}, \mathrm{s}}}
+\]</span></p>
+<p>​ 权重 <span class="math inline">\(w_{u,s}\)</span>是用户<span
+class="math inline">\(u\)</span>和用户<span
+class="math inline">\(s\)</span>的相似度，<span
+class="math inline">\(R_{s,p}\)</span> 是用户<span
+class="math inline">\(s\)</span>对物品<span
+class="math inline">\(p\)</span>的评分</p>
+<ul>
+<li><strong>推荐物品评分与此用户的所有评分的差值进行加权平均，
+这时候考虑用户内心的评分标准不一</strong> <span class="math display">\[
+\mathrm{P}_{\mathrm{i},
+\mathrm{j}}=\overline{\mathrm{R}}_{\mathrm{i}}+\frac{\sum_{\mathrm{k}=1}^{\mathrm{n}}\left(\mathrm{S}_{\mathrm{i},
+\mathrm{k}}\left(\mathrm{R}_{\mathrm{k},
+\mathrm{j}}-\overline{\mathrm{R}}_{\mathrm{k}}\right)\right)}{\sum_{\mathrm{k}=1}^{\mathrm{n}}
+\mathrm{S}_{\mathrm{j}, \mathrm{k}}}
+\]</span> 权重 <span class="math inline">\(S_{j,k}\)</span>是用户<span
+class="math inline">\(i\)</span>和用户<span
+class="math inline">\(k\)</span>的相似度，获得用户u
+uu对不同物品的评价预测后， 最终的推荐列表根据预测评分进行排序得到。</li>
+</ul>
+<h3 id="方法的缺点">方法的缺点</h3>
+<ul>
+<li><p>数据稀疏性：</p>
+<p>大型的电子商务推荐系统一般有非常多的物品，用户可能买的其中不到1%的物品，不同用户之间买的物品重叠性较低，导致算法无法找到一个用户的邻居，即偏好相似的用户</p></li>
+<li><p>算法的扩展性</p>
+<p>基于用户的协同过滤需要维护用户相似度矩阵以便快速的找出Topn相似用户，
+该矩阵的存储开销非常大，存储空间随着用户数量的增加而增加，<strong>不适合用户数据量大的情况使用</strong>。</p></li>
+</ul>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>推荐系统</tag>
       </tags>
   </entry>
 </search>
