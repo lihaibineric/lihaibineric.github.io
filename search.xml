@@ -2405,6 +2405,36 @@ alt="some bug" />
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim torch/_tensor.py<br></code></pre></td></tr></table></figure>
 <p>将757行的内容进行修改</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">-: self.numpy()<br>+: self.cpu().numpy()<br></code></pre></td></tr></table></figure>
+<h2 id="谷歌足球环境">谷歌足球环境</h2>
+<p>Google Research
+Football：https://github.com/google-research/football</p>
+<h4 id="安装linux依赖环境">安装Linux依赖环境</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sudo apt-get install git cmake build-essential libgl1-mesa-dev libsdl2-dev \<br>libsdl2-image-dev libsdl2-ttf-dev libsdl2-gfx-dev libboost-all-dev \<br>libdirectfb-dev libst-dev mesa-utils xvfb x11vnc python3-pip<br><br>python3 -m pip install --upgrade pip setuptools psutil wheel<br></code></pre></td></tr></table></figure>
+<p>这一步非常重要，必须合理安装相应的包。</p>
+<h4 id="安装gfootball">安装GFootball</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">python3 -m pip install gfootball<br></code></pre></td></tr></table></figure>
+<p>或者用github的仓库来进行安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/google-research/football.git<br><span class="hljs-built_in">cd</span> football<br></code></pre></td></tr></table></figure>
+<p>可以选择使用虚拟环境:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">python3 -m venv football-env<br><span class="hljs-built_in">source</span> football-env/bin/activate<br></code></pre></td></tr></table></figure>
+<p>安装依赖包</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">python3 -m pip install .<br></code></pre></td></tr></table></figure>
+<h4 id="运行结果展示">运行结果展示：</h4>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240106145437351.png" alt="谷歌足球结果展示" style="zoom:50%;" /></p>
+<h4 id="遇到的问题">遇到的问题</h4>
+<p>编译错误，缺少boost的包：</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240106145036965.png"
+alt="编译错误" />
+<figcaption aria-hidden="true">编译错误</figcaption>
+</figure>
+<p>选择安装如下包：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda install anaconda::py-boost<br></code></pre></td></tr></table></figure>
+<p>第二个错误：</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240106145218372.png" alt="错误二" style="zoom:67%;" /></p>
+<p>解决方法：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7<br></code></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>强化学习</category>
