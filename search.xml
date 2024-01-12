@@ -2946,7 +2946,24 @@ alt="image-20240109154409333" /></p>
 <p>双层Attention行为序列：第一层Attention历史行为序列内部的依赖关系；第二层是当前物料和历史行为序列</p>
 <p>SIM：将“软过滤”变成“硬过滤”，相当于从长序列选择短序列进行DIN</p>
 <h2 id="召回">召回</h2>
+<h3 id="传统召回算法">传统召回算法</h3>
+<ul>
+<li><p>基于物料属性的倒排索引</p></li>
+<li><p>基于统计的协同过滤算法</p>
+<ul>
+<li>基于用户的协同过滤：给用户A找到与他相似爱好的用户B，把B喜欢的东西推荐给A</li>
+<li>基于物料的协同过滤：用户A喜欢物料C，找到与A相似的其他物料D，把D推荐给A</li>
+</ul></li>
+<li><p>矩阵分解算法(Matrix Factorization, MF)</p>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20240112183612140.png"
+alt="矩阵分解法图示" />
+<figcaption aria-hidden="true">矩阵分解法图示</figcaption>
+</figure></li>
+</ul>
 <h3 id="向量化召回统一建模框架">向量化召回统一建模框架</h3>
+<p>如何定义负样本、如何定义证样本、如何生成Embedding、如何定义优化目标</p>
 <p>定义：将召回问题建模成向量空间中的近邻搜索问题</p>
 <p>分类：两类实体QT，可以是物料-用户、用户-用户、物料-物料</p>
 <p>方法流程：</p>
@@ -2957,11 +2974,111 @@ alt="image-20240109154409333" /></p>
 </ol>
 <p>建模方法：</p>
 <ul>
-<li>如何定义正样本</li>
-<li>如何定义负样本</li>
-<li>如何将q和t映射成Embedding</li>
-<li>如何定义优化目标和损失函数</li>
+<li>如何定义正样本（哪些q和t在向量空间中应该近）
+<ul>
+<li>qt都是物料：时间间隔很近的用户行为序列交互过的物料认为很近，相似性</li>
+<li>q是用户t是物料：用户交互过的物料认为是相近的，匹配性</li>
+<li>qt都是用户：比如孪生网络，q是用户一半的交互历史，t是同一用户另一半的交互历史，同一性</li>
+</ul></li>
+<li>如何定义负样本（哪些q和t在向量空间中应该远）
+<ul>
+<li><strong>负样本为王</strong>，负样本选择对模型很重要</li>
+<li><strong>离线训练的数据分布应该与线上服务的数据分布保持一致</strong></li>
+<li>注意 召回和排序
+候选集完全不同：<strong>召回</strong>要让模型见过最匹配也要见最不靠谱，因此<strong>召回的负样本主要依靠随机采样生成，不能（只）拿“曝光未点击”作为负样本</strong></li>
+<li>注意Easy
+Negative问题，负样本要和q有细节差异，增加难度；<code>easy:hard=100:1</code></li>
+</ul></li>
+<li>如何将q和t映射成Embedding
+<ul>
+<li><strong>排序鼓励特征交叉，召回要求解耦</strong></li>
+<li>排序使用了大量的交叉统计特征，排序将用户特征、物料特征、交叉统计特征拼接</li>
+<li>召回解耦，不用知道用户的请求提前计算好物料向量，避免计算交叉特征耗时</li>
+</ul></li>
+<li>如何定义优化目标和损失函数
+<ul>
+<li>NCE Loss</li>
+<li>Sampled Softmax Loss</li>
+<li>Pairwise Loss</li>
+</ul></li>
 </ul>
+<h3 id="双塔模型">双塔模型</h3>
+<p><img src="../../../../../Library/Application Support/typora-user-images/image-20240112190357356.png" alt="双塔结构示意图" style="zoom:67%;" /></p>
+<ul>
+<li><p>Batch内负采样</p></li>
+<li><p>混合负采样：向量缓存（物料塔）</p></li>
+<li><p>双塔结构</p>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20240112190544472.png"
+alt="双塔结构解释" />
+<figcaption aria-hidden="true">双塔结构解释</figcaption>
+</figure></li>
+<li><p>双塔结构注意要解耦</p></li>
+</ul>
+<h2 id="粗排和重排">粗排和重排</h2>
+<h3 id="双塔结构">双塔结构</h3>
+<p>相同点：都需要解耦建模</p>
+<p>不同点：</p>
+<ul>
+<li>召回需要向量数据库建立索引，粗排不需要索引</li>
+<li>负样本的选择，可以拿“曝光未点击”当负样本</li>
+<li>损失函数，粗排的损失函数需要考虑用户实际反馈，召回不需要</li>
+<li>召回ANN快速搜索近邻使用点积实现交叉，粗排可以选择任意的交叉方式</li>
+</ul>
+<p>双塔结构的问题：细粒度信息在塔中被消耗，如何保留更多的塔中输出信息</p>
+<p>解决方案：</p>
+<ul>
+<li>动态调整输入信息，减少噪声信息的输入</li>
+<li>重要的信息走捷径，ResNet</li>
+<li>双塔并联FM结构，</li>
+</ul>
+<h3 id="知识蒸馏">知识蒸馏</h3>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240112192240280.png"
+alt="image-20240112192240280" />
+<figcaption aria-hidden="true">image-20240112192240280</figcaption>
+</figure>
+<p>用精排来给粗排作知识蒸馏</p>
+<p>处理样本选择偏差</p>
+<h3 id="重排">重排</h3>
+<p>为了避免出现审美疲劳，相似的内容不能放在一起</p>
+<p>实现打散规则，最大化整个布局的多样性</p>
+<ul>
+<li><p>基于启发式规则</p>
+<ul>
+<li><p>滑动窗口打散</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240112193748060.png"
+alt="image-20240112193748060" />
+<figcaption aria-hidden="true">image-20240112193748060</figcaption>
+</figure></li>
+<li><p>分桶打散</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240112193840407.png"
+alt="image-20240112193840407" />
+<figcaption aria-hidden="true">image-20240112193840407</figcaption>
+</figure></li>
+<li><p>MMR算法</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240112193931777.png"
+alt="image-20240112193931777" />
+<figcaption aria-hidden="true">image-20240112193931777</figcaption>
+</figure></li>
+</ul></li>
+<li><p>基于行列式点过程DPP</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240112194228653.png"
+alt="image-20240112194228653" />
+<figcaption aria-hidden="true">image-20240112194228653</figcaption>
+</figure></li>
+</ul>
+<h2 id="多任务与多场景">多任务与多场景</h2>
 ]]></content>
       <categories>
         <category>深度学习</category>
