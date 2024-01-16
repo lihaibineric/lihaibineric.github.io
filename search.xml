@@ -2719,10 +2719,7 @@ class="math display">\[Score(u,g,v)=Like(u,g)\times Q(v)\]</span>
 <li>第六步推荐系统对排序结果进行截断，只保留前4个视频，返回给用户。</li>
 <li>第七步，用户按照[B, C,
 A,D]的顺序看到了4个视频，点击并观看了视频B。用户行为，即"用户u点
-击视频</li>
-</ol>
-<p>B, A/C/D曝光未点击"，被记录进日志，发送给推荐系统。</p>
-<ol type="1">
+击视频B, A/C/D曝光未点击"，被记录进日志，发送给推荐系统。</li>
 <li>第八步，推荐系统接收到了用户反馈，并据此更新用户的兴趣爱好。</li>
 </ol>
 <p>以上是比较简单的推荐系统的例子，具体的实现过程中可能会非常复杂，考虑的东西会非常多，因此具体实现上可能需要进一步的考虑。</p>
@@ -2783,8 +2780,8 @@ F_{recommend}(t|u)
 <figure>
 <img
 src="https://hw1g2gf4y6m.feishu.cn/space/api/box/stream/download/asynccode/?code=ZGE5NDI3YTkxNzUzYmNjODhmNTdhNWY3YmYzZjQxNjNfYXlpcWFEZ3NIQkxob2JvakRPNUZOQkNvWldyRlVYYWFfVG9rZW46WlNuMWJwbHZBbzBBUjh4cXVqY2NnSkFsbkxiXzE3MDUzODk5NjU6MTcwNTM5MzU2NV9WNA"
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+alt="推荐系统的功能架构" />
+<figcaption aria-hidden="true">推荐系统的功能架构</figcaption>
 </figure>
 <h3 id="召回">召回</h3>
 <p>召回模块的第一要务就是"快"，可以牺牲一部分精度，
@@ -2795,13 +2792,9 @@ alt="img" />
 片面的，但是多路召回的结果汇总起来，取长补短，查漏补缺，就能覆盖用户兴趣的方方面面。</p>
 <p><strong>区分召回和排序：</strong></p>
 <ul>
-<li>召回是从一大堆物料中排除与用户兴趣八杆子打不着的，留下还比较合用户品味的。举个例子，召回好</li>
+<li><p>召回是从一大堆物料中排除与用户兴趣八杆子打不着的，留下还比较合用户品味的。举个例子，召回好比经历过社会历练，无论哪种"不靠谱"，他都见识过。</p></li>
+<li><p>精排是从一小拨儿还不错的物料中，精挑细选，优中选优，挑出对用户来说最好的物料。举个例子，精排好比还在校园中的乖学生，见过最不靠谱的人不过是借橡皮不还的同桌。</p></li>
 </ul>
-<p>比经历过社会历练，无论哪种"不靠谱"，他都见识过。</p>
-<ul>
-<li>精排是从一小拨儿还不错的物料中，精挑细选，优中选优，挑出对用户来说最好的物料。举个例子，精</li>
-</ul>
-<p>排好比还在校园中的乖学生，见过最不靠谱的人不过是借橡皮不还的同桌。</p>
 <h4 id="传统召回算法"><strong>传统召回算法</strong></h4>
 <ul>
 <li>基于物料属性的倒排索引</li>
@@ -2815,8 +2808,8 @@ alt="img" />
 <figure>
 <img
 src="https://gitee.com/lihaibineric/picgo/raw/master/pic/(null)-20240116152608169.(null)"
-alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
+alt="矩阵分解算法图示例" />
+<figcaption aria-hidden="true">矩阵分解算法图示例</figcaption>
 </figure>
 <h4
 id="向量化召回统一建模框架"><strong>向量化召回统一建模框架</strong></h4>
