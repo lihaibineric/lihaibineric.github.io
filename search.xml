@@ -2183,6 +2183,10 @@ href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/description/
 <figure class="highlight dns"><table><tr><td class="code"><pre><code class="hljs dns">输入：head = [<span class="hljs-number">1,2,3,4</span>,<span class="hljs-number">5</span>], n = <span class="hljs-number">2</span><br>输出：[<span class="hljs-number">1,2,3,5</span>]<br></code></pre></td></tr></table></figure>
 <p><strong>示例 2：</strong></p>
 <figure class="highlight inform7"><table><tr><td class="code"><pre><code class="hljs inform7">输入：head = <span class="hljs-comment">[1]</span>, n = 1<br>输出：<span class="hljs-comment">[]</span><br></code></pre></td></tr></table></figure>
+<p>思路：</p>
+<p>遍历，用两个指针分别来记录</p>
+<p>如果要删除倒数第n个节点，让fast移动n步，然后让fast和slow同时移动，直到fast指向链表末尾。删掉slow所指向的节点就可以了</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs CPP"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">removeNthFromEnd</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>        ListNode* dummyHead = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>);<br>        dummyHead-&gt;next = head;<br>        ListNode* slow = dummyHead;<br>        ListNode* fast = dummyHead;<br>        <span class="hljs-keyword">while</span>(n-- &amp;&amp; fast != <span class="hljs-literal">NULL</span>) &#123;<br>            fast = fast-&gt;next;<br>        &#125;<br>        fast = fast-&gt;next; <span class="hljs-comment">// fast再提前走一步，因为需要让slow指向删除节点的上一个节点</span><br>        <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">NULL</span>) &#123;<br>            fast = fast-&gt;next;<br>            slow = slow-&gt;next;<br>        &#125;<br>        slow-&gt;next = slow-&gt;next-&gt;next; <br>        <br>        <span class="hljs-comment">// ListNode *tmp = slow-&gt;next;  C++释放内存的逻辑</span><br>        <span class="hljs-comment">// slow-&gt;next = tmp-&gt;next;</span><br>        <span class="hljs-comment">// delete nth;</span><br>        <br>        <span class="hljs-keyword">return</span> dummyHead-&gt;next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <h1 id="二叉树">二叉树</h1>
 <h1 id="深搜回溯">深搜回溯</h1>
 <h1 id="贪心算法">贪心算法</h1>
@@ -4388,6 +4392,211 @@ ViVi上，当作一次特征更新。同理，对图中的每个节点进行聚�
       </categories>
       <tags>
         <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【基础工具】Docker的使用</title>
+    <url>/2024/01/19/docker/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<p><a
+href="https://docker.easydoc.net/doc/81170005/cCewZWoN/AWOEX9XM#nav_2">参考文档</a></p>
+<h1 id="docker介绍">Docker介绍</h1>
+<p>Docker
+是一个应用打包、分发、部署的工具，也可以把它理解为一个轻量的虚拟机，它只虚拟你软件需要的运行环境，多余的一点都不要，而普通虚拟机则是一个完整而庞大的系统，包含各种不管你要不要的软件。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119102920136.png" alt="Docker" style="zoom: 50%;" /></p>
+<table>
+
+<thead>
+<tr class="header">
+<th>特性</th>
+<th>普通虚拟机</th>
+<th>Docker</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>跨平台</td>
+<td>通常只能在桌面级系统运行，例如
+Windows/Mac，无法在不带图形界面的服务器上运行</td>
+<td>支持的系统非常多，各类 windows 和 Linux 都支持</td>
+</tr>
+<tr class="even">
+<td>性能</td>
+<td>性能损耗大，内存占用高，因为是把整个完整系统都虚拟出来了</td>
+<td>性能好，只虚拟软件所需运行环境，最大化减少没用的配置</td>
+</tr>
+<tr class="odd">
+<td>自动化</td>
+<td>需要手动安装所有东西</td>
+<td>一个命令就可以自动部署好所需环境</td>
+</tr>
+<tr class="even">
+<td>稳定性</td>
+<td>稳定性不高，不同系统差异大</td>
+<td>稳定性好，不同系统都一样部署方式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="docker-主要功能">Docker 主要功能</h3>
+<ul>
+<li><strong>打包</strong>：就是把你软件运行所需的依赖、第三方库、软件打包到一起，变成一个安装包</li>
+<li><strong>分发</strong>：你可以把你打包好的“安装包”上传到一个镜像仓库，其他人可以非常方便的获取和安装</li>
+<li><strong>部署</strong>：拿着“安装包”就可以一个命令运行起来你的应用，自动模拟出一摸一样的运行环境，不管是在
+Windows/Mac/Linux。</li>
+</ul>
+<h3 id="docker-用途介绍">Docker 用途介绍</h3>
+<ul>
+<li>应用分发、部署，方便传播给他人安装。特别是开源软件和提供私有部署的应用</li>
+<li>快速安装测试/学习软件，用完就丢（类似小程序），不把时间浪费在安装软件上。例如
+Redis / MongoDB / ElasticSearch / ELK</li>
+<li>多个版本软件共存，不污染系统，例如
+Python2、Python3，Redis4.0，Redis5.0</li>
+<li>Windows 上体验/学习各种 Linux 系统</li>
+</ul>
+<h3 id="docker主要概念">Docker主要概念</h3>
+<ul>
+<li><strong>镜像</strong>：可以理解为软件安装包，可以方便的进行传播和安装。</li>
+<li><strong>容器</strong>：软件安装后的状态，每个软件运行环境都是独立的、隔离的，称之为容器。</li>
+<li>简单来说就是我们<strong>存储上传镜像，通过镜像生成容器</strong>，镜像可以在<strong>docker
+hub</strong>中进行管理</li>
+</ul>
+<h1 id="docker的安装">Docker的安装</h1>
+<h3 id="版本的安装">版本的安装</h3>
+<ul>
+<li>桌面版：https://www.docker.com/products/docker-desktop</li>
+<li>服务器版：https://docs.docker.com/engine/install/#server</li>
+</ul>
+<h3 id="镜像加速源">镜像加速源</h3>
+<table>
+<thead>
+<tr class="header">
+<th>镜像加速器</th>
+<th>镜像加速器地址</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Docker 中国官方镜像</td>
+<td>https://registry.docker-cn.com</td>
+</tr>
+<tr class="even">
+<td>DaoCloud 镜像站</td>
+<td>http://f1361db2.m.daocloud.io</td>
+</tr>
+<tr class="odd">
+<td>Azure 中国镜像</td>
+<td>https://dockerhub.azk8s.cn</td>
+</tr>
+<tr class="even">
+<td>科大镜像站</td>
+<td>https://docker.mirrors.ustc.edu.cn</td>
+</tr>
+<tr class="odd">
+<td>阿里云</td>
+<td>https://ud6340vz.mirror.aliyuncs.com</td>
+</tr>
+<tr class="even">
+<td>七牛云</td>
+<td>https://reg-mirror.qiniu.com</td>
+</tr>
+<tr class="odd">
+<td>网易云</td>
+<td>https://hub-mirror.c.163.com</td>
+</tr>
+<tr class="even">
+<td>腾讯云</td>
+<td>https://mirror.ccs.tencentyun.com</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119103400627.png"
+alt="添加docker的镜像源" />
+<figcaption aria-hidden="true">添加docker的镜像源</figcaption>
+</figure>
+<p><strong>加入以下命令：=="registry-mirrors":
+["https://registry.docker-cn.com,
+https://hub-mirror.c.163.com"]==</strong></p>
+<h1 id="docker镜像下载与软件安装">Docker镜像下载与软件安装</h1>
+<h3 id="docker-安装的优点">Docker 安装的优点</h3>
+<ul>
+<li>一个命令就可以安装好，快速方便</li>
+<li>有大量的镜像，可直接使用</li>
+<li>没有系统兼容问题，Linux 专享软件也照样跑</li>
+<li>支持软件多版本共存</li>
+<li>用完就丢，不拖慢电脑速度</li>
+<li>不同系统和硬件，只要安装好 Docker
+其他都一样了，一个命令搞定所有</li>
+</ul>
+<h3 id="docker-安装-redis">Docker 安装 Redis</h3>
+<p>Docker 官方镜像仓库查找 Redis ：https://hub.docker.com/</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119103742209.png" alt="查找redis镜像" style="zoom:67%;" /></p>
+<p>找到如下的命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ docker run --name some-redis -d redis<br></code></pre></td></tr></table></figure>
+<ul>
+<li>--name的意思就是为产生的容器命名，比如这里命名为some-redis</li>
+<li>-d的意思是在后台运行</li>
+<li>执行<strong>docker run</strong>就能立刻
+<strong>pull镜像、生成容器、以及运行容器</strong></li>
+</ul>
+<h3 id="docker安装ubuntu">Docker安装ubuntu</h3>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119105133828.png"
+alt="安装ubuntu" />
+<figcaption aria-hidden="true">安装ubuntu</figcaption>
+</figure>
+<p>首先先从远端拉取镜像，可以指定版本或者是最新的版本</p>
+<p>接着本地进行run</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">- docker pull ubuntu:18.04<br>- docker run -it ubuntu /bin/bash<br></code></pre></td></tr></table></figure>
+<h3 id="docker参考文档">Docker参考文档</h3>
+<p>命令参考：<a
+href="https://docs.docker.com/engine/reference/commandline/run/">https://docs.docker.com/engine/reference/commandline/run/</a></p>
+<h1 id="docker的常见命令">Docker的常见命令</h1>
+<ul>
+<li><code>docker run</code>
+运行一个容器<strong>(-d后台运行、--name重命名container)</strong></li>
+<li><code>docker stop</code> 停止运行一个容器</li>
+<li><code>docker ps</code> 列出正在运行的容器</li>
+<li><code>docker ps -a</code> 列出所有的容器</li>
+<li><code>docker rm</code> 删除某个容器</li>
+<li><code>docker exec</code> <strong>(-it
+/bin/sh)</strong>进入某一个容器； <code>docker exit</code>
+退出某个容器</li>
+<li><code>docker stop container-id</code> 停止指定 id
+的容器<code>docker start container-id</code> 启动某个id容器</li>
+<li><code>docker images</code> 查看镜像列表</li>
+<li><code>docker rm container-id</code> 删除指定 id 的容器</li>
+<li><code>docker rmi image-id</code> 删除指定 id 的镜像</li>
+<li><code>docker volume ls</code> 查看 volume 列表</li>
+<li><code>docker network ls</code> 查看网络列表</li>
+<li><code>docker-compose up</code>
+表示的意思是在docker-compose.yml的文件夹所在的位置运行如下</li>
+<li><code>docker-compose up -d</code> 后台运行只需要加一个 -d 参数</li>
+<li><code>docker-compose ps</code> 查看运行状态</li>
+<li><code>docker-compose stop</code> 停止运行</li>
+<li><code>docker-compose</code> 重启docker compose的服务</li>
+<li><code>docker-compose restart service-name</code> 重启单个服务</li>
+<li><code>docker-compose exec service-name sh</code> 进入容器命令行</li>
+</ul>
+<h1 id="docker-compose">Docker-Compose</h1>
+<p>如果项目依赖更多的第三方软件，我们需要管理的容器就更加多，每个都要单独配置运行，指定网络。使用
+docker-compose
+把项目的多个服务集合到一起，一键运行。要把项目依赖的多个服务集合到一起，我们需要编写一个<code>docker-compose.yml</code>文件，描述依赖哪些服务</p>
+<h3 id="wordpress安装">Wordpress安装</h3>
+<p>在dockerhub在安装wordpress的时候，所需要的服务非常多，所以需要把项目依赖的多个服务集合到一起</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">version:</span> <span class="hljs-string">&#x27;3.1&#x27;</span><br><br><span class="hljs-attr">services:</span><br><br>  <span class="hljs-attr">wordpress:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">wordpress</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-number">8080</span><span class="hljs-string">:80</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">WORDPRESS_DB_HOST:</span> <span class="hljs-string">db</span><br>      <span class="hljs-attr">WORDPRESS_DB_USER:</span> <span class="hljs-string">exampleuser</span><br>      <span class="hljs-attr">WORDPRESS_DB_PASSWORD:</span> <span class="hljs-string">examplepass</span><br>      <span class="hljs-attr">WORDPRESS_DB_NAME:</span> <span class="hljs-string">exampledb</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">wordpress:/var/www/html</span><br><br>  <span class="hljs-attr">db:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">mysql:5.7</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">MYSQL_DATABASE:</span> <span class="hljs-string">exampledb</span><br>      <span class="hljs-attr">MYSQL_USER:</span> <span class="hljs-string">exampleuser</span><br>      <span class="hljs-attr">MYSQL_PASSWORD:</span> <span class="hljs-string">examplepass</span><br>      <span class="hljs-attr">MYSQL_RANDOM_ROOT_PASSWORD:</span> <span class="hljs-string">&#x27;1&#x27;</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">db:/var/lib/mysql</span><br><br><span class="hljs-attr">volumes:</span><br>  <span class="hljs-attr">wordpress:</span><br>  <span class="hljs-attr">db:</span><br><br></code></pre></td></tr></table></figure>
+<p>首先编写一个：<code>docker-compose.yml</code></p>
+<p>接着在docker-compose.ym==l文件所在的位置==执行：<code>docker-compose up</code>就可以了</p>
+<p><strong>注意：执行完docker-compose
+up之后就已经生成容器并已经成功run起来了</strong></p>
+]]></content>
+      <categories>
+        <category>基础工具</category>
+      </categories>
+      <tags>
+        <tag>后端开发</tag>
       </tags>
   </entry>
 </search>
