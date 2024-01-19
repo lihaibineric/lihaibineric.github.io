@@ -4604,6 +4604,7 @@ up之后就已经生成容器并已经成功run起来了</strong></p>
     <url>/2024/01/19/pymarl-code/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
 <h1 id="pymarl代码结构">Pymarl代码结构</h1>
+<p>本文章主要介绍多智能体强化学习中的PyMarl框架的代码结构以及训练流程</p>
 <h2 id="main">Main</h2>
 <p>Pymarl的主文件（<code>main.py</code>)主要的作用是构建一个
 <strong>sacred.Experiment</strong> 类的对象 <code>ex</code>

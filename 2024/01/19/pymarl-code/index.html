@@ -16,15 +16,15 @@
   <meta name="author" content="Haibin Li">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Pymarl代码结构 Main Pymarl的主文件（main.py)主要的作用是构建一个 sacred.Experiment 类的对象 ex ，ex 包含三个重要的内置变量：  _run：表示当前实验运行时的 run 对象，_run.info 可用于记录实验中产生的结果，实验初始时是空字典&amp;#123;&amp;#125;； _config：表示当前实验运行时的参数，字典类，pymarl首先读取配置文件">
+    <meta name="description" content="Pymarl代码结构 本文章主要介绍多智能体强化学习中的PyMarl框架的代码结构以及训练流程 Main Pymarl的主文件（main.py)主要的作用是构建一个 sacred.Experiment 类的对象 ex ，ex 包含三个重要的内置变量：  _run：表示当前实验运行时的 run 对象，_run.info 可用于记录实验中产生的结果，实验初始时是空字典&amp;#123;&amp;#125;； _c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【多智能体强化学习】Pymarl代码分析">
 <meta property="og:url" content="https://lihaibineric.github.io/2024/01/19/pymarl-code/index.html">
 <meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
-<meta property="og:description" content="Pymarl代码结构 Main Pymarl的主文件（main.py)主要的作用是构建一个 sacred.Experiment 类的对象 ex ，ex 包含三个重要的内置变量：  _run：表示当前实验运行时的 run 对象，_run.info 可用于记录实验中产生的结果，实验初始时是空字典&amp;#123;&amp;#125;； _config：表示当前实验运行时的参数，字典类，pymarl首先读取配置文件">
+<meta property="og:description" content="Pymarl代码结构 本文章主要介绍多智能体强化学习中的PyMarl框架的代码结构以及训练流程 Main Pymarl的主文件（main.py)主要的作用是构建一个 sacred.Experiment 类的对象 ex ，ex 包含三个重要的内置变量：  _run：表示当前实验运行时的 run 对象，_run.info 可用于记录实验中产生的结果，实验初始时是空字典&amp;#123;&amp;#125;； _c">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-01-19T04:21:40.000Z">
-<meta property="article:modified_time" content="2024-01-19T09:54:00.072Z">
+<meta property="article:modified_time" content="2024-01-19T09:55:09.718Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="深度学习">
@@ -265,6 +265,7 @@
                 
                 <meta name="referrer" content="no-referrer"/>
 <h1 id="pymarl代码结构">Pymarl代码结构</h1>
+<p>本文章主要介绍多智能体强化学习中的PyMarl框架的代码结构以及训练流程</p>
 <h2 id="main">Main</h2>
 <p>Pymarl的主文件（<code>main.py</code>)主要的作用是构建一个
 <strong>sacred.Experiment</strong> 类的对象 <code>ex</code>
