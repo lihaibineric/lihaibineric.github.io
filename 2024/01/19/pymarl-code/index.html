@@ -24,7 +24,7 @@
 <meta property="og:description" content="Pymarl代码结构 Main Pymarl的主文件（main.py)主要的作用是构建一个 sacred.Experiment 类的对象 ex ，ex 包含三个重要的内置变量：  _run：表示当前实验运行时的 run 对象，_run.info 可用于记录实验中产生的结果，实验初始时是空字典&amp;#123;&amp;#125;； _config：表示当前实验运行时的参数，字典类，pymarl首先读取配置文件">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-01-19T04:21:40.000Z">
-<meta property="article:modified_time" content="2024-01-19T06:36:21.902Z">
+<meta property="article:modified_time" content="2024-01-19T08:01:43.647Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="深度学习">
@@ -210,7 +210,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.8k words
+          9.4k words
         
       </span>
     
@@ -221,7 +221,7 @@
         
         
         
-          41 mins
+          79 mins
         
       </span>
     
@@ -318,9 +318,16 @@
 <h2 id="run-sequential">Run Sequential</h2>
 <p>这部分是<strong>run的核心</strong>，也是对内部的函数进行控制和调用的关键</p>
 <h3 id="mac管理器">Mac管理器</h3>
+<p><strong>主要被扔进 <code>runnner</code> 和 <code>learner</code>
+两个板块中使用</strong></p>
 <p>属于自定义的<code>controller.basic_controller.BasicMAC</code>类，该对象的主要作用是
 <strong>控制智能体</strong>，因此<code>mac</code>对象中的一个重要属性就是<code>nn.module</code>类的智能体对象<code>mac.agent</code>，该对象定义了各个智能体的局部Q网络，即接收观测作为输入，输出智能体各个动作的Q值。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Setup multiagent controller here</span><br>   mac = mac_REGISTRY[args.mac](buffer.scheme, groups, args)<br></code></pre></td></tr></table></figure>
+<p><code>mac</code>对象有<strong>两个关键方法</strong>：</p>
+<ul>
+<li><code>mac.forward(ep_batch, t, test_mode=False)</code>：<code>ep_batch</code>表示一个episode的样本，<code>t</code>表示每个样本在该episode内的时间索引，<code>forward()</code>方法的作用是<strong>输出一个episode内每</strong>个时刻的观测对应的所有动作的Q值与<strong>隐层变量</strong><code>mac.hidden_states</code>。</li>
+<li><code>mac.select_actions(self, ep_batch, t_ep, t_env, bs=slice(None), test_mode=False)</code>：该方法用于在一个episode中每个时刻<strong>为所有智能体选择动作</strong>。<code>t_ep</code>代表当前样本在一个episode中的时间索引。<code>t_env</code>代表当前时刻环境运行的总时间，用于计算epsilon-greedy中的epsilon。</li>
+</ul>
 <h3 id="环境运行器">环境运行器</h3>
 <p>首先初始化环境的运行器，这部分能够获取环境的信息</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">runner = r_REGISTRY[args.runner](args=args, logger=logger)<br></code></pre></td></tr></table></figure>
@@ -334,11 +341,64 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">scheme = &#123;<br>     <span class="hljs-string">&quot;state&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: env_info[<span class="hljs-string">&quot;state_shape&quot;</span>]&#125;,<br>     <span class="hljs-string">&quot;obs&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: env_info[<span class="hljs-string">&quot;obs_shape&quot;</span>], <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>&#125;,<br>     <span class="hljs-string">&quot;actions&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (<span class="hljs-number">1</span>,), <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>, <span class="hljs-string">&quot;dtype&quot;</span>: th.long&#125;,<br>     <span class="hljs-string">&quot;avail_actions&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (env_info[<span class="hljs-string">&quot;n_actions&quot;</span>],), <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>, <span class="hljs-string">&quot;dtype&quot;</span>: th.<span class="hljs-built_in">int</span>&#125;,<br>     <span class="hljs-string">&quot;probs&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (env_info[<span class="hljs-string">&quot;n_actions&quot;</span>],), <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>, <span class="hljs-string">&quot;dtype&quot;</span>: th.<span class="hljs-built_in">float</span>&#125;,<br>        <span class="hljs-string">&quot;reward&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (<span class="hljs-number">1</span>,)&#125;,<br>        <span class="hljs-string">&quot;terminated&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (<span class="hljs-number">1</span>,), <span class="hljs-string">&quot;dtype&quot;</span>: th.uint8&#125;,&#125;<br>groups = &#123; <span class="hljs-string">&quot;agents&quot;</span>: args.n_agents&#125;<br>preprocess = &#123;<span class="hljs-string">&quot;actions&quot;</span>: (<span class="hljs-string">&quot;actions_onehot&quot;</span>, [OneHot(out_dim=args.n_actions)])&#125;<br>buffer = ReplayBuffer(scheme, groups, args.buffer_size, env_info[<span class="hljs-string">&quot;episode_limit&quot;</span>] + <span class="hljs-number">1</span>,<br>                          preprocess=preprocess,<br>                          device=<span class="hljs-string">&quot;cpu&quot;</span> <span class="hljs-keyword">if</span> args.buffer_cpu_only <span class="hljs-keyword">else</span> args.device)<br></code></pre></td></tr></table></figure>
 <p>初始化运行环境，确保所有必要的组件都已经配置好，以便开始运行或者训练算法。这个方法可能会创建必要的数据结构，设置好数据流，以及准备环境来执行特定的训练或测试循环</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">runner.setup(scheme=scheme, groups=groups, preprocess=preprocess, mac=mac)<br></code></pre></td></tr></table></figure>
+<p><code>runner</code>对象中最关键的方法是：</p>
+<p><code>runner.run(test_mode=False)</code>：利用当前智能体<code>mac</code>在环境中运行（需要用到<code>mac</code>对象），产生一个episode的样本数据<code>episode_batch</code>，存储在<code>runner.batch</code>中。</p>
+<h3 id="buffer存储器">Buffer存储器</h3>
+<p><code>buffer</code>对象属于自定义的<code>components.episode_buffer.ReplayBuffer(EpisodeBatch)</code>类，该对象的主要作用是<strong>存储样本以及采样样本</strong>。<code>ReplayBuffer</code>的父类是<code>EpisodeBatch</code>。<code>EpisodeBatch</code>类对象用于存储episode的样本，<code>ReplayBuffer(EpisodeBatch)</code>类对象则用于存储所有的off-policy样本，也即<code>EpisodeBatch</code>类变量的样本会持续地补充到<code>ReplayBuffer(EpisodeBatch)</code>类的变量中。同样由于QMix用的是DRQN结构，因此<code>EpisodeBatch</code>与<code>ReplayBuffer</code>中的样本都是以episode为单位存储的。在<code>EpisodeBatch</code>中数据的维度是<code>[batch_size, max_seq_length, *shape]</code>，<code>ReplayBuffer</code>类数据的维度是<code>[buffer_size, max_seq_length, *shape]</code>。<code>EpisodeBatch</code>中<code>Batch Size</code>表示此时batch中有多少episode，<code>ReplayBuffer</code>中<code>episodes_in_buffer</code>表示此时buffer中有多少个episode的有效样本。<code>max_seq_length</code>则表示一个episode的最大长度。</p>
+<p><code>buffer</code>对象中的关键方法有：</p>
+<ul>
+<li><code>buffer.insert_episode_batch(ep_batch)</code>：将<code>EpisodeBatch</code>类变量<code>ep_batch</code>中的样本全部存储到<code>buffer</code>中。</li>
+<li><code>buffer.sample(batch_size)</code>：从<code>buffer</code>中取出<code>batch_size</code>个episode的样本用于训练，这些样本组成了<code>EpisodeBatch</code>类的对象</li>
+</ul>
 <h3 id="learner学习器">Learner学习器</h3>
 <p>自定义的<code>leaners.q_learner.QLearner</code>（与具体选择哪个算法有关），该对象的主要作用是<strong>依据特定算法对智能体参数进行训练更新</strong>。在QMix算法中，有<code>nn.module</code>类的混合网络<code>learner.mixer</code>，因此<code>learner</code>对象需要学习的参数包括各个智能体的局部Q网络参数<code>mac.parameters()</code></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Learner</span><br>    learner = le_REGISTRY[args.learner](mac, buffer.scheme, logger, args)<br></code></pre></td></tr></table></figure>
 <p>其中这个 <code>[args.learner]</code>
-参数是根据调用命令的时候传递的config的参数文件config.yml中的参数，在内部会一并将其参数统一收集使用</p>
+参数是根据调用命令的时候传递的<code>config</code>的参数文件<code>config.yml</code>中的参数，在内部会一并将其参数统一收集使用</p>
+<p><code>learner.train(batch: EpisodeBatch, t_env: int, episode_num: int)</code>：<code>batch</code>表示当前用于训练的样本，<code>t_env</code>表示当前环境运行的总时间步数，<code>episode_num</code>表示当前环境运行的总episode数，该方法利用特定算法对<code>learner.params</code>进行更新</p>
+<h2 id="train过程">Train过程</h2>
+<h3 id="收集buffer">收集buffer</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">with</span> th.no_grad():<br>            episode_batch = runner.run(test_mode=<span class="hljs-literal">False</span>)<br>            buffer.insert_episode_batch(episode_batch)<br></code></pre></td></tr></table></figure>
+<p><code>with th.no_grad():</code>在前期的操作中我们只需要收集环境的交互信息，因此此时不需要用到梯度和推理</p>
+<p><code>episode_batch = runner.run(test_mode=False)</code>
+这行代码调用了一个名为<code>runner</code>的对象的方法。这个<code>runner</code>可能是一个负责执行环境交互和收集经验的模块。<code>test_mode=False</code>表明这个调用是在训练模式下运行的，而不是测试模式在训练过程中，智能体（agent）会根据策略（policy）在环境中采取行动，收集一系列的剧集（episodes），这些剧集包含了状态（states）、动作（actions）、奖励（rewards）等信息.</p>
+<p><code>buffer.insert_episode_batch(episode_batch)</code>
+这行代码将刚刚收集到的剧集批次（episode_batch）插入到一个名为buffer的数据结构中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">buffer.can_sample(args.batch_size)<br></code></pre></td></tr></table></figure>
+<p>这一步是用来判断当前的<code>buffer</code>的容量是否超过了满足选择<code>batch_size</code>的大小，如果满足的话那么就可以在
+<code>buffer</code> 中开始选择对应的大小</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">episode_sample = buffer.sample(args.batch_size)<br></code></pre></td></tr></table></figure>
+<p>上述的过程是对<code>buffer</code>中的元素内容进行采样</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">max_ep_t = episode_sample.max_t_filled()<br>episode_sample = episode_sample[:, :max_ep_t]<br></code></pre></td></tr></table></figure>
+<p>这一步是在补充时间步骤，在强化学习中，每个episode可能会有不同长度，因为它们可能由于早停或达到某个终止条件而长度不一。</p>
+<p>第二步是在从其中<code>sample</code>之后的数据元素进行截取选择的结果</p>
+<h3 id="train">Train</h3>
+<p>具体的学习过程就会扔进<code>learner</code> 的学习器中进行训练参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">learner.train(episode_sample, runner.t_env, episode)<br></code></pre></td></tr></table></figure>
+<p>调用学习器的<code>train</code>方法来实际进行训练。<code>episode_sample</code>是用来训练的数据，<code>runner.t_env</code>是环境步数（可能用于记录或者计算折扣因子等），<code>episode</code>可能是一个计数器或者记录当前是第几个<code>episode</code>的变量</p>
+<p><strong>注意对于价值函数分解的方法会额外用到mixer</strong></p>
+<p>为了具体分析<code>learner</code>的训练过程，我们这里给出基于
+<code>group</code>的学习代码来进行分析</p>
+<ol type="1">
+<li><p>首先第一步是进行初始化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, mac, scheme, logger, args</span>):<br>        self.args = args<br>        self.mac = mac<br>        self.target_mac = copy.deepcopy(mac)<br>        self.params = <span class="hljs-built_in">list</span>(self.mac.parameters())<br>        self.logger = logger<br>        self.device = th.device(<span class="hljs-string">&#x27;cuda&#x27;</span> <span class="hljs-keyword">if</span> args.use_cuda  <span class="hljs-keyword">else</span> <span class="hljs-string">&#x27;cpu&#x27;</span>)<br>        <span class="hljs-keyword">if</span> args.mixer == <span class="hljs-string">&quot;group&quot;</span>:<br>            self.mixer = GroupMixer(args)<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">raise</span> <span class="hljs-string">&quot;mixer error&quot;</span><br>        self.target_mixer = copy.deepcopy(self.mixer)<br>        self.params += <span class="hljs-built_in">list</span>(self.mixer.parameters())<br>        <span class="hljs-comment">#其中这一步是将模型的参数量级进行输出</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Mixer Size: &#x27;</span>)<br>        <span class="hljs-built_in">print</span>(get_parameters_num(self.mixer.parameters()))<br>        <br>        <span class="hljs-keyword">if</span> self.args.optimizer == <span class="hljs-string">&#x27;adam&#x27;</span>:<br>            self.optimiser = Adam(params=self.params, lr=args.lr)<br>        <span class="hljs-keyword">else</span>:<br>            self.optimiser = RMSprop(params=self.params, lr=args.lr, alpha=args.optim_alpha, eps=args.optim_eps)<br>        self.last_target_update_episode = <span class="hljs-number">0</span><br>        self.log_stats_t = -self.args.learner_log_interval - <span class="hljs-number">1</span><br>        self.train_t = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<p>这里会初始化定义一些比如<code>mac/target mac</code>和<code>mixer/target mixer</code>的初始化参数内容，同时定义优化算子：Adam/RMSprop等内容</p></li>
+<li><p>估计每个Q价值函数的值</p></li>
+<li><p>学习并得到联合的Q价值函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Pick the Q-Values for the actions taken by each agent</span><br>chosen_action_qvals = th.gather(mac_out[:, :-<span class="hljs-number">1</span>], dim=<span class="hljs-number">3</span>, index=actions).squeeze(<span class="hljs-number">3</span>)<br><br> <span class="hljs-comment"># Mixer</span><br>chosen_action_qvals, w1_avg_list, sd_loss = self.mixer(chosen_action_qvals, batch[<span class="hljs-string">&quot;state&quot;</span>][:, :-<span class="hljs-number">1</span>], mac_hidden[:, :-<span class="hljs-number">1</span>], mac_group_state[:, :-<span class="hljs-number">1</span>], <span class="hljs-string">&quot;eval&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>这一步中调用<code>mixer</code>的函数来学习联合的动作价值函数</p></li>
+<li><p>计算target Q的值</p>
+<p>最开始的步骤和Q函数的处理过程一样来学习每个智能体的价值函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">with</span> th.no_grad():<br>            target_mac_out = []<br>            target_mac_hidden = []<br>            target_mac_group_state = []<br><br>            self.target_mac.init_hidden(batch.batch_size)<br>            <span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(batch.max_seq_length):<br>                target_agent_outs = self.target_mac.forward(batch, t=t)<br>                target_mac_hidden.append(self.target_mac.hidden_states)<br>                target_mac_group_state.append(self.target_mac.group_states)<br>                target_mac_out.append(target_agent_outs)<br></code></pre></td></tr></table></figure>
+<p>计算得到目标的联合动作价值函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Calculate n-step Q-Learning targets</span><br>target_max_qvals, _, _ = self.target_mixer(target_max_qvals, batch[<span class="hljs-string">&quot;state&quot;</span>], target_mac_hidden, target_mac_group_state, <span class="hljs-string">&quot;target&quot;</span>)<br><br>targets = build_td_lambda_targets(rewards, terminated, mask, target_max_qvals, <br>                                            self.args.n_agents, self.args.gamma, self.args.td_lambda)<br></code></pre></td></tr></table></figure></li>
+<li><p>11</p></li>
+<li></li>
+<li></li>
+</ol>
+<h3 id="test">Test</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n_test_runs):<br>                runner.run(test_mode=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
+<p>注意这个地方就是对算法进行测试了</p>
 
                 
               </div>
