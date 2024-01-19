@@ -2187,8 +2187,101 @@ href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/description/
 <p>遍历，用两个指针分别来记录</p>
 <p>如果要删除倒数第n个节点，让fast移动n步，然后让fast和slow同时移动，直到fast指向链表末尾。删掉slow所指向的节点就可以了</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs CPP"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">removeNthFromEnd</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>        ListNode* dummyHead = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>);<br>        dummyHead-&gt;next = head;<br>        ListNode* slow = dummyHead;<br>        ListNode* fast = dummyHead;<br>        <span class="hljs-keyword">while</span>(n-- &amp;&amp; fast != <span class="hljs-literal">NULL</span>) &#123;<br>            fast = fast-&gt;next;<br>        &#125;<br>        fast = fast-&gt;next; <span class="hljs-comment">// fast再提前走一步，因为需要让slow指向删除节点的上一个节点</span><br>        <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">NULL</span>) &#123;<br>            fast = fast-&gt;next;<br>            slow = slow-&gt;next;<br>        &#125;<br>        slow-&gt;next = slow-&gt;next-&gt;next; <br>        <br>        <span class="hljs-comment">// ListNode *tmp = slow-&gt;next;  C++释放内存的逻辑</span><br>        <span class="hljs-comment">// slow-&gt;next = tmp-&gt;next;</span><br>        <span class="hljs-comment">// delete nth;</span><br>        <br>        <span class="hljs-keyword">return</span> dummyHead-&gt;next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="链表相交">链表相交</h3>
+<p>给你两个单链表的头节点 <code>headA</code> 和 <code>headB</code>
+，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回
+<code>null</code> 。</p>
+<p>题目数据 <strong>保证</strong> 整个链式结构中不存在环。</p>
+<p><strong>注意</strong>，函数返回结果后，链表必须
+<strong>保持其原始结构</strong> 。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119195217619.png" alt="链表相交图" style="zoom:80%;" /></p>
+<figure class="highlight dns"><table><tr><td class="code"><pre><code class="hljs dns">输入：intersectVal = <span class="hljs-number">8</span>, listA = [<span class="hljs-number">4,1,8,4</span>,<span class="hljs-number">5</span>], listB = [<span class="hljs-number">5,0,1,8</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>], skipA = <span class="hljs-number">2</span>, skipB = <span class="hljs-number">3</span><br>输出：Intersected at &#x27;<span class="hljs-number">8</span>&#x27;<br>解释：相交节点的值为 <span class="hljs-number">8</span> （注意，如果两个链表相交则不能为 <span class="hljs-number">0</span>）。<br>从各自的表头开始算起，链表 <span class="hljs-keyword">A</span> 为 [<span class="hljs-number">4,1,8,4</span>,<span class="hljs-number">5</span>]，链表 B 为 [<span class="hljs-number">5,0,1,8</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>]。<br>在 <span class="hljs-keyword">A</span> 中，相交节点前有 <span class="hljs-number">2</span> 个节点；在 B 中，相交节点前有 <span class="hljs-number">3</span> 个节点。<br></code></pre></td></tr></table></figure>
+<p>思路：</p>
+<p>简单来说，就是求两个链表交点节点的<strong>指针</strong>，注意返回的是结点的指针，不是对应的数值，同时注意这里比较的是<strong>相同的指针不是数值相同</strong>，因此直接比较指针是不是相同就可以了</p>
+<p>由于题目说的相交的结构如图所示，如果存在相交的指针位置，只可能出现在后面只需要考虑利用双指针从相差的数值位开始遍历</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode *<span class="hljs-title">getIntersectionNode</span><span class="hljs-params">(ListNode *headA, ListNode *headB)</span> </span>&#123;<br>        ListNode* curA = headA;<br>        ListNode* curB = headB;<br>        <span class="hljs-type">int</span> lenA = <span class="hljs-number">0</span>, lenB = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span>(curA != <span class="hljs-literal">NULL</span>)&#123;<br>            lenA++;<br>            curA = curA -&gt;next;<br>        &#125;<br>        <span class="hljs-keyword">while</span>(curB != <span class="hljs-literal">NULL</span>)&#123;<br>            lenB++;<br>            curB = curB -&gt;next;<br>        &#125;<br>        curA = headA;<br>        curB = headB;<br>        <span class="hljs-keyword">if</span>(lenB&gt; lenA)&#123;<br>            <span class="hljs-built_in">swap</span>(lenA,lenB);<br>            <span class="hljs-built_in">swap</span>(curA, curB);<br>        &#125;<br><br>        <span class="hljs-type">int</span> gap = lenA - lenB;<br>        <span class="hljs-keyword">while</span>(gap--)&#123;<br>            curA =  curA-&gt;next;<br>        &#125;<br>        <span class="hljs-keyword">while</span>(curA!=<span class="hljs-literal">NULL</span>)&#123;<br>            <span class="hljs-keyword">if</span>(curA == curB)&#123;<br>                <span class="hljs-keyword">return</span> curA;<br>            &#125;<br>            curA = curA-&gt;next;<br>            curB = curB-&gt;next;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="环形链表">环形链表</h3>
+<p><a
+href="https://leetcode.cn/problems/linked-list-cycle-ii/description/">https://leetcode.cn/problems/linked-list-cycle-ii/description/</a></p>
+<p>判断是否是有还存在，如果有那么返回开始入环的第一个节点的下标</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119200331204.png" alt="环形链表" style="zoom:50%;" /></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">输入：<span class="hljs-built_in">head</span> = [3,2,0,-4], pos = 1<br>输出：返回索引为 1 的链表节点<br>解释：链表中有一个环，其尾部连接到第二个节点。<br></code></pre></td></tr></table></figure>
+<p>思路：</p>
+<p>这道题用快慢指针的思路，就是慢指针每次只走一步，快指针每次走两步，如果在到达null之前出现快慢指针指向了同一个地方，说明这个<strong>链表有环存在</strong>，那么怎么判断下标的位置呢？</p>
+<p>具体的证明过程：</p>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20240119200838486.png"
+alt="环形链表" />
+<figcaption aria-hidden="true">环形链表</figcaption>
+</figure>
+<p>相遇时slow指针走过的节点数为: <code>x + y</code>，
+fast指针走过的节点数：<code>x + y + n (y + z)</code>，n为fast指针在环内走了n圈才遇到slow指针，
+（y+z）为 一圈内节点的个数A。</p>
+<p>因为fast指针是一步走两个节点，slow指针一步走一个节点， 所以
+fast指针走过的节点数 = slow指针走过的节点数 * 2：</p>
+<figure class="highlight lisp"><table><tr><td class="code"><pre><code class="hljs lisp">(<span class="hljs-name">x</span> + y) * <span class="hljs-number">2</span> = x + y + n (<span class="hljs-name">y</span> + z)<br></code></pre></td></tr></table></figure>
+<p>两边消掉一个（x+y）: <code>x + y = n (y + z)</code></p>
+<p>因为要找环形的入口，那么要求的是x，因为x表示 头结点到
+环形入口节点的的距离。</p>
+<p>所以要求x ，将x单独放在左面：<code>x = n (y + z) - y</code> ,</p>
+<p>再从n(y+z)中提出一个
+（y+z）来，整理公式之后为如下公式：<code>x = (n - 1) (y + z) + z</code>
+注意这里n一定是大于等于1的，因为
+fast指针至少要多走一圈才能相遇slow指针</p>
+<p>所以可以得到的规律是：<strong>从头结点出发一个指针，从相遇节点
+也出发一个指针，这两个指针每次只走一个节点，
+那么当这两个指针相遇的时候就是 环形入口的节点</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode *<span class="hljs-title">detectCycle</span><span class="hljs-params">(ListNode *head)</span> </span>&#123;<br>        ListNode* fast = head;<br>        ListNode* slow = head;<br>        <span class="hljs-keyword">while</span>(fast!=<span class="hljs-literal">NULL</span>&amp;&amp; fast-&gt;next!=<span class="hljs-literal">NULL</span>)&#123;<br>            slow = slow-&gt;next;<br>            fast = fast-&gt;next-&gt;next;<br>            <span class="hljs-comment">//说明找到了</span><br>            <span class="hljs-keyword">if</span>(slow==fast)&#123;<br>                ListNode* index1 = fast;<br>                ListNode* index2 = head;<br>                <span class="hljs-keyword">while</span>(index1!=index2)&#123;<br>                    index1 = index1-&gt;next;<br>                    index2 = index2 -&gt;next;<br>                &#125;<br>                <span class="hljs-keyword">return</span> index2;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <h1 id="二叉树">二叉树</h1>
 <h1 id="深搜回溯">深搜回溯</h1>
+<p><strong>深度优先搜索的三部曲：</strong></p>
+<ol type="1">
+<li>确定搜索函数的返回值以及搜索函数的参数分别是什么</li>
+<li>确定每次找到叶子结点的终止条件</li>
+<li>确定for单层搜索的逻辑，包含push,backtracking,pop</li>
+</ol>
+<p>别忘了最开始的初始化步骤</p>
+<h3 id="组合问题">组合问题</h3>
+<p><a
+href="https://leetcode.cn/problems/combinations/description/">https://leetcode.cn/problems/combinations/description/</a></p>
+<p>给定两个整数 <code>n</code> 和 <code>k</code>，返回范围
+<code>[1, n]</code> 中所有可能的 <code>k</code> 个数的组合。</p>
+<p>你可以按 <strong>任何顺序</strong> 返回答案。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight inform7"><table><tr><td class="code"><pre><code class="hljs inform7">输入：n = 4, k = 2<br>输出：<br><span class="hljs-comment">[</span><br><span class="hljs-comment">  <span class="hljs-comment">[2,4]</span>,</span><br><span class="hljs-comment">  <span class="hljs-comment">[3,4]</span>,</span><br><span class="hljs-comment">  <span class="hljs-comment">[2,3]</span>,</span><br><span class="hljs-comment">  <span class="hljs-comment">[1,2]</span>,</span><br><span class="hljs-comment">  <span class="hljs-comment">[1,3]</span>,</span><br><span class="hljs-comment">  <span class="hljs-comment">[1,4]</span>,</span><br><span class="hljs-comment">]</span><br></code></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua">输入：n = <span class="hljs-number">1</span>, k = <span class="hljs-number">1</span><br>输出：<span class="hljs-string">[[1]]</span><br></code></pre></td></tr></table></figure>
+<p>思路，使用深度优先搜索算法进行处理</p>
+<ul>
+<li>首先要区分private和public这两个部分分别做的内容，private主要就是写出回溯的函数主体并且可能需要的数据结构</li>
+<li>public中就对函数进行跳用以及数据结构的使用</li>
+<li>第一步就是确定函数的类型和返回，这里用了一个 <code>startindex</code>
+用来存储下一次进行选择的位置点这样能够避免重复</li>
+<li>同时函数的返回类型是二位的向量结构</li>
+<li>同时定义终止条件和单层循环的内容</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; result;<br>    vector&lt;<span class="hljs-type">int</span>&gt;path;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtracking</span><span class="hljs-params">(<span class="hljs-type">int</span> n,<span class="hljs-type">int</span> k, <span class="hljs-type">int</span> startindex)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(path.<span class="hljs-built_in">size</span>()==k)&#123;<br>            result.<span class="hljs-built_in">push_back</span>(path);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = startindex;i&lt;=n;i++)&#123;<br>            path.<span class="hljs-built_in">push_back</span>(i);<br>            <span class="hljs-built_in">backtracking</span>(n,k,i+<span class="hljs-number">1</span>);<br>            path.<span class="hljs-built_in">pop_back</span>();<br>        &#125;<br>    &#125;<br><span class="hljs-keyword">public</span>:<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">combine</span>(<span class="hljs-type">int</span> n, <span class="hljs-type">int</span> k)&#123;<br>        <span class="hljs-built_in">backtracking</span>(n,k,<span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="组合问题iii">组合问题III</h3>
+<p><a
+href="https://leetcode.cn/problems/combination-sum-iii/submissions/496823507/">https://leetcode.cn/problems/combination-sum-iii/submissions/496823507/</a></p>
+<p>思路：简单的深度优先搜索，但需要注意的是可以适当采用<strong>减枝操作和必要的时候添加sum变量进行记录</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; result;<br>    vector&lt;<span class="hljs-type">int</span>&gt; path;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtacking</span><span class="hljs-params">(<span class="hljs-type">int</span> k, <span class="hljs-type">int</span> n,<span class="hljs-type">int</span> startindex, <span class="hljs-type">int</span> sum)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(path.<span class="hljs-built_in">size</span>()==k)&#123;<br>            <span class="hljs-keyword">if</span>(sum == n) result.<span class="hljs-built_in">push_back</span>(path);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i= startindex;i&lt;=<span class="hljs-number">9</span>;i++)&#123;<br>            sum+=i;<br>            path.<span class="hljs-built_in">push_back</span>(i);<br>            <span class="hljs-built_in">backtacking</span>(k,n,i+<span class="hljs-number">1</span>,sum);<br>            sum-=i;<br>            path.<span class="hljs-built_in">pop_back</span>();<br>        &#125;<br>    &#125;<br><span class="hljs-keyword">public</span>:<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">combinationSum3</span>(<span class="hljs-type">int</span> k, <span class="hljs-type">int</span> n) &#123;<br>        <span class="hljs-built_in">backtacking</span>(k,n,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>为了优化可以做一个剪枝操作</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">if</span> (sum &gt; targetSum) &#123; <span class="hljs-comment">// 剪枝操作</span><br>    <span class="hljs-keyword">return</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="电话号码组合问题">电话号码组合问题</h3>
+<p>给定一个仅包含数字 <code>2-9</code>
+的字符串，返回所有它能表示的字母组合。答案可以按
+<strong>任意顺序</strong> 返回。</p>
+<p>给出数字到字母的映射如下（与电话按键相同）。注意 1
+不对应任何字母。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119211247536.png" alt="电话号码的按键" style="zoom:50%;" /></p>
+<p><strong>示例 ：</strong></p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><code class="hljs ada">输入：<span class="hljs-keyword">digits</span> = <span class="hljs-string">&quot;23&quot;</span><br>输出：[<span class="hljs-string">&quot;ad&quot;</span>,<span class="hljs-string">&quot;ae&quot;</span>,<span class="hljs-string">&quot;af&quot;</span>,<span class="hljs-string">&quot;bd&quot;</span>,<span class="hljs-string">&quot;be&quot;</span>,<span class="hljs-string">&quot;bf&quot;</span>,<span class="hljs-string">&quot;cd&quot;</span>,<span class="hljs-string">&quot;ce&quot;</span>,<span class="hljs-string">&quot;cf&quot;</span>]<br></code></pre></td></tr></table></figure>
+<p>这道题需要注意的地方是，首先第一步做好map字符的映射</p>
+<p>第二步最关键是要写清楚回溯函数的参数可能包含index，就是第几位置的字符，同时需要区分backtracking函数的for循环的内容是相当于横向的遍历，而函数体内部的实现是纵向的遍历</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">private</span>:<br><span class="hljs-type">const</span> string letterMap[<span class="hljs-number">10</span>] = &#123;<br>        <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-comment">// 0</span><br>        <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-comment">// 1</span><br>        <span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-comment">// 2</span><br>        <span class="hljs-string">&quot;def&quot;</span>, <span class="hljs-comment">// 3</span><br>        <span class="hljs-string">&quot;ghi&quot;</span>, <span class="hljs-comment">// 4</span><br>        <span class="hljs-string">&quot;jkl&quot;</span>, <span class="hljs-comment">// 5</span><br>        <span class="hljs-string">&quot;mno&quot;</span>, <span class="hljs-comment">// 6</span><br>        <span class="hljs-string">&quot;pqrs&quot;</span>, <span class="hljs-comment">// 7</span><br>        <span class="hljs-string">&quot;tuv&quot;</span>, <span class="hljs-comment">// 8</span><br>        <span class="hljs-string">&quot;wxyz&quot;</span>, <span class="hljs-comment">// 9</span><br>    &#125;;<br>    vector&lt;string&gt; result;<br>    string s;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtracking</span><span class="hljs-params">(<span class="hljs-type">const</span> string digits,<span class="hljs-type">int</span> index, string s)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(digits.<span class="hljs-built_in">size</span>()==<span class="hljs-number">0</span>)&#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(index==digits.<span class="hljs-built_in">size</span>())&#123;<br>            result.<span class="hljs-built_in">push_back</span>(s);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-type">int</span> digit = digits[index]-<span class="hljs-string">&#x27;0&#x27;</span>;<br>        string letters = letterMap[digit];<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i= <span class="hljs-number">0</span>;i&lt;letters.<span class="hljs-built_in">size</span>();i++)&#123;<br>            s.<span class="hljs-built_in">push_back</span>(letters[i]);<br>            <span class="hljs-built_in">backtracking</span>(digits, index+<span class="hljs-number">1</span>, s);<br>            s.<span class="hljs-built_in">pop_back</span>();<br>        &#125;<br>    &#125;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;string&gt; <span class="hljs-title">letterCombinations</span><span class="hljs-params">(string digits)</span> </span>&#123;<br>        <span class="hljs-built_in">backtracking</span>(digits,<span class="hljs-number">0</span>,<span class="hljs-string">&quot;&quot;</span>);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <h1 id="贪心算法">贪心算法</h1>
 <h1 id="动态规划">动态规划</h1>
 ]]></content>
