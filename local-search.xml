@@ -4,13 +4,25 @@
   
   
   <entry>
-    <title>go-kit</title>
+    <title>【后端开发】Go kit框架</title>
     <link href="/2024/01/23/go-kit/"/>
     <url>/2024/01/23/go-kit/</url>
     
-    <content type="html"><![CDATA[]]></content>
+    <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><h1 id="go-kit框架">Go-kit框架</h1>]]></content>
     
     
+    <categories>
+      
+      <category>后端开发</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>后端开发</tag>
+      
+    </tags>
     
   </entry>
   
@@ -175,7 +187,7 @@
   
   
   <entry>
-    <title>【后端开发】Golang基础</title>
+    <title>【后端开发】Golang语法基础</title>
     <link href="/2023/11/27/go-%E5%9F%BA%E7%A1%80/"/>
     <url>/2023/11/27/go-%E5%9F%BA%E7%A1%80/</url>
     
@@ -216,9 +228,9 @@
     
     <tags>
       
-      <tag>后端开发</tag>
-      
       <tag>基础工具</tag>
+      
+      <tag>后端开发</tag>
       
     </tags>
     

@@ -333,6 +333,96 @@ alt="GRF的训练结果与可视化" />
       </tags>
   </entry>
   <entry>
+    <title>【基础工具】Anaconda命令集</title>
+    <url>/2023/10/22/conda_list/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h2 id="conda安装">Conda安装</h2>
+<h3 id="直接安装">直接安装</h3>
+<p>安装网址https://www.anaconda.com/，但是下载速度很慢</p>
+<h3 id="镜像安装">镜像安装</h3>
+<p>清华源网址https://mirrors.tuna.tsinghua.edu.cn/anaconda/</p>
+<p>下载速度会比较快</p>
+<p>如果觉得anacodna的包非常大，可以选择安装miniconda
+https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/</p>
+<h2 id="conda-常用命令">Conda 常用命令</h2>
+<h3 id="查看conda版本">查看conda版本</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda --version/ conda -V<br></code></pre></td></tr></table></figure>
+<h3 id="查看已有环境">查看已有环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda info --envs<br>conda env <span class="hljs-built_in">list</span><br>conda info -e<br></code></pre></td></tr></table></figure>
+<h3 id="进退环境">进退环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate  [name]<span class="hljs-comment"># 重新进入虚拟环境</span><br>conda deactivate  <span class="hljs-comment"># 退出虚拟环境</span><br></code></pre></td></tr></table></figure>
+<h3 id="创建新的环境">创建新的环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n *** python=<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<h3 id="删除环境">删除环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove -n old_name --<span class="hljs-built_in">all</span> <span class="hljs-comment"># 删除环境old_name</span><br></code></pre></td></tr></table></figure>
+<h3 id="激活环境">激活环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate xxxx <span class="hljs-comment"># 激活xxxx环境</span><br></code></pre></td></tr></table></figure>
+<h3 id="关闭环境">关闭环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda deactivate <span class="hljs-comment"># 关闭环境</span><br></code></pre></td></tr></table></figure>
+<h3 id="克隆环境">克隆环境</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n [new_name] --clone [old_name]<br></code></pre></td></tr></table></figure>
+<h3 id="升级版本">升级版本</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda update -n base conda <span class="hljs-comment">#update最新版本的conda；</span><br>conda update --<span class="hljs-built_in">all</span> <span class="hljs-comment">#更新所有包</span><br></code></pre></td></tr></table></figure>
+<h3 id="pip管理的常用包">Pip管理的常用包</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip search package_name <br>pip show package_name <br>pip uninstall｜｜package_name<br>pip <span class="hljs-built_in">list</span><br></code></pre></td></tr></table></figure>
+<h3 id="删除环境中的包">删除环境中的包</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove package <span class="hljs-comment">#删除当前环境中的包</span><br>conda remove -- name env_name package <span class="hljs-comment">#删除指定环境中的包</span><br></code></pre></td></tr></table></figure>
+<h3 id="指定环境中安装包">指定环境中安装包</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda install --name env_name package_name <br></code></pre></td></tr></table></figure>
+<h3 id="生成conda环境依赖包的版本">生成Conda环境依赖包的版本</h3>
+<p>在做实验的过程中，需要输出一个关于当前环境的版本依赖文件，可以选择使用下面的方法进行输出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">pip list --format=freeze&gt; requirements.txt<br></code></pre></td></tr></table></figure>
+<h3 id="conda环境的python版本非指定">Conda环境的python版本非指定</h3>
+<p>指定虚拟环境x的python版本是3.8，base环境是3.11；conda
+activate激活x之后python版本仍为3.11。</p>
+<p><strong>原因：</strong>在base环境中修改了.zshrc文件中的python只定路径，让每次虚拟环境中的python找到的python都只能按照指定的python路径进行寻找，从而导致conda环境中的python版本不能制定。</p>
+<p><strong>修改方式：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim .zshrc<br></code></pre></td></tr></table></figure>
+<p>进入
+.zshrc环境中进行修改，如果发现一类诸如其他python版本指定的路径的话，需要进行删除，只需要保留最原始的关于anaconda的命令初始化，完成之后输入</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.zshrc<br></code></pre></td></tr></table></figure>
+<p>解决问题</p>
+<h3 id="镜像源安装">镜像源安装</h3>
+<p>在conda环境中改变默认的下载镜像源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">pip config <span class="hljs-built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple <br></code></pre></td></tr></table></figure>
+<p>加上这句话之后就会出现以下的写文件</p>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino">Writing to /home/user/.config/pip/pip.conf<br></code></pre></td></tr></table></figure>
+<p><strong>下载使用清华源加上： -i
+https://pypi.tuna.tsinghua.edu.cn/simple</strong></p>
+<blockquote>
+<p><strong>清华：<code>https://pypi.tuna.tsinghua.edu.cn/simple/</code></strong></p>
+<p><strong>阿里云：<code>http://mirrors.aliyun.com/pypi/simple/</code></strong></p>
+<p><strong>中国科技大学
+：<code>https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/</code></strong></p>
+<p><strong>豆瓣：<code>http://pypi.doubanio.com/simple/</code></strong></p>
+</blockquote>
+<p>如果是给conda添加镜像：清华源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --add channels http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/win-64/<br></code></pre></td></tr></table></figure>
+<p>添加阿里源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --add channels https://mirrors.aliyun.com/pypi/simple/<br></code></pre></td></tr></table></figure>
+<p>查看已经添加的镜像源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --show channels<br></code></pre></td></tr></table></figure>
+<p>移除其中的指定的镜像源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --remove channels + 镜像的名称<br></code></pre></td></tr></table></figure>
+<h3 id="conda无法自动更新">Conda无法自动更新</h3>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206113335958.png"
+alt="image-20231206113335958" />
+<figcaption aria-hidden="true">image-20231206113335958</figcaption>
+</figure>
+<p>原因：<a
+href="https://so.csdn.net/so/search?q=conda&amp;spm=1001.2101.3001.7020">conda</a>和pip等相关包的版本太低，自动更新不能用，解决方案：在命令行中输入以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda clean --all<br>conda update --all<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>基础工具</category>
+      </categories>
+      <tags>
+        <tag>基础工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【自动驾驶】RSS Model for Autonomous Driving</title>
     <url>/2023/10/21/RSS-Model/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
@@ -998,6 +1088,211 @@ system，能够产生极高的精度；直接测量速度和距离，这进一�
       </tags>
   </entry>
   <entry>
+    <title>【基础工具】Docker使用</title>
+    <url>/2024/01/19/docker/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<p><a
+href="https://docker.easydoc.net/doc/81170005/cCewZWoN/AWOEX9XM#nav_2">参考文档</a></p>
+<h1 id="docker介绍">Docker介绍</h1>
+<p>Docker
+是一个应用打包、分发、部署的工具，也可以把它理解为一个轻量的虚拟机，它只虚拟你软件需要的运行环境，多余的一点都不要，而普通虚拟机则是一个完整而庞大的系统，包含各种不管你要不要的软件。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119102920136.png" alt="Docker" style="zoom: 50%;" /></p>
+<table>
+
+<thead>
+<tr class="header">
+<th>特性</th>
+<th>普通虚拟机</th>
+<th>Docker</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>跨平台</td>
+<td>通常只能在桌面级系统运行，例如
+Windows/Mac，无法在不带图形界面的服务器上运行</td>
+<td>支持的系统非常多，各类 windows 和 Linux 都支持</td>
+</tr>
+<tr class="even">
+<td>性能</td>
+<td>性能损耗大，内存占用高，因为是把整个完整系统都虚拟出来了</td>
+<td>性能好，只虚拟软件所需运行环境，最大化减少没用的配置</td>
+</tr>
+<tr class="odd">
+<td>自动化</td>
+<td>需要手动安装所有东西</td>
+<td>一个命令就可以自动部署好所需环境</td>
+</tr>
+<tr class="even">
+<td>稳定性</td>
+<td>稳定性不高，不同系统差异大</td>
+<td>稳定性好，不同系统都一样部署方式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="docker-主要功能">Docker 主要功能</h3>
+<ul>
+<li><strong>打包</strong>：就是把你软件运行所需的依赖、第三方库、软件打包到一起，变成一个安装包</li>
+<li><strong>分发</strong>：你可以把你打包好的“安装包”上传到一个镜像仓库，其他人可以非常方便的获取和安装</li>
+<li><strong>部署</strong>：拿着“安装包”就可以一个命令运行起来你的应用，自动模拟出一摸一样的运行环境，不管是在
+Windows/Mac/Linux。</li>
+</ul>
+<h3 id="docker-用途介绍">Docker 用途介绍</h3>
+<ul>
+<li>应用分发、部署，方便传播给他人安装。特别是开源软件和提供私有部署的应用</li>
+<li>快速安装测试/学习软件，用完就丢（类似小程序），不把时间浪费在安装软件上。例如
+Redis / MongoDB / ElasticSearch / ELK</li>
+<li>多个版本软件共存，不污染系统，例如
+Python2、Python3，Redis4.0，Redis5.0</li>
+<li>Windows 上体验/学习各种 Linux 系统</li>
+</ul>
+<h3 id="docker主要概念">Docker主要概念</h3>
+<ul>
+<li><strong>镜像</strong>：可以理解为软件安装包，可以方便的进行传播和安装。</li>
+<li><strong>容器</strong>：软件安装后的状态，每个软件运行环境都是独立的、隔离的，称之为容器。</li>
+<li>简单来说就是我们<strong>存储上传镜像，通过镜像生成容器</strong>，镜像可以在<strong>docker
+hub</strong>中进行管理</li>
+</ul>
+<h1 id="docker的安装">Docker的安装</h1>
+<h3 id="版本的安装">版本的安装</h3>
+<ul>
+<li>桌面版：https://www.docker.com/products/docker-desktop</li>
+<li>服务器版：https://docs.docker.com/engine/install/#server</li>
+</ul>
+<h3 id="镜像加速源">镜像加速源</h3>
+<table>
+<thead>
+<tr class="header">
+<th>镜像加速器</th>
+<th>镜像加速器地址</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Docker 中国官方镜像</td>
+<td>https://registry.docker-cn.com</td>
+</tr>
+<tr class="even">
+<td>DaoCloud 镜像站</td>
+<td>http://f1361db2.m.daocloud.io</td>
+</tr>
+<tr class="odd">
+<td>Azure 中国镜像</td>
+<td>https://dockerhub.azk8s.cn</td>
+</tr>
+<tr class="even">
+<td>科大镜像站</td>
+<td>https://docker.mirrors.ustc.edu.cn</td>
+</tr>
+<tr class="odd">
+<td>阿里云</td>
+<td>https://ud6340vz.mirror.aliyuncs.com</td>
+</tr>
+<tr class="even">
+<td>七牛云</td>
+<td>https://reg-mirror.qiniu.com</td>
+</tr>
+<tr class="odd">
+<td>网易云</td>
+<td>https://hub-mirror.c.163.com</td>
+</tr>
+<tr class="even">
+<td>腾讯云</td>
+<td>https://mirror.ccs.tencentyun.com</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119103400627.png"
+alt="添加docker的镜像源" />
+<figcaption aria-hidden="true">添加docker的镜像源</figcaption>
+</figure>
+<p><strong>加入以下命令：=="registry-mirrors":
+["https://registry.docker-cn.com,
+https://hub-mirror.c.163.com"]==</strong></p>
+<h1 id="docker镜像下载与软件安装">Docker镜像下载与软件安装</h1>
+<h3 id="docker-安装的优点">Docker 安装的优点</h3>
+<ul>
+<li>一个命令就可以安装好，快速方便</li>
+<li>有大量的镜像，可直接使用</li>
+<li>没有系统兼容问题，Linux 专享软件也照样跑</li>
+<li>支持软件多版本共存</li>
+<li>用完就丢，不拖慢电脑速度</li>
+<li>不同系统和硬件，只要安装好 Docker
+其他都一样了，一个命令搞定所有</li>
+</ul>
+<h3 id="docker-安装-redis">Docker 安装 Redis</h3>
+<p>Docker 官方镜像仓库查找 Redis ：https://hub.docker.com/</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119103742209.png" alt="查找redis镜像" style="zoom:67%;" /></p>
+<p>找到如下的命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ docker run --name some-redis -d redis<br></code></pre></td></tr></table></figure>
+<ul>
+<li>--name的意思就是为产生的容器命名，比如这里命名为some-redis</li>
+<li>-d的意思是在后台运行</li>
+<li>执行<strong>docker run</strong>就能立刻
+<strong>pull镜像、生成容器、以及运行容器</strong></li>
+</ul>
+<h3 id="docker安装ubuntu">Docker安装ubuntu</h3>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119105133828.png"
+alt="安装ubuntu" />
+<figcaption aria-hidden="true">安装ubuntu</figcaption>
+</figure>
+<p>首先先从远端拉取镜像，可以指定版本或者是最新的版本</p>
+<p>接着本地进行run</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">- docker pull ubuntu:18.04<br>- docker run -it ubuntu /bin/bash<br></code></pre></td></tr></table></figure>
+<h3 id="docker参考文档">Docker参考文档</h3>
+<p>命令参考：<a
+href="https://docs.docker.com/engine/reference/commandline/run/">https://docs.docker.com/engine/reference/commandline/run/</a></p>
+<h1 id="docker的常见命令">Docker的常见命令</h1>
+<ul>
+<li><code>docker run</code>
+运行一个容器<strong>(-d后台运行、--name重命名container)</strong></li>
+<li><code>docker stop</code> 停止运行一个容器</li>
+<li><code>docker ps</code> 列出正在运行的容器</li>
+<li><code>docker ps -a</code> 列出所有的容器</li>
+<li><code>docker rm</code> 删除某个容器</li>
+<li><code>docker exec</code> <strong>(-it
+/bin/sh)</strong>进入某一个容器； <code>docker exit</code>
+退出某个容器</li>
+<li><code>docker stop container-id</code> 停止指定 id
+的容器<code>docker start container-id</code> 启动某个id容器</li>
+<li><code>docker images</code> 查看镜像列表</li>
+<li><code>docker rm container-id</code> 删除指定 id 的容器</li>
+<li><code>docker rmi image-id</code> 删除指定 id 的镜像</li>
+<li><code>docker volume ls</code> 查看 volume 列表</li>
+<li><code>docker network ls</code> 查看网络列表</li>
+<li><code>docker-compose up</code>
+表示的意思是在docker-compose.yml的文件夹所在的位置运行如下</li>
+<li><code>docker-compose up -d</code> 后台运行只需要加一个 -d 参数</li>
+<li><code>docker-compose ps</code> 查看运行状态</li>
+<li><code>docker-compose stop</code> 停止运行</li>
+<li><code>docker-compose</code> 重启docker compose的服务</li>
+<li><code>docker-compose restart service-name</code> 重启单个服务</li>
+<li><code>docker-compose exec service-name sh</code> 进入容器命令行</li>
+</ul>
+<h1 id="docker-compose">Docker-Compose</h1>
+<p>如果项目依赖更多的第三方软件，我们需要管理的容器就更加多，每个都要单独配置运行，指定网络。使用
+docker-compose
+把项目的多个服务集合到一起，一键运行。要把项目依赖的多个服务集合到一起，我们需要编写一个<code>docker-compose.yml</code>文件，描述依赖哪些服务</p>
+<h3 id="wordpress安装">Wordpress安装</h3>
+<p>在dockerhub在安装wordpress的时候，所需要的服务非常多，所以需要把项目依赖的多个服务集合到一起</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">version:</span> <span class="hljs-string">&#x27;3.1&#x27;</span><br><br><span class="hljs-attr">services:</span><br><br>  <span class="hljs-attr">wordpress:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">wordpress</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-number">8080</span><span class="hljs-string">:80</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">WORDPRESS_DB_HOST:</span> <span class="hljs-string">db</span><br>      <span class="hljs-attr">WORDPRESS_DB_USER:</span> <span class="hljs-string">exampleuser</span><br>      <span class="hljs-attr">WORDPRESS_DB_PASSWORD:</span> <span class="hljs-string">examplepass</span><br>      <span class="hljs-attr">WORDPRESS_DB_NAME:</span> <span class="hljs-string">exampledb</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">wordpress:/var/www/html</span><br><br>  <span class="hljs-attr">db:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">mysql:5.7</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">MYSQL_DATABASE:</span> <span class="hljs-string">exampledb</span><br>      <span class="hljs-attr">MYSQL_USER:</span> <span class="hljs-string">exampleuser</span><br>      <span class="hljs-attr">MYSQL_PASSWORD:</span> <span class="hljs-string">examplepass</span><br>      <span class="hljs-attr">MYSQL_RANDOM_ROOT_PASSWORD:</span> <span class="hljs-string">&#x27;1&#x27;</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">db:/var/lib/mysql</span><br><br><span class="hljs-attr">volumes:</span><br>  <span class="hljs-attr">wordpress:</span><br>  <span class="hljs-attr">db:</span><br><br></code></pre></td></tr></table></figure>
+<p>首先编写一个：<code>docker-compose.yml</code></p>
+<p>接着在docker-compose.ym==l文件所在的位置==执行：<code>docker-compose up</code>就可以了</p>
+<p><strong>注意：执行完docker-compose
+up之后就已经生成容器并已经成功run起来了</strong></p>
+]]></content>
+      <categories>
+        <category>基础工具</category>
+      </categories>
+      <tags>
+        <tag>后端开发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>【基础工具】Git命令集</title>
     <url>/2023/10/23/git/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
@@ -1138,7 +1433,29 @@ alt="远端和本地的不同分支" />
       </tags>
   </entry>
   <entry>
-    <title>【后端开发】Golang基础</title>
+    <title>【深度学习】图神经网络</title>
+    <url>/2024/01/12/gnn/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h1 id="图神经网络">图神经网络</h1>
+<p>GNN全称----图神经网络，它是一种直接作用于图结构上的神经网络。我们可以把图中的每一个节点
+<span class="math inline">\(V\)</span> 当作个体对象，而每一条边 <span
+class="math inline">\(E\)</span>
+当作个体与个体间的某种联系，所有节点组成的关系网就是最后的图 <span
+class="math inline">\(U\)</span></p>
+<p>GNN的输入一般是每个节点的起始特征向量和表示节点间关系的邻接矩阵，有了这两个输入信息，接下来就是聚合操作了。所谓的聚合，其实就是将周边与节点
+V i ViVi 有关联的节点{V a , V b , . . . Va,Vb,...Va,Vb,...}加权到V i
+ViVi上，当作一次特征更新。同理，对图中的每个节点进行聚合操作，更新所有图节点的特征。</p>
+<p>GNN本质就是更新每个节点的特征，输入是特征，输出是特征，邻接矩阵不会变</p>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【后端开发】Golang语法基础</title>
     <url>/2023/11/27/go-%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
 <hr />
@@ -2982,8 +3299,176 @@ time) ；wa: IO等待时间百分比； id: 空闲时间百分比</p></li>
         <category>基础工具</category>
       </categories>
       <tags>
-        <tag>后端开发</tag>
         <tag>基础工具</tag>
+        <tag>后端开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【多智能体强化学习】Pymarl代码分析</title>
+    <url>/2024/01/19/pymarl-code/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h1 id="pymarl代码结构">Pymarl代码结构</h1>
+<p>本文章主要介绍多智能体强化学习中的PyMarl框架的代码结构以及训练流程</p>
+<h2 id="main">Main</h2>
+<p>Pymarl的主文件（<code>main.py</code>)主要的作用是构建一个
+<strong>sacred.Experiment</strong> 类的对象 <code>ex</code>
+，<code>ex</code> 包含三个重要的内置变量：</p>
+<ul>
+<li><code>_run</code>：表示当前实验运行时的 <strong>run</strong>
+对象，<code>_run.info</code>
+可用于记录实验中产生的结果，实验初始时是空字典<code>&#123;&#125;</code>；</li>
+<li><code>_config</code>：表示当前实验运行时的参数，字典类，pymarl首先读取配置文件然后利用<code>ex.add_config()</code>
+将配置文件中的参数添加到<code>_config</code>变量中；</li>
+<li><code>_log</code>：一个
+<strong>logger</strong>，pymarl首先创建了一个
+<strong>logging.logger</strong> 类的对象<code>logger</code>，然后将
+<code>logger</code> 赋给了 <code>ex.logger</code> 也就是
+<code>_log</code>。<code>_log</code> 可以通过
+<code>_log.info('information')</code>
+在控制台打印实验过程中的中间信息，方便我们能够定期追踪实验状态。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-meta">@ex.main</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">my_main</span>(<span class="hljs-params">_run, _config, _log</span>):<br>    <span class="hljs-comment"># Setting the random seed throughout the modules</span><br>    config = config_copy(_config)<br>    np.random.seed(config[<span class="hljs-string">&quot;seed&quot;</span>])<br>    th.manual_seed(config[<span class="hljs-string">&quot;seed&quot;</span>])<br>    config[<span class="hljs-string">&#x27;env_args&#x27;</span>][<span class="hljs-string">&#x27;seed&#x27;</span>] = config[<span class="hljs-string">&quot;seed&quot;</span>]<br></code></pre></td></tr></table></figure>
+<h2 id="run">Run</h2>
+<p>如何进入：通过借助装饰器定义一个主函数，其中还定义了如何运行</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># run</span><br>   <span class="hljs-keyword">if</span> <span class="hljs-string">&quot;use_per&quot;</span> <span class="hljs-keyword">in</span> _config <span class="hljs-keyword">and</span> _config[<span class="hljs-string">&quot;use_per&quot;</span>]:<br>       run_REGISTRY[<span class="hljs-string">&#x27;per_run&#x27;</span>](_run, config, _log)<br>   <span class="hljs-keyword">else</span>:<br>       run_REGISTRY[_config[<span class="hljs-string">&#x27;run&#x27;</span>]](_run, config, _log)<br></code></pre></td></tr></table></figure>
+<p>关于这部分<code>run_REGISTRY</code>
+字典的设置，在初始化中文件中会进行指定：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> .run <span class="hljs-keyword">import</span> run <span class="hljs-keyword">as</span> default_run<br><span class="hljs-keyword">from</span> .interval_run <span class="hljs-keyword">import</span> run <span class="hljs-keyword">as</span> interval_run<br><br>REGISTRY = &#123;&#125;<br>REGISTRY[<span class="hljs-string">&quot;default&quot;</span>] = default_run<br>REGISTRY[<span class="hljs-string">&quot;interval_run&quot;</span>] = interval_run<br></code></pre></td></tr></table></figure>
+<p>这个地方引入的
+<code>import run as default_run</code>就是指定了在某个文件中的<code>run</code>函数主体，通过最<strong>外层的装饰器进行指定</strong>运行那个合适的<code>run</code>函数</p>
+<p><code>run_REGISTRY[_config['run']](_run, config, _log)</code>
+表示了指定运行哪个函数，并传递相关的参数</p>
+<p><code>run.py</code>
+文件中<code>run</code>函数的主要作用是构建实验参数变量 <code>args</code>
+以及一个自定义 <code>Logger</code> 类的记录器
+<code>logger</code>。内置变量<code>_config</code>的拷贝作为参数传入到了<code>run</code>函数中，<code>_config</code>
+是字典变量，因此查看参数时，需要利用 <code>_config[key]=value</code>，在
+<code>run</code>
+函数中，作者构建了一个<code>namespace</code>类的变量<code>args</code>，将<code>_config</code>中的参数都传给了
+<code>args</code>，这样就可以通过<code>args.key=value</code>的方式查看参数了。</p>
+<p>其中<code>'run'</code> 指的是在参数文件中指定的，比如在
+<code>default.yaml</code> 文件中会进行指定字典中的元素</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">logger = Logger(_log)<br><br>  _log.info(<span class="hljs-string">&quot;Experiment Parameters:&quot;</span>)<br>  experiment_params = pprint.pformat(_config,<br>                                     indent=<span class="hljs-number">4</span>,<br>                                     width=<span class="hljs-number">1</span>)<br>  _log.info(<span class="hljs-string">&quot;\n\n&quot;</span> + experiment_params + <span class="hljs-string">&quot;\n&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>上述代码中创建了一个 <code>Logger</code>
+类的实例，用于封装日志记录的功能，用于记录信息，<code>_log.info()</code>
+使用的就是用于打印日志信息的语句，其中消息内容哥就是
+<code>Experiment Parameters</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">run_sequential(args=args, logger=logger)<br></code></pre></td></tr></table></figure>
+<p>这一步是主要的实验运行的板块
+<strong>==<code>run_sequential</code>==</strong>，
+借助这个板块对实验运行的内容进行管理和控制，接下来将对这个板块的实现进行详细的介绍。将参数以及初始化创建之后的日志板块都传递进这个函数内部进行训练</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># Clean up after finishing</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Exiting Main&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Stopping all threads&quot;</span>)<br>    <span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> threading.<span class="hljs-built_in">enumerate</span>():<br>        <span class="hljs-keyword">if</span> t.name != <span class="hljs-string">&quot;MainThread&quot;</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Thread &#123;&#125; is alive! Is daemon: &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(t.name, t.daemon))<br>            t.join(timeout=<span class="hljs-number">1</span>)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Thread joined&quot;</span>)<br><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Exiting script&quot;</span>)<br>    <span class="hljs-comment"># Making sure framework really exits</span><br>    os._exit(os.EX_OK)<br></code></pre></td></tr></table></figure>
+<p>结尾部分就是对进程的退出和控制。</p>
+<h2 id="run-sequential">Run Sequential</h2>
+<p>这部分是<strong>run的核心</strong>，也是对内部的函数进行控制和调用的关键</p>
+<h3 id="mac管理器">Mac管理器</h3>
+<p><strong>主要被扔进 <code>runnner</code> 和 <code>learner</code>
+两个板块中使用</strong></p>
+<p>属于自定义的<code>controller.basic_controller.BasicMAC</code>类，该对象的主要作用是
+<strong>控制智能体</strong>，因此<code>mac</code>对象中的一个重要属性就是<code>nn.module</code>类的智能体对象<code>mac.agent</code>，该对象定义了各个智能体的局部Q网络，即接收观测作为输入，输出智能体各个动作的Q值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Setup multiagent controller here</span><br>   mac = mac_REGISTRY[args.mac](buffer.scheme, groups, args)<br></code></pre></td></tr></table></figure>
+<p><code>mac</code>对象有<strong>两个关键方法</strong>：</p>
+<ul>
+<li><code>mac.forward(ep_batch, t, test_mode=False)</code>：<code>ep_batch</code>表示一个episode的样本，<code>t</code>表示每个样本在该episode内的时间索引，<code>forward()</code>方法的作用是<strong>输出一个episode内每</strong>个时刻的观测对应的所有动作的Q值与<strong>隐层变量</strong><code>mac.hidden_states</code>。</li>
+<li><code>mac.select_actions(self, ep_batch, t_ep, t_env, bs=slice(None), test_mode=False)</code>：该方法用于在一个episode中每个时刻<strong>为所有智能体选择动作</strong>。<code>t_ep</code>代表当前样本在一个episode中的时间索引。<code>t_env</code>代表当前时刻环境运行的总时间，用于计算epsilon-greedy中的epsilon。</li>
+</ul>
+<h3 id="环境运行器">环境运行器</h3>
+<p>首先初始化环境的运行器，这部分能够获取环境的信息</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">runner = r_REGISTRY[args.runner](args=args, logger=logger)<br></code></pre></td></tr></table></figure>
+<p>尝试从环境中获取相关的数据信息，如各种智能体数量、动作空间维度、状态的维度等</p>
+<p>其中<code>getattr(args, "accumulated_episodes", None)</code>
+的意思是，如果
+<code>args</code>中有<code>"accumulated_episodes"</code>，那么就获取，否则就设置为
+<code>None</code> 一种很优雅的写法，下面的也是同理</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">env_info = runner.get_env_info()<br>args.n_agents = env_info[<span class="hljs-string">&quot;n_agents&quot;</span>]<br>args.n_actions = env_info[<span class="hljs-string">&quot;n_actions&quot;</span>]<br>args.state_shape = env_info[<span class="hljs-string">&quot;state_shape&quot;</span>]<br>args.accumulated_episodes = <span class="hljs-built_in">getattr</span>(args, <span class="hljs-string">&quot;accumulated_episodes&quot;</span>, <span class="hljs-literal">None</span>)<br><span class="hljs-keyword">if</span> <span class="hljs-built_in">getattr</span>(args, <span class="hljs-string">&#x27;agent_own_state_size&#x27;</span>, <span class="hljs-literal">False</span>):<br>        args.agent_own_state_size = get_agent_own_state_size(args.env_args)<br></code></pre></td></tr></table></figure>
+<p>这个地方就是定义需要用到的强化学习字典数据结构</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">scheme = &#123;<br>     <span class="hljs-string">&quot;state&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: env_info[<span class="hljs-string">&quot;state_shape&quot;</span>]&#125;,<br>     <span class="hljs-string">&quot;obs&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: env_info[<span class="hljs-string">&quot;obs_shape&quot;</span>], <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>&#125;,<br>     <span class="hljs-string">&quot;actions&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (<span class="hljs-number">1</span>,), <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>, <span class="hljs-string">&quot;dtype&quot;</span>: th.long&#125;,<br>     <span class="hljs-string">&quot;avail_actions&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (env_info[<span class="hljs-string">&quot;n_actions&quot;</span>],), <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>, <span class="hljs-string">&quot;dtype&quot;</span>: th.<span class="hljs-built_in">int</span>&#125;,<br>     <span class="hljs-string">&quot;probs&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (env_info[<span class="hljs-string">&quot;n_actions&quot;</span>],), <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>, <span class="hljs-string">&quot;dtype&quot;</span>: th.<span class="hljs-built_in">float</span>&#125;,<br>        <span class="hljs-string">&quot;reward&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (<span class="hljs-number">1</span>,)&#125;,<br>        <span class="hljs-string">&quot;terminated&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (<span class="hljs-number">1</span>,), <span class="hljs-string">&quot;dtype&quot;</span>: th.uint8&#125;,&#125;<br>groups = &#123; <span class="hljs-string">&quot;agents&quot;</span>: args.n_agents&#125;<br>preprocess = &#123;<span class="hljs-string">&quot;actions&quot;</span>: (<span class="hljs-string">&quot;actions_onehot&quot;</span>, [OneHot(out_dim=args.n_actions)])&#125;<br>buffer = ReplayBuffer(scheme, groups, args.buffer_size, env_info[<span class="hljs-string">&quot;episode_limit&quot;</span>] + <span class="hljs-number">1</span>,<br>                          preprocess=preprocess,<br>                          device=<span class="hljs-string">&quot;cpu&quot;</span> <span class="hljs-keyword">if</span> args.buffer_cpu_only <span class="hljs-keyword">else</span> args.device)<br></code></pre></td></tr></table></figure>
+<p>初始化运行环境，确保所有必要的组件都已经配置好，以便开始运行或者训练算法。这个方法可能会创建必要的数据结构，设置好数据流，以及准备环境来执行特定的训练或测试循环</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">runner.setup(scheme=scheme, groups=groups, preprocess=preprocess, mac=mac)<br></code></pre></td></tr></table></figure>
+<p><code>runner</code>对象中最关键的方法是：</p>
+<p><code>runner.run(test_mode=False)</code>：利用当前智能体<code>mac</code>在环境中运行（需要用到<code>mac</code>对象），产生一个episode的样本数据<code>episode_batch</code>，存储在<code>runner.batch</code>中。</p>
+<h3 id="buffer存储器">Buffer存储器</h3>
+<p><code>buffer</code>对象属于自定义的<code>components.episode_buffer.ReplayBuffer(EpisodeBatch)</code>类，该对象的主要作用是<strong>存储样本以及采样样本</strong>。<code>ReplayBuffer</code>的父类是<code>EpisodeBatch</code>。<code>EpisodeBatch</code>类对象用于存储episode的样本，<code>ReplayBuffer(EpisodeBatch)</code>类对象则用于存储所有的off-policy样本，也即<code>EpisodeBatch</code>类变量的样本会持续地补充到<code>ReplayBuffer(EpisodeBatch)</code>类的变量中。同样由于QMix用的是DRQN结构，因此<code>EpisodeBatch</code>与<code>ReplayBuffer</code>中的样本都是以episode为单位存储的。在<code>EpisodeBatch</code>中数据的维度是<code>[batch_size, max_seq_length, *shape]</code>，<code>ReplayBuffer</code>类数据的维度是<code>[buffer_size, max_seq_length, *shape]</code>。<code>EpisodeBatch</code>中<code>Batch Size</code>表示此时batch中有多少episode，<code>ReplayBuffer</code>中<code>episodes_in_buffer</code>表示此时buffer中有多少个episode的有效样本。<code>max_seq_length</code>则表示一个episode的最大长度。</p>
+<p><code>buffer</code>对象中的关键方法有：</p>
+<ul>
+<li><code>buffer.insert_episode_batch(ep_batch)</code>：将<code>EpisodeBatch</code>类变量<code>ep_batch</code>中的样本全部存储到<code>buffer</code>中。</li>
+<li><code>buffer.sample(batch_size)</code>：从<code>buffer</code>中取出<code>batch_size</code>个episode的样本用于训练，这些样本组成了<code>EpisodeBatch</code>类的对象</li>
+</ul>
+<h3 id="learner学习器">Learner学习器</h3>
+<p>自定义的<code>leaners.q_learner.QLearner</code>（与具体选择哪个算法有关），该对象的主要作用是<strong>依据特定算法对智能体参数进行训练更新</strong>。在QMix算法中，有<code>nn.module</code>类的混合网络<code>learner.mixer</code>，因此<code>learner</code>对象需要学习的参数包括各个智能体的局部Q网络参数<code>mac.parameters()</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Learner</span><br>    learner = le_REGISTRY[args.learner](mac, buffer.scheme, logger, args)<br></code></pre></td></tr></table></figure>
+<p>其中这个 <code>[args.learner]</code>
+参数是根据调用命令的时候传递的<code>config</code>的参数文件<code>config.yml</code>中的参数，在内部会一并将其参数统一收集使用</p>
+<p><code>learner.train(batch: EpisodeBatch, t_env: int, episode_num: int)</code>：<code>batch</code>表示当前用于训练的样本，<code>t_env</code>表示当前环境运行的总时间步数，<code>episode_num</code>表示当前环境运行的总episode数，该方法利用特定算法对<code>learner.params</code>进行更新</p>
+<h2 id="train过程">Train过程</h2>
+<h3 id="收集buffer">收集buffer</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">with</span> th.no_grad():<br>            episode_batch = runner.run(test_mode=<span class="hljs-literal">False</span>)<br>            buffer.insert_episode_batch(episode_batch)<br></code></pre></td></tr></table></figure>
+<p><code>with th.no_grad():</code>在前期的操作中我们只需要收集环境的交互信息，因此此时不需要用到梯度和推理</p>
+<p><code>episode_batch = runner.run(test_mode=False)</code>
+这行代码调用了一个名为<code>runner</code>的对象的方法。这个<code>runner</code>可能是一个负责执行环境交互和收集经验的模块。<code>test_mode=False</code>表明这个调用是在训练模式下运行的，而不是测试模式在训练过程中，智能体（agent）会根据策略（policy）在环境中采取行动，收集一系列的剧集（episodes），这些剧集包含了状态（states）、动作（actions）、奖励（rewards）等信息.</p>
+<p><code>buffer.insert_episode_batch(episode_batch)</code>
+这行代码将刚刚收集到的剧集批次（episode_batch）插入到一个名为buffer的数据结构中。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">buffer.can_sample(args.batch_size)<br></code></pre></td></tr></table></figure>
+<p>这一步是用来判断当前的<code>buffer</code>的容量是否超过了满足选择<code>batch_size</code>的大小，如果满足的话那么就可以在
+<code>buffer</code> 中开始选择对应的大小</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">episode_sample = buffer.sample(args.batch_size)<br></code></pre></td></tr></table></figure>
+<p>上述的过程是对<code>buffer</code>中的元素内容进行采样</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">max_ep_t = episode_sample.max_t_filled()<br>episode_sample = episode_sample[:, :max_ep_t]<br></code></pre></td></tr></table></figure>
+<p>这一步是在补充时间步骤，在强化学习中，每个episode可能会有不同长度，因为它们可能由于早停或达到某个终止条件而长度不一。</p>
+<p>第二步是在从其中<code>sample</code>之后的数据元素进行截取选择的结果</p>
+<h3 id="train">Train</h3>
+<p>具体的学习过程就会扔进<code>learner</code> 的学习器中进行训练参数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">learner.train(episode_sample, runner.t_env, episode)<br></code></pre></td></tr></table></figure>
+<p>调用学习器的<code>train</code>方法来实际进行训练。<code>episode_sample</code>是用来训练的数据，<code>runner.t_env</code>是环境步数（可能用于记录或者计算折扣因子等），<code>episode</code>可能是一个计数器或者记录当前是第几个<code>episode</code>的变量</p>
+<p><strong>注意对于价值函数分解的方法会额外用到mixer</strong></p>
+<p>为了具体分析<code>learner</code>的训练过程，我们这里给出基于
+<code>group</code>的学习代码来进行分析</p>
+<ol type="1">
+<li><p>首先第一步是进行初始化</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, mac, scheme, logger, args</span>):<br>        self.args = args<br>        self.mac = mac<br>        self.target_mac = copy.deepcopy(mac)<br>        self.params = <span class="hljs-built_in">list</span>(self.mac.parameters())<br>        self.logger = logger<br>        self.device = th.device(<span class="hljs-string">&#x27;cuda&#x27;</span> <span class="hljs-keyword">if</span> args.use_cuda  <span class="hljs-keyword">else</span> <span class="hljs-string">&#x27;cpu&#x27;</span>)<br>        <span class="hljs-keyword">if</span> args.mixer == <span class="hljs-string">&quot;group&quot;</span>:<br>            self.mixer = GroupMixer(args)<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">raise</span> <span class="hljs-string">&quot;mixer error&quot;</span><br>        self.target_mixer = copy.deepcopy(self.mixer)<br>        self.params += <span class="hljs-built_in">list</span>(self.mixer.parameters())<br>        <span class="hljs-comment">#其中这一步是将模型的参数量级进行输出</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Mixer Size: &#x27;</span>)<br>        <span class="hljs-built_in">print</span>(get_parameters_num(self.mixer.parameters()))<br>        <br>        <span class="hljs-keyword">if</span> self.args.optimizer == <span class="hljs-string">&#x27;adam&#x27;</span>:<br>            self.optimiser = Adam(params=self.params, lr=args.lr)<br>        <span class="hljs-keyword">else</span>:<br>            self.optimiser = RMSprop(params=self.params, lr=args.lr, alpha=args.optim_alpha, eps=args.optim_eps)<br>        self.last_target_update_episode = <span class="hljs-number">0</span><br>        self.log_stats_t = -self.args.learner_log_interval - <span class="hljs-number">1</span><br>        self.train_t = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<p>这里会初始化定义一些比如<code>mac/target mac</code>和<code>mixer/target mixer</code>的初始化参数内容，同时定义优化算子：Adam/RMSprop等内容</p></li>
+<li><p>估计所有智能体的Q价值函数值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">mac_out = []<br>mac_hidden = []<br>mac_group_state = []<br><br>self.mac.init_hidden(batch.batch_size)<br><span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(batch.max_seq_length):<br>   agent_outs = self.mac.forward(batch, t=t)<br>   mac_hidden.append(self.mac.hidden_states)<br>   mac_group_state.append(self.mac.group_states)<br>   mac_out.append(agent_outs)<br><br>mac_out = th.stack(mac_out, dim=<span class="hljs-number">1</span>) <span class="hljs-comment">#得到所有的智能体的输出并堆在一起</span><br>mac_hidden = th.stack(mac_hidden, dim=<span class="hljs-number">1</span>)<br>mac_group_state = th.stack(mac_group_state, dim=<span class="hljs-number">1</span>)<br><br>mac_hidden = mac_hidden.detach() <span class="hljs-comment">#这一步相当于从计算图中取消不计算梯度</span><br></code></pre></td></tr></table></figure></li>
+<li><p>学习并得到联合的Q价值函数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Pick the Q-Values for the actions taken by each agent</span><br>chosen_action_qvals = th.gather(mac_out[:, :-<span class="hljs-number">1</span>], dim=<span class="hljs-number">3</span>, index=actions).squeeze(<span class="hljs-number">3</span>)<br><br> <span class="hljs-comment"># Mixer</span><br>chosen_action_qvals, w1_avg_list, sd_loss = self.mixer(chosen_action_qvals, batch[<span class="hljs-string">&quot;state&quot;</span>][:, :-<span class="hljs-number">1</span>], mac_hidden[:, :-<span class="hljs-number">1</span>], mac_group_state[:, :-<span class="hljs-number">1</span>], <span class="hljs-string">&quot;eval&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>这一步中调用<code>mixer</code>的函数来学习联合的动作价值函数</p></li>
+<li><p>计算target Q的值</p>
+<p>最开始的步骤和Q函数的处理过程一样来学习每个智能体的价值函数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">with</span> th.no_grad():<br>            target_mac_out = []<br>            target_mac_hidden = []<br>            target_mac_group_state = []<br><br>            self.target_mac.init_hidden(batch.batch_size)<br>            <span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(batch.max_seq_length):<br>                target_agent_outs = self.target_mac.forward(batch, t=t)<br>                target_mac_hidden.append(self.target_mac.hidden_states)<br>                target_mac_group_state.append(self.target_mac.group_states)<br>                target_mac_out.append(target_agent_outs)<br></code></pre></td></tr></table></figure>
+<p>计算得到目标的联合动作价值函数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Calculate n-step Q-Learning targets</span><br>target_max_qvals, _, _ = self.target_mixer(target_max_qvals, batch[<span class="hljs-string">&quot;state&quot;</span>], target_mac_hidden, target_mac_group_state, <span class="hljs-string">&quot;target&quot;</span>)<br></code></pre></td></tr></table></figure></li>
+<li><p>计算TD target</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">targets = build_td_lambda_targets(rewards, terminated, mask, target_max_qvals, <br>                                            self.args.n_agents, self.args.gamma, self.args.td_lambda)<br></code></pre></td></tr></table></figure>
+<p>相当于计算 <span class="math inline">\(r+\gamma
+Q_{taregt}\)</span></p></li>
+<li><p>计算TD error</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">td_error = (chosen_action_qvals - targets.detach())<br>td_error = <span class="hljs-number">0.5</span> * td_error.<span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure></li>
+<li><p>注意填充的部分</p>
+<ul>
+<li><code>mask = mask.expand_as(td_error)</code>这一行代码中，<code>mask</code>它的元素为<code>True</code>的地方表示对应的序列元素是有效的，而<code>False</code>的地方表示对应的序列元素是填充的（或不存在的，在序列的开始部分）</li>
+<li><code>expand_as</code>方法会将<code>mask</code>张量扩展到与<code>td_error</code>相同的大小，这样做是为了保证在计算<code>masked_td_error</code>时，<code>mask</code>能够覆盖<code>td_error</code>的每个元素。</li>
+<li><code>masked_td_error = td_error * mask</code>在这一行中，结果<code>masked_td_error</code>只有在mask为<code>True</code>的位置才会有非零值，而在<code>mask</code>为<code>False</code>的位置（即填充的部分）将会是零。</li>
+<li><code>td_loss = masked_td_error.sum() / mask.sum()</code>最后一行代码计算了<code>masked_td_error</code>的总和，然后除以<code>mask</code>的总和，这样可以得到一个标量损失值，这个值只包含了有效序列元素的贡献。这样做是为了在计算损失时忽略填充的部分，因为这些部分在训练过程中不应该影响模型的学习.</li>
+</ul>
+<figure class="highlight ini"><table><tr><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">mask</span> = mask.expand_as(td_error)<br><span class="hljs-attr">masked_td_error</span> = td_error * mask<br><span class="hljs-attr">td_loss</span> = masked_td_error.sum() / mask.sum()<br></code></pre></td></tr></table></figure></li>
+<li><p>最后的优化算子的部分反向传播</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">self.optimiser.zero_grad()<br>loss.backward()<br>grad_norm = th.nn.utils.clip_grad_norm_(self.params, self.args.grad_norm_clip)<br>self.optimiser.step()<br></code></pre></td></tr></table></figure></li>
+<li><p>按照一定的时间步长更新目标网络</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> (episode_num - self.last_target_update_episode) / self.args.target_update_interval &gt;= <span class="hljs-number">1.0</span>:<br>     self._update_targets()<br>     self.last_target_update_episode = episode_num<br></code></pre></td></tr></table></figure>
+<p>根据需要可以选择打印出log</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> t_env - self.log_stats_t &gt;= self.args.learner_log_interval:<br>            self.logger.log_stat(<span class="hljs-string">&quot;loss_td&quot;</span>, td_loss.item(), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;grad_norm&quot;</span>, grad_norm, t_env)<br>            mask_elems = mask.<span class="hljs-built_in">sum</span>().item()<br>            self.logger.log_stat(<span class="hljs-string">&quot;td_error_abs&quot;</span>, (masked_td_error.<span class="hljs-built_in">abs</span>().<span class="hljs-built_in">sum</span>().item()/mask_elems), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;q_taken_mean&quot;</span>, (chosen_action_qvals * mask).<span class="hljs-built_in">sum</span>().item()/(mask_elems * self.args.n_agents), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;target_mean&quot;</span>, (targets * mask).<span class="hljs-built_in">sum</span>().item()/(mask_elems * self.args.n_agents), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;total_loss&quot;</span>, loss.item(), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;lasso_loss&quot;</span>, lasso_loss.item(), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;sd_loss&quot;</span>, sd_loss.item(), t_env)          <br>            self.log_stats_t = t_env<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="test">Test</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n_test_runs):<br>                runner.run(test_mode=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
+<p>注意这个地方就是对算法进行测试了</p>
+]]></content>
+      <categories>
+        <category>强化学习</category>
+      </categories>
+      <tags>
+        <tag>人工智能</tag>
+        <tag>深度学习</tag>
+        <tag>强化学习</tag>
       </tags>
   </entry>
   <entry>
@@ -4719,494 +5204,16 @@ alt="img" />
       </tags>
   </entry>
   <entry>
-    <title>【基础工具】Anaconda命令集</title>
-    <url>/2023/10/22/conda_list/</url>
+    <title>【后端开发】Go kit框架</title>
+    <url>/2024/01/23/go-kit/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<h2 id="conda安装">Conda安装</h2>
-<h3 id="直接安装">直接安装</h3>
-<p>安装网址https://www.anaconda.com/，但是下载速度很慢</p>
-<h3 id="镜像安装">镜像安装</h3>
-<p>清华源网址https://mirrors.tuna.tsinghua.edu.cn/anaconda/</p>
-<p>下载速度会比较快</p>
-<p>如果觉得anacodna的包非常大，可以选择安装miniconda
-https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/</p>
-<h2 id="conda-常用命令">Conda 常用命令</h2>
-<h3 id="查看conda版本">查看conda版本</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda --version/ conda -V<br></code></pre></td></tr></table></figure>
-<h3 id="查看已有环境">查看已有环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda info --envs<br>conda env <span class="hljs-built_in">list</span><br>conda info -e<br></code></pre></td></tr></table></figure>
-<h3 id="进退环境">进退环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate  [name]<span class="hljs-comment"># 重新进入虚拟环境</span><br>conda deactivate  <span class="hljs-comment"># 退出虚拟环境</span><br></code></pre></td></tr></table></figure>
-<h3 id="创建新的环境">创建新的环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n *** python=<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
-<h3 id="删除环境">删除环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove -n old_name --<span class="hljs-built_in">all</span> <span class="hljs-comment"># 删除环境old_name</span><br></code></pre></td></tr></table></figure>
-<h3 id="激活环境">激活环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda activate xxxx <span class="hljs-comment"># 激活xxxx环境</span><br></code></pre></td></tr></table></figure>
-<h3 id="关闭环境">关闭环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda deactivate <span class="hljs-comment"># 关闭环境</span><br></code></pre></td></tr></table></figure>
-<h3 id="克隆环境">克隆环境</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda create -n [new_name] --clone [old_name]<br></code></pre></td></tr></table></figure>
-<h3 id="升级版本">升级版本</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda update -n base conda <span class="hljs-comment">#update最新版本的conda；</span><br>conda update --<span class="hljs-built_in">all</span> <span class="hljs-comment">#更新所有包</span><br></code></pre></td></tr></table></figure>
-<h3 id="pip管理的常用包">Pip管理的常用包</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">pip search package_name <br>pip show package_name <br>pip uninstall｜｜package_name<br>pip <span class="hljs-built_in">list</span><br></code></pre></td></tr></table></figure>
-<h3 id="删除环境中的包">删除环境中的包</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda remove package <span class="hljs-comment">#删除当前环境中的包</span><br>conda remove -- name env_name package <span class="hljs-comment">#删除指定环境中的包</span><br></code></pre></td></tr></table></figure>
-<h3 id="指定环境中安装包">指定环境中安装包</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda install --name env_name package_name <br></code></pre></td></tr></table></figure>
-<h3 id="生成conda环境依赖包的版本">生成Conda环境依赖包的版本</h3>
-<p>在做实验的过程中，需要输出一个关于当前环境的版本依赖文件，可以选择使用下面的方法进行输出</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">pip list --format=freeze&gt; requirements.txt<br></code></pre></td></tr></table></figure>
-<h3 id="conda环境的python版本非指定">Conda环境的python版本非指定</h3>
-<p>指定虚拟环境x的python版本是3.8，base环境是3.11；conda
-activate激活x之后python版本仍为3.11。</p>
-<p><strong>原因：</strong>在base环境中修改了.zshrc文件中的python只定路径，让每次虚拟环境中的python找到的python都只能按照指定的python路径进行寻找，从而导致conda环境中的python版本不能制定。</p>
-<p><strong>修改方式：</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">vim .zshrc<br></code></pre></td></tr></table></figure>
-<p>进入
-.zshrc环境中进行修改，如果发现一类诸如其他python版本指定的路径的话，需要进行删除，只需要保留最原始的关于anaconda的命令初始化，完成之后输入</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.zshrc<br></code></pre></td></tr></table></figure>
-<p>解决问题</p>
-<h3 id="镜像源安装">镜像源安装</h3>
-<p>在conda环境中改变默认的下载镜像源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">pip config <span class="hljs-built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple <br></code></pre></td></tr></table></figure>
-<p>加上这句话之后就会出现以下的写文件</p>
-<figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino">Writing to /home/user/.config/pip/pip.conf<br></code></pre></td></tr></table></figure>
-<p><strong>下载使用清华源加上： -i
-https://pypi.tuna.tsinghua.edu.cn/simple</strong></p>
-<blockquote>
-<p><strong>清华：<code>https://pypi.tuna.tsinghua.edu.cn/simple/</code></strong></p>
-<p><strong>阿里云：<code>http://mirrors.aliyun.com/pypi/simple/</code></strong></p>
-<p><strong>中国科技大学
-：<code>https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/</code></strong></p>
-<p><strong>豆瓣：<code>http://pypi.doubanio.com/simple/</code></strong></p>
-</blockquote>
-<p>如果是给conda添加镜像：清华源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --add channels http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/win-64/<br></code></pre></td></tr></table></figure>
-<p>添加阿里源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --add channels https://mirrors.aliyun.com/pypi/simple/<br></code></pre></td></tr></table></figure>
-<p>查看已经添加的镜像源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --show channels<br></code></pre></td></tr></table></figure>
-<p>移除其中的指定的镜像源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda config --remove channels + 镜像的名称<br></code></pre></td></tr></table></figure>
-<h3 id="conda无法自动更新">Conda无法自动更新</h3>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206113335958.png"
-alt="image-20231206113335958" />
-<figcaption aria-hidden="true">image-20231206113335958</figcaption>
-</figure>
-<p>原因：<a
-href="https://so.csdn.net/so/search?q=conda&amp;spm=1001.2101.3001.7020">conda</a>和pip等相关包的版本太低，自动更新不能用，解决方案：在命令行中输入以下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">conda clean --all<br>conda update --all<br></code></pre></td></tr></table></figure>
+<h1 id="go-kit框架">Go-kit框架</h1>
 ]]></content>
       <categories>
-        <category>基础工具</category>
-      </categories>
-      <tags>
-        <tag>基础工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【深度学习】图神经网络</title>
-    <url>/2024/01/12/gnn/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<h1 id="图神经网络">图神经网络</h1>
-<p>GNN全称----图神经网络，它是一种直接作用于图结构上的神经网络。我们可以把图中的每一个节点
-<span class="math inline">\(V\)</span> 当作个体对象，而每一条边 <span
-class="math inline">\(E\)</span>
-当作个体与个体间的某种联系，所有节点组成的关系网就是最后的图 <span
-class="math inline">\(U\)</span></p>
-<p>GNN的输入一般是每个节点的起始特征向量和表示节点间关系的邻接矩阵，有了这两个输入信息，接下来就是聚合操作了。所谓的聚合，其实就是将周边与节点
-V i ViVi 有关联的节点{V a , V b , . . . Va,Vb,...Va,Vb,...}加权到V i
-ViVi上，当作一次特征更新。同理，对图中的每个节点进行聚合操作，更新所有图节点的特征。</p>
-<p>GNN本质就是更新每个节点的特征，输入是特征，输出是特征，邻接矩阵不会变</p>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>【基础工具】Docker使用</title>
-    <url>/2024/01/19/docker/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<p><a
-href="https://docker.easydoc.net/doc/81170005/cCewZWoN/AWOEX9XM#nav_2">参考文档</a></p>
-<h1 id="docker介绍">Docker介绍</h1>
-<p>Docker
-是一个应用打包、分发、部署的工具，也可以把它理解为一个轻量的虚拟机，它只虚拟你软件需要的运行环境，多余的一点都不要，而普通虚拟机则是一个完整而庞大的系统，包含各种不管你要不要的软件。</p>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119102920136.png" alt="Docker" style="zoom: 50%;" /></p>
-<table>
-
-<thead>
-<tr class="header">
-<th>特性</th>
-<th>普通虚拟机</th>
-<th>Docker</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>跨平台</td>
-<td>通常只能在桌面级系统运行，例如
-Windows/Mac，无法在不带图形界面的服务器上运行</td>
-<td>支持的系统非常多，各类 windows 和 Linux 都支持</td>
-</tr>
-<tr class="even">
-<td>性能</td>
-<td>性能损耗大，内存占用高，因为是把整个完整系统都虚拟出来了</td>
-<td>性能好，只虚拟软件所需运行环境，最大化减少没用的配置</td>
-</tr>
-<tr class="odd">
-<td>自动化</td>
-<td>需要手动安装所有东西</td>
-<td>一个命令就可以自动部署好所需环境</td>
-</tr>
-<tr class="even">
-<td>稳定性</td>
-<td>稳定性不高，不同系统差异大</td>
-<td>稳定性好，不同系统都一样部署方式</td>
-</tr>
-</tbody>
-</table>
-<h3 id="docker-主要功能">Docker 主要功能</h3>
-<ul>
-<li><strong>打包</strong>：就是把你软件运行所需的依赖、第三方库、软件打包到一起，变成一个安装包</li>
-<li><strong>分发</strong>：你可以把你打包好的“安装包”上传到一个镜像仓库，其他人可以非常方便的获取和安装</li>
-<li><strong>部署</strong>：拿着“安装包”就可以一个命令运行起来你的应用，自动模拟出一摸一样的运行环境，不管是在
-Windows/Mac/Linux。</li>
-</ul>
-<h3 id="docker-用途介绍">Docker 用途介绍</h3>
-<ul>
-<li>应用分发、部署，方便传播给他人安装。特别是开源软件和提供私有部署的应用</li>
-<li>快速安装测试/学习软件，用完就丢（类似小程序），不把时间浪费在安装软件上。例如
-Redis / MongoDB / ElasticSearch / ELK</li>
-<li>多个版本软件共存，不污染系统，例如
-Python2、Python3，Redis4.0，Redis5.0</li>
-<li>Windows 上体验/学习各种 Linux 系统</li>
-</ul>
-<h3 id="docker主要概念">Docker主要概念</h3>
-<ul>
-<li><strong>镜像</strong>：可以理解为软件安装包，可以方便的进行传播和安装。</li>
-<li><strong>容器</strong>：软件安装后的状态，每个软件运行环境都是独立的、隔离的，称之为容器。</li>
-<li>简单来说就是我们<strong>存储上传镜像，通过镜像生成容器</strong>，镜像可以在<strong>docker
-hub</strong>中进行管理</li>
-</ul>
-<h1 id="docker的安装">Docker的安装</h1>
-<h3 id="版本的安装">版本的安装</h3>
-<ul>
-<li>桌面版：https://www.docker.com/products/docker-desktop</li>
-<li>服务器版：https://docs.docker.com/engine/install/#server</li>
-</ul>
-<h3 id="镜像加速源">镜像加速源</h3>
-<table>
-<thead>
-<tr class="header">
-<th>镜像加速器</th>
-<th>镜像加速器地址</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Docker 中国官方镜像</td>
-<td>https://registry.docker-cn.com</td>
-</tr>
-<tr class="even">
-<td>DaoCloud 镜像站</td>
-<td>http://f1361db2.m.daocloud.io</td>
-</tr>
-<tr class="odd">
-<td>Azure 中国镜像</td>
-<td>https://dockerhub.azk8s.cn</td>
-</tr>
-<tr class="even">
-<td>科大镜像站</td>
-<td>https://docker.mirrors.ustc.edu.cn</td>
-</tr>
-<tr class="odd">
-<td>阿里云</td>
-<td>https://ud6340vz.mirror.aliyuncs.com</td>
-</tr>
-<tr class="even">
-<td>七牛云</td>
-<td>https://reg-mirror.qiniu.com</td>
-</tr>
-<tr class="odd">
-<td>网易云</td>
-<td>https://hub-mirror.c.163.com</td>
-</tr>
-<tr class="even">
-<td>腾讯云</td>
-<td>https://mirror.ccs.tencentyun.com</td>
-</tr>
-</tbody>
-</table>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119103400627.png"
-alt="添加docker的镜像源" />
-<figcaption aria-hidden="true">添加docker的镜像源</figcaption>
-</figure>
-<p><strong>加入以下命令：=="registry-mirrors":
-["https://registry.docker-cn.com,
-https://hub-mirror.c.163.com"]==</strong></p>
-<h1 id="docker镜像下载与软件安装">Docker镜像下载与软件安装</h1>
-<h3 id="docker-安装的优点">Docker 安装的优点</h3>
-<ul>
-<li>一个命令就可以安装好，快速方便</li>
-<li>有大量的镜像，可直接使用</li>
-<li>没有系统兼容问题，Linux 专享软件也照样跑</li>
-<li>支持软件多版本共存</li>
-<li>用完就丢，不拖慢电脑速度</li>
-<li>不同系统和硬件，只要安装好 Docker
-其他都一样了，一个命令搞定所有</li>
-</ul>
-<h3 id="docker-安装-redis">Docker 安装 Redis</h3>
-<p>Docker 官方镜像仓库查找 Redis ：https://hub.docker.com/</p>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119103742209.png" alt="查找redis镜像" style="zoom:67%;" /></p>
-<p>找到如下的命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ docker run --name some-redis -d redis<br></code></pre></td></tr></table></figure>
-<ul>
-<li>--name的意思就是为产生的容器命名，比如这里命名为some-redis</li>
-<li>-d的意思是在后台运行</li>
-<li>执行<strong>docker run</strong>就能立刻
-<strong>pull镜像、生成容器、以及运行容器</strong></li>
-</ul>
-<h3 id="docker安装ubuntu">Docker安装ubuntu</h3>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119105133828.png"
-alt="安装ubuntu" />
-<figcaption aria-hidden="true">安装ubuntu</figcaption>
-</figure>
-<p>首先先从远端拉取镜像，可以指定版本或者是最新的版本</p>
-<p>接着本地进行run</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">- docker pull ubuntu:18.04<br>- docker run -it ubuntu /bin/bash<br></code></pre></td></tr></table></figure>
-<h3 id="docker参考文档">Docker参考文档</h3>
-<p>命令参考：<a
-href="https://docs.docker.com/engine/reference/commandline/run/">https://docs.docker.com/engine/reference/commandline/run/</a></p>
-<h1 id="docker的常见命令">Docker的常见命令</h1>
-<ul>
-<li><code>docker run</code>
-运行一个容器<strong>(-d后台运行、--name重命名container)</strong></li>
-<li><code>docker stop</code> 停止运行一个容器</li>
-<li><code>docker ps</code> 列出正在运行的容器</li>
-<li><code>docker ps -a</code> 列出所有的容器</li>
-<li><code>docker rm</code> 删除某个容器</li>
-<li><code>docker exec</code> <strong>(-it
-/bin/sh)</strong>进入某一个容器； <code>docker exit</code>
-退出某个容器</li>
-<li><code>docker stop container-id</code> 停止指定 id
-的容器<code>docker start container-id</code> 启动某个id容器</li>
-<li><code>docker images</code> 查看镜像列表</li>
-<li><code>docker rm container-id</code> 删除指定 id 的容器</li>
-<li><code>docker rmi image-id</code> 删除指定 id 的镜像</li>
-<li><code>docker volume ls</code> 查看 volume 列表</li>
-<li><code>docker network ls</code> 查看网络列表</li>
-<li><code>docker-compose up</code>
-表示的意思是在docker-compose.yml的文件夹所在的位置运行如下</li>
-<li><code>docker-compose up -d</code> 后台运行只需要加一个 -d 参数</li>
-<li><code>docker-compose ps</code> 查看运行状态</li>
-<li><code>docker-compose stop</code> 停止运行</li>
-<li><code>docker-compose</code> 重启docker compose的服务</li>
-<li><code>docker-compose restart service-name</code> 重启单个服务</li>
-<li><code>docker-compose exec service-name sh</code> 进入容器命令行</li>
-</ul>
-<h1 id="docker-compose">Docker-Compose</h1>
-<p>如果项目依赖更多的第三方软件，我们需要管理的容器就更加多，每个都要单独配置运行，指定网络。使用
-docker-compose
-把项目的多个服务集合到一起，一键运行。要把项目依赖的多个服务集合到一起，我们需要编写一个<code>docker-compose.yml</code>文件，描述依赖哪些服务</p>
-<h3 id="wordpress安装">Wordpress安装</h3>
-<p>在dockerhub在安装wordpress的时候，所需要的服务非常多，所以需要把项目依赖的多个服务集合到一起</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">version:</span> <span class="hljs-string">&#x27;3.1&#x27;</span><br><br><span class="hljs-attr">services:</span><br><br>  <span class="hljs-attr">wordpress:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">wordpress</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-number">8080</span><span class="hljs-string">:80</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">WORDPRESS_DB_HOST:</span> <span class="hljs-string">db</span><br>      <span class="hljs-attr">WORDPRESS_DB_USER:</span> <span class="hljs-string">exampleuser</span><br>      <span class="hljs-attr">WORDPRESS_DB_PASSWORD:</span> <span class="hljs-string">examplepass</span><br>      <span class="hljs-attr">WORDPRESS_DB_NAME:</span> <span class="hljs-string">exampledb</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">wordpress:/var/www/html</span><br><br>  <span class="hljs-attr">db:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">mysql:5.7</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">MYSQL_DATABASE:</span> <span class="hljs-string">exampledb</span><br>      <span class="hljs-attr">MYSQL_USER:</span> <span class="hljs-string">exampleuser</span><br>      <span class="hljs-attr">MYSQL_PASSWORD:</span> <span class="hljs-string">examplepass</span><br>      <span class="hljs-attr">MYSQL_RANDOM_ROOT_PASSWORD:</span> <span class="hljs-string">&#x27;1&#x27;</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">db:/var/lib/mysql</span><br><br><span class="hljs-attr">volumes:</span><br>  <span class="hljs-attr">wordpress:</span><br>  <span class="hljs-attr">db:</span><br><br></code></pre></td></tr></table></figure>
-<p>首先编写一个：<code>docker-compose.yml</code></p>
-<p>接着在docker-compose.ym==l文件所在的位置==执行：<code>docker-compose up</code>就可以了</p>
-<p><strong>注意：执行完docker-compose
-up之后就已经生成容器并已经成功run起来了</strong></p>
-]]></content>
-      <categories>
-        <category>基础工具</category>
+        <category>后端开发</category>
       </categories>
       <tags>
         <tag>后端开发</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>【多智能体强化学习】Pymarl代码分析</title>
-    <url>/2024/01/19/pymarl-code/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<h1 id="pymarl代码结构">Pymarl代码结构</h1>
-<p>本文章主要介绍多智能体强化学习中的PyMarl框架的代码结构以及训练流程</p>
-<h2 id="main">Main</h2>
-<p>Pymarl的主文件（<code>main.py</code>)主要的作用是构建一个
-<strong>sacred.Experiment</strong> 类的对象 <code>ex</code>
-，<code>ex</code> 包含三个重要的内置变量：</p>
-<ul>
-<li><code>_run</code>：表示当前实验运行时的 <strong>run</strong>
-对象，<code>_run.info</code>
-可用于记录实验中产生的结果，实验初始时是空字典<code>&#123;&#125;</code>；</li>
-<li><code>_config</code>：表示当前实验运行时的参数，字典类，pymarl首先读取配置文件然后利用<code>ex.add_config()</code>
-将配置文件中的参数添加到<code>_config</code>变量中；</li>
-<li><code>_log</code>：一个
-<strong>logger</strong>，pymarl首先创建了一个
-<strong>logging.logger</strong> 类的对象<code>logger</code>，然后将
-<code>logger</code> 赋给了 <code>ex.logger</code> 也就是
-<code>_log</code>。<code>_log</code> 可以通过
-<code>_log.info('information')</code>
-在控制台打印实验过程中的中间信息，方便我们能够定期追踪实验状态。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-meta">@ex.main</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">my_main</span>(<span class="hljs-params">_run, _config, _log</span>):<br>    <span class="hljs-comment"># Setting the random seed throughout the modules</span><br>    config = config_copy(_config)<br>    np.random.seed(config[<span class="hljs-string">&quot;seed&quot;</span>])<br>    th.manual_seed(config[<span class="hljs-string">&quot;seed&quot;</span>])<br>    config[<span class="hljs-string">&#x27;env_args&#x27;</span>][<span class="hljs-string">&#x27;seed&#x27;</span>] = config[<span class="hljs-string">&quot;seed&quot;</span>]<br></code></pre></td></tr></table></figure>
-<h2 id="run">Run</h2>
-<p>如何进入：通过借助装饰器定义一个主函数，其中还定义了如何运行</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># run</span><br>   <span class="hljs-keyword">if</span> <span class="hljs-string">&quot;use_per&quot;</span> <span class="hljs-keyword">in</span> _config <span class="hljs-keyword">and</span> _config[<span class="hljs-string">&quot;use_per&quot;</span>]:<br>       run_REGISTRY[<span class="hljs-string">&#x27;per_run&#x27;</span>](_run, config, _log)<br>   <span class="hljs-keyword">else</span>:<br>       run_REGISTRY[_config[<span class="hljs-string">&#x27;run&#x27;</span>]](_run, config, _log)<br></code></pre></td></tr></table></figure>
-<p>关于这部分<code>run_REGISTRY</code>
-字典的设置，在初始化中文件中会进行指定：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> .run <span class="hljs-keyword">import</span> run <span class="hljs-keyword">as</span> default_run<br><span class="hljs-keyword">from</span> .interval_run <span class="hljs-keyword">import</span> run <span class="hljs-keyword">as</span> interval_run<br><br>REGISTRY = &#123;&#125;<br>REGISTRY[<span class="hljs-string">&quot;default&quot;</span>] = default_run<br>REGISTRY[<span class="hljs-string">&quot;interval_run&quot;</span>] = interval_run<br></code></pre></td></tr></table></figure>
-<p>这个地方引入的
-<code>import run as default_run</code>就是指定了在某个文件中的<code>run</code>函数主体，通过最<strong>外层的装饰器进行指定</strong>运行那个合适的<code>run</code>函数</p>
-<p><code>run_REGISTRY[_config['run']](_run, config, _log)</code>
-表示了指定运行哪个函数，并传递相关的参数</p>
-<p><code>run.py</code>
-文件中<code>run</code>函数的主要作用是构建实验参数变量 <code>args</code>
-以及一个自定义 <code>Logger</code> 类的记录器
-<code>logger</code>。内置变量<code>_config</code>的拷贝作为参数传入到了<code>run</code>函数中，<code>_config</code>
-是字典变量，因此查看参数时，需要利用 <code>_config[key]=value</code>，在
-<code>run</code>
-函数中，作者构建了一个<code>namespace</code>类的变量<code>args</code>，将<code>_config</code>中的参数都传给了
-<code>args</code>，这样就可以通过<code>args.key=value</code>的方式查看参数了。</p>
-<p>其中<code>'run'</code> 指的是在参数文件中指定的，比如在
-<code>default.yaml</code> 文件中会进行指定字典中的元素</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">logger = Logger(_log)<br><br>  _log.info(<span class="hljs-string">&quot;Experiment Parameters:&quot;</span>)<br>  experiment_params = pprint.pformat(_config,<br>                                     indent=<span class="hljs-number">4</span>,<br>                                     width=<span class="hljs-number">1</span>)<br>  _log.info(<span class="hljs-string">&quot;\n\n&quot;</span> + experiment_params + <span class="hljs-string">&quot;\n&quot;</span>)<br></code></pre></td></tr></table></figure>
-<p>上述代码中创建了一个 <code>Logger</code>
-类的实例，用于封装日志记录的功能，用于记录信息，<code>_log.info()</code>
-使用的就是用于打印日志信息的语句，其中消息内容哥就是
-<code>Experiment Parameters</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">run_sequential(args=args, logger=logger)<br></code></pre></td></tr></table></figure>
-<p>这一步是主要的实验运行的板块
-<strong>==<code>run_sequential</code>==</strong>，
-借助这个板块对实验运行的内容进行管理和控制，接下来将对这个板块的实现进行详细的介绍。将参数以及初始化创建之后的日志板块都传递进这个函数内部进行训练</p>
-<figure class="highlight py"><table><tr><td class="code"><pre><code class="hljs py"><span class="hljs-comment"># Clean up after finishing</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Exiting Main&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Stopping all threads&quot;</span>)<br>    <span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> threading.<span class="hljs-built_in">enumerate</span>():<br>        <span class="hljs-keyword">if</span> t.name != <span class="hljs-string">&quot;MainThread&quot;</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Thread &#123;&#125; is alive! Is daemon: &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(t.name, t.daemon))<br>            t.join(timeout=<span class="hljs-number">1</span>)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Thread joined&quot;</span>)<br><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Exiting script&quot;</span>)<br>    <span class="hljs-comment"># Making sure framework really exits</span><br>    os._exit(os.EX_OK)<br></code></pre></td></tr></table></figure>
-<p>结尾部分就是对进程的退出和控制。</p>
-<h2 id="run-sequential">Run Sequential</h2>
-<p>这部分是<strong>run的核心</strong>，也是对内部的函数进行控制和调用的关键</p>
-<h3 id="mac管理器">Mac管理器</h3>
-<p><strong>主要被扔进 <code>runnner</code> 和 <code>learner</code>
-两个板块中使用</strong></p>
-<p>属于自定义的<code>controller.basic_controller.BasicMAC</code>类，该对象的主要作用是
-<strong>控制智能体</strong>，因此<code>mac</code>对象中的一个重要属性就是<code>nn.module</code>类的智能体对象<code>mac.agent</code>，该对象定义了各个智能体的局部Q网络，即接收观测作为输入，输出智能体各个动作的Q值。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Setup multiagent controller here</span><br>   mac = mac_REGISTRY[args.mac](buffer.scheme, groups, args)<br></code></pre></td></tr></table></figure>
-<p><code>mac</code>对象有<strong>两个关键方法</strong>：</p>
-<ul>
-<li><code>mac.forward(ep_batch, t, test_mode=False)</code>：<code>ep_batch</code>表示一个episode的样本，<code>t</code>表示每个样本在该episode内的时间索引，<code>forward()</code>方法的作用是<strong>输出一个episode内每</strong>个时刻的观测对应的所有动作的Q值与<strong>隐层变量</strong><code>mac.hidden_states</code>。</li>
-<li><code>mac.select_actions(self, ep_batch, t_ep, t_env, bs=slice(None), test_mode=False)</code>：该方法用于在一个episode中每个时刻<strong>为所有智能体选择动作</strong>。<code>t_ep</code>代表当前样本在一个episode中的时间索引。<code>t_env</code>代表当前时刻环境运行的总时间，用于计算epsilon-greedy中的epsilon。</li>
-</ul>
-<h3 id="环境运行器">环境运行器</h3>
-<p>首先初始化环境的运行器，这部分能够获取环境的信息</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">runner = r_REGISTRY[args.runner](args=args, logger=logger)<br></code></pre></td></tr></table></figure>
-<p>尝试从环境中获取相关的数据信息，如各种智能体数量、动作空间维度、状态的维度等</p>
-<p>其中<code>getattr(args, "accumulated_episodes", None)</code>
-的意思是，如果
-<code>args</code>中有<code>"accumulated_episodes"</code>，那么就获取，否则就设置为
-<code>None</code> 一种很优雅的写法，下面的也是同理</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">env_info = runner.get_env_info()<br>args.n_agents = env_info[<span class="hljs-string">&quot;n_agents&quot;</span>]<br>args.n_actions = env_info[<span class="hljs-string">&quot;n_actions&quot;</span>]<br>args.state_shape = env_info[<span class="hljs-string">&quot;state_shape&quot;</span>]<br>args.accumulated_episodes = <span class="hljs-built_in">getattr</span>(args, <span class="hljs-string">&quot;accumulated_episodes&quot;</span>, <span class="hljs-literal">None</span>)<br><span class="hljs-keyword">if</span> <span class="hljs-built_in">getattr</span>(args, <span class="hljs-string">&#x27;agent_own_state_size&#x27;</span>, <span class="hljs-literal">False</span>):<br>        args.agent_own_state_size = get_agent_own_state_size(args.env_args)<br></code></pre></td></tr></table></figure>
-<p>这个地方就是定义需要用到的强化学习字典数据结构</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">scheme = &#123;<br>     <span class="hljs-string">&quot;state&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: env_info[<span class="hljs-string">&quot;state_shape&quot;</span>]&#125;,<br>     <span class="hljs-string">&quot;obs&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: env_info[<span class="hljs-string">&quot;obs_shape&quot;</span>], <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>&#125;,<br>     <span class="hljs-string">&quot;actions&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (<span class="hljs-number">1</span>,), <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>, <span class="hljs-string">&quot;dtype&quot;</span>: th.long&#125;,<br>     <span class="hljs-string">&quot;avail_actions&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (env_info[<span class="hljs-string">&quot;n_actions&quot;</span>],), <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>, <span class="hljs-string">&quot;dtype&quot;</span>: th.<span class="hljs-built_in">int</span>&#125;,<br>     <span class="hljs-string">&quot;probs&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (env_info[<span class="hljs-string">&quot;n_actions&quot;</span>],), <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;agents&quot;</span>, <span class="hljs-string">&quot;dtype&quot;</span>: th.<span class="hljs-built_in">float</span>&#125;,<br>        <span class="hljs-string">&quot;reward&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (<span class="hljs-number">1</span>,)&#125;,<br>        <span class="hljs-string">&quot;terminated&quot;</span>: &#123;<span class="hljs-string">&quot;vshape&quot;</span>: (<span class="hljs-number">1</span>,), <span class="hljs-string">&quot;dtype&quot;</span>: th.uint8&#125;,&#125;<br>groups = &#123; <span class="hljs-string">&quot;agents&quot;</span>: args.n_agents&#125;<br>preprocess = &#123;<span class="hljs-string">&quot;actions&quot;</span>: (<span class="hljs-string">&quot;actions_onehot&quot;</span>, [OneHot(out_dim=args.n_actions)])&#125;<br>buffer = ReplayBuffer(scheme, groups, args.buffer_size, env_info[<span class="hljs-string">&quot;episode_limit&quot;</span>] + <span class="hljs-number">1</span>,<br>                          preprocess=preprocess,<br>                          device=<span class="hljs-string">&quot;cpu&quot;</span> <span class="hljs-keyword">if</span> args.buffer_cpu_only <span class="hljs-keyword">else</span> args.device)<br></code></pre></td></tr></table></figure>
-<p>初始化运行环境，确保所有必要的组件都已经配置好，以便开始运行或者训练算法。这个方法可能会创建必要的数据结构，设置好数据流，以及准备环境来执行特定的训练或测试循环</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">runner.setup(scheme=scheme, groups=groups, preprocess=preprocess, mac=mac)<br></code></pre></td></tr></table></figure>
-<p><code>runner</code>对象中最关键的方法是：</p>
-<p><code>runner.run(test_mode=False)</code>：利用当前智能体<code>mac</code>在环境中运行（需要用到<code>mac</code>对象），产生一个episode的样本数据<code>episode_batch</code>，存储在<code>runner.batch</code>中。</p>
-<h3 id="buffer存储器">Buffer存储器</h3>
-<p><code>buffer</code>对象属于自定义的<code>components.episode_buffer.ReplayBuffer(EpisodeBatch)</code>类，该对象的主要作用是<strong>存储样本以及采样样本</strong>。<code>ReplayBuffer</code>的父类是<code>EpisodeBatch</code>。<code>EpisodeBatch</code>类对象用于存储episode的样本，<code>ReplayBuffer(EpisodeBatch)</code>类对象则用于存储所有的off-policy样本，也即<code>EpisodeBatch</code>类变量的样本会持续地补充到<code>ReplayBuffer(EpisodeBatch)</code>类的变量中。同样由于QMix用的是DRQN结构，因此<code>EpisodeBatch</code>与<code>ReplayBuffer</code>中的样本都是以episode为单位存储的。在<code>EpisodeBatch</code>中数据的维度是<code>[batch_size, max_seq_length, *shape]</code>，<code>ReplayBuffer</code>类数据的维度是<code>[buffer_size, max_seq_length, *shape]</code>。<code>EpisodeBatch</code>中<code>Batch Size</code>表示此时batch中有多少episode，<code>ReplayBuffer</code>中<code>episodes_in_buffer</code>表示此时buffer中有多少个episode的有效样本。<code>max_seq_length</code>则表示一个episode的最大长度。</p>
-<p><code>buffer</code>对象中的关键方法有：</p>
-<ul>
-<li><code>buffer.insert_episode_batch(ep_batch)</code>：将<code>EpisodeBatch</code>类变量<code>ep_batch</code>中的样本全部存储到<code>buffer</code>中。</li>
-<li><code>buffer.sample(batch_size)</code>：从<code>buffer</code>中取出<code>batch_size</code>个episode的样本用于训练，这些样本组成了<code>EpisodeBatch</code>类的对象</li>
-</ul>
-<h3 id="learner学习器">Learner学习器</h3>
-<p>自定义的<code>leaners.q_learner.QLearner</code>（与具体选择哪个算法有关），该对象的主要作用是<strong>依据特定算法对智能体参数进行训练更新</strong>。在QMix算法中，有<code>nn.module</code>类的混合网络<code>learner.mixer</code>，因此<code>learner</code>对象需要学习的参数包括各个智能体的局部Q网络参数<code>mac.parameters()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Learner</span><br>    learner = le_REGISTRY[args.learner](mac, buffer.scheme, logger, args)<br></code></pre></td></tr></table></figure>
-<p>其中这个 <code>[args.learner]</code>
-参数是根据调用命令的时候传递的<code>config</code>的参数文件<code>config.yml</code>中的参数，在内部会一并将其参数统一收集使用</p>
-<p><code>learner.train(batch: EpisodeBatch, t_env: int, episode_num: int)</code>：<code>batch</code>表示当前用于训练的样本，<code>t_env</code>表示当前环境运行的总时间步数，<code>episode_num</code>表示当前环境运行的总episode数，该方法利用特定算法对<code>learner.params</code>进行更新</p>
-<h2 id="train过程">Train过程</h2>
-<h3 id="收集buffer">收集buffer</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">with</span> th.no_grad():<br>            episode_batch = runner.run(test_mode=<span class="hljs-literal">False</span>)<br>            buffer.insert_episode_batch(episode_batch)<br></code></pre></td></tr></table></figure>
-<p><code>with th.no_grad():</code>在前期的操作中我们只需要收集环境的交互信息，因此此时不需要用到梯度和推理</p>
-<p><code>episode_batch = runner.run(test_mode=False)</code>
-这行代码调用了一个名为<code>runner</code>的对象的方法。这个<code>runner</code>可能是一个负责执行环境交互和收集经验的模块。<code>test_mode=False</code>表明这个调用是在训练模式下运行的，而不是测试模式在训练过程中，智能体（agent）会根据策略（policy）在环境中采取行动，收集一系列的剧集（episodes），这些剧集包含了状态（states）、动作（actions）、奖励（rewards）等信息.</p>
-<p><code>buffer.insert_episode_batch(episode_batch)</code>
-这行代码将刚刚收集到的剧集批次（episode_batch）插入到一个名为buffer的数据结构中。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">buffer.can_sample(args.batch_size)<br></code></pre></td></tr></table></figure>
-<p>这一步是用来判断当前的<code>buffer</code>的容量是否超过了满足选择<code>batch_size</code>的大小，如果满足的话那么就可以在
-<code>buffer</code> 中开始选择对应的大小</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">episode_sample = buffer.sample(args.batch_size)<br></code></pre></td></tr></table></figure>
-<p>上述的过程是对<code>buffer</code>中的元素内容进行采样</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">max_ep_t = episode_sample.max_t_filled()<br>episode_sample = episode_sample[:, :max_ep_t]<br></code></pre></td></tr></table></figure>
-<p>这一步是在补充时间步骤，在强化学习中，每个episode可能会有不同长度，因为它们可能由于早停或达到某个终止条件而长度不一。</p>
-<p>第二步是在从其中<code>sample</code>之后的数据元素进行截取选择的结果</p>
-<h3 id="train">Train</h3>
-<p>具体的学习过程就会扔进<code>learner</code> 的学习器中进行训练参数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">learner.train(episode_sample, runner.t_env, episode)<br></code></pre></td></tr></table></figure>
-<p>调用学习器的<code>train</code>方法来实际进行训练。<code>episode_sample</code>是用来训练的数据，<code>runner.t_env</code>是环境步数（可能用于记录或者计算折扣因子等），<code>episode</code>可能是一个计数器或者记录当前是第几个<code>episode</code>的变量</p>
-<p><strong>注意对于价值函数分解的方法会额外用到mixer</strong></p>
-<p>为了具体分析<code>learner</code>的训练过程，我们这里给出基于
-<code>group</code>的学习代码来进行分析</p>
-<ol type="1">
-<li><p>首先第一步是进行初始化</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, mac, scheme, logger, args</span>):<br>        self.args = args<br>        self.mac = mac<br>        self.target_mac = copy.deepcopy(mac)<br>        self.params = <span class="hljs-built_in">list</span>(self.mac.parameters())<br>        self.logger = logger<br>        self.device = th.device(<span class="hljs-string">&#x27;cuda&#x27;</span> <span class="hljs-keyword">if</span> args.use_cuda  <span class="hljs-keyword">else</span> <span class="hljs-string">&#x27;cpu&#x27;</span>)<br>        <span class="hljs-keyword">if</span> args.mixer == <span class="hljs-string">&quot;group&quot;</span>:<br>            self.mixer = GroupMixer(args)<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">raise</span> <span class="hljs-string">&quot;mixer error&quot;</span><br>        self.target_mixer = copy.deepcopy(self.mixer)<br>        self.params += <span class="hljs-built_in">list</span>(self.mixer.parameters())<br>        <span class="hljs-comment">#其中这一步是将模型的参数量级进行输出</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Mixer Size: &#x27;</span>)<br>        <span class="hljs-built_in">print</span>(get_parameters_num(self.mixer.parameters()))<br>        <br>        <span class="hljs-keyword">if</span> self.args.optimizer == <span class="hljs-string">&#x27;adam&#x27;</span>:<br>            self.optimiser = Adam(params=self.params, lr=args.lr)<br>        <span class="hljs-keyword">else</span>:<br>            self.optimiser = RMSprop(params=self.params, lr=args.lr, alpha=args.optim_alpha, eps=args.optim_eps)<br>        self.last_target_update_episode = <span class="hljs-number">0</span><br>        self.log_stats_t = -self.args.learner_log_interval - <span class="hljs-number">1</span><br>        self.train_t = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
-<p>这里会初始化定义一些比如<code>mac/target mac</code>和<code>mixer/target mixer</code>的初始化参数内容，同时定义优化算子：Adam/RMSprop等内容</p></li>
-<li><p>估计所有智能体的Q价值函数值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">mac_out = []<br>mac_hidden = []<br>mac_group_state = []<br><br>self.mac.init_hidden(batch.batch_size)<br><span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(batch.max_seq_length):<br>   agent_outs = self.mac.forward(batch, t=t)<br>   mac_hidden.append(self.mac.hidden_states)<br>   mac_group_state.append(self.mac.group_states)<br>   mac_out.append(agent_outs)<br><br>mac_out = th.stack(mac_out, dim=<span class="hljs-number">1</span>) <span class="hljs-comment">#得到所有的智能体的输出并堆在一起</span><br>mac_hidden = th.stack(mac_hidden, dim=<span class="hljs-number">1</span>)<br>mac_group_state = th.stack(mac_group_state, dim=<span class="hljs-number">1</span>)<br><br>mac_hidden = mac_hidden.detach() <span class="hljs-comment">#这一步相当于从计算图中取消不计算梯度</span><br></code></pre></td></tr></table></figure></li>
-<li><p>学习并得到联合的Q价值函数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Pick the Q-Values for the actions taken by each agent</span><br>chosen_action_qvals = th.gather(mac_out[:, :-<span class="hljs-number">1</span>], dim=<span class="hljs-number">3</span>, index=actions).squeeze(<span class="hljs-number">3</span>)<br><br> <span class="hljs-comment"># Mixer</span><br>chosen_action_qvals, w1_avg_list, sd_loss = self.mixer(chosen_action_qvals, batch[<span class="hljs-string">&quot;state&quot;</span>][:, :-<span class="hljs-number">1</span>], mac_hidden[:, :-<span class="hljs-number">1</span>], mac_group_state[:, :-<span class="hljs-number">1</span>], <span class="hljs-string">&quot;eval&quot;</span>)<br></code></pre></td></tr></table></figure>
-<p>这一步中调用<code>mixer</code>的函数来学习联合的动作价值函数</p></li>
-<li><p>计算target Q的值</p>
-<p>最开始的步骤和Q函数的处理过程一样来学习每个智能体的价值函数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">with</span> th.no_grad():<br>            target_mac_out = []<br>            target_mac_hidden = []<br>            target_mac_group_state = []<br><br>            self.target_mac.init_hidden(batch.batch_size)<br>            <span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(batch.max_seq_length):<br>                target_agent_outs = self.target_mac.forward(batch, t=t)<br>                target_mac_hidden.append(self.target_mac.hidden_states)<br>                target_mac_group_state.append(self.target_mac.group_states)<br>                target_mac_out.append(target_agent_outs)<br></code></pre></td></tr></table></figure>
-<p>计算得到目标的联合动作价值函数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Calculate n-step Q-Learning targets</span><br>target_max_qvals, _, _ = self.target_mixer(target_max_qvals, batch[<span class="hljs-string">&quot;state&quot;</span>], target_mac_hidden, target_mac_group_state, <span class="hljs-string">&quot;target&quot;</span>)<br></code></pre></td></tr></table></figure></li>
-<li><p>计算TD target</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">targets = build_td_lambda_targets(rewards, terminated, mask, target_max_qvals, <br>                                            self.args.n_agents, self.args.gamma, self.args.td_lambda)<br></code></pre></td></tr></table></figure>
-<p>相当于计算 <span class="math inline">\(r+\gamma
-Q_{taregt}\)</span></p></li>
-<li><p>计算TD error</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">td_error = (chosen_action_qvals - targets.detach())<br>td_error = <span class="hljs-number">0.5</span> * td_error.<span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure></li>
-<li><p>注意填充的部分</p>
-<ul>
-<li><code>mask = mask.expand_as(td_error)</code>这一行代码中，<code>mask</code>它的元素为<code>True</code>的地方表示对应的序列元素是有效的，而<code>False</code>的地方表示对应的序列元素是填充的（或不存在的，在序列的开始部分）</li>
-<li><code>expand_as</code>方法会将<code>mask</code>张量扩展到与<code>td_error</code>相同的大小，这样做是为了保证在计算<code>masked_td_error</code>时，<code>mask</code>能够覆盖<code>td_error</code>的每个元素。</li>
-<li><code>masked_td_error = td_error * mask</code>在这一行中，结果<code>masked_td_error</code>只有在mask为<code>True</code>的位置才会有非零值，而在<code>mask</code>为<code>False</code>的位置（即填充的部分）将会是零。</li>
-<li><code>td_loss = masked_td_error.sum() / mask.sum()</code>最后一行代码计算了<code>masked_td_error</code>的总和，然后除以<code>mask</code>的总和，这样可以得到一个标量损失值，这个值只包含了有效序列元素的贡献。这样做是为了在计算损失时忽略填充的部分，因为这些部分在训练过程中不应该影响模型的学习.</li>
-</ul>
-<figure class="highlight ini"><table><tr><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">mask</span> = mask.expand_as(td_error)<br><span class="hljs-attr">masked_td_error</span> = td_error * mask<br><span class="hljs-attr">td_loss</span> = masked_td_error.sum() / mask.sum()<br></code></pre></td></tr></table></figure></li>
-<li><p>最后的优化算子的部分反向传播</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">self.optimiser.zero_grad()<br>loss.backward()<br>grad_norm = th.nn.utils.clip_grad_norm_(self.params, self.args.grad_norm_clip)<br>self.optimiser.step()<br></code></pre></td></tr></table></figure></li>
-<li><p>按照一定的时间步长更新目标网络</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> (episode_num - self.last_target_update_episode) / self.args.target_update_interval &gt;= <span class="hljs-number">1.0</span>:<br>     self._update_targets()<br>     self.last_target_update_episode = episode_num<br></code></pre></td></tr></table></figure>
-<p>根据需要可以选择打印出log</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> t_env - self.log_stats_t &gt;= self.args.learner_log_interval:<br>            self.logger.log_stat(<span class="hljs-string">&quot;loss_td&quot;</span>, td_loss.item(), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;grad_norm&quot;</span>, grad_norm, t_env)<br>            mask_elems = mask.<span class="hljs-built_in">sum</span>().item()<br>            self.logger.log_stat(<span class="hljs-string">&quot;td_error_abs&quot;</span>, (masked_td_error.<span class="hljs-built_in">abs</span>().<span class="hljs-built_in">sum</span>().item()/mask_elems), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;q_taken_mean&quot;</span>, (chosen_action_qvals * mask).<span class="hljs-built_in">sum</span>().item()/(mask_elems * self.args.n_agents), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;target_mean&quot;</span>, (targets * mask).<span class="hljs-built_in">sum</span>().item()/(mask_elems * self.args.n_agents), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;total_loss&quot;</span>, loss.item(), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;lasso_loss&quot;</span>, lasso_loss.item(), t_env)<br>            self.logger.log_stat(<span class="hljs-string">&quot;sd_loss&quot;</span>, sd_loss.item(), t_env)          <br>            self.log_stats_t = t_env<br></code></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="test">Test</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n_test_runs):<br>                runner.run(test_mode=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
-<p>注意这个地方就是对算法进行测试了</p>
-]]></content>
-      <categories>
-        <category>强化学习</category>
-      </categories>
-      <tags>
-        <tag>人工智能</tag>
-        <tag>深度学习</tag>
-        <tag>强化学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go-kit</title>
-    <url>/2024/01/23/go-kit/</url>
-    <content><![CDATA[
-]]></content>
   </entry>
 </search>
