@@ -18,14 +18,15 @@
   
     <meta name="description" content="Go-kit框架 Go-kit 是一个功能丰富、易于使用的分布式微服务框架，旨在帮助开发者构建健壮、可维护和可测试的分布式系统。它通过提供一系列可组合的组件，解决了分布式系统中的常见问题，使开发者能够专注于业务逻辑。Go-kit 的核心理念是通过可插拔的组件来实现微服务的功能，这些组件包括服务发现、负载均衡、请求追踪、日志记录和监控等。 Go-kit基本架构 Go-kit 包含了一些基本的组件，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【后端开发】Go kit框架">
+<meta property="og:title" content="【后端开发】Go-kit与Gin框架">
 <meta property="og:url" content="https://lihaibineric.github.io/2024/01/23/go-kit/index.html">
 <meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
 <meta property="og:description" content="Go-kit框架 Go-kit 是一个功能丰富、易于使用的分布式微服务框架，旨在帮助开发者构建健壮、可维护和可测试的分布式系统。它通过提供一系列可组合的组件，解决了分布式系统中的常见问题，使开发者能够专注于业务逻辑。Go-kit 的核心理念是通过可插拔的组件来实现微服务的功能，这些组件包括服务发现、负载均衡、请求追踪、日志记录和监控等。 Go-kit基本架构 Go-kit 包含了一些基本的组件，">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240127123105999.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240127180429934.png">
 <meta property="article:published_time" content="2024-01-23T08:50:40.000Z">
-<meta property="article:modified_time" content="2024-01-27T04:43:23.298Z">
+<meta property="article:modified_time" content="2024-01-27T10:08:17.908Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="后端开发">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,7 +34,7 @@
   
   
   
-  <title>【后端开发】Go kit框架 - LIHAIBIN&#39;S BLOG</title>
+  <title>【后端开发】Go-kit与Gin框架 - LIHAIBIN&#39;S BLOG</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -187,7 +188,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="【后端开发】Go kit框架"></span>
+            <span id="subtitle" data-typed-text="【后端开发】Go-kit与Gin框架"></span>
           
         </div>
 
@@ -210,7 +211,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9.9k words
+          12k words
         
       </span>
     
@@ -221,7 +222,7 @@
         
         
         
-          83 mins
+          102 mins
         
       </span>
     
@@ -258,7 +259,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">【后端开发】Go kit框架</h1>
+            <h1 id="seo-header">【后端开发】Go-kit与Gin框架</h1>
             
               <p class="note note-info">
                 
@@ -347,7 +348,13 @@ Web应用的开发更加高效和模块化，有助于构建高性能、可伸�
 <h3 id="handle层">Handle层</h3>
 <p>这一层主要的作用就是利用gin来对web的实现，传递的参数分别是</p>
 <p><code>handler := httptransport.NewServer(endpoint, transports.DecodeUserRequest, transports.EncodeUserResponse)</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> handler<br><br><span class="hljs-keyword">import</span> (<br>	. <span class="hljs-string">&quot;ApiService/endpoints&quot;</span><br>	. <span class="hljs-string">&quot;ApiService/services&quot;</span><br>	<span class="hljs-string">&quot;ApiService/transports&quot;</span><br>	<span class="hljs-string">&quot;github.com/gin-gonic/gin&quot;</span><br>	httptransport <span class="hljs-string">&quot;github.com/go-kit/kit/transport/http&quot;</span><br>)<br><span class="hljs-comment">// 创建 Gin 路由</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MakeGinHandler</span><span class="hljs-params">(svc IUserService)</span></span> *gin.Engine &#123;<br>	<span class="hljs-comment">//初始化一个Gin引擎，并配置了一些中间件</span><br>	r := gin.New()<br>	r.Use(gin.Logger())   <span class="hljs-comment">//用于记录每个请求的详细信息，例如请求方法、URL、执行时间等</span><br>	r.Use(gin.Recovery()) <span class="hljs-comment">//在程序发生 panic 时恢复运行，并返回一个500的HTTP状态码</span><br><br>	<span class="hljs-comment">// 创建 Go kit 的 endpoint</span><br>	endpoint := GetUserEndPoint(svc)<br><br>	<span class="hljs-comment">// 创建 HTTP 传输层处理程序</span><br>	handler := httptransport.NewServer(endpoint, transports.DecodeUserRequest, transports.EncodeUserResponse)<br>	r.GET(<span class="hljs-string">&quot;/hello&quot;</span>, gin.WrapH(handler))<br>	<span class="hljs-keyword">return</span> r<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> handler<br><br><span class="hljs-keyword">import</span> (<br>	. <span class="hljs-string">&quot;ApiService/endpoints&quot;</span> <br>	. <span class="hljs-string">&quot;ApiService/services&quot;</span><br>	<span class="hljs-string">&quot;ApiService/transports&quot;</span><br>	<span class="hljs-string">&quot;github.com/gin-gonic/gin&quot;</span><br>	httptransport <span class="hljs-string">&quot;github.com/go-kit/kit/transport/http&quot;</span><br>)<br><span class="hljs-comment">// 创建 Gin 路由</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MakeGinHandler</span><span class="hljs-params">(svc IUserService)</span></span> *gin.Engine &#123;<br>	<span class="hljs-comment">//初始化一个Gin引擎，并配置了一些中间件</span><br>	r := gin.New()<br>	r.Use(gin.Logger())   <span class="hljs-comment">//用于记录每个请求的详细信息，例如请求方法、URL、执行时间等</span><br>	r.Use(gin.Recovery()) <span class="hljs-comment">//在程序发生 panic 时恢复运行，并返回一个500的HTTP状态码</span><br><br>	<span class="hljs-comment">// 创建 Go kit 的 endpoint</span><br>	endpoint := GetUserEndPoint(svc)<br><br>	<span class="hljs-comment">// 创建 HTTP 传输层处理程序</span><br>	handler := httptransport.NewServer(endpoint, transports.DecodeUserRequest, transports.EncodeUserResponse)<br>	r.GET(<span class="hljs-string">&quot;/hello&quot;</span>, gin.WrapH(handler))<br>	<span class="hljs-keyword">return</span> r<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>注意在调用包的时候：</p>
+<ul>
+<li><code>. "ApiService/endpoints"</code>
+那么在引用函数的时候就不需要<code>endpoints.XXX()</code></li>
+<li><code>"ApiService/transports"</code>那么在引用函数的时候需要<code>transports.XXX()</code></li>
+</ul>
 <h3 id="main层">Main层</h3>
 <p>这一层的实现是通过以下三个步骤实现的：</p>
 <ul>
@@ -356,6 +363,42 @@ Web应用的开发更加高效和模块化，有助于构建高性能、可伸�
 <li><strong>启动gin服务器</strong></li>
 </ul>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs GO"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>    . <span class="hljs-string">&quot;ApiService/handler&quot;</span><br>    . <span class="hljs-string">&quot;ApiService/services&quot;</span><br>    <span class="hljs-string">&quot;log&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">// 创建 Go kit 服务</span><br>    userSvc := UserService&#123;&#125;<br>    <span class="hljs-comment">// 创建 Gin 路由并绑定服务</span><br>    r := MakeGinHandler(userSvc)<br>    <span class="hljs-comment">// 启动 Gin 服务器</span><br>    <span class="hljs-keyword">if</span> err := r.Run(<span class="hljs-string">&quot;:8080&quot;</span>); err != <span class="hljs-literal">nil</span> &#123;<br>       log.Fatal(err)<br>    &#125;<br>&#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">说明，这个demo运行后，浏览器输入 http://127.0.0.1:8080/hello?uid=1999 即可测试，还可以输入下面的内容进行测试：</span><br><span class="hljs-comment"> http://127.0.0.1:8080/hello</span><br><span class="hljs-comment"> http://127.0.0.1:8080</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<h1 id="gin统一收集路由">Gin统一收集路由</h1>
+<p>统一收集路由（unified routing
+collection）通常指的是将所有的路由配置集中到一个地方管理，这样可以更方便地管理和维护路由。Gin
+本身已经提供了一个路由器（Router）对象，用于收集和管理所有的路由。统一收集路由的好处包括：</p>
+<ul>
+<li>易于维护：所有的路由都在一个地方，便于查看和修改。</li>
+<li>路由重用：可以定义全局中间件，这些中间件会在所有路由上应用，而不需要在每个路由上重复编写。</li>
+<li>更好的错误处理：可以在统一的地方处理路由错误，例如未找到路由或方法不允许等。</li>
+<li>性能优化：Gin 路由器会预编译路由，这可以提高处理请求的效率</li>
+</ul>
+<h2 id="局部的路由规则初始化">局部的路由规则初始化</h2>
+<p>首先定义局部的具体路由规则，这里给出例子
+<code>GetUserRoutes</code>和<code>GetVideoRoutes</code>，在 Gin
+路由器中注册与视频相关的路由规则。这个函数接受一个<code>*gin.RouterGroup</code>参数</p>
+<p>它创建了一个新的子路由组
+video，这是通过调用<code>route.Group("/videos")</code>实现的。这个子路由组将会处理所有以<code>/videos</code>
+开头的请求。</p>
+<p>然后，<code>video.GET("/getVideoId", handler.GetVideoId)</code>
+这行代码为路径<code>/videos/getVideoId</code> 注册了一个新的 GET
+请求处理函数。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">package</span> route<br><br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;ApiService/handler&quot;</span><br>    <span class="hljs-string">&quot;github.com/gin-gonic/gin&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">GetUserRoutes</span><span class="hljs-params">(route *gin.RouterGroup)</span></span> &#123;<br>    user := route.Group(<span class="hljs-string">&quot;/users&quot;</span>)<br>    &#123;<br>       user.GET(<span class="hljs-string">&quot;/getUserId&quot;</span>, handler.GetUserId)<br>    &#125;<br>&#125;<br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;ApiService/handler&quot;</span><br>    <span class="hljs-string">&quot;github.com/gin-gonic/gin&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">GetVideoRoutes</span><span class="hljs-params">(route *gin.RouterGroup)</span></span> &#123;<br>    video := route.Group(<span class="hljs-string">&quot;/videos&quot;</span>)<br>    &#123;<br>       video.GET(<span class="hljs-string">&quot;/getVideoId&quot;</span>, handler.GetVideoId)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="全局路由规则统一">全局路由规则统一</h2>
+<p>设置Gin路由<strong>统一收集的</strong>
+<strong><code>CollectRoute</code>的函数</strong>，它的作用是将一系列的路由规则注册到
+Gin 路由器实例中。r <strong>是 Gin
+的路由器实例</strong>，这部分内容可以忽略（svc
+是某个服务接口的实例，这里是指 IUserService 接口的实例）。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">package</span> route<br><br><span class="hljs-keyword">import</span> (<br>    . <span class="hljs-string">&quot;ApiService/handler&quot;</span><br>    . <span class="hljs-string">&quot;ApiService/services&quot;</span><br>    <span class="hljs-string">&quot;ApiService/transports&quot;</span><br>    <span class="hljs-string">&quot;github.com/gin-gonic/gin&quot;</span><br>    httptransport <span class="hljs-string">&quot;github.com/go-kit/kit/transport/http&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">CollectRoute</span><span class="hljs-params">(r *gin.Engine, svc IUserService)</span></span> *gin.Engine &#123;<br>    r.Use(gin.Logger())<br>    r.Use(gin.Recovery())<br><br>    handler := httptransport.NewServer(MakeGinHandler(svc), transports.DecodeUserRequest, transports.EncodeUserResponse)<br>    api := r.Group(<span class="hljs-string">&quot;&quot;</span>)<br>    &#123;<br>       GetUserRoutes(api)<br>       GetVideoRoutes(api)<br>       api.GET(<span class="hljs-string">&quot;/hello&quot;</span>, gin.WrapH(handler))<br>    &#125;<br>    api.POST(<span class="hljs-string">&quot;/ping&quot;</span>, Ping)<br>    api.GET(<span class="hljs-string">&quot;/ping&quot;</span>, Ping)<br><br>    <span class="hljs-keyword">return</span> r<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="主函数初始化调用">主函数初始化调用</h2>
+<p>在 Gin Web 框架中，<code>gin.Default()</code> 创建了一个默认的 Gin
+路由器实例</p>
+<p><code>r = route.CollectRoute(r, userSvc)</code>这行代码的作用是将一系列的路由规则注册到
+Gin 路由器实例中</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">// 创建 Go kit 服务</span><br>    userSvc := UserService&#123;&#125;<br>    <span class="hljs-comment">// 创建 Gin 路由并绑定服务</span><br>    r := gin.Default()<br>    r = route.CollectRoute(r, userSvc)<br>    <span class="hljs-comment">//r := MakeGinHandler(userSvc)</span><br>    <span class="hljs-comment">// 启动 Gin 服务器</span><br>    <span class="hljs-keyword">if</span> err := r.Run(<span class="hljs-string">&quot;:8080&quot;</span>); err != <span class="hljs-literal">nil</span> &#123;<br>       log.Fatal(err)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="实际运行结果">实际运行结果</h2>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240127180429934.png" srcset="/img/loading.gif" lazyload alt="根据不同的url地址选择不同的输出" style="zoom:67%;" /></p>
 
                 
               </div>
@@ -401,7 +444,7 @@ Web应用的开发更加高效和模块化，有助于构建高性能、可伸�
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>【后端开发】Go kit框架</div>
+      <div>【后端开发】Go-kit与Gin框架</div>
       <div>https://lihaibineric.github.io/2024/01/23/go-kit/</div>
     </div>
     <div class="license-meta">
