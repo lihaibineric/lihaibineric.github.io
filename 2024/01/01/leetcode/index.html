@@ -32,8 +32,10 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119200331204.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119211247536.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240122123926323.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240128142408271.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240128143004648.png">
 <meta property="article:published_time" content="2024-01-01T13:15:17.000Z">
-<meta property="article:modified_time" content="2024-01-23T08:11:06.431Z">
+<meta property="article:modified_time" content="2024-01-28T06:37:17.421Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="算法题">
 <meta property="article:tag" content="leetcode">
@@ -219,7 +221,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          41k words
+          44k words
         
       </span>
     
@@ -230,7 +232,7 @@
         
         
         
-          342 mins
+          370 mins
         
       </span>
     
@@ -272,7 +274,7 @@
               <p class="note note-info">
                 
                   
-                    Last updated on January 23, 2024 pm
+                    Last updated on January 28, 2024 pm
                   
                 
               </p>
@@ -999,6 +1001,94 @@ target="_blank" rel="noopener" href="https://leetcode.cn/problems/best-time-to-b
 <p>相当于是每天的利润之差和0的比较，只选择为正的值，负数的情况直接忽略</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxProfit</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; prices)</span> </span>&#123;<br>        <span class="hljs-type">int</span> res = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;prices.<span class="hljs-built_in">size</span>();i++)&#123;<br>            res+=<span class="hljs-built_in">max</span>(prices[i]-prices[i<span class="hljs-number">-1</span>],<span class="hljs-number">0</span>);<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <h1 id="动态规划">动态规划</h1>
+<p>状态转移公式（递推公式）是很重要，但动规不仅仅只有递推公式。</p>
+<p><strong>对于动态规划问题，我将拆解为如下五步曲，这五步都搞清楚了，才能说把动态规划真的掌握了！</strong></p>
+<ol type="1">
+<li>确定dp数组（dp table）以及下标的含义</li>
+<li>确定递推公式</li>
+<li>dp数组如何初始化</li>
+<li>确定遍历顺序</li>
+<li>举例推导dp数组</li>
+</ol>
+<p><strong>注意：动态规划的问题一般只会输出最后的一个结果，不会输出比如中间的路径等相关的值</strong></p>
+<h3 id="斐波那契数列">斐波那契数列</h3>
+<p><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/fibonacci-number/">https://leetcode.cn/problems/fibonacci-number/</a></p>
+<p><strong>斐波那契数</strong> （通常用 <code>F(n)</code>
+表示）形成的序列称为 <strong>斐波那契数列</strong> 。该数列由
+<code>0</code> 和 <code>1</code>
+开始，后面的每一项数字都是前面两项数字的和。也就是：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">F</span><span class="hljs-params">(<span class="hljs-number">0</span>)</span></span> = <span class="hljs-number">0</span>，<span class="hljs-built_in">F</span>(<span class="hljs-number">1</span>) = <span class="hljs-number">1</span><br><span class="hljs-function"><span class="hljs-title">F</span><span class="hljs-params">(n)</span></span> = <span class="hljs-built_in">F</span>(n - <span class="hljs-number">1</span>) + <span class="hljs-built_in">F</span>(n - <span class="hljs-number">2</span>)，其中 n &gt; <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<p>给定 <code>n</code> ，请计算 <code>F(n)</code> 。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs isbl">输入：<span class="hljs-variable">n</span> = <span class="hljs-number">2</span><br>输出：<span class="hljs-number">1</span><br>解释：<span class="hljs-function"><span class="hljs-title">F</span>(<span class="hljs-number">2</span>) = <span class="hljs-title">F</span>(<span class="hljs-number">1</span>) + <span class="hljs-title">F</span>(<span class="hljs-number">0</span>) = <span class="hljs-number">1</span> + <span class="hljs-number">0</span> = <span class="hljs-number">1</span></span><br></code></pre></td></tr></table></figure>
+<p>思路：</p>
+<p>因为这道题给出了递推公式：<code>F(n) = F(n - 1) + F(n - 2)</code></p>
+<p>动规五部曲：</p>
+<p>这里我们要用一个一维dp数组来保存递归的结果</p>
+<ol type="1">
+<li><p>确定dp数组以及下标的含义：dp[i]的定义为：第i个数的斐波那契数值是dp[i]</p></li>
+<li><p>确定递推公式<code>F(n) = F(n - 1) + F(n - 2)</code></p></li>
+<li><p>dp数组如何初始化</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">dp[0] = 0;<br>dp[1] = 1;<br></code></pre></td></tr></table></figure></li>
+<li><p>确定遍历顺序</p>
+<p>从递归公式dp[i] = dp[i - 1] + dp[i - 2];中可以看出，dp[i]是依赖 dp[i
+- 1] 和 dp[i - 2]，那么遍历的顺序一定是从前到后遍历的</p></li>
+<li><p>举例推导dp数组</p></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fib</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(n&lt;=<span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> n;<br>        vector&lt;<span class="hljs-type">int</span>&gt;<span class="hljs-built_in">dp</span>(n+<span class="hljs-number">1</span>);<br>        dp[<span class="hljs-number">0</span>]=<span class="hljs-number">0</span>;<br>        dp[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;<br>            dp[i]=dp[i<span class="hljs-number">-1</span>]+dp[i<span class="hljs-number">-2</span>];<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp[n];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="爬楼梯">爬楼梯</h3>
+<p>假设你正在爬楼梯。需要 <code>n</code> 阶你才能到达楼顶。每次你可以爬
+<code>1</code> 或 <code>2</code>
+个台阶。你有多少种不同的方法可以爬到楼顶呢？</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs tap">输入：n = 2<br>输出：2<br>解释：有两种方法可以爬到楼顶。<br>1.<span class="hljs-number"> 1 </span>阶 +<span class="hljs-number"> 1 </span>阶<br>2.<span class="hljs-number"> 2 </span>阶<br></code></pre></td></tr></table></figure>
+<p>思路：</p>
+<p>动态规划简单题，递推公式：<code>dp[i] = dp[i-2]+dp[i-1];</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">climbStairs</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(n&lt;=<span class="hljs-number">2</span>) <span class="hljs-keyword">return</span> n;<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">dp</span><span class="hljs-params">(n+<span class="hljs-number">1</span>)</span></span>;<br>        dp[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<br>        dp[<span class="hljs-number">2</span>]=<span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">3</span>;i&lt;=n;i++)&#123;<br>            dp[i] = dp[i<span class="hljs-number">-2</span>]+dp[i<span class="hljs-number">-1</span>];<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp[n];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="最小费用爬楼梯">最小费用爬楼梯</h3>
+<p><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/min-cost-climbing-stairs/description/">https://leetcode.cn/problems/min-cost-climbing-stairs/description/</a></p>
+<p>给你一个整数数组 <code>cost</code> ，其中 <code>cost[i]</code>
+是从楼梯第 <code>i</code>
+个台阶向上爬需要支付的费用。一旦你支付此费用，即可选择向上爬一个或者两个台阶。你可以选择从下标为
+<code>0</code> 或下标为 <code>1</code>
+的台阶开始爬楼梯。请你计算并返回达到楼梯顶部的最低花费。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs tap">输入：cost = [10,15,20]<br>输出：15<br>解释：你将从下标为<span class="hljs-number"> 1 </span>的台阶开始。<br>- 支付<span class="hljs-number"> 15 </span>，向上爬两个台阶，到达楼梯顶部。<br>总花费为<span class="hljs-number"> 15 </span>。<br></code></pre></td></tr></table></figure>
+<p>思路：</p>
+<p>动态规划<strong>可以有两个途径得到dp[i]，一个是dp[i-1]
+一个是dp[i-2]</strong>。</p>
+<p>dp[i - 1] 跳到 dp[i] 需要花费
+<code>dp[i - 1] + cost[i - 1]</code>。</p>
+<p>dp[i - 2] 跳到 dp[i] 需要花费
+<code>dp[i - 2] + cost[i - 2]</code>。</p>
+<p>那么究竟是选从dp[i - 1]跳还是从dp[i - 2]跳呢？</p>
+<p>一定是选最小的，所以<code>dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2])</code>;</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">minCostClimbingStairs</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; cost)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = cost.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">dp</span><span class="hljs-params">(n+<span class="hljs-number">1</span>)</span></span>;<br>        dp[<span class="hljs-number">0</span>]= <span class="hljs-number">0</span>;<br>        dp[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;<br>            dp[i]=<span class="hljs-built_in">min</span>(dp[i<span class="hljs-number">-1</span>]+cost[i<span class="hljs-number">-1</span>], dp[i<span class="hljs-number">-2</span>]+cost[i<span class="hljs-number">-2</span>]);<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp[n];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="不同路径">不同路径</h3>
+<p>一个机器人位于一个 <code>m x n</code> 网格的左上角
+（起始点在下图中标记为 “Start”
+）。机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为
+“Finish” ）。问总共有多少条不同的路径？</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240128142408271.png" srcset="/img/loading.gif" lazyload alt="机器人路径问题" style="zoom:67%;" /></p>
+<p>思路：</p>
+<p>简单的动态规划问题，只需要保证每次迭代都从上面和左边进行叠加</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">uniquePaths</span><span class="hljs-params">(<span class="hljs-type">int</span> m, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;<span class="hljs-built_in">dp</span>(m, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(n, <span class="hljs-number">0</span>));<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;m;i++)&#123;<br>            dp[i][<span class="hljs-number">0</span>]=<span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)&#123;<br>            dp[<span class="hljs-number">0</span>][i]=<span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;m;i++)&#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;n;j++)&#123;<br>                dp[i][j]=dp[i<span class="hljs-number">-1</span>][j]+dp[i][j<span class="hljs-number">-1</span>];<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp[m<span class="hljs-number">-1</span>][n<span class="hljs-number">-1</span>];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="不同路径ii">不同路径II</h3>
+<p><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-paths-ii/description/">https://leetcode.cn/problems/unique-paths-ii/description/</a></p>
+<p>一个机器人位于一个 <code>m x n</code> 网格的左上角
+（起始点在下图中标记为 “Start”
+）。机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为
+“Finish”）。现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？网格中的障碍物和空位置分别用
+<code>1</code> 和 <code>0</code> 来表示。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240128143004648.png" srcset="/img/loading.gif" lazyload alt="障碍物的机器人路径" style="zoom: 50%;" /></p>
+<p>思路：</p>
+<p>和上一题的思路一样，都是需要遍历路径就行，但是这里加入了一个新的数组用来存储有障碍物的位置，因此需要额外进行标记
+<code>&amp;&amp;obstacleGrid[i][0]==0</code>的信息，同时遇到障碍物就不改变对应的值，直接
+<code>continue</code>就好</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">uniquePathsWithObstacles</span><span class="hljs-params">(vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; obstacleGrid)</span> </span>&#123;<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;<span class="hljs-built_in">dp</span>(obstacleGrid.<span class="hljs-built_in">size</span>(), <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(obstacleGrid[<span class="hljs-number">0</span>].<span class="hljs-built_in">size</span>(), <span class="hljs-number">0</span>));<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;obstacleGrid.<span class="hljs-built_in">size</span>()&amp;&amp;obstacleGrid[i][<span class="hljs-number">0</span>]==<span class="hljs-number">0</span>;i++) dp[i][<span class="hljs-number">0</span>]=<span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;obstacleGrid[<span class="hljs-number">0</span>].<span class="hljs-built_in">size</span>()&amp;&amp;obstacleGrid[<span class="hljs-number">0</span>][i]==<span class="hljs-number">0</span>;i++) dp[<span class="hljs-number">0</span>][i]=<span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;obstacleGrid.<span class="hljs-built_in">size</span>();i++)&#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">1</span>;j&lt;obstacleGrid[<span class="hljs-number">0</span>].<span class="hljs-built_in">size</span>();j++)&#123;<br>                <span class="hljs-keyword">if</span>(obstacleGrid[i][j]==<span class="hljs-number">1</span>) <span class="hljs-keyword">continue</span>;<br>                dp[i][j]=dp[i<span class="hljs-number">-1</span>][j]+dp[i][j<span class="hljs-number">-1</span>];<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp[obstacleGrid.<span class="hljs-built_in">size</span>()<span class="hljs-number">-1</span>][obstacleGrid[<span class="hljs-number">0</span>].<span class="hljs-built_in">size</span>()<span class="hljs-number">-1</span>];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -1065,7 +1155,7 @@ target="_blank" rel="noopener" href="https://leetcode.cn/problems/best-time-to-b
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>January 23, 2024</div>
+          <div>January 28, 2024</div>
         </div>
       
       
