@@ -1254,7 +1254,7 @@ href="https://docs.docker.com/engine/reference/commandline/run/">https://docs.do
 <li><code>docker ps</code> 列出正在运行的容器</li>
 <li><code>docker ps -a</code> 列出所有的容器</li>
 <li><code>docker rm</code> 删除某个容器</li>
-<li><code>docker exec</code> <strong>(-it
+<li><code>docker exec</code> <strong>(-it <code>mycontainer</code>
 /bin/sh)</strong>进入某一个容器； <code>docker exit</code>
 退出某个容器</li>
 <li><code>docker stop container-id</code> 停止指定 id
