@@ -1273,6 +1273,90 @@ href="https://docs.docker.com/engine/reference/commandline/run/">https://docs.do
 <li><code>docker-compose restart service-name</code> 重启单个服务</li>
 <li><code>docker-compose exec service-name sh</code> 进入容器命令行</li>
 </ul>
+<h1 id="docker创建镜像">Docker创建镜像</h1>
+<p><code>Dockerfile</code>是用于创建自定义Docker镜像的文件，其主要作用包括配置文件、挂载点、对外暴露的端口和设置环境变量</p>
+<p>容器其实是在镜像的最上面加了一层读写层，在运行容器里做的任何文件改动，都会写到这个读写层。如果删除了容器，也就删除了其最上面的读写层，文件改动也就丢失了。Docker使用存储驱动管理镜像每层内容及可读写层的容器层。</p>
+<h2 id="dockerfile-操作常用指令">Dockerfile 操作常用指令</h2>
+<ol type="1">
+<li><p><strong>FROM 镜像</strong></p>
+<p>指定新镜像所基于的基础镜像，第一条指令必须为FROM
+指令，每创建一个镜像就需要一条 FROM 指令</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment">#指定了go的镜像：这个时候会从网上下载</span><br><span class="hljs-keyword">FROM</span> golang:<span class="hljs-number">1.20</span>-alpine<br></code></pre></td></tr></table></figure></li>
+<li><p><strong>MAINTAINER 名字</strong></p>
+<p>说明新镜像的维护人信息</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment">#指定维护者的信息</span><br><span class="hljs-keyword">LABEL</span><span class="language-bash"> maintainer=<span class="hljs-string">&quot;XXXXX@gmail.com&quot;</span></span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>WORKDIR 路径</strong> 为后续的 RUN、CMD、ENTRYPOINT
+指定工作目录</p>
+<p>这里定义的目录相当于是在docker的文件夹下定义新的目录并会将本地的文件内容上传上去</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># 定义工作目录</span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /Workspace/ApiService</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>RUN 命令</strong></p>
+<p>在所基于的镜像上执行命令，并提交到新的镜像中</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment">#编译应用程序</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> go build -o api_service main.go</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>CMD ["要运行的程序", "参数1", "参数2"]</strong></p>
+<p>Dockerfile只能有一条CMD命令。如果指定多条命令，只执行最后一条命令。</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># 运行应用程序</span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;./api_service&quot;</span>]</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>EXPOSE 端口号</strong></p>
+<p>指定新镜像加载到 Docker 时要开启的端口</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># 暴露端口</span><br><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">8080</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>ENV 环境变量 变量值</strong></p>
+<p>设置一个环境变量的值，会被后面的 RUN 使用</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># 设置环境变量</span><br><span class="hljs-keyword">ENV</span> BUILD_ENV local<br><span class="hljs-keyword">ENV</span> TZ=Asia/Shanghai <span class="hljs-comment">#容器内部的时间设置与上海所在的时区一致</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>ADD 源文件/目录 目标文件/目录</strong></p>
+<p>将源文件复制到镜像中，源文件要与 <code>Dockerfile</code>
+位于相同目录</p>
+<p>例子本地的文件在<code>/Workspace/ApiService</code>中，这个时候会将本地的<code>/Workspace/ApiService</code>目录下所有的文件送到<code>docker</code>中的<code>/Workspace/ApiService/docker</code>中</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /Workspace/ApiService</span><br><br><span class="hljs-keyword">ADD</span><span class="language-bash"> docker .</span><br><span class="hljs-comment">#ADD . . #这里表示相同文件夹目录直接复制</span><br></code></pre></td></tr></table></figure></li>
+<li><p><strong>VOLUME [“目录”]</strong> 在容器中创建一个挂载点</p></li>
+</ol>
+<h2 id="build镜像并运行">Build镜像并运行</h2>
+<h4
+id="构建dockerfile镜像并运行"><strong>构建dockerfile镜像并运行</strong></h4>
+<p>要运行 Dockerfile 文件，需要使用 Docker 工具。Docker
+可以在不同的操作系统上运行，包括 Windows、macOS 和各种 Linux
+发行版。以下是一些运行 Dockerfile 的步骤：</p>
+<ol type="1">
+<li>安装 Docker 工具</li>
+</ol>
+<p>在官网上下载并安装 Docker
+工具，根据你的操作系统选择对应版本。安装完成后，可以在终端中运行
+<strong><code>docker</code></strong> 命令来检查是否安装成功。</p>
+<ul>
+<li>进入 Dockerfile 所在目录</li>
+</ul>
+<p>打开终端，进入 Dockerfile 所在目录。可以使用
+<strong><code>cd</code></strong> 命令切换目录。</p>
+<ul>
+<li>构建 Docker 镜像</li>
+</ul>
+<p>使用以下命令构建 Docker 镜像：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs Bash">docker build -t &lt;镜像名称&gt; .<br><span class="hljs-comment">#docker build -t api_service . </span><br></code></pre></td></tr></table></figure>
+<p>其中 <strong><code>-t</code></strong>
+参数用于指定镜像的名称，<strong><code>.</code></strong> 表示 Dockerfile
+所在目录。执行该命令后，Docker 会根据 Dockerfile
+文件中的指令创建镜像。</p>
+<ul>
+<li>运行 Docker 容器</li>
+</ul>
+<p>使用以下命令运行 Docker 容器：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs Bash">docker run -p &lt;主机端口&gt;:&lt;容器端口&gt; &lt;镜像名称&gt;<br>docker run -d --name my_container -p&lt;主机端口&gt;:&lt;容器端口&gt; &lt;镜像名称&gt;<br><span class="hljs-comment">#docker run -d --name api-container -p 8080:8080 api_service</span><br></code></pre></td></tr></table></figure>
+<p>其中 <strong><code>-p</code></strong>
+参数用于指定主机端口和容器端口的映射关系，<strong><code>&lt;镜像名称&gt;</code></strong>
+是在第 3 步中指定的镜像名称。执行该命令后，Docker
+会在后台启动一个容器，并将容器的标准输出输出到终端中。如果 Dockerfile
+中没有指定端口，需要在运行容器时指定 <strong><code>-p</code></strong>
+参数，并将容器端口映射到主机上的一个端口。否则，容器会启动失败。</p>
+<p><code>-d</code>表示的当前的容器可以在后台运行</p>
+<p><code>--name</code>表示给指定的容器起个名字，否则会随机生成名字</p>
+<h4 id="停止docekr容器"><strong>停止docekr容器</strong></h4>
+<p>使用如下命令停止：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs Bash">docker stop &lt;container-id&gt;<br></code></pre></td></tr></table></figure>
+<p>其中，<strong><code>&lt;container-id&gt;</code></strong>
+是要停止的容器的 ID。可以使用以下命令查看正在运行的容器列表：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs Bash">docker ps<br></code></pre></td></tr></table></figure>
+<p>如果要停止所有容器，可以使用以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs Bash">docker stop $(docker ps -aq)<br></code></pre></td></tr></table></figure>
+<p>其中，<strong><code>docker ps -aq</code></strong>
+命令用于列出所有容器的 ID。</p>
 <h1 id="docker-compose">Docker-Compose</h1>
 <p>如果项目依赖更多的第三方软件，我们需要管理的容器就更加多，每个都要单独配置运行，指定网络。使用
 docker-compose
