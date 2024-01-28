@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119102920136.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240119103742209.png">
 <meta property="article:published_time" content="2024-01-19T02:25:53.000Z">
-<meta property="article:modified_time" content="2024-01-28T02:26:36.575Z">
+<meta property="article:modified_time" content="2024-01-28T05:07:36.701Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="后端开发">
 <meta name="twitter:card" content="summary_large_image">
@@ -211,7 +211,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.2k words
+          6.1k words
         
       </span>
     
@@ -222,7 +222,7 @@
         
         
         
-          44 mins
+          51 mins
         
       </span>
     
@@ -264,7 +264,7 @@
               <p class="note note-info">
                 
                   
-                    Last updated on January 28, 2024 am
+                    Last updated on January 28, 2024 pm
                   
                 
               </p>
@@ -539,6 +539,17 @@ id="构建dockerfile镜像并运行"><strong>构建dockerfile镜像并运行</st
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">docker stop $(docker ps -aq)<br></code></pre></td></tr></table></figure>
 <p>其中，<strong><code>docker ps -aq</code></strong>
 命令用于列出所有容器的 ID。</p>
+<h2 id="scratch最小镜像">Scratch最小镜像</h2>
+<p>使用<code>scratch</code>镜像时，确保应用程序是静态的可执行文件或者不需要额外的操作系统层，这样可以最大程度地减少镜像的大小</p>
+<p>我们这里给出一个例子</p>
+<p>首先在创建一个最小的镜像的时候需要一个应用程序，这个程序可以通过dockerfile生成或者是从其他地方引入，那么这里给出一个<code>golang</code>
+镜像构建应用程序<code>api_service</code></p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># 第一阶段：使用 golang 镜像构建应用程序</span><br><span class="hljs-keyword">FROM</span> golang:<span class="hljs-number">1.20</span>-alpine AS builder<br><br><span class="hljs-comment"># 定义工作目录</span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /workspace</span><br><br><span class="hljs-comment"># 复制源代码到工作目录</span><br><span class="hljs-keyword">COPY</span><span class="language-bash"> . .</span><br><br><span class="hljs-comment"># 设置环境变量</span><br><span class="hljs-keyword">ENV</span> CGO_ENABLED=<span class="hljs-number">0</span><br><span class="hljs-keyword">ENV</span> GOOS=linux<br><span class="hljs-keyword">ENV</span> GOARCH=amd64<br><br><span class="hljs-comment"># 编译应用程序</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> go build -o api_service main.go</span><br></code></pre></td></tr></table></figure>
+<p>接着第二阶段就建一个最小的轻量级的docker镜像，首先需要按照构建镜像的基本步骤确定工作目录，环境变量、端口等信息，接着通过从已经编译好的环境中获取应用程序，最后执行程序</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># 第二阶段：创建一个新的轻量级镜像</span><br><span class="hljs-keyword">FROM</span> scratch<br><br><span class="hljs-comment"># 设置工作目录</span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /app</span><br><br><span class="hljs-comment"># 从 builder 镜像中复制编译好的应用程序</span><br><span class="hljs-keyword">COPY</span><span class="language-bash"> --from=builder /workspace/api_service .</span><br><br><span class="hljs-comment"># 设置环境变量</span><br><span class="hljs-keyword">ENV</span> BUILD_ENV local<br><span class="hljs-keyword">ENV</span> TZ=Asia/Shanghai<br><br><span class="hljs-comment"># 暴露端口</span><br><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">8080</span><br><br><span class="hljs-comment"># 运行应用程序</span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;./api_service&quot;</span>]</span><br></code></pre></td></tr></table></figure>
+<p>写好dockerfile之后就可以构建并运行了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker build -t api_scratch .<br>docker run -d --name scratch_container -p 8080:8080 api_scratch<br></code></pre></td></tr></table></figure>
+<p><strong>注意：通过这个方式只会产生一个scratch镜像，仅包含一个应用程序</strong></p>
 <h1 id="docker-compose">Docker-Compose</h1>
 <p>如果项目依赖更多的第三方软件，我们需要管理的容器就更加多，每个都要单独配置运行，指定网络。使用
 docker-compose
