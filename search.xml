@@ -1701,6 +1701,8 @@ proxy）,其作用是用于使 Go
 </ul>
 <p>执行以下命令开启go mod管理</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go <span class="hljs-built_in">env</span> -w GO111MODULE=on<br></code></pre></td></tr></table></figure>
+<p>Go mod操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">go mod init github.com/hub/project<br></code></pre></td></tr></table></figure>
 <h2 id="go基本语法">Go基本语法</h2>
 <h3 id="如何编译并运行一个go文件">如何编译并运行一个Go文件</h3>
 <p>对于已经写好的go文件，这里以hello.go作为例子，直接使用以下语句进行编译并运行</p>
@@ -3234,6 +3236,7 @@ href="https://leetcode.cn/problems/partition-equal-subset-sum/description/">http
 <figure class="highlight dns"><table><tr><td class="code"><pre><code class="hljs dns">输入: temperatures = [<span class="hljs-number">73,74,75,71</span>,<span class="hljs-number">69,72,76,73</span>]<br>输出: [<span class="hljs-number">1,1,4,2</span>,<span class="hljs-number">1,1,0,0</span>]<br></code></pre></td></tr></table></figure>
 <p>思路：</p>
 <p>可以选择使用<strong>单调栈的方法</strong>来求解，具体的思路是设置一个栈，遍历数组的时候和栈顶元素进行比较，小于栈顶元素的时候就需要将当前元素放入栈中</p>
+<p>首先这道题必须有一个向量数组来存储对应位置的元素的值，<code>vector&lt;int&gt; res(temperatures.size(),0)</code>方便修改对应的元素</p>
 <p>如果大于当前的栈顶元素的值，那么就要进行比较<code>while</code>循环，只要还是大于当前栈顶的元素都需要对栈顶的元素进行<code>pop()</code></p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">dailyTemperatures</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; temperatures)</span> </span>&#123;<br>        stack&lt;<span class="hljs-type">int</span>&gt; st;<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">res</span><span class="hljs-params">(temperatures.size(),<span class="hljs-number">0</span>)</span></span>;<br>        st.<span class="hljs-built_in">push</span>(<span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;temperatures.<span class="hljs-built_in">size</span>();i++)&#123;<br>            <span class="hljs-keyword">if</span>(temperatures[i]&lt;=temperatures[st.<span class="hljs-built_in">top</span>()])&#123;<br>                st.<span class="hljs-built_in">push</span>(i);<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                <span class="hljs-keyword">while</span> (!st.<span class="hljs-built_in">empty</span>()&amp;&amp; temperatures[i]&gt;temperatures[st.<span class="hljs-built_in">top</span>()])&#123;<br>                    res[st.<span class="hljs-built_in">top</span>()]=i-st.<span class="hljs-built_in">top</span>();<br>                    st.<span class="hljs-built_in">pop</span>();<br>                &#125;<br>                st.<span class="hljs-built_in">push</span>(i);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <h1 id="图论">图论</h1>
@@ -5660,5 +5663,182 @@ Gin 路由器实例中</p>
       <tags>
         <tag>后端开发</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>【后端开发】Consul服务与配置</title>
+    <url>/2024/02/02/consul/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h1 id="consul介绍">Consul介绍</h1>
+<p>Consul是hashicorp公司推出的开源工具，用于实现分布式系统的服务发现与配置。
+内置了服务注册与发现框架、分布一致性协议实现、健康检查、key/value存储、多数据中心方案，不再需要依赖其它工具。</p>
+<p>Consul是一个服务网络解决方案，它使团队能够管理服务之间以及跨多云环境和运行时的安全网络连接。Consul提供服务发现、基于身份的授权、L7流量管理和服务到服务加密。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240202225407197.png" alt="Consul示意图" style="zoom:50%;" /></p>
+<h1 id="consul角色">Consul角色</h1>
+<p>服务发现和注册</p>
+<ul>
+<li><strong>dev：</strong>开发模式</li>
+<li><strong>client：</strong>客户端，接受请求转达给服务端集群，将http和dns接口请求转发给局域网内的服务端集群，它只是一个代理的角色</li>
+<li><strong>server：</strong>服务端，保存配置信息，高可用集群，每个数据中心的server数据推荐为3个或5个</li>
+</ul>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240203112411765.png" alt="Consul内部角色介绍" style="zoom:50%;" /></p>
+<ul>
+<li>不管是server还是<code>client</code>，统称为<code>agent</code></li>
+<li><code>consul client</code>是相对无状态的，只负责转发<code>rpc</code>到<code>server</code>，资源开销很少</li>
+<li><code>server</code>是一个有一组扩展功能的代理，这些功能包括参与<code>raft</code>选举，维护集群状态，响应<code>rpc</code>查询，与其它数据中心交互<code>wan gossip</code>和转发查询给<code>leader</code>或远程数据中心。</li>
+<li>每个数据中心，<code>client</code>和<code>server</code>是混合的，一般建有3-5台<code>server</code></li>
+</ul>
+<h1 id="安装consul">安装Consul</h1>
+<p>安装地址：<a
+href="https://www.consul.io/">https://www.consul.io/</a>，这里建议安装终端版本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">consul agent -dev -clinent=0.0.0.0<br><span class="hljs-comment">#-dev表示开发模式运行， -server表示服务模式运行</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#默认端口</span><br>localhost:8500<br></code></pre></td></tr></table></figure>
+<p>登陆这个默认的端口就能看见可视化的界面 <img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240202231921098.png"
+alt="可视化UI界面" /></p>
+<h1 id="consul工作原理">Consul工作原理</h1>
+<p><strong><code>producer</code></strong>：服务提供者</p>
+<p><strong><code>consumer</code></strong>：服务消费者</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240202230444248.png" alt="image-20240202230444248" style="zoom: 50%;" /></p>
+<h2 id="服务发现与注册">服务发现与注册</h2>
+<ul>
+<li><strong>producer</strong>启动时，会将自己的<strong><code>ip/host</code></strong>等信息通过发送请求告知<strong>consul</strong></li>
+<li><strong>consul</strong>接收到<strong>producer</strong>的注册信息后，每隔10秒（默认）会向<strong>producer</strong>发送一个健康检查的请求，检查<strong>producer</strong>是否处于可用状态</li>
+<li><strong><code>post</code></strong>
+服务<strong><code>注册 /health</code></strong>健康定期检查</li>
+</ul>
+<h2 id="服务调用">服务调用</h2>
+<ul>
+<li>当<strong>consumer</strong>请求<strong>product</strong>时，会先从<strong><code>consul</code></strong>中拿存储的<code>producer</code>服务的ip和port的临时表（<strong><code>temp table</code></strong>)，从表中任选一个<code>producer</code>的ip和<code>port</code></li>
+<li>根据这个<code>ip</code>和<code>port</code>,发送访问请求</li>
+<li>此表只包含通过健康检查的<strong><code>producer</code></strong>信息，并且每隔10秒更新</li>
+<li><code>Temp table</code> 拉取服务列表
+从临时表中拿<code>producer</code>的ip和端口发送请求</li>
+</ul>
+<h1 id="consulgo实现">Consul+Go实现</h1>
+<p>下面给出一个例子对于在GO项目中是如何结合<strong><code>Consul</code></strong>进行使用的</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240203143606479.png" alt="consul中间件目录" style="zoom:50%;" /></p>
+<p>首先给出<code>consul</code>中间件的结构体图，这里主要对<code>consul</code>进行了<code>sdk</code>的封装，包含了以下的内容：</p>
+<ol type="1">
+<li><code>consulclient</code>：服务注册与发现的板块</li>
+<li><code>consulconfig</code>：主要是中心化配置的内容</li>
+<li><code>consulsdk</code>：主要是对以上的两个板块进行了封装</li>
+<li><code>main_test</code>：是给出了一个例子对上述的内容进行测试</li>
+</ol>
+<h3 id="consulclient">Consulclient</h3>
+<p>这部分着重来写如何实现对服务注册和服务发现的功能</p>
+<ul>
+<li><strong>定义 <code>ConsulClient</code> 结构体</strong>：</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go">goCopy code<br><span class="hljs-keyword">type</span> ConsulClient <span class="hljs-keyword">struct</span> &#123;<br>	client     *consulapi.Client<br>	serverPort <span class="hljs-type">int</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>ConsulClient</code> 结构体包含了一个 Consul
+客户端指针和一个服务端口。</p>
+<ul>
+<li><strong>创建新的 Consul 客户端</strong>：</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewConsulClient</span><span class="hljs-params">(consulAddress <span class="hljs-type">string</span>, serverPort <span class="hljs-type">int</span>)</span></span> (*ConsulClient, <span class="hljs-type">error</span>) &#123;<br>	config := consulapi.DefaultConfig()<br>	config.Address = consulAddress<br>	client, err := consulapi.NewClient(config)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err<br>	&#125;<br>	<span class="hljs-keyword">return</span> &amp;ConsulClient&#123;client: client, serverPort: serverPort&#125;, <span class="hljs-literal">nil</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p><code>NewConsulClient</code> 函数用于创建一个新的 Consul
+客户端实例。它接收 Consul 服务器的地址和服务端口作为参数，并返回一个
+<code>ConsulClient</code> 实例以及可能的错误。</p>
+<ul>
+<li><strong>注册服务</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *ConsulClient)</span></span> RegisterService(serviceID, serviceName, serviceHost <span class="hljs-type">string</span>, servicePort <span class="hljs-type">int</span>) <span class="hljs-type">error</span> &#123;<br>	service := &amp;consulapi.AgentServiceRegistration&#123;<br>		ID:      serviceID,<br>		Name:    serviceName,<br>		Address: serviceHost,<br>		Port:    servicePort,<br>	&#125;<br>	<span class="hljs-keyword">return</span> c.client.Agent().ServiceRegister(service)<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p><code>RegisterService</code> 方法用于向 Consul
+注册服务。它接收服务的ID、名称、主机和端口作为参数，并向 Consul
+注册该服务。</p>
+<ul>
+<li><strong>服务发现</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *ConsulClient)</span></span> DiscoverService(serviceName <span class="hljs-type">string</span>) (<span class="hljs-type">string</span>, <span class="hljs-type">error</span>) &#123;<br>	services, _, err := c.client.Health().Service(serviceName, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">nil</span>)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>, err<br>	&#125;<br>	<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(services) == <span class="hljs-number">0</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>, fmt.Errorf(<span class="hljs-string">&quot;service not found&quot;</span>)<br>	&#125;<br><br>	<span class="hljs-comment">// 随机选择一个服务实例</span><br>	<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(services) &gt; <span class="hljs-number">0</span> &#123;<br>		index := rand.Intn(<span class="hljs-built_in">len</span>(services))<br>		service := services[index].Service<br>		address := fmt.Sprintf(<span class="hljs-string">&quot;%v:%v&quot;</span>, service.Address, service.Port)<br>		<span class="hljs-keyword">return</span> address, <span class="hljs-literal">nil</span><br>	&#125;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>, fmt.Errorf(<span class="hljs-string">&quot;no healthy instances found for service %s&quot;</span>, serviceName)<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p><code>DiscoverService</code> 方法用于从 Consul
+中发现服务实例。它接收服务名称作为参数，并返回一个服务实例的地址。在内部，它通过健康检查来获取可用的服务实例，并随机选择一个健康的实例返回其地址。</p>
+<h3 id="consulconfig">Consulconfig</h3>
+<p>这段代码实现了一个基本的 Consul 配置中心客户端，用于从 Consul
+中获取、设置和删除键值对的配置信息。</p>
+<ul>
+<li><strong>定义 <code>ConsulConfigCenter</code> 结构体</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> ConsulConfigCenter <span class="hljs-keyword">struct</span> &#123;<br>	client *consulapi.Client<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>创建新的 <code>Consul</code> 配置中心客户端</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewConsulConfigCenter</span><span class="hljs-params">(consulAddress <span class="hljs-type">string</span>)</span></span> (*ConsulConfigCenter, <span class="hljs-type">error</span>) &#123;<br>	config := consulapi.DefaultConfig()<br>	config.Address = consulAddress<br>	client, err := consulapi.NewClient(config)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err<br>	&#125;<br>	<span class="hljs-keyword">return</span> &amp;ConsulConfigCenter&#123;client: client&#125;, <span class="hljs-literal">nil</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>NewConsulConfigCenter</code> 函数用于创建一个新的 Consul
+配置中心客户端实例。它接收 Consul 服务器的地址作为参数，并返回一个
+<code>ConsulConfigCenter</code> 实例以及可能的错误</p>
+<ul>
+<li><strong>获取特定键对应的值</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cc *ConsulConfigCenter)</span></span> GetValue(key <span class="hljs-type">string</span>) (<span class="hljs-type">string</span>, <span class="hljs-type">error</span>) &#123;<br>	kv := cc.client.KV()<br>	pair, _, err := kv.Get(key, <span class="hljs-literal">nil</span>)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>, err<br>	&#125;<br>	<span class="hljs-keyword">if</span> pair == <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>, fmt.Errorf(<span class="hljs-string">&quot;key &#x27;%s&#x27; not found&quot;</span>, key)<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-type">string</span>(pair.Value), <span class="hljs-literal">nil</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>GetValue</code> 方法用于从 Consul
+中获取特定键对应的值。它接收键名作为参数，并返回键对应的值以及可能的错误。</p>
+<ul>
+<li><strong>设置键值对</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cc *ConsulConfigCenter)</span></span> SetValue(key, value <span class="hljs-type">string</span>) <span class="hljs-type">error</span> &#123;<br>	kv := cc.client.KV()<br>	p := &amp;consulapi.KVPair&#123;Key: key, Value: []<span class="hljs-type">byte</span>(value)&#125;<br>	_, err := kv.Put(p, <span class="hljs-literal">nil</span>)<br>	<span class="hljs-keyword">return</span> err<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>SetValue</code> 方法用于在 Consul
+的键值存储中设置一个键值对。它接收键名和值作为参数，并将其设置到 Consul
+中。</p>
+<ul>
+<li><strong>删除键值对</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cc *ConsulConfigCenter)</span></span> DeleteValue(key <span class="hljs-type">string</span>) <span class="hljs-type">error</span> &#123;<br>	kv := cc.client.KV()<br>	_, err := kv.Delete(key, <span class="hljs-literal">nil</span>)<br>	<span class="hljs-keyword">return</span> err<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>DeleteValue</code> 方法用于从 Consul
+的键值存储中删除指定的键值对。它接收键名作为参数，并将对应的键值对从
+Consul 中删除。</p>
+<h3 id="consulsdk">ConsulSDK</h3>
+<p>实现了一个基于单例模式的 Consul SDK，用于管理 Consul
+客户端和配置中心。让我们逐段解释代码的功能</p>
+<ul>
+<li><strong>定义 <code>ConsulSDK</code> 结构体</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> ConsulSDK <span class="hljs-keyword">struct</span> &#123;<br>	Client       *ConsulClient<br>	ConfigCenter *ConsulConfigCenter<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>ConsulSDK</code> 结构体包含了 Consul 客户端和配置中心的实例</p>
+<ul>
+<li><strong>定义全局变量和 <code>sync.Once</code> 实例</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> (<br>	instance *ConsulSDK<br>	once     sync.Once<br>)<br></code></pre></td></tr></table></figure>
+<p>定义了 <code>instance</code> 变量用于保存 ConsulSDK
+实例，<code>once</code> 变量用于确保 <code>GetInstance()</code>
+函数只被执行一次</p>
+<ul>
+<li><strong>实现 <code>NewConsulSDK</code> 函数</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewConsulSDK</span><span class="hljs-params">(consulAddress <span class="hljs-type">string</span>, serverPort <span class="hljs-type">int</span>)</span></span> (*ConsulSDK, <span class="hljs-type">error</span>) &#123;<br>	<span class="hljs-comment">// 创建 Consul 客户端</span><br>	client, err := NewConsulClient(consulAddress, serverPort)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err<br>	&#125;<br><br>	<span class="hljs-comment">// 创建 Consul 配置中心</span><br>	configCenter, err := NewConsulConfigCenter(consulAddress)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err<br>	&#125;<br><br>	<span class="hljs-comment">// 返回 ConsulSDK 实例</span><br>	<span class="hljs-keyword">return</span> &amp;ConsulSDK&#123;<br>		Client:       client,<br>		ConfigCenter: configCenter,<br>	&#125;, <span class="hljs-literal">nil</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>NewConsulSDK</code> 函数用于创建一个新的 ConsulSDK 实例，它接收
+Consul 服务器地址和端口作为参数，并返回一个 ConsulSDK
+实例以及可能的错误</p>
+<ul>
+<li><strong>实现 <code>GetInstance()</code> 函数</strong>：</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">GetInstance</span><span class="hljs-params">()</span></span> *ConsulSDK &#123;<br>	<span class="hljs-comment">// 保证只执行一次</span><br>	once.Do(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>		consulAddress := <span class="hljs-string">&quot;127.0.0.1:8500&quot;</span><br>		serverPort := <span class="hljs-number">8080</span><br><br>		<span class="hljs-comment">// 创建 Consul 客户端</span><br>		client, err := NewConsulClient(consulAddress, serverPort)<br>		<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>			fmt.Println(<span class="hljs-string">&quot;Failed to create Consul client:&quot;</span>, err)<br>			os.Exit(<span class="hljs-number">1</span>)<br>		&#125;<br><br>		<span class="hljs-comment">// 创建 Consul 配置中心</span><br>		configCenter, err := NewConsulConfigCenter(consulAddress)<br>		<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>			fmt.Println(<span class="hljs-string">&quot;Failed to create Consul config center:&quot;</span>, err)<br>			os.Exit(<span class="hljs-number">1</span>)<br>		&#125;<br><br>		<span class="hljs-comment">// 初始化 ConsulSDK 实例</span><br>		instance = &amp;ConsulSDK&#123;<br>			Client:       client,<br>			ConfigCenter: configCenter,<br>		&#125;<br>	&#125;)<br>	<span class="hljs-keyword">return</span> instance<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>GetInstance()</code> 函数用于获取 ConsulSDK 的单例实例。它通过
+<code>once.Do()</code> 确保<strong>只执行一次</strong>，创建 Consul
+客户端和配置中心，并将其保存到全局变量 <code>instance</code>
+中，然后返回该实例</p>
+<h3 id="main_test.go">Main_test.go</h3>
+<p>这个部分主要对上述的sdk接口给出了一个具体的测试用例</p>
+<p>注意在终端运行的时候的运行为：<strong><code>go test</code>
+go默认对<code>_test</code>会进行测试</strong></p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> consul<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;os&quot;</span><br>	<span class="hljs-string">&quot;testing&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">TestConsul</span><span class="hljs-params">(t *testing.T)</span></span> &#123;<br>	<span class="hljs-comment">//创建新的 consul sdk</span><br>	sdk := GetInstance()<br><br>	<span class="hljs-comment">// 注册服务</span><br>	serviceID := <span class="hljs-string">&quot;my_service&quot;</span><br>	serviceName := <span class="hljs-string">&quot;my_service&quot;</span><br>	serviceHost := <span class="hljs-string">&quot;127.0.0.1&quot;</span><br>	servicePort := <span class="hljs-number">8080</span><br><br>	err := sdk.Client.RegisterService(serviceID, serviceName, serviceHost, servicePort)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		fmt.Printf(<span class="hljs-string">&quot;Error registering service: %v\n&quot;</span>, err)<br>		os.Exit(<span class="hljs-number">1</span>)<br>	&#125;<br><br>	<span class="hljs-comment">// 发现服务</span><br>	serviceAddress, err := sdk.Client.DiscoverService(serviceName)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		fmt.Printf(<span class="hljs-string">&quot;Error discovering service: %v\n&quot;</span>, err)<br>		os.Exit(<span class="hljs-number">1</span>)<br>	&#125;<br>	fmt.Printf(<span class="hljs-string">&quot;Discovered service address: %s\n&quot;</span>, serviceAddress)<br><br>	<span class="hljs-comment">//使用 ConsulConfig 获取键对应的值</span><br>	value, err := sdk.ConfigCenter.GetValue(<span class="hljs-string">&quot;test&quot;</span>)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		fmt.Println(<span class="hljs-string">&quot;Failed to get value:&quot;</span>, err)<br>		<span class="hljs-keyword">return</span><br>	&#125;<br>	fmt.Println(<span class="hljs-string">&quot;Value:&quot;</span>, value)<br>&#125;<br><br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>后端开发</category>
+      </categories>
+      <tags>
+        <tag>后端开发</tag>
+        <tag>go开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>deepl</title>
+    <url>/2024/01/30/deepl/</url>
+    <content><![CDATA[<p><a
+href="https://blog.csdn.net/weixin_42693876/article/details/120345924">https://blog.csdn.net/weixin_42693876/article/details/120345924</a></p>
+<p><a
+href="https://zhuanlan.zhihu.com/p/560482252">https://zhuanlan.zhihu.com/p/560482252</a></p>
+<p><a
+href="https://zhuanlan.zhihu.com/p/667048896">https://zhuanlan.zhihu.com/p/667048896</a></p>
+]]></content>
   </entry>
 </search>
