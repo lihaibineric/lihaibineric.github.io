@@ -24,7 +24,7 @@
 <meta property="og:description" content="Git 是一个版本控制系统，是任何软件开发项目中的主要内容。通常有两个主要用途：代码备份和代码版本控制。使用Git可以逐步处理代码，在需要回滚到备份副本的过程中保存每一步的进度。   Git与GitHub  Git的安装与配置 安装Git 直接上官网下载安装 https:&#x2F;&#x2F;link.zhihu.com&#x2F;?target&#x3D;https%3A&#x2F;&#x2F;git-scm.com&#x2F;download https:&#x2F;">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-10-23T13:28:55.000Z">
-<meta property="article:modified_time" content="2023-12-06T14:32:19.847Z">
+<meta property="article:modified_time" content="2024-02-03T07:18:39.323Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="后端开发">
 <meta name="twitter:card" content="summary_large_image">
@@ -208,7 +208,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k words
+          2.7k words
         
       </span>
     
@@ -219,7 +219,7 @@
         
         
         
-          21 mins
+          23 mins
         
       </span>
     
@@ -261,7 +261,7 @@
               <p class="note note-info">
                 
                   
-                    Last updated on December 6, 2023 pm
+                    Last updated on February 3, 2024 pm
                   
                 
               </p>
@@ -392,6 +392,15 @@ alt="远端和本地的不同分支" />
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git branch [branch] <span class="hljs-comment">#创建新的分支</span><br></code></pre></td></tr></table></figure>
 <p>创建新的分支并切换到上面</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git checkout -b [branch] <span class="hljs-comment">#创建并切换新的分支</span><br></code></pre></td></tr></table></figure>
+<p>合并分支</p>
+<ul>
+<li>现在的任务是将b分支完全合并进a分支，同时只留下a分支</li>
+<li>首先确保b分支上的修改提交到了origin</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git checkout a <span class="hljs-comment">#先切换到a分支</span><br>git pull <span class="hljs-comment">#获取最新的内容</span><br>git merge origin/b <span class="hljs-comment">#合并b</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git add .<br>git commit -m <span class="hljs-string">&quot;merge test&quot;</span><br>git push<br></code></pre></td></tr></table></figure>
+<p>但是此时还是有另一个分支存在，如果想删除分支b</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">git push origin --<span class="hljs-built_in">delete</span> b<br></code></pre></td></tr></table></figure>
 <h3 id="分支冲突">分支冲突</h3>
 <p><strong>问题描述：</strong>如果当前修改的版本基于旧版，但是远端已经是新版origin/master，<strong>此时修改基于的内容和远端不同不能强行推</strong>。</p>
 <p><strong>解决方法1：</strong>通过换基的方法解决，通过将当前的修改的旧版换到最新的基上</p>
@@ -462,7 +471,7 @@ alt="远端和本地的不同分支" />
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>December 6, 2023</div>
+          <div>February 3, 2024</div>
         </div>
       
       
