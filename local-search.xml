@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>【深度学习】推荐系统算法总结</title>
+    <link href="/2024/02/04/rec-al/"/>
+    <url>/2024/02/04/rec-al/</url>
+    
+    <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><h1 id="推荐系统算法总结">推荐系统算法总结</h1>]]></content>
+    
+    
+    <categories>
+      
+      <category>深度学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>人工智能</tag>
+      
+      <tag>深度学习</tag>
+      
+      <tag>推荐系统</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【后端开发】Consul服务与配置</title>
     <link href="/2024/02/02/consul/"/>
     <url>/2024/02/02/consul/</url>
@@ -123,7 +152,7 @@
   
   
   <entry>
-    <title>【深度学习】推荐系统</title>
+    <title>【深度学习】推荐系统基础知识</title>
     <link href="/2024/01/16/rec/"/>
     <url>/2024/01/16/rec/</url>
     
@@ -142,6 +171,8 @@
       <tag>人工智能</tag>
       
       <tag>深度学习</tag>
+      
+      <tag>推荐系统</tag>
       
     </tags>
     

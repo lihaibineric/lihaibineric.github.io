@@ -3966,7 +3966,7 @@ alt="编译错误" />
       </tags>
   </entry>
   <entry>
-    <title>【深度学习】推荐系统</title>
+    <title>【深度学习】推荐系统基础知识</title>
     <url>/2024/01/16/rec/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
 <h1 id="推荐系统学习资料">推荐系统学习资料</h1>
@@ -5533,6 +5533,7 @@ alt="img" />
       <tags>
         <tag>人工智能</tag>
         <tag>深度学习</tag>
+        <tag>推荐系统</tag>
       </tags>
   </entry>
   <entry>
@@ -5908,5 +5909,20 @@ href="https://zhuanlan.zhihu.com/p/560482252">https://zhuanlan.zhihu.com/p/56048
 <p><a
 href="https://zhuanlan.zhihu.com/p/667048896">https://zhuanlan.zhihu.com/p/667048896</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>【深度学习】推荐系统算法总结</title>
+    <url>/2024/02/04/rec-al/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h1 id="推荐系统算法总结">推荐系统算法总结</h1>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>人工智能</tag>
+        <tag>深度学习</tag>
+        <tag>推荐系统</tag>
+      </tags>
   </entry>
 </search>
