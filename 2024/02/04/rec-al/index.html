@@ -16,13 +16,14 @@
   <meta name="author" content="Haibin Li">
   <meta name="keywords" content="">
   
-    <meta name="description" content="推荐系统算法总结 召回Recall 基于内容的推荐 这是一种比较简单的推荐方法，基于内容的推荐方法是非常直接的，它以物品的内容描述信息为依据来做出的推荐，本质上是基于对物品和用户自身的特征或属性的直接分析和计算。例如，假设已知电影A是一部喜剧，而恰巧我们得知某个用户喜欢看喜剧电影，那么我们基于这样的已知信息，就可以将电影A推荐给该用户。具体实现步骤：  构建物品画像(主要包括物品的分类信息，标题">
+    <meta name="description" content="推荐系统算法总结 传统模型(Recall)  数据集介绍 rating 标签列表为：UserID::MovieID::Rating::Timestamp * UserIDs：用户ID（1～6040） * MovieIDs：电影ID（1～3952） * Ratings：评分（1～5） * Timestamp：时间戳 #### user 标签列表为： UserID::Gender::Age::Occ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【深度学习】推荐系统算法总结">
 <meta property="og:url" content="https://lihaibineric.github.io/2024/02/04/rec-al/index.html">
 <meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
-<meta property="og:description" content="推荐系统算法总结 召回Recall 基于内容的推荐 这是一种比较简单的推荐方法，基于内容的推荐方法是非常直接的，它以物品的内容描述信息为依据来做出的推荐，本质上是基于对物品和用户自身的特征或属性的直接分析和计算。例如，假设已知电影A是一部喜剧，而恰巧我们得知某个用户喜欢看喜剧电影，那么我们基于这样的已知信息，就可以将电影A推荐给该用户。具体实现步骤：  构建物品画像(主要包括物品的分类信息，标题">
+<meta property="og:description" content="推荐系统算法总结 传统模型(Recall)  数据集介绍 rating 标签列表为：UserID::MovieID::Rating::Timestamp * UserIDs：用户ID（1～6040） * MovieIDs：电影ID（1～3952） * Ratings：评分（1～5） * Timestamp：时间戳 #### user 标签列表为： UserID::Gender::Age::Occ">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205155007538.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240204113943282.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240204114536506.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240204132411326.png">
@@ -32,14 +33,20 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205004453718.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205142142169.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205143207386.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205145510049.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205170756448.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205175255366.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205181713518.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205192049667.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205214722921.png">
 <meta property="article:published_time" content="2024-02-03T16:37:51.000Z">
-<meta property="article:modified_time" content="2024-02-05T06:46:34.288Z">
+<meta property="article:modified_time" content="2024-02-05T14:24:58.020Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="推荐系统">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240204113943282.png">
+<meta name="twitter:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205155007538.png">
   
   
   
@@ -220,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          13k words
+          37k words
         
       </span>
     
@@ -231,7 +238,7 @@
         
         
         
-          111 mins
+          311 mins
         
       </span>
     
@@ -283,7 +290,17 @@
                 
                 <meta name="referrer" content="no-referrer"/>
 <h1 id="推荐系统算法总结">推荐系统算法总结</h1>
-<h2 id="召回recall">召回Recall</h2>
+<h2 id="传统模型recall">传统模型(Recall)</h2>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205155007538.png" srcset="/img/loading.gif" lazyload alt="传统推荐算法宏观框架" style="zoom: 50%;" /></p>
+<h3 id="数据集介绍">数据集介绍</h3>
+<h4 id="rating">rating</h4>
+<p>标签列表为：UserID::MovieID::Rating::Timestamp *
+UserIDs：用户ID（1～6040） * MovieIDs：电影ID（1～3952） *
+Ratings：评分（1～5） * Timestamp：时间戳 #### user 标签列表为：
+UserID::Gender::Age::Occupation::Zip-code * Gender：性别， "M"代表男，
+"F"代表女； * Age：年龄，分为多个区间：1，18， 25， 35， 45， 50； *
+Occupation：职业，0～20； #### movies 标签列表为：MovieID::Title::Genres
+* Titles：电影名称； * Genres：电影分类</p>
 <h3 id="基于内容的推荐">基于内容的推荐</h3>
 <p>这是一种比较简单的推荐方法，基于内容的推荐方法是非常直接的，它以物品的内容描述信息为依据来做出的推荐，本质上是基于对物品和用户自身的特征或属性的直接分析和计算。例如，假设已知电影A是一部喜剧，而恰巧我们得知某个用户喜欢看喜剧电影，那么我们基于这样的已知信息，就可以将电影A推荐给该用户。具体实现步骤：</p>
 <ul>
@@ -561,10 +578,447 @@ T(u)}{\sum_{u}|R(u)|}
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 提供推荐的接口：def recommend(aim_user, k=20, n=10):</span><br><br><span class="hljs-comment"># 准确率、召回率和覆盖率</span><br>hit = <span class="hljs-number">0</span><br>rec_count = <span class="hljs-number">0</span>     <span class="hljs-comment"># 统计推荐的影片数量， 计算查准率</span><br>test_count = <span class="hljs-number">0</span>    <span class="hljs-comment"># 统计测试集的影片数量， 计算查全率</span><br>all_rec_movies = <span class="hljs-built_in">set</span>()    <span class="hljs-comment"># 统计被推荐出来的影片个数，无重复了，为了计算覆盖率</span><br>item_populatity = <span class="hljs-built_in">dict</span>()   <span class="hljs-comment"># 计算新颖度</span><br><br><span class="hljs-comment"># 先计算每部影片的流行程度</span><br><span class="hljs-keyword">for</span> user, items <span class="hljs-keyword">in</span> trainSet.items():<br>    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> items.keys():<br>        <span class="hljs-keyword">if</span> item <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> item_populatity:<br>            item_populatity[item] = <span class="hljs-number">0</span><br>        item_populatity[item] += <span class="hljs-number">1</span>    <span class="hljs-comment"># 这里统计训练集中每部影片用户观看的总次数，代表每部影片的流行程度</span><br><br><span class="hljs-comment"># 计算评测指标</span><br>ret = <span class="hljs-number">0</span><br>ret_cou = <span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> user, items <span class="hljs-keyword">in</span> trainSet.items():    <span class="hljs-comment"># 这里得保证测试集里面的用户在训练集里面才能推荐</span><br>    test_movies = testSet.get(user, &#123;&#125;)<br>    rec_movies = recommend(user)<br>    <span class="hljs-keyword">for</span> movie, w <span class="hljs-keyword">in</span> rec_movies:<br>        <span class="hljs-keyword">if</span> movie <span class="hljs-keyword">in</span> test_movies:<br>            hit += <span class="hljs-number">1</span>  <span class="hljs-comment">#准确率++</span><br>        all_rec_movies.add(movie)<br>        ret += math.log(<span class="hljs-number">1</span>+item_populatity[movie])<br>        ret_cou += <span class="hljs-number">1</span><br>    rec_count += n<br>    test_count += <span class="hljs-built_in">len</span>(test_movies)<br>    <br>precision = hit / (<span class="hljs-number">1.0</span> * rec_count)<br>recall = hit / (<span class="hljs-number">1.0</span> * test_count) <br>coverage = <span class="hljs-built_in">len</span>(all_rec_movies) / movie_count<br>ret /= ret_cou*<span class="hljs-number">1.0</span><br>    <br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;precisioin = %.4f\nrecall = %.4f\ncoverage = %.4f\npopularity = %.4f&#x27;</span> % (precision, recall, coverage, ret))<br></code></pre></td></tr></table></figure>
 <h4 id="物品协同过滤算法">物品协同过滤算法</h4>
+<ol type="1">
+<li>导入数据， 读取文件得到"用户-电影"的评分数据，
+并且分为训练集和测试</li>
+<li>计算电影之间的相似度</li>
+<li>针对目标用户u， 找到其最相似的k个用户， 产生N个推荐</li>
+<li>产生推荐之后， 通过准确率、召回率和覆盖率等进行评估。</li>
+</ol>
+<p>这一步之前都和基于用户的协同过滤算法一样，都进行了<strong>数据集的训练和测试的划分</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 声明两个字典， 分别是训练集和测试集</span><br>trainSet, testSet = &#123;&#125;, &#123;&#125;<br>trainSet_len, testSet_len = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br>pivot = <span class="hljs-number">0.75</span>    <span class="hljs-comment"># 训练集的比例</span><br><br><span class="hljs-comment"># 遍历data的每一行， 把userId, movidId, rating按照&#123;user: &#123;movidId: rating&#125;&#125;的方式存储， 当然定义一个随机种子进行数据集划分</span><br><span class="hljs-keyword">for</span> ele <span class="hljs-keyword">in</span> data.itertuples():   <span class="hljs-comment"># 遍历行这里推荐用itertuples， 比iterrows会高效很多</span><br>    user, movie, rating = <span class="hljs-built_in">getattr</span>(ele, <span class="hljs-string">&#x27;userId&#x27;</span>), <span class="hljs-built_in">getattr</span>(ele, <span class="hljs-string">&#x27;movieId&#x27;</span>), <span class="hljs-built_in">getattr</span>(ele, <span class="hljs-string">&#x27;rating&#x27;</span>)<br>    <span class="hljs-keyword">if</span> random.random() &lt; pivot:<br>        trainSet.setdefault(user, &#123;&#125;)<br>        trainSet[user][movie] = rating<br>        trainSet_len += <span class="hljs-number">1</span><br>    <span class="hljs-keyword">else</span>:<br>        testSet.setdefault(user, &#123;&#125;)<br>        testSet[user][movie] = rating <br>        testSet_len += <span class="hljs-number">1</span><br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Split trainingSet and testSet success!&#x27;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;TrainSet = %s&#x27;</span> % trainSet_len)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;TestSet = %s&#x27;</span> % testSet_len)<br></code></pre></td></tr></table></figure>
+<p>和<strong>UserItemCF</strong>相似， 这里同样需要建立一个倒排表，
+只不过这里的倒排变成了<strong>{用户：物品}</strong>的倒排表， 如下：</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205145510049.png" srcset="/img/loading.gif" lazyload alt="用户，物品 的倒排表" style="zoom:50%;" /></p>
+<p>我们这里的存储正好是“用户-物品"评分表， 所以现在正好是倒排的形式，
+所以不用刻意建立建立倒排表， 直接遍历trainSet即可， 但是在这之前，
+我们先计算下每部电影的流行程度， 也就是被用户观看的总次数，
+这个在衡量相似度的时候作为分母， 这里的其他逻辑和UserCF基本一致了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 计算每部电影的流行程度, 也就是每部电影被用户看的总次数， 这个衡量相似度的时候作为分母</span><br>movie_popular = &#123;&#125;<br><span class="hljs-keyword">for</span> user, movies <span class="hljs-keyword">in</span> trainSet.items():   <span class="hljs-comment"># 这里的user就是每个用户， movies还是个字典， &#123;movieID: rating&#125;</span><br>    <span class="hljs-keyword">for</span> movie <span class="hljs-keyword">in</span> movies:       <span class="hljs-comment"># 这里的movie就是movieID了</span><br>        <span class="hljs-keyword">if</span> movie <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> movie_popular:     <br>            movie_popular[movie] = <span class="hljs-number">0</span>  <br>        movie_popular[movie] += <span class="hljs-number">1</span><br>movie_count = <span class="hljs-built_in">len</span>(movie_popular)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Total movie number = %d&#x27;</span> % movie_count)<br><span class="hljs-comment"># 下面建立电影相似矩阵</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Build user co-rated movies matrix ...&#x27;</span>)<br>movie_sim_matrix = &#123;&#125;<br><span class="hljs-keyword">for</span> user, movies <span class="hljs-keyword">in</span> trainSet.items():     <span class="hljs-comment"># 注意这个地方与UserCF的不同</span><br>    <span class="hljs-keyword">for</span> m1 <span class="hljs-keyword">in</span> movies:           <span class="hljs-comment"># 对于每个电影， 都得双层遍历</span><br>        <span class="hljs-keyword">for</span> m2 <span class="hljs-keyword">in</span> movies:<br>            <span class="hljs-keyword">if</span> m1 == m2:<br>                <span class="hljs-keyword">continue</span><br>            movie_sim_matrix.setdefault(m1, &#123;&#125;)      <span class="hljs-comment"># 把字典的值设置为字典的形式</span><br>            movie_sim_matrix[m1].setdefault(m2, <span class="hljs-number">0</span>)<br>            movie_sim_matrix[m1][m2] += <span class="hljs-number">1</span>     <span class="hljs-comment"># 这里统计两个电影被同一个用户产生行为的次数， 这个就是余弦相似度的分子</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Build user co-rated movies matrix success!&#x27;</span>)<br><br><span class="hljs-comment"># 下面计算电影之间的相似性</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Calculating movies similarity matrix ...&#x27;</span>)<br><span class="hljs-keyword">for</span> m1, related_movies <span class="hljs-keyword">in</span> movie_sim_matrix.items():<br>    <span class="hljs-keyword">for</span> m2, count <span class="hljs-keyword">in</span> related_movies.items():    <span class="hljs-comment"># 这里面m2是相关电影， count是共同被同一个用户打分的次数</span><br>        <span class="hljs-comment"># 这里注意零向量的处理， 即某电影的用户数为0</span><br>        <span class="hljs-keyword">if</span> movie_popular[m1] == <span class="hljs-number">0</span>  <span class="hljs-keyword">or</span> movie_popular[m2] == <span class="hljs-number">0</span>:<br>            movie_sim_matrix[m1][m2] = <span class="hljs-number">0</span><br>        <span class="hljs-keyword">else</span>:<br>            movie_sim_matrix[m1][m2] = count / math.sqrt(movie_popular[m1] * movie_popular[m2])  <br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Calculate movies similarity matrix success!&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<p><strong>找到相似性最高的K个物品并进行N推荐</strong></p>
+<p>所以下面的代码逻辑是这样： * 首先， 给定我一个用户ID，
+我先拿到这个用户ID目前看过的所有电影， 以防后面推荐重了。<br />
+* 然后从相似性矩阵中，找到与当前用户看的物品的最相近的K个物品 *
+遍历他们看过的电影， 如果当前用户没有看过， 该电影的权重等级累加 *
+最后给所有的电影进行排序， 推荐前n部给当前用户</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 找到最相似的K个产品， 并推荐给n个用户</span><br>k = <span class="hljs-number">20</span><br>n = <span class="hljs-number">10</span><br>aim_user = <span class="hljs-number">10</span>     <span class="hljs-comment"># 目标用户ID</span><br>rank =&#123;&#125;<br>watched_movies = trainSet[aim_user]      <span class="hljs-comment"># 找出目标用户看到电影</span><br><span class="hljs-keyword">for</span> movie, rating <span class="hljs-keyword">in</span> watched_movies.items():<br>    <span class="hljs-comment">#遍历与物品item最相似的前k个产品，获得这些物品及相似分数</span><br>    <span class="hljs-keyword">for</span> related_movie, w <span class="hljs-keyword">in</span> <span class="hljs-built_in">sorted</span>(movie_sim_matrix[movie].items(), key=itemgetter(<span class="hljs-number">1</span>), reverse=<span class="hljs-literal">True</span>)[:k]:<br>        <span class="hljs-comment"># 若该物品用户看过， 跳过</span><br>        <span class="hljs-keyword">if</span> related_movie <span class="hljs-keyword">in</span> watched_movies:<br>            <span class="hljs-keyword">continue</span><br>        <br>        <span class="hljs-comment"># 计算用户user对related_movie的偏好值， 初始化该值为0</span><br>        rank.setdefault(related_movie, <span class="hljs-number">0</span>)<br>        <span class="hljs-comment">#通过与其相似物品对物品related_movie的偏好值相乘并相加。</span><br>        <span class="hljs-comment">#排名的依据—— &gt; 推荐电影与该已看电影的相似度(累计) * 用户对已看电影的评分</span><br>        rank[related_movie] += w * <span class="hljs-built_in">float</span>(rating) <br><span class="hljs-comment"># 产生最后的推荐列表</span><br>rec_movies = <span class="hljs-built_in">sorted</span>(rank.items(), key=itemgetter(<span class="hljs-number">1</span>), reverse=<span class="hljs-literal">True</span>)[:n]  <span class="hljs-comment"># itemgetter(1) 是简洁写法</span><br></code></pre></td></tr></table></figure>
+<p><strong>对模型的性能进行评估</strong></p>
+<p>这部分的内容和基于用户的协同过滤算法一样</p>
+<ol type="1">
+<li>召回率</li>
+<li>准确率</li>
+<li>覆盖率</li>
+<li>新颖率</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 准确率、召回率和覆盖率</span><br>hit = <span class="hljs-number">0</span><br>rec_count = <span class="hljs-number">0</span>     <span class="hljs-comment"># 统计推荐的影片数量， 计算查准率</span><br>test_count = <span class="hljs-number">0</span>    <span class="hljs-comment"># 统计测试集的影片数量， 计算查全率</span><br>all_rec_movies = <span class="hljs-built_in">set</span>()    <span class="hljs-comment"># 统计被推荐出来的影片个数， 无重复了， 为了计算覆盖率</span><br>item_populatity = <span class="hljs-built_in">dict</span>()   <span class="hljs-comment"># 计算新颖度</span><br><span class="hljs-comment"># 先计算每部影片的流行程度</span><br><span class="hljs-keyword">for</span> user, items <span class="hljs-keyword">in</span> trainSet.items():<br>    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> items.keys():<br>        <span class="hljs-keyword">if</span> item <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> item_populatity:<br>            item_populatity[item] = <span class="hljs-number">0</span><br>        item_populatity[item] += <span class="hljs-number">1</span>    <span class="hljs-comment"># 这里统计训练集中每部影片用户观看的总次数， 代表每部影片的流行程度</span><br><span class="hljs-comment"># 计算评测指标</span><br>ret = <span class="hljs-number">0</span><br>ret_cou = <span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> user, items <span class="hljs-keyword">in</span> trainSet.items():    <span class="hljs-comment"># 这里得保证测试集里面的用户在训练集里面才能推荐</span><br>    test_movies = testSet.get(user, &#123;&#125;)<br>    rec_movies = recommend(user)<br>    <span class="hljs-keyword">for</span> movie, w <span class="hljs-keyword">in</span> rec_movies:<br>        <span class="hljs-keyword">if</span> movie <span class="hljs-keyword">in</span> test_movies:<br>            hit += <span class="hljs-number">1</span><br>        all_rec_movies.add(movie)<br>        ret += math.log(<span class="hljs-number">1</span>+item_populatity[movie])<br>        ret_cou += <span class="hljs-number">1</span><br>    rec_count += n<br>    test_count += <span class="hljs-built_in">len</span>(test_movies)<br>precision = hit / (<span class="hljs-number">1.0</span> * rec_count)<br>recall = hit / (<span class="hljs-number">1.0</span> * test_count)<br>coverage = <span class="hljs-built_in">len</span>(all_rec_movies) / movie_count<br>ret /= ret_cou*<span class="hljs-number">1.0</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;precisioin = %.4f\nrecall = %.4f\ncoverage = %.4f\npopularity = %.4f&#x27;</span> % (precision, recall, coverage, ret))<br></code></pre></td></tr></table></figure>
 <h3 id="隐语义模型与矩阵分解"><strong>隐语义模型与矩阵分解</strong></h3>
+<p>参考文档<a
+target="_blank" rel="noopener" href="https://blog.csdn.net/wuzhongqiang/article/details/108173885">https://blog.csdn.net/wuzhongqiang/article/details/108173885</a></p>
+<h4 id="矩阵分解算法">矩阵分解算法</h4>
+<p><strong>矩阵分解算法：BacisSVD, RSVD, ASVD, SVD++</strong></p>
+<p>隐语义模型其实就是在<strong>想办法基于这个评分矩阵去找到上面例子中的那两个矩阵，
+也就是用户兴趣和物品的隐向量表达，
+然后就把这个评分矩阵分解成Q和P两个矩阵乘积的形式，
+这时候就可以基于这两个矩阵去预测某个用户对某个物品的评分了。
+然后基于这个评分去进行推荐</strong>。</p>
+<ol type="1">
+<li>首先， 先初始化用户矩阵P和物品矩阵Q，
+P的维度是<code>[users_num, F]</code>,
+Q的维度是<code>[item_nums, F]</code>， 这个F是隐向量的维度。
+也就是通过隐向量的方式把用户的兴趣和F的特点关联了起来。
+初始化这两个矩阵的方式很多， 但根据经验，
+随机数需要和<code>1/sqrt(F)</code>成正比。</li>
+<li>有了两个矩阵之后， 我就可以根据用户已经打分的数据去更新参数，
+这就是训练模型的过程， 方法很简单， 就是遍历用户， 对于每个用户，
+遍历它打分的电影，这样就拿到了该用户和电影的隐向量，
+然后两者相乘加上偏置就是预测的评分， 这时候与真实评分有个差距，
+根据上面的梯度下降就可以进行参数的更新</li>
+<li>训练好模型之后， 就可以进行预测评分， 根据预测的评分对用户推荐</li>
+<li>评估模型， 评估方式还是协同过滤里面的四种评估标准</li>
+</ol>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205164625576.png" srcset="/img/loading.gif" lazyload
+alt="矩阵分解示意图" />
+<figcaption aria-hidden="true">矩阵分解示意图</figcaption>
+</figure>
+<p>矩阵分解算法将m × n维的共享矩阵R分解成m × k维的用户矩阵U和k ×
+n维的物品矩阵V相乘的形式。 其中m是用户数量， n是物品数量，
+k是隐向量维度， 也就是隐含特征个数，
+只不过这里的隐含特征变得不可解释了， 即我们不知道具体含义了，
+要模型自己去学。</p>
+<p>最常用的方法是<strong>特征值分解(EVD)</strong>或者<strong>奇异值分解(SVD）</strong>，EVD要求分解的矩阵是方阵，
+显然用户-物品矩阵不满足这个要求</p>
+<h4 id="svd矩阵分解算法">SVD矩阵分解算法</h4>
+<p>这个算法的思路就是深度学习的思路</p>
+<ol type="1">
+<li>首先先初始化这两个矩阵</li>
+<li>把用户评分矩阵里面已经评过分的那些样本当做训练集的<code>label</code>，
+把对应的用户和物品的隐向量当做features，
+这样就会得到<code>(features, label)</code>相当于训练集</li>
+<li>通过两个隐向量乘积得到预测值<code>pred</code></li>
+<li>根据<code>label</code>和<code>pred</code>计算损失</li>
+<li><strong>然后反向传播，
+通过梯度下降的方式，更新两个隐向量的值</strong></li>
+<li>未评过分的那些样本当做测试集，
+通过两个隐向量就可以得到测试集的<code>label</code>值</li>
+<li>这样就填充完了矩阵， 下一步就可以进行推荐了</li>
+</ol>
+<p>有个问题就是当参数很多的时候， 就是两个矩阵很大的时候，
+往往容易陷入过拟合的困境， 这时候，
+就需要在<strong>目标函数上面加上正则化的损失， 就变成了RSVD</strong></p>
+<p>读取数据和对测试数据和训练数据的划分的步骤和之前没有差别具体的步骤可以<strong>看之前的协同过滤算法</strong></p>
+<p><strong>建立SVD模型</strong></p>
+<p>这里按照矩阵分解法初始化隐特征矩阵，转化为一个最优化问题</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, rating_data, F=<span class="hljs-number">5</span>, alpha=<span class="hljs-number">0.1</span>, lmbda=<span class="hljs-number">0.1</span>, max_iter=<span class="hljs-number">100</span></span>):<br>        self.F = F           <span class="hljs-comment"># 这个表示隐向量的维度</span><br>        self.P = <span class="hljs-built_in">dict</span>()          <span class="hljs-comment">#  用户矩阵P  大小是[users_num, F]</span><br>        self.Q = <span class="hljs-built_in">dict</span>()     <span class="hljs-comment"># 物品矩阵Q  大小是[item_nums, F]</span><br>        self.bu = <span class="hljs-built_in">dict</span>()   <span class="hljs-comment"># 用户偏差系数</span><br>        self.bi = <span class="hljs-built_in">dict</span>()    <span class="hljs-comment"># 物品偏差系数</span><br>        self.mu = <span class="hljs-number">0.0</span>        <span class="hljs-comment"># 全局偏差系数</span><br>        self.alpha = alpha   <span class="hljs-comment"># 学习率</span><br>        self.lmbda = lmbda    <span class="hljs-comment"># 正则项系数</span><br>        self.max_iter = max_iter    <span class="hljs-comment"># 最大迭代次数</span><br>        self.rating_data = rating_data <span class="hljs-comment"># 评分矩阵</span><br>        <br>        <span class="hljs-comment"># 初始化矩阵P和Q, 方法很多， 一般用随机数填充， 但随机数大小有讲究， 根据经验， 随机数需要和1/sqrt(F)成正比</span><br>        cnt = <span class="hljs-number">0</span>    <span class="hljs-comment"># 统计总的打分数， 初始化mu用</span><br>        <span class="hljs-keyword">for</span> user, items <span class="hljs-keyword">in</span> self.rating_data.items():<br>            self.P[user] = [random.random() / math.sqrt(self.F)  <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, F)]<br>            self.bu[user] = <span class="hljs-number">0</span><br>            cnt += <span class="hljs-built_in">len</span>(items) <br>            <span class="hljs-keyword">for</span> item, rating <span class="hljs-keyword">in</span> items.items():<br>                <span class="hljs-keyword">if</span> item <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> self.Q:<br>                    self.Q[item] = [random.random() / math.sqrt(self.F) <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, F)]<br>                    self.bi[item] = <span class="hljs-number">0</span><br>        self.mu /= cnt<br></code></pre></td></tr></table></figure>
+<p>训练的过程：采用的是梯度下降法进行更新参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 有了矩阵之后， 就可以进行训练, 这里使用随机梯度下降的方式训练参数P和Q</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">for</span> step <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(self.max_iter):<br>            <span class="hljs-keyword">for</span> user, items <span class="hljs-keyword">in</span> self.rating_data.items():<br>                <span class="hljs-keyword">for</span> item, rui <span class="hljs-keyword">in</span> items.items():<br>                    rhat_ui = self.predict(user, item)   <span class="hljs-comment"># 得到预测评分</span><br>                    <span class="hljs-comment"># 计算误差</span><br>                    e_ui = rui - rhat_ui<br>                    <br>                    self.bu[user] += self.alpha * (e_ui - self.lmbda * self.bu[user])<br>                    self.bi[item] += self.alpha * (e_ui - self.lmbda * self.bi[item])<br>                    <span class="hljs-comment"># 随机梯度下降更新梯度</span><br>                    <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, self.F):<br>                        self.P[user][k] += self.alpha * (e_ui*self.Q[item][k] - self.lmbda * self.P[user][k])<br>                        self.Q[item][k] += self.alpha * (e_ui*self.P[user][k] - self.lmbda * self.Q[item][k])<br>                    <br>            self.alpha *= <span class="hljs-number">0.1</span>    <span class="hljs-comment"># 每次迭代步长要逐步缩小</span><br></code></pre></td></tr></table></figure>
+<p>根据此产生推荐的结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 这里产生推荐列表， 遍历物品列表， 如果用户看了， 那么就跳过， 否则， 预测用户对该电影的打分， 然后记录， 最后排名</span><br>movie_list = []<br><span class="hljs-keyword">for</span> user, items <span class="hljs-keyword">in</span> trainSet.items():<br>    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> items.keys():<br>        <span class="hljs-keyword">if</span> item <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> movie_list:<br>            movie_list.append(item)<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">recommend</span>(<span class="hljs-params">aim_user, n=<span class="hljs-number">10</span></span>):<br>    rank = &#123;&#125;<br>    watched_movies = trainSet[aim_user] <span class="hljs-comment"># 目标用户看过的电影</span><br>    <br>    <span class="hljs-keyword">for</span> movie <span class="hljs-keyword">in</span> movie_list:<br>        <span class="hljs-keyword">if</span> movie <span class="hljs-keyword">in</span> watched_movies:<br>            <span class="hljs-keyword">continue</span>      <br>        <span class="hljs-comment"># 如果当前用户没看过， 就预测打分， 并保存到rank</span><br>        rank[movie] = basicsvd.predict(aim_user, movie)<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">sorted</span>(rank.items(), key=<span class="hljs-keyword">lambda</span> x: x[<span class="hljs-number">1</span>], reverse=<span class="hljs-literal">True</span>)[:n] <br></code></pre></td></tr></table></figure>
+<p>最后进行模型结果的评估：准确率、召回率、覆盖率</p>
+<h4 id="rsvd矩阵分解算法">RSVD矩阵分解算法</h4>
+<p>在目标函数中加入正则化参数（加入惩罚项）, 对于目标函数来说, <span
+class="math inline">\(Q\)</span> 矩阵和 <span
+class="math inline">\(V\)</span> 矩阵中的所有值都是变量,
+这些变量在不知道哪个变量会带来过拟合的情况下，对所有变量都进行惩罚:
+<span class="math display">\[
+\begin{aligned}
+\mathrm{SSE} &amp; =\frac{1}{2} \sum_{\mathrm{u}, \mathrm{i}}
+\mathrm{e}_{\mathrm{ui}}^2+\frac{1}{2} \lambda
+\sum_{\mathrm{u}}\left|\mathrm{p}_{\mathrm{u}}\right|^2+\frac{1}{2}
+\lambda \sum_{\mathrm{i}}\left|\mathrm{q}_{\mathrm{i}}\right|^2 \\
+&amp; =\frac{1}{2} \sum_{\mathrm{u}, \mathrm{i}}
+\mathrm{e}_{\mathrm{ui}}^2+\frac{1}{2} \lambda \sum_{\mathrm{u}}
+\sum_{\mathrm{k}=0}^{\mathrm{K}} \mathrm{p}_{\mathrm{u},
+\mathrm{k}}^2+\frac{1}{2} \lambda \sum_{\mathrm{i}}
+\sum_{\mathrm{k}=0}^{\mathrm{K}} \mathrm{q}_{\mathrm{k}, \mathrm{i}}^2
+\end{aligned}
+\]</span></p>
+<p>这时候目标函数对参数的导数就发生了变化, 前面的那块没变,
+无非就是加入了后面的梯度。所以此时对 <span
+class="math inline">\(\mathrm{p}_{\mathrm{u}, \mathrm{k}}\)</span> 求导,
+得到: <span class="math display">\[
+\begin{aligned}
+&amp; \frac{\partial}{\partial p_{u, k}}
+\mathrm{SSE}=-\mathrm{e}_{\mathrm{ui}} \mathrm{q}_{\mathrm{k},
+\mathrm{i}}+\lambda \mathrm{p}_{\mathrm{u}, \mathrm{k}} \\
+&amp; \frac{\partial}{\partial \mathrm{q}_{\mathrm{i}, \mathrm{k}}}
+\mathrm{SSE}=-\mathrm{e}_{\mathrm{u}, \mathrm{i}}
+\mathrm{p}_{\mathrm{u}, \mathrm{k}}+\lambda \mathrm{q}_{\mathrm{i},
+\mathrm{k}}
+\end{aligned}
+\]</span></p>
+<p>这样, 正则化之后, 梯度的更新公式就变成了: <span
+class="math display">\[
+\begin{aligned}
+p_{\mathrm{u}, \mathrm{k}} &amp; =\mathrm{p}_{\mathrm{u},
+\mathrm{k}}+\eta\left(\mathrm{e}_{\mathrm{ui}} \mathrm{q}_{\mathrm{k},
+\mathrm{i}}-\lambda \mathrm{p}_{\mathrm{u}, \mathrm{k}}\right) \\
+\mathrm{q}_{\mathrm{k}, \mathrm{i}} &amp; =\mathrm{q}_{\mathrm{k},
+\mathrm{i}}+\eta\left(\mathrm{e}_{\mathrm{ui}} \mathrm{p}_{\mathrm{u},
+\mathrm{k}}-\lambda \mathrm{q}_{\mathrm{i}, \mathrm{k}}\right)
+\end{aligned}
+\]</span></p>
+<h4 id="svd矩阵分解">SVD++矩阵分解</h4>
+<p>SVD++， 它将<strong>用户历史评分的物品加入到了LFM模型里</strong></p>
+<p>之前的矩阵分解是只分解的当前的共现矩阵， 比如某个用户<span
+class="math inline">\(u\)</span>对于某个物品<span
+class="math inline">\(i\)</span>的评分， 就单纯的分解成用户<span
+class="math inline">\(u\)</span>的隐向量与物品<span
+class="math inline">\(i\)</span>的隐向量乘积再加上偏置项，这时候注意并没有考虑该用户评分的历史物品</p>
+<p>这个式子是预测用户 <span class="math inline">\(\mathrm{u}\)</span>
+对于物品 <span class="math inline">\(\mathrm{i}\)</span> 的打分, <span
+class="math inline">\(\mathrm{N}(\mathrm{u})\)</span> 表示用户 <span
+class="math inline">\(\mathrm{u}\)</span> 打过分的历史物品, <span
+class="math inline">\(\mathrm{w}_{\mathrm{ij}}\)</span> 表示物品 <span
+class="math inline">\(\mathrm{ij}\)</span> 的相似度,
+当然这里的这个相似度不再是ItemCF那样, 通过向量计算的, 而是想向LFM那样,
+让模型自己学出这个参数来, 那么相应的就可以通过优化的思想： <span
+class="math display">\[
+\mathrm{SSE}=\sum_{(\mathrm{u}, \mathrm{i}) \in \text { Train
+}}\left(\mathrm{r}_{\mathrm{ui}}-\sum_{\mathrm{j} \in
+\mathrm{N}(\mathrm{u})} \mathrm{w}_{\mathrm{ij}}
+\mathrm{r}_{\mathrm{uj}}\right)^2+\lambda \mathrm{w}_{\mathrm{ij}}^2
+\]</span></p>
+<p>但是呢, 这么模型有个问题, 就是 <span
+class="math inline">\(\mathrm{w}\)</span> 比较稠密, 存储需要很大的空间,
+因为如果有 <span class="math inline">\(\mathrm{n}\)</span> 个物品,
+那么模型的参数就是 <span class="math inline">\(\mathrm{n}^2\)</span>,
+参数一多, 就容易造成过拟合。所以Koren提出应该对 <span
+class="math inline">\(\mathrm{w}\)</span> 矩阵进行分解, 将参数降到了
+<span class="math inline">\(2 * \mathrm{n} * \mathrm{~F}\)</span> :
+<span class="math display">\[
+\hat{\mathrm{r}}_{\mathrm{ui}}=\frac{1}{\sqrt{|\mathrm{N}(\mathrm{u})|}}
+\sum_{\mathrm{j} \in \mathrm{N}(\mathrm{u})}
+\mathrm{x}_{\mathrm{i}}^{\mathrm{T}}
+\mathrm{y}_{\mathrm{j}}=\frac{1}{\sqrt{|\mathrm{N}(\mathrm{u})|}}
+\mathrm{x}_{\mathrm{i}}^{\mathrm{T}} \sum_{\mathrm{j} \in
+\mathrm{N}(\mathrm{u})} \mathrm{y}_{\mathrm{j}}
+\]</span></p>
+<p>相当于用 <span
+class="math inline">\(\mathrm{x}_{\mathrm{i}}^{\mathrm{T}}
+\mathrm{y}_{\mathrm{j}}\)</span> 代替了 <span
+class="math inline">\(\mathrm{w}_{\mathrm{ij}}\)</span>, 这里的 <span
+class="math inline">\(\mathrm{x}_{\mathrm{i}},
+\mathrm{y}_{\mathrm{j}}\)</span> 是两个 <span
+class="math inline">\(\mathrm{F}\)</span> 维的向量。有没有发现在这里,
+就出现了点 <span class="math inline">\(\mathrm{FM}\)</span>
+的改进身影了。这里其实就是又对物品 <span
+class="math inline">\(\mathrm{i}\)</span> 和某个用户 <span
+class="math inline">\(\mathrm{u}\)</span>
+买过的历史物品又学习一波隐向量, 这次是 <span
+class="math inline">\(\mathrm{F}\)</span> 维, 为了衡量出物品 <span
+class="math inline">\(\mathrm{i}\)</span> 和历史物品 <span
+class="math inline">\(\mathrm{j}\)</span> 之间的相似性来。这时候,
+参数的数量降了下来,
+并同时也考虑进来了用户的历史物品记录。所以这个和之前的LFM相加就得到了：
+<span class="math display">\[
+\hat{r}_{u i}=\mu+b_u+b_i+p_u^T \cdot q_i+\frac{1}{\sqrt{|N(u)|}} x_i^T
+\sum_{j \in N(u)} y_j
+\]</span></p>
 <h3 id="fmffm模型"><strong>FM+FFM模型</strong></h3>
-<h3 id="neuralcf-模型"><strong>NeuralCF 模型</strong></h3>
-<h2 id="精排rank">精排Rank</h2>
+<p>基本的框架</p>
+<p>因子分解机(Factorization Machine, FM)和域感知因子分解机(Field-aware
+Factorization Machine, FFM)</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205170756448.png" srcset="/img/loading.gif" lazyload alt="FM+FFM发展历程" style="zoom: 50%;" /></p>
+<h4 id="fm算法与使用">FM算法与使用</h4>
+<p>在逻辑回归里面, 如果想得到组合特征,
+往往需要人工在特征工程的时候手动的组合特征, 然后再进行篮选,
+但这个比较低效, 第一个是这个会有经验的成分在里面,
+第二个是可能会比较玄学, 不太好找到有用的组合特征。于是乎,
+采用POLY2模型进行特征的“暴力”组合就成了可行的选择。POLY2是二阶多项式模型,
+数学形式如下: <span class="math display">\[
+y=w_0+\sum_{i=1}^n w_i x_i+\sum_{i=1}^{n-1} \sum_{i+1}^n w_{i j} x_i x_j
+\]</span></p>
+<p>看到这个基本上不用怎么解释就明白了，这个模型对所有的特征进行了两两的交叉，然后又算得了一个权重，这个其实和逻辑回归依然是超级像的，如果我们在逻辑回归中，做特征工程的时候，也可以自己做出这样的一些特征来</p>
+<p><strong>POLY2缺点：</strong>任意两个参数相互独立，
+这时候如果数据非常稀疏， 再要训练这么多参数， 无疑是非常困难的，
+最终模型也不会很好。POLY2模型虽然是引入了特征的二阶交叉组合，
+但是由于其模型参数， 稀疏场景受限的问题使得FM登场了</p>
+<p><strong>FM算法思路：</strong></p>
+<p>对于稀疏的评分矩阵， 我们有办法分解成两个向量相乘的形式，
+那么为何不把这种思想用到解决POLY2的缺陷上呢？
+无非就是评分矩阵换成POLY2后面的W矩阵(所有二次项系数 <span
+class="math inline">\(w_{ij}\)</span>组成的）就是把W矩阵进行分解成两个矩阵相乘的方式</p>
+<p>对于二次项参数 <span
+class="math inline">\(\mathrm{w}_{\mathrm{ij}}\)</span> 组成的对称阵
+<span class="math inline">\(\mathrm{W}\)</span> (为了方面说明 <span
+class="math inline">\(\mathrm{FM}\)</span> 的由来,
+对角元素设置为正实数)，我们就可以分解成 <span
+class="math inline">\(\mathrm{V}^{\mathrm{T}} \mathrm{V}\)</span>
+的形式， <span class="math inline">\(\mathrm{V}\)</span>的第 <span
+class="math inline">\(j\)</span> 列 <span
+class="math inline">\(v_j\)</span> 表示的是第 <span
+class="math inline">\(j\)</span> 维特征 <span
+class="math inline">\(x_j\)</span> 的隐向量。换句话说，特征分量 <span
+class="math inline">\(x_i\)</span> 和 <span
+class="math inline">\(x_j\)</span> 的交叉系数就等于 <span
+class="math inline">\(x_i\)</span> 和 <span
+class="math inline">\(x_j\)</span> 对应的隐向量的内积，即每个参数 <span
+class="math inline">\(\mathrm{w}_{\mathrm{ij}}=&lt;\mathrm{v}_{\mathrm{i}},
+\mathrm{v}_{\mathrm{j}}&gt;\)</span>, 这就是 <span
+class="math inline">\(F M\)</span> 模型的核心思想: <span
+class="math display">\[
+\mathrm{W}^{\star}=\left[\begin{array}{cccc}
+\omega_{11} &amp; \omega_{12} &amp; \ldots &amp; \omega_{1 \mathrm{n}}
+\\
+\omega_{21} &amp; \omega_{22} &amp; \ldots &amp; \omega_{2 \mathrm{n}}
+\\
+\ldots &amp; \ldots &amp; \ldots &amp; \ldots \\
+\omega_{\mathrm{n} 1} &amp; \omega_{\mathrm{n} 2} &amp; \ldots &amp;
+\omega_{\mathrm{nn}}
+\end{array}\right]=\mathrm{V}^{\mathrm{T}}
+\mathrm{V}=\left[\begin{array}{c}
+\mathrm{V}_1 \\
+\mathrm{~V}_2 \\
+\ldots \\
+\mathrm{V}_{\mathrm{n}}
+\end{array}\right] \times\left[\mathrm{V}_1, \mathrm{~V}_2, \ldots,
+\mathrm{V}_{\mathrm{n}}\right]=\left[\begin{array}{cccc}
+\mathrm{v}_{11} &amp; \mathrm{v}_{12} &amp; \ldots &amp; \mathrm{v}_{1
+\mathrm{k}} \\
+\mathrm{v}_{21} &amp; \mathrm{v}_{22} &amp; \ldots &amp; \mathrm{v}_{2
+\mathrm{k}} \\
+\ldots &amp; \ldots &amp; \ldots &amp; \ldots \\
+\mathrm{v}_{\mathrm{n} 1} &amp; \mathrm{v}_{\mathrm{n} 2} &amp; \ldots
+&amp; \mathrm{v}_{\mathrm{nk}}
+\end{array}\right] \times\left[\begin{array}{c}
+\mathrm{v}_{11} \\
+\mathrm{v}_{12} \\
+\ldots \\
+\mathrm{v}_{1 \mathrm{k}}
+\end{array}\right.
+\]</span></p>
+<p>这时候, 为了求 <span class="math inline">\(w_{i j}\)</span>,
+我们需要求出特征分量 <span class="math inline">\(x_i\)</span> 的辅助向量
+<span class="math inline">\(v_i=\left(v_{i 1}, v_{i 2}, \ldots v_{i
+k}\right), v_j=\left(v_{j 1}, v_{j 2}, \ldots v_{j k}\right)\)</span>
+所以, 有了这样的一个铺垫, 就可以写出FM的模型方程了，就是POLY2 的基础上,
+把 <span class="math inline">\(\mathrm{w}_{\mathrm{ij}}\)</span>
+写成了两个隐向量相乘的方式。 <span class="math display">\[
+\hat{y}(X)=\omega_0+\sum_{i=1}^n \omega_i x_i+\sum_{i=1}^{n-1}
+\sum_{j=i+1}^n&lt;v_i, v_j&gt;x_i x_j
+\]</span>
+FM的公式是一个通用的拟合方程，可以采用不同的损失函数用于解决regression、classification等问题，比如可以采用MSE（Mean
+Square Error）loss function来求解回归问题，也可以采用Hinge/Cross-Entropy
+loss来求解分类问题。</p>
+<p>安装相关的包
+<code>pip install git+https://github.com/coreylynch/pyFM</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 导入包</span><br><span class="hljs-keyword">from</span> pyfm <span class="hljs-keyword">import</span> pylibfm<br><span class="hljs-keyword">from</span> sklearn.feature_extraction <span class="hljs-keyword">import</span> DictVectorizer<br><span class="hljs-keyword">from</span> sklearn.preprocessing <span class="hljs-keyword">import</span> OneHotEncoder<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br></code></pre></td></tr></table></figure>
+<p>使用这个类最简单的方式就是把数据存成字典的形式，
+然后用DictVectorizer进行one-hot</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">train = [<br>    &#123;<span class="hljs-string">&#x27;user&#x27;</span>: <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-string">&#x27;item&#x27;</span>: <span class="hljs-string">&#x27;5&#x27;</span>, <span class="hljs-string">&#x27;age&#x27;</span>: <span class="hljs-number">19</span>&#125;,<br>    &#123;<span class="hljs-string">&#x27;user&#x27;</span>: <span class="hljs-string">&#x27;2&#x27;</span>, <span class="hljs-string">&#x27;item&#x27;</span>: <span class="hljs-string">&#x27;43&#x27;</span>, <span class="hljs-string">&#x27;age&#x27;</span>: <span class="hljs-number">33</span>&#125;,<br>    &#123;<span class="hljs-string">&#x27;user&#x27;</span>: <span class="hljs-string">&#x27;3&#x27;</span>, <span class="hljs-string">&#x27;item&#x27;</span>: <span class="hljs-string">&#x27;20&#x27;</span>, <span class="hljs-string">&#x27;age&#x27;</span>: <span class="hljs-number">55</span>&#125;,<br>    &#123;<span class="hljs-string">&#x27;user&#x27;</span>: <span class="hljs-string">&#x27;4&#x27;</span>, <span class="hljs-string">&#x27;item&#x27;</span>: <span class="hljs-string">&#x27;10&#x27;</span>, <span class="hljs-string">&#x27;age&#x27;</span>: <span class="hljs-number">20</span>&#125;<br>]<br>v = DictVectorizer()<br>X = v.fit_transform(train)      <span class="hljs-comment"># 本身被压缩了</span><br>X.toarray()<br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205175255366.png" srcset="/img/loading.gif" lazyload alt="one-hot形式" style="zoom:50%;" /></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">y = np.repeat(<span class="hljs-number">1</span>, X.shape[<span class="hljs-number">0</span>])<br>fm = pylibfm.FM()<br>fm.fit(X, y)<br></code></pre></td></tr></table></figure>
+<p>进行测试</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 测试集</span><br>test = v.transform(&#123;<span class="hljs-string">&#x27;user&#x27;</span>: <span class="hljs-string">&quot;1&quot;</span>, <span class="hljs-string">&#x27;item&#x27;</span>: <span class="hljs-string">&quot;10&quot;</span>, <span class="hljs-string">&#x27;age&#x27;</span>: <span class="hljs-number">24</span>&#125;)<br>fm.predict(test)<br></code></pre></td></tr></table></figure>
+<p>给出另一个例子说明：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#加载数据集</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">loadData</span>():<br>    rating_data=&#123;<span class="hljs-number">1</span>: &#123;<span class="hljs-string">&#x27;A&#x27;</span>: <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;B&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;C&#x27;</span>: <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;D&#x27;</span>: <span class="hljs-number">4</span>&#125;,<br>           <span class="hljs-number">2</span>: &#123;<span class="hljs-string">&#x27;A&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;B&#x27;</span>: <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;C&#x27;</span>: <span class="hljs-number">2</span>, <span class="hljs-string">&#x27;D&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;E&#x27;</span>: <span class="hljs-number">3</span>&#125;,<br>           <span class="hljs-number">3</span>: &#123;<span class="hljs-string">&#x27;A&#x27;</span>: <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;B&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;C&#x27;</span>: <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;D&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;E&#x27;</span>: <span class="hljs-number">5</span>&#125;,<br>           <span class="hljs-number">4</span>: &#123;<span class="hljs-string">&#x27;A&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;B&#x27;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&#x27;C&#x27;</span>: <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;D&#x27;</span>: <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;E&#x27;</span>: <span class="hljs-number">4</span>&#125;,<br>           <span class="hljs-number">5</span>: &#123;<span class="hljs-string">&#x27;A&#x27;</span>: <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;B&#x27;</span>: <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;C&#x27;</span>: <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;D&#x27;</span>: <span class="hljs-number">2</span>, <span class="hljs-string">&#x27;E&#x27;</span>: <span class="hljs-number">1</span>&#125;<br>          &#125;<br>    <span class="hljs-keyword">return</span> rating_data<br>    <br>rating_data = loadData()<br>df = pd.DataFrame(rating_data).T<br>df = df.stack().reset_index()<br>df.columns = [<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-string">&#x27;item&#x27;</span>, <span class="hljs-string">&#x27;rating&#x27;</span>]<br>df[<span class="hljs-string">&#x27;user&#x27;</span>] = df[<span class="hljs-string">&#x27;user&#x27;</span>].astype(<span class="hljs-string">&#x27;str&#x27;</span>)<br><br>item_map = &#123;item: <span class="hljs-built_in">str</span>(idx) <span class="hljs-keyword">for</span> idx, item <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(<span class="hljs-built_in">set</span>(df[<span class="hljs-string">&#x27;item&#x27;</span>]))&#125;<br>df[<span class="hljs-string">&#x27;item&#x27;</span>] = df[<span class="hljs-string">&#x27;item&#x27;</span>].<span class="hljs-built_in">map</span>(item_map)<br>train_data = df[[<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-string">&#x27;item&#x27;</span>]]<br>y = df[<span class="hljs-string">&#x27;rating&#x27;</span>]<br>one = OneHotEncoder()<br>x = one.fit_transform(train_data)<br><br><span class="hljs-comment"># 建立模型</span><br>fm = pylibfm.FM(num_factors=<span class="hljs-number">10</span>, num_iter=<span class="hljs-number">100</span>, verbose=<span class="hljs-literal">True</span>, task=<span class="hljs-string">&#x27;regression&#x27;</span>, initial_learning_rate=<span class="hljs-number">0.001</span>, learning_rate_schedule=<span class="hljs-string">&#x27;optimal&#x27;</span>)<br>fm.fit(x, y)<br><br><span class="hljs-comment"># 测试集</span><br>test = &#123;<span class="hljs-string">&#x27;user&#x27;</span>: <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-string">&#x27;item&#x27;</span>: <span class="hljs-string">&#x27;4&#x27;</span>&#125;<br>x_test = one.transform(pd.DataFrame(test, index=[<span class="hljs-number">0</span>]))<br><br>pred_rating = fm.predict(x_test)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;FM的预测评分:&#123;&#125;&#x27;</span>.<span class="hljs-built_in">format</span>(pred_rating[<span class="hljs-number">0</span>]))<br></code></pre></td></tr></table></figure>
+<h4 id="fm算法的回归与分类任务">FM算法的回归与分类任务</h4>
+<p><strong>回归任务</strong></p>
+<p>数据集的下载地址: <a
+target="_blank" rel="noopener" href="http://www.grouplens.org/system/files/ml-100k.zip">http://www.grouplens.org/system/files/ml-100k.zip</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 导入包</span><br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">from</span> sklearn.feature_extraction <span class="hljs-keyword">import</span> DictVectorizer<br><span class="hljs-keyword">from</span> pyfm <span class="hljs-keyword">import</span> pylibfm<br><br><span class="hljs-comment"># 导入数据</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">loadData</span>(<span class="hljs-params">filename, path=<span class="hljs-string">&#x27;ml-100k/&#x27;</span></span>):<br>    data = []<br>    y = []<br>    users = <span class="hljs-built_in">set</span>()<br>    items = <span class="hljs-built_in">set</span>()<br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(path+filename) <span class="hljs-keyword">as</span> f:<br>        <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> f:<br>            (user, movieid, rating, ts) = line.split(<span class="hljs-string">&#x27;\t&#x27;</span>)<br>            data.append(&#123;<span class="hljs-string">&#x27;user_id&#x27;</span>: <span class="hljs-built_in">str</span>(user), <span class="hljs-string">&#x27;movie_id&#x27;</span>: <span class="hljs-built_in">str</span>(movieid)&#125;)<br>            y.append(<span class="hljs-built_in">float</span>(rating))<br>            users.add(user)<br>            items.add(movieid)<br>    <br>    <span class="hljs-keyword">return</span> (data, np.array(y), users, items)<br></code></pre></td></tr></table></figure>
+<p>数据类型：</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205181713518.png" srcset="/img/loading.gif" lazyload alt="数据类型展示" style="zoom:50%;" /></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 下面需要转成one-hot</span><br>v = DictVectorizer()<br>X_train = v.fit_transform(train_data)<br>X_test = v.transform(test_data)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 建立FM模型 </span><br>fm = pylibfm.FM(num_factors=<span class="hljs-number">10</span>, num_iter=<span class="hljs-number">100</span>, verbose=<span class="hljs-literal">True</span>, task=<span class="hljs-string">&#x27;regression&#x27;</span>, initial_learning_rate=<span class="hljs-number">0.001</span>, learning_rate_schedule=<span class="hljs-string">&#x27;optimal&#x27;</span>)<br><br><span class="hljs-comment"># 模型训练</span><br>fm.fit(X_train, y_train)<br></code></pre></td></tr></table></figure>
+<p>FM的具体参数函数如下: 这里面重点需要设置的已标出(详细的可以参考源码)
+* <strong>num_factors</strong>: 隐向量的维度， 也就是k *
+<strong>num_iter</strong>: 迭代次数， 由于使用的SGD， 随机梯度下降，
+要指明迭代多少个epoch * k0, k1: k0表示是否用偏置（看FM的公式)，
+k1表示是否要第二项， 就是单个特征的， 这俩默认True * init_stdev:
+初始化隐向量时候的方差, 默认0.01 * <strong>validation_size</strong>:
+验证集的比例， 默认0.01 * learning_rate_schedule: 学习率衰减方式，
+有constant, optimal, 和invscaling三种方式， 具体公式看源码 *
+<strong>initial_learning_rate</strong>: 初始学习率， 默认0.01 *
+power_t， t0: 逆缩放学习率的指数，最优学习率分母常数，
+这两个和上面学习率衰减方式的计算有关 * <strong>task</strong>:
+分类或者回归任务， 要指明 * verbose: 是否打印当前的迭代次数， 训练误差 *
+shuffle_training: 是否在学习之前打乱训练集 * seed: 随机种子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 评估</span><br>preds = fm.predict(X_test)<br><br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> mean_squared_error<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;FM MSE: %.4f&#x27;</span> % mean_squared_error(y_test, preds))<br></code></pre></td></tr></table></figure>
+<p><strong>分类任务</strong></p>
+<p>创建一个随机的分类数据集并对数据集进行测试集和验证集的划分</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> make_classification   <span class="hljs-comment"># 创建一个随机的分类数据集</span><br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> log_loss<br><br>X, y = make_classification(n_samples=<span class="hljs-number">1000</span>, n_features=<span class="hljs-number">100</span>, n_clusters_per_class=<span class="hljs-number">1</span>) <span class="hljs-comment"># 1000个训练样本， 100维的数据</span><br>data = [&#123;v: k <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">in</span> <span class="hljs-built_in">dict</span>(<span class="hljs-built_in">zip</span>(i, <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(i)))).items()&#125; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> X]<br>x_train, x_test, y_train, y_test = train_test_split(data, y, test_size=<span class="hljs-number">0.1</span>, random_state=<span class="hljs-number">42</span>)<br></code></pre></td></tr></table></figure>
+<p>对数据集进行one-hot的处理</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">v = DictVectorizer()<br>x_train = v.fit_transform(x_train)<br>x_test = v.transform(x_test)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 建立模型</span><br>fm = pylibfm.FM(num_factors=<span class="hljs-number">50</span>, num_iter=<span class="hljs-number">10</span>, verbose=<span class="hljs-literal">True</span>, task=<span class="hljs-string">&#x27;classification&#x27;</span>, initial_learning_rate=<span class="hljs-number">0.0001</span>, learning_rate_schedule=<span class="hljs-string">&#x27;optimal&#x27;</span>)<br><br>fm.fit(x_train, y_train)<br>y_pre = fm.predict(x_test)<br><br><span class="hljs-comment"># 评估模型</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;validation log loss: %.4f&#x27;</span> % log_loss(y_test, y_pre))<br></code></pre></td></tr></table></figure>
+<h4 id="ffm算法介绍与使用">FFM算法介绍与使用</h4>
+<p>FFM是基于FM进行的修改，<strong>FFM模型引入了特征域感知(filed-aware)</strong>
+，我们先回顾一下FM模型公式： <span class="math display">\[
+\hat{y}(X)=\omega_0+\sum_{i=1}^n \omega_i x_i+\sum_{i=1}^{n-1}
+\sum_{j=i+1}^n&lt;v_i, v_j&gt;x_i x_j
+\]</span> FFM就是一个特征对应多个隐向量。
+这样在与不同域(类）里面特征交叉的时候，
+用相应的隐向量去交叉计算权重，这样做的好处是学习隐向量的时候只需要考虑相应的域的数据，
+与不同类的特征进行关联采用不同的隐向量，
+这和不同类特征的内在差异也比较相符。 这其实就是FFM在FM的基础上做的改进，
+引入了<strong>域的概念</strong>，对于每个特征，<strong>针对不同的交叉域要学习不同的隐向量特征</strong></p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205192049667.png" srcset="/img/loading.gif" lazyload alt="引入不同的域的概念的分类" style="zoom:50%;" /></p>
+<p>细品的话， 不同单词不同身份的时候,
+会有不同的embedding对待，其实这里的FFM域embedding，如果经过上面的铺垫感觉FFM差不多了,
+那么下面就是模型的方程了:</p>
+<p><span class="math display">\[
+\hat{y}(X)=\omega_0+\sum_{i=1}^n \omega_i x_i+\sum_{i=1}^{n-1}
+\sum_{j=i+1}^n&lt;v_{i, f_j}, v_{j, f_i}&gt;x_i x_j
+\]</span> <span class="math inline">\(&lt;v_{i, f_j}, v_{j,
+f_i}&gt;\)</span>注意这里的已经是加上域的内容之后的结果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">FFM_Node</span>(<span class="hljs-title class_ inherited__">object</span>):<br>    <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">    通常x是高维稀疏向量，所以用链表来表示一个x，链表上的每个节点是个3元组(j,f,v)</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    __slots__ = [<span class="hljs-string">&#x27;j&#x27;</span>, <span class="hljs-string">&#x27;f&#x27;</span>, <span class="hljs-string">&#x27;v&#x27;</span>]    <span class="hljs-comment"># 按照元组不是字典的方式存储类的成员属性</span><br>    <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, j, f, v</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">            j: Feature index (0-n-1)</span><br><span class="hljs-string">            f: field index(0-m-1)</span><br><span class="hljs-string">            v: value</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        self.j = j<br>        self.f = f<br>        self.v = v<br>    <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">FFM</span>(<span class="hljs-title class_ inherited__">object</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, m, n, k, eta, lambd</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">            m: Number of fields</span><br><span class="hljs-string">            n: Number of features</span><br><span class="hljs-string">            k: Number of latent factors</span><br><span class="hljs-string">            eta: learning rate</span><br><span class="hljs-string">            lambd: regularization coefficient</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        self.m = m<br>        self.n = n<br>        self.k = k<br>        <br>        <span class="hljs-comment">#超参数</span><br>        self.eta = eta<br>        self.lambd = lambd<br>        <br>        <span class="hljs-comment"># 初始化三维权重矩阵w~U(0, 1/sqrt(k))</span><br>        self.w = np.random.rand(n, m, k) / math.sqrt(k)<br>        <br>        <span class="hljs-comment"># 初始化累积梯度平方和， AdaGrad时要用到</span><br>        self.G = np.ones(shape=(n, m, k), dtype=np.float64)<br>        self.log = Logistic()<br><br>    <span class="hljs-comment"># 这个是计算第三项</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">phi</span>(<span class="hljs-params">self, node_list</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        特征组合式的线性加权求和</span><br><span class="hljs-string">        param node_list: 用链表存储x中的非0值</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        z = <span class="hljs-number">0.0</span><br>        <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(node_list)):<br>            node1 = node_list[a]<br>            j1 = node1.j<br>            f1 = node1.f<br>            v1 = node1.v<br>            <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(a+<span class="hljs-number">1</span>, <span class="hljs-built_in">len</span>(node_list)):<br>                node2 = node_list[b]<br>                j2 = node2.j<br>                f2 = node2.f<br>                v2 = node2.v<br>                w1 = self.w[j1, f2]<br>                w2 = self.w[j2, f1]<br>                z += np.dot(w1, w2) * v1 * v2<br>        <br>        <span class="hljs-keyword">return</span> z<br>    <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">predict</span>(<span class="hljs-params">self, node_list</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        输入x， 预测y的值</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        z = self.phi(node_list)<br>        y = self.log.decide_by_tanh(z)<br>        <span class="hljs-keyword">return</span> y<br><br>    <span class="hljs-comment"># 随机梯度下降</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">sgd</span>(<span class="hljs-params">self, node_list, y</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        根据一个样本更新模型参数：</span><br><span class="hljs-string">        node_list: 链表存储x中的非0值</span><br><span class="hljs-string">        y: 正样本1， 负样本-1</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        kappa = -y / (<span class="hljs-number">1</span>+math.exp(y*self.phi(node_list)))    <span class="hljs-comment"># 论文里面的那个导数</span><br>        <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(node_list)):<br>            node1 = node_list[a]<br>            j1 = node1.j<br>            f1 = node1.f<br>            v1 = node1.v<br>            <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(a+<span class="hljs-number">1</span>, <span class="hljs-built_in">len</span>(node_list)):<br>                node2 = node_list[b]<br>                j2 = node2.j<br>                f2 = node2.f<br>                v2 = node2.v<br>                c = kappa * v1 * v2      <span class="hljs-comment"># 这是求导数</span><br>                <br>                <span class="hljs-comment"># self.w[j1,f2]和self.w[j2,f1]是向量，导致g_j1_f2和g_j2_f1也是向量</span><br>                g_j1_f2 = self.lambd * self.w[j1, f2] + c * self.w[j2, f1]<br>                g_j2_f1 = self.lambd * self.w[j2, f1] + c * self.w[j1, f2]<br>                <br>                <span class="hljs-comment"># 计算各个维度上的梯度累积平方和</span><br>                self.G[j1, f2] += g_j1_f2 ** <span class="hljs-number">2</span><br>                self.G[j2, f1] += g_j2_f1 ** <span class="hljs-number">2</span><br>                <br>                <span class="hljs-comment"># Adagrad 算法</span><br>                self.w[j1, f2] -= self.eta / np.sqrt(self.G[j1, f2]) * g_j1_f2  <span class="hljs-comment"># sqrt(G)作为分母，所以G必须是大于0的正数</span><br>                self.w[j2, f1] -= self.eta / np.sqrt(<br>                    self.G[j2, f1]) * g_j2_f1  <span class="hljs-comment"># math.sqrt()只能接收一个数字作为参数，而numpy.sqrt()可以接收一个array作为参数，表示对array中的每个元素分别开方</span><br>    <br>    <span class="hljs-comment"># 训练</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params">self, sample_generator, max_echo, max_r2</span>):<br>        <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        根据一堆样本训练模型</span><br><span class="hljs-string">        sample_generator: 样本生成器，每次yield (node_list, y)，node_list中存储的是x的非0值。通常x要事先做好归一化，即模长为1，这样精度会略微高一点</span><br><span class="hljs-string">        max_echo: 最大迭代次数</span><br><span class="hljs-string">        max_r2: 拟合系数r2达到阈值时即可终止学习</span><br><span class="hljs-string">        &quot;&quot;&quot;</span><br>        <span class="hljs-keyword">for</span> itr <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(max_echo):<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;echo: &quot;</span>, itr)<br>            y_sum = <span class="hljs-number">0.0</span><br>            y_sqare_sum = <span class="hljs-number">0.0</span><br>            err_square_sum = <span class="hljs-number">0.0</span>    <span class="hljs-comment"># 误差平方和</span><br>            population = <span class="hljs-number">0</span>   <span class="hljs-comment"># 样本总数</span><br>            <span class="hljs-keyword">for</span> node_list, y <span class="hljs-keyword">in</span> sample_generator:<br>                y = <span class="hljs-number">0.0</span>  <span class="hljs-keyword">if</span> y == -<span class="hljs-number">1</span> <span class="hljs-keyword">else</span> y    <span class="hljs-comment"># 真实的y取值为&#123;-1,1&#125;，而预测的y位于(0,1)，计算拟合效果时需要进行统一</span><br>                self.sgd(node_list, y)<br>                y_hat = self.predict(node_list)<br>                y_sum += y<br>                y_sqare_sum += y ** <span class="hljs-number">2</span><br>                err_square_sum += (y-y_hat) ** <span class="hljs-number">2</span><br>                population += <span class="hljs-number">1</span><br>            <br>            var_y = y_sqare_sum - y_sum * y_sum / population  <span class="hljs-comment"># y的方差</span><br>            r2 = <span class="hljs-number">1</span> - err_square_sum / var_y<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;r2: &quot;</span>, r2)<br>            <span class="hljs-keyword">if</span> r2 &gt; max_r2:<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;r2 have reach&quot;</span>, r2)<br>                <span class="hljs-keyword">break</span><br>        <br>    <span class="hljs-comment"># 模型保存</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">save_model</span>(<span class="hljs-params">self, outfile</span>):<br>        <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">        序列化模型</span><br><span class="hljs-string">        :param outfile:</span><br><span class="hljs-string">        :return:</span><br><span class="hljs-string">        &#x27;&#x27;&#x27;</span><br>        np.save(outfile, self.w)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">load_model</span>(<span class="hljs-params">self, infile</span>):<br>        <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">        加载模型</span><br><span class="hljs-string">        :param infile:</span><br><span class="hljs-string">        :return:</span><br><span class="hljs-string">        &#x27;&#x27;&#x27;</span><br>        self.w = np.load(infile)<br></code></pre></td></tr></table></figure>
+<p>调用的过程如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 设置参数   5个特征， 2个域， 2维的k</span><br>n = <span class="hljs-number">5</span><br>m = <span class="hljs-number">2</span><br>k = <span class="hljs-number">2</span><br><br><span class="hljs-comment"># 路径</span><br>train_file = <span class="hljs-string">&quot;dataset/train.txt&quot;</span><br>valid_file = <span class="hljs-string">&quot;dataset/test.txt&quot;</span><br>model_file = <span class="hljs-string">&quot;ffm.npy&quot;</span><br><br><span class="hljs-comment"># 超参数</span><br>eta = <span class="hljs-number">0.01</span><br>lambd = <span class="hljs-number">1e-2</span><br>max_echo = <span class="hljs-number">30</span><br>max_r2 = <span class="hljs-number">0.9</span><br><br><span class="hljs-comment"># 训练模型，并保存模型参数</span><br>sample_generator = Sample(train_file)<br>ffm = FFM(m, n, k, eta, lambd)<br>ffm.train(sample_generator, max_echo, max_r2)<br>ffm.save_model(model_file)<br></code></pre></td></tr></table></figure>
+<h3 id="逻辑回归模型与gbdtlr-模型"><strong>逻辑回归模型与GBDT+LR
+模型</strong></h3>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205214722921.png" srcset="/img/loading.gif" lazyload alt="总体结构图" style="zoom:50%;" /></p>
+<p>协同过滤和矩阵分解利用用户的<strong>物品“相似度”进行推荐</strong>，
+逻辑回归模型将问题看成了一个分类问题，
+通过预测正样本的概率对物品进行排序</p>
+<p>这里的正样本可以是用户“点击”了某个商品或者“观看”了某个视频，
+均是推荐系统希望用户产生“正反馈”行为，
+因此<strong>逻辑回归模型将推荐问题转成成了一个点击率预估问题</strong></p>
+<h4 id="逻辑回归lr算法">逻辑回归LR算法</h4>
+<p>逻辑回归是在线性回归的基础上加了一个 Sigmoid
+函数（非线形）映射，使得逻辑回归称为了一个优秀的分类算法，
+学习逻辑回归模型，
+首先要记住一句话：<strong>逻辑回归假设数据服从伯努利分布,通过极大化似然函数的方法，运用梯度下降来求解参数，来达到将数据二分类的目的。</strong></p>
+<p><strong>逻辑回归模型已经将推荐问题转换成了一个点击率预测的问题</strong>，
+而点击率预测就是一个典型的二分类， 正好适合逻辑回归进行处理，
+那么逻辑回归是如何做推荐的呢？</p>
+<ol type="1">
+<li><p>将用户年龄、性别、物品属性、物品描述、当前时间、当前地点等特征转成<strong>数值型向量</strong></p></li>
+<li><p>确定逻辑回归的优化目标，比如把点击率预测转换成二分类问题，
+这样就可以得到分类问题常用的损失作为目标， 训练模型</p></li>
+<li><p>在预测的时候， 将特征向量输入模型产生预测，
+得到用户“点击”物品的概率</p></li>
+<li><p>利用点击概率对候选物品排序， 得到推荐列表</p></li>
+</ol>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240205220635359.png" srcset="/img/loading.gif" lazyload
+alt="训练和推断的过程" />
+<figcaption aria-hidden="true">训练和推断的过程</figcaption>
+</figure>
+<p>每个特征的权重参数<span class="math inline">\(w\)</span>，
+我们一般是使用梯度下降的方式， 首先会先随机初始化一批<span
+class="math inline">\(w\)</span>，
+然后将特征向量（也就是我们上面数值化出来的特征）输入到模型，
+就会通过计算会得到模型的预测概率， 然后通过对目标函数求导得到每个<span
+class="math inline">\(w\)</span>的梯度， 然后进行更新<span
+class="math inline">\(w\)</span></p>
+<p>优点：</p>
+<ol type="1">
+<li><p>LR模型形式简单，可解释性好，从特征的权重可以看到不同的特征对最后结果的影响。</p></li>
+<li><p>训练时便于并行化，在预测时只需要对特征进行线性加权，所以性能比较好，往往适合处理海量id类特征，用id类特征有一个很重要的好处，就是防止信息损失（相对于范化的
+CTR 特征），对于头部资源会有更细致的描述</p></li>
+<li><p>资源占用小,尤其是内存。在实际的工程应用中只需要存储权重比较大的特征及特征对应的权重</p></li>
+<li><p>方便输出结果调整。逻辑回归可以很方便的得到最后的分类结果，因为输出的是每个样本的概率分数，我们可以很容易的对这些概率分数进行cutoff，也就是划分阈值(大于某个阈值的是一类，小于某个阈值的是一类)</p></li>
+<li><p>工程化需要， 在深度学习技术之前， 逻辑回归凭借易于并行化，
+模型简单，训练开销小等特点，占领工程领域的主流，
+因为即使工程团队发现了复杂模型会提升效果，
+但一般如果没有把握击败逻辑回归的话仍然不敢尝试或者升级。</p></li>
+</ol>
+<p>当然， 逻辑回归模型也有一定的局限性</p>
+<ol type="1">
+<li>表达能力不强， 无法<strong>进行特征交叉</strong>，
+特征筛选等一系列“高级“操作（这些工作都得人工来干，
+这样就需要一定的经验， 否则会走一些弯路）， 因此可能造成信息的损失</li>
+<li>准确率并不是很高。因为这毕竟是一个线性模型加了个sigmoid，
+形式非常的简单(非常类似线性模型)，很难去拟合数据的真实分布</li>
+<li>处理非线性数据较麻烦。逻辑回归在不引入其他方法的情况下，只能处理线性可分的数据，
+如果想处理非线性，
+首先对连续特征的处理需要先进行离散化（离散化的目的是为了引入非线性），如上文所说，人工分桶的方式会引入多种问题。</li>
+<li>LR
+需要进行人工特征组合，这就需要开发者有非常丰富的领域经验，才能不走弯路。这样的模型迁移起来比较困难，换一个领域又需要重新进行大量的特征工程。</li>
+</ol>
+<h4 id="gbdt原理">GBDT原理</h4>
+<p>GBDT全称<strong>梯度提升决策树</strong>，GBDT（Gradient Boosting
+Decision
+Tree，梯度提升决策树）是一种机器学习算法，它通过优化损失函数的梯度来构建一组树模型的集合，并希望这些树模型能够协同工作以获得更准确的结果。</p>
+<p><strong>GBDT的工作原理：</strong></p>
+<ol type="1">
+<li>初始化模型：使用一个简单的树模型作为起点。</li>
+<li>训练模型：
+<ul>
+<li>评估当前模型的损失函数。</li>
+<li>根据当前模型的预测值来计算损失函数的梯度。</li>
+<li>在当前模型的基础上，寻找能够最小化梯度下降的树模型。</li>
+</ul></li>
+<li>组合模型：将新树模型的预测结果与原模型的预测结果结合，作为下一轮迭代的初始模型。</li>
+<li>重复迭代：重复步骤2和3，直到达到预设的迭代次数或模型性能不再提升</li>
+</ol>
+<p><strong>GBDT的优点：</strong></p>
+<ul>
+<li>​ 灵活性：可以处理非线性问题。</li>
+<li>效率：在预测时，每个节点的计算只与少数特征有关，因此计算效率相对较高。</li>
+<li>效果：在许多任务中，尤其是回归和分类任务中，GBDT都能取得很好的效果。</li>
+</ul>
+<p><strong>GBDT的缺点：</strong></p>
+<ul>
+<li>过拟合：由于模型复杂，容易过拟合，需要通过正则化、限制树的数量或深度等方法来控制。</li>
+<li>调参复杂：需要调整多个超参数，如学习率、树的数量、节点的最大深度等。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> xgboost <span class="hljs-keyword">as</span> xgb<br><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> load_boston<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> mean_squared_error<br><br><span class="hljs-comment"># 加载数据</span><br>boston = load_boston()<br>X = boston.data<br>y = boston.target<br><br><span class="hljs-comment"># 划分训练集和测试集</span><br>X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="hljs-number">0.2</span>, random_state=<span class="hljs-number">42</span>)<br><br><span class="hljs-comment"># 初始化XGBRegressor模型</span><br>xgb_reg = xgb.XGBRegressor(objective=<span class="hljs-string">&#x27;reg:squarederror&#x27;</span>, n_estimators=<span class="hljs-number">100</span>, seed=<span class="hljs-number">42</span>)<br><br><span class="hljs-comment"># 训练模型</span><br>xgb_reg.fit(X_train, y_train)<br><br><span class="hljs-comment"># 预测</span><br>predictions = xgb_reg.predict(X_test)<br><br><span class="hljs-comment"># 评估模型</span><br>mse = mean_squared_error(y_test, predictions)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Mean Squared Error: <span class="hljs-subst">&#123;mse&#125;</span>&quot;</span>)<br></code></pre></td></tr></table></figure>
+<h4 id="gbdtlr代码实现">GBDT+LR代码实现</h4>
+<h2 id="深度学习模型rank">深度学习模型(Rank)</h2>
 
                 
               </div>
