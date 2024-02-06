@@ -35,9 +35,10 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240122123926323.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240128142408271.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240128143004648.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240206140055727.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240129130942760.png">
 <meta property="article:published_time" content="2024-01-01T13:15:17.000Z">
-<meta property="article:modified_time" content="2024-01-30T14:38:01.579Z">
+<meta property="article:modified_time" content="2024-02-06T06:45:24.545Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="算法题">
 <meta property="article:tag" content="leetcode">
@@ -223,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          52k words
+          56k words
         
       </span>
     
@@ -234,7 +235,7 @@
         
         
         
-          432 mins
+          465 mins
         
       </span>
     
@@ -276,7 +277,7 @@
               <p class="note note-info">
                 
                   
-                    Last updated on January 30, 2024 pm
+                    Last updated on February 6, 2024 pm
                   
                 
               </p>
@@ -1175,7 +1176,63 @@ target="_blank" rel="noopener" href="https://leetcode.cn/problems/partition-equa
 <code>nums</code>
 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等<strong>示例：</strong></p>
 <figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：nums = <span class="hljs-comment">[1,5,11,5]</span><br>输出：true<br>解释：数组可以分割成 <span class="hljs-comment">[1, 5, 5]</span> 和 <span class="hljs-comment">[11]</span> <br></code></pre></td></tr></table></figure>
-<h1 id="单调栈">单调栈</h1>
+<h1 id="栈队列单调栈">栈&amp;队列&amp;单调栈</h1>
+<h3 id="有效括号">有效括号</h3>
+<p><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/valid-parentheses/description/">https://leetcode.cn/problems/valid-parentheses/description/</a></p>
+<p>给定一个只包括
+<code>'('</code>，<code>')'</code>，<code>'&#123;'</code>，<code>'&#125;'</code>，<code>'['</code>，<code>']'</code>
+的字符串 <code>s</code> ，判断字符串是否有效。</p>
+<ol type="1">
+<li>左括号必须用相同类型的右括号闭合。</li>
+<li>左括号必须以正确的顺序闭合。</li>
+<li>每个右括号都有一个对应的相同类型的左括号。</li>
+</ol>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">s</span> = <span class="hljs-string">&quot;()&quot;</span><br>输出：<span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+<p>思路：简单的判断栈</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">ismatch</span><span class="hljs-params">(<span class="hljs-type">char</span> a, <span class="hljs-type">char</span> b)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>((a==<span class="hljs-string">&#x27;)&#x27;</span>&amp;&amp;b==<span class="hljs-string">&#x27;(&#x27;</span>)||(a==<span class="hljs-string">&#x27;&#125;&#x27;</span>&amp;&amp;b==<span class="hljs-string">&#x27;&#123;&#x27;</span>)||(a==<span class="hljs-string">&#x27;]&#x27;</span>&amp;&amp;b==<span class="hljs-string">&#x27;[&#x27;</span>))&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isValid</span><span class="hljs-params">(string s)</span> </span>&#123;<br>        stack&lt;<span class="hljs-type">char</span>&gt;st;<br>        <span class="hljs-keyword">if</span>(s.<span class="hljs-built_in">size</span>()%<span class="hljs-number">2</span>!=<span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;s.<span class="hljs-built_in">size</span>();i++)&#123;<br>            <span class="hljs-keyword">if</span>(s[i]==<span class="hljs-string">&#x27;)&#x27;</span>||s[i]==<span class="hljs-string">&#x27;&#125;&#x27;</span>||s[i]==<span class="hljs-string">&#x27;]&#x27;</span>)&#123;<br>                <span class="hljs-keyword">if</span>(!st.<span class="hljs-built_in">empty</span>()&amp;&amp;<span class="hljs-built_in">ismatch</span>(s[i],st.<span class="hljs-built_in">top</span>()))&#123;<br>                    st.<span class="hljs-built_in">pop</span>();<br>                &#125;<span class="hljs-keyword">else</span>&#123;<br>                    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>                &#125;<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                st.<span class="hljs-built_in">push</span>(s[i]);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> st.<span class="hljs-built_in">empty</span>();<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="删除相邻重复">删除相邻重复</h3>
+<p><strong>示例：</strong></p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs 1c">输入：<span class="hljs-string">&quot;abbaca&quot;</span><br>输出：<span class="hljs-string">&quot;ca&quot;</span><br>解释：<br>例如，在 <span class="hljs-string">&quot;abbaca&quot;</span> 中，我们可以删除 <span class="hljs-string">&quot;bb&quot;</span> 由于两字母相邻且相同，这是此时唯一可以执行删除操作的重复项。之后我们得到字符串 <span class="hljs-string">&quot;aaca&quot;</span>，其中又只有 <span class="hljs-string">&quot;aa&quot;</span> 可以执行重复项删除操作，所以最后的字符串为 <span class="hljs-string">&quot;ca&quot;</span>。<br></code></pre></td></tr></table></figure>
+<p><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string/description/">https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string/description/</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">string <span class="hljs-title">removeDuplicates</span><span class="hljs-params">(string s)</span> </span>&#123;<br>        stack&lt;<span class="hljs-type">char</span>&gt;st;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">char</span> c:s)&#123;<br>            <span class="hljs-keyword">if</span>(st.<span class="hljs-built_in">empty</span>()||c!=st.<span class="hljs-built_in">top</span>())&#123;<br>                st.<span class="hljs-built_in">push</span>(c);<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                st.<span class="hljs-built_in">pop</span>();<br>            &#125;<br>        &#125;<br>        string res=<span class="hljs-string">&quot;&quot;</span>;<br>        <span class="hljs-keyword">while</span>(!st.<span class="hljs-built_in">empty</span>())&#123;<br>            res+=st.<span class="hljs-built_in">top</span>();<br>            st.<span class="hljs-built_in">pop</span>();<br>        &#125;<br>        <span class="hljs-built_in">reverse</span>(res.<span class="hljs-built_in">begin</span>(), res.<span class="hljs-built_in">end</span>()); <span class="hljs-comment">//注意这个地方需要反转一下字符串</span><br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="逆波兰表达式求值">逆波兰表达式求值</h3>
+<p><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/evaluate-reverse-polish-notation/description/">https://leetcode.cn/problems/evaluate-reverse-polish-notation/description/</a></p>
+<p>给你一个字符串数组 <code>tokens</code> ，表示一个根据 <a
+target="_blank" rel="noopener" href="https://baike.baidu.com/item/逆波兰式/128437">逆波兰表示法</a>
+表示的算术表达式。请你计算该表达式。返回一个表示表达式值的整数。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs maxima">输入：<span class="hljs-built_in">tokens</span> = [<span class="hljs-string">&quot;2&quot;</span>,<span class="hljs-string">&quot;1&quot;</span>,<span class="hljs-string">&quot;+&quot;</span>,<span class="hljs-string">&quot;3&quot;</span>,<span class="hljs-string">&quot;*&quot;</span>]<br>输出：<span class="hljs-number">9</span><br>解释：该算式转化为常见的中缀算术表达式为：((<span class="hljs-number">2</span> + <span class="hljs-number">1</span>) * <span class="hljs-number">3</span>) = <span class="hljs-number">9</span><br></code></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs maxima">输入：<span class="hljs-built_in">tokens</span> = [<span class="hljs-string">&quot;4&quot;</span>,<span class="hljs-string">&quot;13&quot;</span>,<span class="hljs-string">&quot;5&quot;</span>,<span class="hljs-string">&quot;/&quot;</span>,<span class="hljs-string">&quot;+&quot;</span>]<br>输出：<span class="hljs-number">6</span><br>解释：该算式转化为常见的中缀算术表达式为：(<span class="hljs-number">4</span> + (<span class="hljs-number">13</span> / <span class="hljs-number">5</span>)) = <span class="hljs-number">6</span><br></code></pre></td></tr></table></figure>
+<p>思路：</p>
+<p>利用栈的思想模拟运算的过程，按照tokens的顺序将数字放进栈中，遇到运算符那么就拿出栈中的数字，运算结束之后再放进栈中</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">evalRPN</span><span class="hljs-params">(vector&lt;string&gt;&amp; tokens)</span> </span>&#123;<br>        stack&lt;<span class="hljs-type">int</span>&gt;st;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;tokens.<span class="hljs-built_in">size</span>();i++)&#123;<br>            <span class="hljs-keyword">if</span>(tokens[i]!=<span class="hljs-string">&quot;/&quot;</span>&amp;&amp;tokens[i]!=<span class="hljs-string">&quot;+&quot;</span>&amp;&amp;tokens[i]!=<span class="hljs-string">&quot;-&quot;</span>&amp;&amp;tokens[i]!=<span class="hljs-string">&quot;*&quot;</span>)&#123;<br>                st.<span class="hljs-built_in">push</span>(<span class="hljs-built_in">stoi</span>(tokens[i]));<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                <span class="hljs-type">int</span> num1 = st.<span class="hljs-built_in">top</span>();<br>                st.<span class="hljs-built_in">pop</span>();<br>                <span class="hljs-type">int</span> num2 = st.<span class="hljs-built_in">top</span>();<br>                st.<span class="hljs-built_in">pop</span>();<br>                <span class="hljs-keyword">if</span> (tokens[i] == <span class="hljs-string">&quot;+&quot;</span>) st.<span class="hljs-built_in">push</span>(num2 + num1);<br>                <span class="hljs-keyword">if</span> (tokens[i] == <span class="hljs-string">&quot;-&quot;</span>) st.<span class="hljs-built_in">push</span>(num2 - num1);<br>                <span class="hljs-keyword">if</span> (tokens[i] == <span class="hljs-string">&quot;*&quot;</span>) st.<span class="hljs-built_in">push</span>(num2 * num1);<br>                <span class="hljs-keyword">if</span> (tokens[i] == <span class="hljs-string">&quot;/&quot;</span>) st.<span class="hljs-built_in">push</span>(num2 / num1);<br>            &#125;<br>        &#125;<br>        <span class="hljs-type">int</span> result = st.<span class="hljs-built_in">top</span>();<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="前k个高频元素">前K个高频元素</h3>
+<p><a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/top-k-frequent-elements/description/">https://leetcode.cn/problems/top-k-frequent-elements/description/</a></p>
+<p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code>
+，请你返回其中出现频率前 <code>k</code> 高的元素。你可以按
+<strong>任意顺序</strong> 返回答案。</p>
+<p><strong>示例 1:</strong></p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入: nums = <span class="hljs-comment">[1,1,1,2,2,3]</span>, k = 2<br>输出: <span class="hljs-comment">[1,2]</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240206140055727.png" srcset="/img/loading.gif" lazyload alt="前k个高频元素的思路图" style="zoom:50%;" /></p>
+<p>这道题目主要涉及到如下三块内容：</p>
+<ol type="1">
+<li>要统计元素出现频率</li>
+<li>对频率排序</li>
+<li>找出前K个高频元素</li>
+</ol>
+<p>首先统计元素出现的频率，这一类的问题可以使用map来进行统计。</p>
+<p>然后是对频率进行排序，这里我们可以使用一种
+容器适配器就是<strong>优先级队列</strong></p>
+<p>优先级队列内部元素是自动依照元素的权值排列。那么它是如何有序排列的呢？</p>
+<p>缺省情况下priority_queue利用max-heap（大顶堆）完成对元素的排序，这个大顶堆是以vector为表现形式的complete
+binary tree（完全二叉树）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">mycomparison</span>&#123;<br>        <span class="hljs-keyword">public</span>:<br>            <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">const</span> pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&amp; lhs, <span class="hljs-type">const</span> pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&amp; rhs)</span></span>&#123;<br>                <span class="hljs-keyword">return</span> lhs.second &gt; rhs.second;<br>            &#125;<br>    &#125;;<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">topKFrequent</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> k)</span> </span>&#123;<br>        <span class="hljs-comment">//统计元素出现的频率</span><br>        unordered_map&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;map;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;nums.<span class="hljs-built_in">size</span>();i++)&#123;<br>            map[nums[i]]++;<br>        &#125;<br><br>        <span class="hljs-comment">//对频率进行排序</span><br>        <span class="hljs-comment">//定义一个小顶堆，大小为k</span><br>        priority_queue&lt;pair&lt;<span class="hljs-type">int</span>,<span class="hljs-type">int</span>&gt;, vector&lt;pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt;, mycomparison&gt; pri_que;<br><br>        <span class="hljs-comment">//用固定大小为k的小顶堆，扫面所有频率的数值</span><br>        <span class="hljs-keyword">for</span>(unordered_map&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;::iterator it=map.<span class="hljs-built_in">begin</span>(); it!=map.<span class="hljs-built_in">end</span>(); it++)&#123;<br>            pri_que.<span class="hljs-built_in">push</span>(*it);<br>            <span class="hljs-keyword">if</span>(pri_que.<span class="hljs-built_in">size</span>()&gt;k)&#123;<br>                pri_que.<span class="hljs-built_in">pop</span>();<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-comment">//找出前面k个高频元素，因为小顶堆先弹出的是最小的，所以倒序输出到数组</span><br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">res</span><span class="hljs-params">(k)</span></span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=k<span class="hljs-number">-1</span>;i&gt;=<span class="hljs-number">0</span>;i--)&#123;<br>            res[i]=pri_que.<span class="hljs-built_in">top</span>().first;<br>            pri_que.<span class="hljs-built_in">pop</span>();<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <h3 id="每日温度">每日温度</h3>
 <p>给定一个整数数组 <code>temperatures</code>
 ，表示每天的温度，返回一个数组 <code>answer</code> ，其中
@@ -1283,7 +1340,7 @@ target="_blank" rel="noopener" href="https://leetcode.cn/problems/number-of-isla
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>January 30, 2024</div>
+          <div>February 6, 2024</div>
         </div>
       
       
