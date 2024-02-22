@@ -1,0 +1,821 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/galaxy.png">
+  <link rel="icon" href="/img/galaxy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Haibin Li">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Go-kit框架 Go-kit 是一个功能丰富、易于使用的分布式微服务框架，旨在帮助开发者构建健壮、可维护和可测试的分布式系统。它通过提供一系列可组合的组件，解决了分布式系统中的常见问题，使开发者能够专注于业务逻辑。Go-kit 的核心理念是通过可插拔的组件来实现微服务的功能，这些组件包括服务发现、负载均衡、请求追踪、日志记录和监控等。 Go-kit基本架构 Go-kit 包含了一些基本的组件，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【后端开发】Go-kit与Gin框架">
+<meta property="og:url" content="https://lihaibineric.github.io/2024/01/23/develop_go_kit/index.html">
+<meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
+<meta property="og:description" content="Go-kit框架 Go-kit 是一个功能丰富、易于使用的分布式微服务框架，旨在帮助开发者构建健壮、可维护和可测试的分布式系统。它通过提供一系列可组合的组件，解决了分布式系统中的常见问题，使开发者能够专注于业务逻辑。Go-kit 的核心理念是通过可插拔的组件来实现微服务的功能，这些组件包括服务发现、负载均衡、请求追踪、日志记录和监控等。 Go-kit基本架构 Go-kit 包含了一些基本的组件，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240127123105999.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240127180429934.png">
+<meta property="article:published_time" content="2024-01-23T08:50:40.000Z">
+<meta property="article:modified_time" content="2024-02-22T02:06:28.496Z">
+<meta property="article:author" content="Haibin Li">
+<meta property="article:tag" content="后端开发">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240127123105999.png">
+  
+  
+  
+  <title>【后端开发】Go-kit与Gin框架 - LIHAIBIN&#39;S BLOG</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lihaibineric.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 36vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>LIHAIBIN&#39;S HOMEPAGE</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" false
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【后端开发】Go-kit与Gin框架"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-23 16:50" pubdate>
+          January 23, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          12k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          102 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【后端开发】Go-kit与Gin框架</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    Last updated on February 22, 2024 am
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <meta name="referrer" content="no-referrer"/>
+<h1 id="go-kit框架">Go-kit框架</h1>
+<p>Go-kit
+是一个功能丰富、易于使用的<strong>分布式微服务框架</strong>，旨在帮助开发者构建健壮、可维护和可测试的分布式系统。它通过提供一系列可组合的组件，解决了分布式系统中的常见问题，使开发者能够专注于业务逻辑。Go-kit
+的核心理念是通过可插拔的组件来实现微服务的功能，这些组件包括服务发现、负载均衡、请求追踪、日志记录和监控等。</p>
+<h2 id="go-kit基本架构">Go-kit基本架构</h2>
+<p>Go-kit
+包含了一些基本的组件，如服务端点（Endpoint）、传输层（Transport）、服务发现、负载均衡等。服务端点是
+Go-kit 中微服务的基本构建块，用于定义 RPC
+消息模式。传输层提供了将特定序列化算法绑定到端点的辅助方法，目前支持
+JSON 和 HTTP 协议。</p>
+<p>Go-kit的架构来源：https://github.com/go-kit/kit</p>
+<p>基本的Go-kit的三层架构</p>
+<ol type="1">
+<li><p>Transport</p>
+<p>主要负责与HTTP、gRPC、thrift等相关的逻辑，提供端到端的通信服务，不同的传输协议来实现这些功能，最常见的协议是TCP（传输控制协议）和UDP（用户数据报协议）。</p></li>
+<li><p>Endpoint</p>
+<p>定义Request和Response格式,并可以使用装饰器包装函数，以此来实现各种中间件嵌套。</p></li>
+<li><p>Service</p>
+<p>主要职责是处理业务逻辑，也就是应用程序的核心功能和规则，这里就是我们的业务类、接口等。</p></li>
+</ol>
+<h2 id="go-kit的demo">Go-kit的demo</h2>
+<p>接下来我们将给出一个简单的demo（对输入的字符串大写转换和字符串个数计数的功能）来对Go-kit的基本架构的实现和功能展示：</p>
+<h3 id="service层"><strong>Service层</strong></h3>
+<p>首先这个层会给出业务的逻辑实现，核心功能和规则</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> services<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;errors&quot;</span><br>	<span class="hljs-string">&quot;strings&quot;</span><br>)<br><br><span class="hljs-comment">// StringService 定义了字符串处理服务的接口</span><br><span class="hljs-comment">// 这个地方给出接口，相当于是虚基类，后续的接口继承需要实现这部分的函数内容</span><br><span class="hljs-keyword">type</span> StringService <span class="hljs-keyword">interface</span> &#123;<br>	Uppercase(<span class="hljs-type">string</span>) (<span class="hljs-type">string</span>, <span class="hljs-type">error</span>) <span class="hljs-comment">//返回的值是一个string和一个error</span><br>	Count(<span class="hljs-type">string</span>) <span class="hljs-type">int</span><br>&#125;<br><br><span class="hljs-comment">// SStringService 实现了 StringService 接口</span><br><span class="hljs-keyword">type</span> SStringService <span class="hljs-keyword">struct</span>&#123;&#125;<br><br><span class="hljs-comment">// Uppercase 将字符串转换为大写</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(SStringService)</span></span> Uppercase(s <span class="hljs-type">string</span>) (<span class="hljs-type">string</span>, <span class="hljs-type">error</span>) &#123;<br>	<span class="hljs-keyword">if</span> s == <span class="hljs-string">&quot;&quot;</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>, errors.New(<span class="hljs-string">&quot;Input string is empty&quot;</span>)<br>	&#125;<br>	<span class="hljs-keyword">return</span> strings.ToUpper(s), <span class="hljs-literal">nil</span> <span class="hljs-comment">//直接调用string的功能来实现大小写转换</span><br>&#125;<br><br><span class="hljs-comment">// Count 返回字符串的字符数</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(SStringService)</span></span> Count(s <span class="hljs-type">string</span>) <span class="hljs-type">int</span> &#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(s)<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>实现功能service的方式一般总结来说是：</p>
+<ul>
+<li>定义服务接口Interface{}，再定义结构体来实现这个接口的函数来实现继承</li>
+<li>具体的函数内容就表示了业务的实际功能</li>
+</ul>
+<h3 id="endpoint层"><strong>Endpoint层</strong></h3>
+<p>这部分会给出不同的endpoint接口的类型定义，使用不同的type定义request和response的json格式类型，用于后续的变量的选择命名</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> endpoints<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;context&quot;</span><br>	<span class="hljs-string">&quot;github.com/go-kit/kit/endpoint&quot;</span><br>	<span class="hljs-string">&quot;go-kit-test/services&quot;</span><br>)<br><br><span class="hljs-comment">//这个地方借助go-kit来实现endpoint的内容</span><br><span class="hljs-comment">// uppercaseRequest 和 uppercaseResponse 用于 Uppercase 端点</span><br><span class="hljs-keyword">type</span> uppercaseRequest <span class="hljs-keyword">struct</span> &#123;<br>	S <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;s&quot;`</span><br>&#125;<br><br><span class="hljs-keyword">type</span> uppercaseResponse <span class="hljs-keyword">struct</span> &#123;<br>	V   <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;v&quot;`</span><br>	Err <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;err,omitempty&quot;`</span><br>&#125;<br><br><span class="hljs-comment">// countRequest 和 countResponse 用于 Count 端点</span><br><span class="hljs-keyword">type</span> countRequest <span class="hljs-keyword">struct</span> &#123;<br>	S <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;s&quot;`</span><br>&#125;<br><br><span class="hljs-keyword">type</span> countResponse <span class="hljs-keyword">struct</span> &#123;<br>	V <span class="hljs-type">int</span> <span class="hljs-string">`json:&quot;v&quot;`</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>定义总的Endpoints接口，<code>type Endpoints</code>这个地方将会用于后续的对象的创建，<code>func MakeEndpoints</code>函数将被其他的函数进行调用用于创建内部的端点对象，其中在创建的过程中会调用以下的函数来分别创建两个功能的端口类型</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> Endpoints <span class="hljs-keyword">struct</span> &#123;<br>	UppercaseEndpoint endpoint.Endpoint<br>	CountEndpoint     endpoint.Endpoint<br>&#125;<br><br><span class="hljs-comment">// MakeEndpoints 创建并返回所有服务端点</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MakeEndpoints</span><span class="hljs-params">(svc services.StringService)</span></span> Endpoints &#123;<br>	<span class="hljs-keyword">return</span> Endpoints&#123;<br>		UppercaseEndpoint: MakeUppercaseEndpoint(svc),<br>		CountEndpoint:     MakeCountEndpoint(svc),<br>	&#125;<br>&#125;<br><br><span class="hljs-comment">// MakeUppercaseEndpoint 创建 Uppercase 端点</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MakeUppercaseEndpoint</span><span class="hljs-params">(svc services.StringService)</span></span> endpoint.Endpoint &#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ctx context.Context, request <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> (<span class="hljs-keyword">interface</span>&#123;&#125;, <span class="hljs-type">error</span>) &#123;<br>		req := request.(uppercaseRequest)<br>		result, err := svc.Uppercase(req.S)<br>		<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>			<span class="hljs-keyword">return</span> uppercaseResponse&#123;result, err.Error()&#125;, <span class="hljs-literal">nil</span><br>		&#125;<br>		<span class="hljs-keyword">return</span> uppercaseResponse&#123;result, <span class="hljs-string">&quot;&quot;</span>&#125;, <span class="hljs-literal">nil</span><br>	&#125;<br>&#125;<br><br><span class="hljs-comment">// MakeCountEndpoint 创建 Count 端点</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MakeCountEndpoint</span><span class="hljs-params">(svc services.StringService)</span></span> endpoint.Endpoint &#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ctx context.Context, request <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> (<span class="hljs-keyword">interface</span>&#123;&#125;, <span class="hljs-type">error</span>) &#123;<br>		req := request.(countRequest)<br>		result := svc.Count(req.S)<br>		<span class="hljs-keyword">return</span> countResponse&#123;result&#125;, <span class="hljs-literal">nil</span><br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="transport层">Transport层</h3>
+<p>主体的实现框架，分别给出了两个不同服务接口的<code>response</code>和<code>request</code>的数据类型这部分给出<code>json</code>格式</p>
+<p><code>http.NewServeMux()</code>返回一个新的<code>http.ServeMux</code>，这是一个用于处理HTTP请求的请求轮询器（request
+router）。接下来，为<code>/uppercase和/count</code>路径分别配置了新的<code>httptransport.NewServer</code>服务</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> uppercaseRequest <span class="hljs-keyword">struct</span> &#123;<br>	S <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;s&quot;`</span><br>&#125;<br><br><span class="hljs-keyword">type</span> uppercaseResponse <span class="hljs-keyword">struct</span> &#123;<br>	V   <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;v&quot;`</span><br>	Err <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;err,omitempty&quot;`</span><br>&#125;<br><br><span class="hljs-comment">// countRequest 和 countResponse 用于 Count 端点</span><br><span class="hljs-keyword">type</span> countRequest <span class="hljs-keyword">struct</span> &#123;<br>	S <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;s&quot;`</span><br>&#125;<br><br><span class="hljs-keyword">type</span> countResponse <span class="hljs-keyword">struct</span> &#123;<br>	V <span class="hljs-type">int</span> <span class="hljs-string">`json:&quot;v&quot;`</span><br>&#125;<br><span class="hljs-comment">// MakeHTTPHandler 创建 HTTP 处理程序</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MakeHTTPHandler</span><span class="hljs-params">(endpoints endpoints.Endpoints)</span></span> http.Handler &#123;<br>	options := []httptransport.ServerOption&#123;<br>		httptransport.ServerErrorEncoder(errorEncoder),<br>	&#125;<br>	<span class="hljs-comment">//http.NewServeMux()返回一个新的http.ServeMux，这是一个用于处理HTTP请求的请求轮询器（request router）。</span><br>	<span class="hljs-comment">//接下来，为/uppercase和/count路径分别配置了httptransport.NewServer：</span><br>	m := http.NewServeMux()<br>	<span class="hljs-comment">//httptransport.NewServer是一个函数，它接受几个参数来创建一个新的HTTP服务器端点：</span><br>	m.Handle(<span class="hljs-string">&quot;/uppercase&quot;</span>, httptransport.NewServer(<br>		endpoints.UppercaseEndpoint,<br>		decodeUppercaseRequest,<br>		encodeResponse,<br>		options...,<br>	))<br>	m.Handle(<span class="hljs-string">&quot;/count&quot;</span>, httptransport.NewServer(<br>		endpoints.CountEndpoint,<br>		decodeCountRequest,<br>		encodeResponse,<br>		options...,<br>	))<br><br>	<span class="hljs-keyword">return</span> m<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>注意在定义endpoint的时候，要对request编码，对response解码</strong></p>
+<p>具体的解码和编码的过程如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">decodeUppercaseRequest</span><span class="hljs-params">(_ context.Context, r *http.Request)</span></span> (<span class="hljs-keyword">interface</span>&#123;&#125;, <span class="hljs-type">error</span>) &#123;<br>	<span class="hljs-keyword">var</span> request uppercaseRequest<br>	<span class="hljs-keyword">if</span> err := json.NewDecoder(r.Body).Decode(&amp;request); err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err<br>	&#125;<br>	<span class="hljs-keyword">return</span> request, <span class="hljs-literal">nil</span><br>&#125;<br><br><span class="hljs-comment">// decodeCountRequest 解码 HTTP 请求并创建 Count 请求结构</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">decodeCountRequest</span><span class="hljs-params">(_ context.Context, r *http.Request)</span></span> (<span class="hljs-keyword">interface</span>&#123;&#125;, <span class="hljs-type">error</span>) &#123;<br>	<span class="hljs-keyword">var</span> request countRequest<br>	<span class="hljs-keyword">if</span> err := json.NewDecoder(r.Body).Decode(&amp;request); err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err<br>	&#125;<br>	<span class="hljs-keyword">return</span> request, <span class="hljs-literal">nil</span><br>&#125;<br><br><span class="hljs-comment">// encodeResponse 将响应编码为 JSON 并写入 HTTP 响应</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">encodeResponse</span><span class="hljs-params">(_ context.Context, w http.ResponseWriter, response <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> <span class="hljs-type">error</span> &#123;<br>	<span class="hljs-keyword">return</span> json.NewEncoder(w).Encode(response)<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="main主层">Main主层</h3>
+<p>这一层是最外层的调用层：<code>go run main.go</code>，这一层的逻辑实现主要是：</p>
+<ul>
+<li>创建一个service服务接口对象</li>
+<li>将接口对象作为参数传入并生成endpoint相应的端点</li>
+<li><code>httpHandler := transports.MakeHTTPHandler(eps)</code>这一步是产生<code>http</code>的根据提供的Endpoint配置来创建一个HTTP处理程序，这个处理程序负责处理来自客户端的HTTP请求，并将响应返回给客户端</li>
+<li>对于任何来到根路径（<code>"/"</code>）的请求，都应该由<code>httpHandler</code>来处理。httpHandler是在之前的步骤中创建的HTTP处理程序，它知道如何处理<code>HTTP</code>请求并生成响应。这意味着当你访问服务器的根URL<code>（例如，http://localhost:8080/）</code>时，httpHandler中定义的处理逻辑将会被执行</li>
+<li>其中端口8080可以根据自己的需求进行指定</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;go-kit-test/endpoints&quot;</span><br>	<span class="hljs-string">&quot;go-kit-test/services&quot;</span><br>	<span class="hljs-string">&quot;go-kit-test/transports&quot;</span><br>	<span class="hljs-string">&quot;net/http&quot;</span><br>	<span class="hljs-string">&quot;os&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	svc := services.SStringService&#123;&#125;    <span class="hljs-comment">//定义一个对象svc</span><br>	eps := endpoints.MakeEndpoints(svc) <span class="hljs-comment">//接收svc作为输入，创建endpoint端点</span><br>	httpHandler := transports.MakeHTTPHandler(eps)<br><br>	http.Handle(<span class="hljs-string">&quot;/&quot;</span>, httpHandler)<br>	port := <span class="hljs-string">&quot;:8080&quot;</span><br>	<span class="hljs-keyword">if</span> p := os.Getenv(<span class="hljs-string">&quot;PORT&quot;</span>); p != <span class="hljs-string">&quot;&quot;</span> &#123;<br>		port = <span class="hljs-string">&quot;:&quot;</span> + p<br>	&#125;<br><br>	<span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;Service listening on port&quot;</span> + port)<br>	http.ListenAndServe(port, <span class="hljs-literal">nil</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="go-kitgin架构">Go-kit+Gin架构</h1>
+<p><strong>Go-kit</strong>是一个微服务工具集，它提供了服务发现、负载均衡、请求追踪、日志记录和监控等功能，帮助开发者构建健壮、可维护、可测试的分布式系统。</p>
+<p><strong>Gin</strong>是一个轻量级的<strong>Go
+Web</strong>框架，它提供了一个优雅的API和中间件支持，使得编写Web应用程序变得更加快速和简单</p>
+<p><strong>将两者进行结合：</strong>Gin负责处理HTTP请求和响应，提供路由和中间件功能，而go-kit则可以处理服务间的通信，提供服务发现、负载均衡等分布式系统功能。go-kit和Gin的结合使用，可以使得Go
+Web应用的开发更加高效和模块化，有助于构建高性能、可伸缩且易于维护的分布式系统。</p>
+<h2 id="apiservice实现">ApiService实现</h2>
+<p>我们需要利用gin对web端的应用程序进行实现，因此在这个架构之下我们设计的框架为：</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240127123105999.png" srcset="/img/loading.gif" lazyload alt="Gin+Gokit架构图结构" style="zoom:50%;" /></p>
+<p>其中<code>services、endpoints、transports</code>的功能和原来的<code>go-kit</code>基本一样，而<code>handler</code>主要处理的是gin的关于<code>web</code>端内容的控制，下面给出具体的实现</p>
+<h3 id="service层-1">Service层</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> services<br><span class="hljs-keyword">type</span> IUserService <span class="hljs-keyword">interface</span> &#123;<br>	GetName(userId <span class="hljs-type">int</span>) <span class="hljs-type">string</span><br>&#125;<br><br><span class="hljs-keyword">type</span> UserService <span class="hljs-keyword">struct</span> &#123;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s UserService)</span></span> GetName(userId <span class="hljs-type">int</span>) <span class="hljs-type">string</span> &#123;<br>	<span class="hljs-keyword">if</span> userId == <span class="hljs-number">101</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;calvin&quot;</span><br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;guest&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这个地方给出了具体的业务的实现接口功能</p>
+<h3 id="endpoint层-1">Endpoint层</h3>
+<p>在实现端口的过程中一般都需要对相关的<code>type</code>类型进行定义和对应的<code>json</code>格式的描述，函数<code>GetUserEndPoint</code>返回一个<code>endpoint.Endpoint</code>的类型，这个函数用于后续的调用产生<code>endpoint</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs GO"><span class="hljs-keyword">package</span> endpoints<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;ApiService/services&quot;</span><br>	<span class="hljs-string">&quot;context&quot;</span><br>	<span class="hljs-string">&quot;github.com/go-kit/kit/endpoint&quot;</span><br>)<br><span class="hljs-keyword">type</span> UserRequest <span class="hljs-keyword">struct</span> &#123;<br>	Uid <span class="hljs-type">int</span> <span class="hljs-string">`json:&quot;uid&quot;`</span><br>&#125;<br><br><span class="hljs-keyword">type</span> UserResponse <span class="hljs-keyword">struct</span> &#123;<br>	Result <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;result&quot;`</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">GetUserEndPoint</span><span class="hljs-params">(userService services.IUserService)</span></span> endpoint.Endpoint &#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ctx context.Context, request <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> (<span class="hljs-keyword">interface</span>&#123;&#125;, <span class="hljs-type">error</span>) &#123;<br>		r := request.(UserRequest)<br>		result := userService.GetName(r.Uid)<br>		<span class="hljs-keyword">return</span> UserResponse&#123;Result: result&#125;, <span class="hljs-literal">nil</span><br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h3 id="transport层-1">Transport层</h3>
+<p>主要做的事情就是对<code>request</code>和<code>response</code>的解码和编码过程，因为通过对<code>request</code>的解码才能转换成能识别的json格式，才能进行业务端的使用，而后面的编码是为了能够进入<code>web</code>端</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> transports<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;ApiService/endpoints&quot;</span><br>	<span class="hljs-string">&quot;context&quot;</span><br>	<span class="hljs-string">&quot;errors&quot;</span><br>	httptransport <span class="hljs-string">&quot;github.com/go-kit/kit/transport/http&quot;</span><br>	<span class="hljs-string">&quot;net/http&quot;</span><br>	<span class="hljs-string">&quot;strconv&quot;</span><br>)<br><span class="hljs-comment">// 请求解码函数</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">DecodeUserRequest</span><span class="hljs-params">(ctx context.Context, r *http.Request)</span></span> (<span class="hljs-keyword">interface</span>&#123;&#125;, <span class="hljs-type">error</span>) &#123;<br>	<span class="hljs-comment">// 限定参数来源,我们直接从url的params中获取用户id</span><br>	<span class="hljs-comment">// 请求格式类似于：http://127.0.0.1?uid=101</span><br>	<span class="hljs-keyword">if</span> r.URL.Query().Get(<span class="hljs-string">&quot;uid&quot;</span>) != <span class="hljs-string">&quot;&quot;</span> &#123;<br>		uid, _ := strconv.Atoi(r.URL.Query().Get(<span class="hljs-string">&quot;uid&quot;</span>)) <span class="hljs-comment">//strconv.Atoi(...)将字符串转化为整数</span><br>		<span class="hljs-keyword">return</span> endpoints.UserRequest&#123;Uid: uid&#125;, <span class="hljs-literal">nil</span><br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, errors.New(<span class="hljs-string">&quot;参数错误&quot;</span>)<br>&#125;<br><br><span class="hljs-comment">// 响应编码函数</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">EncodeUserResponse</span><span class="hljs-params">(ctx context.Context, w http.ResponseWriter, response <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> <span class="hljs-type">error</span> &#123;<br>	<span class="hljs-comment">// 将返回体body置为json格式</span><br>	<span class="hljs-keyword">return</span> httptransport.EncodeJSONResponse(context.Background(), w, response)<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="handle层">Handle层</h3>
+<p>这一层主要的作用就是利用gin来对web的实现，传递的参数分别是</p>
+<p><code>handler := httptransport.NewServer(endpoint, transports.DecodeUserRequest, transports.EncodeUserResponse)</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> handler<br><br><span class="hljs-keyword">import</span> (<br>	. <span class="hljs-string">&quot;ApiService/endpoints&quot;</span> <br>	. <span class="hljs-string">&quot;ApiService/services&quot;</span><br>	<span class="hljs-string">&quot;ApiService/transports&quot;</span><br>	<span class="hljs-string">&quot;github.com/gin-gonic/gin&quot;</span><br>	httptransport <span class="hljs-string">&quot;github.com/go-kit/kit/transport/http&quot;</span><br>)<br><span class="hljs-comment">// 创建 Gin 路由</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MakeGinHandler</span><span class="hljs-params">(svc IUserService)</span></span> *gin.Engine &#123;<br>	<span class="hljs-comment">//初始化一个Gin引擎，并配置了一些中间件</span><br>	r := gin.New()<br>	r.Use(gin.Logger())   <span class="hljs-comment">//用于记录每个请求的详细信息，例如请求方法、URL、执行时间等</span><br>	r.Use(gin.Recovery()) <span class="hljs-comment">//在程序发生 panic 时恢复运行，并返回一个500的HTTP状态码</span><br><br>	<span class="hljs-comment">// 创建 Go kit 的 endpoint</span><br>	endpoint := GetUserEndPoint(svc)<br><br>	<span class="hljs-comment">// 创建 HTTP 传输层处理程序</span><br>	handler := httptransport.NewServer(endpoint, transports.DecodeUserRequest, transports.EncodeUserResponse)<br>	r.GET(<span class="hljs-string">&quot;/hello&quot;</span>, gin.WrapH(handler))<br>	<span class="hljs-keyword">return</span> r<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>注意在调用包的时候：</p>
+<ul>
+<li><code>. "ApiService/endpoints"</code>
+那么在引用函数的时候就不需要<code>endpoints.XXX()</code></li>
+<li><code>"ApiService/transports"</code>那么在引用函数的时候需要<code>transports.XXX()</code></li>
+</ul>
+<h3 id="main层">Main层</h3>
+<p>这一层的实现是通过以下三个步骤实现的：</p>
+<ul>
+<li><strong>创建go -kit服务</strong></li>
+<li><strong>创建gin路由并绑定服务</strong></li>
+<li><strong>启动gin服务器</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs GO"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>    . <span class="hljs-string">&quot;ApiService/handler&quot;</span><br>    . <span class="hljs-string">&quot;ApiService/services&quot;</span><br>    <span class="hljs-string">&quot;log&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">// 创建 Go kit 服务</span><br>    userSvc := UserService&#123;&#125;<br>    <span class="hljs-comment">// 创建 Gin 路由并绑定服务</span><br>    r := MakeGinHandler(userSvc)<br>    <span class="hljs-comment">// 启动 Gin 服务器</span><br>    <span class="hljs-keyword">if</span> err := r.Run(<span class="hljs-string">&quot;:8080&quot;</span>); err != <span class="hljs-literal">nil</span> &#123;<br>       log.Fatal(err)<br>    &#125;<br>&#125;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">说明，这个demo运行后，浏览器输入 http://127.0.0.1:8080/hello?uid=1999 即可测试，还可以输入下面的内容进行测试：</span><br><span class="hljs-comment"> http://127.0.0.1:8080/hello</span><br><span class="hljs-comment"> http://127.0.0.1:8080</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<h1 id="gin统一收集路由">Gin统一收集路由</h1>
+<p>统一收集路由（unified routing
+collection）通常指的是将所有的路由配置集中到一个地方管理，这样可以更方便地管理和维护路由。Gin
+本身已经提供了一个路由器（Router）对象，用于收集和管理所有的路由。统一收集路由的好处包括：</p>
+<ul>
+<li>易于维护：所有的路由都在一个地方，便于查看和修改。</li>
+<li>路由重用：可以定义全局中间件，这些中间件会在所有路由上应用，而不需要在每个路由上重复编写。</li>
+<li>更好的错误处理：可以在统一的地方处理路由错误，例如未找到路由或方法不允许等。</li>
+<li>性能优化：Gin 路由器会预编译路由，这可以提高处理请求的效率</li>
+</ul>
+<h2 id="局部的路由规则初始化">局部的路由规则初始化</h2>
+<p>首先定义局部的具体路由规则，这里给出例子
+<code>GetUserRoutes</code>和<code>GetVideoRoutes</code>，在 Gin
+路由器中注册与视频相关的路由规则。这个函数接受一个<code>*gin.RouterGroup</code>参数</p>
+<p>它创建了一个新的子路由组
+video，这是通过调用<code>route.Group("/videos")</code>实现的。这个子路由组将会处理所有以<code>/videos</code>
+开头的请求。</p>
+<p>然后，<code>video.GET("/getVideoId", handler.GetVideoId)</code>
+这行代码为路径<code>/videos/getVideoId</code> 注册了一个新的 GET
+请求处理函数。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">package</span> route<br><br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;ApiService/handler&quot;</span><br>    <span class="hljs-string">&quot;github.com/gin-gonic/gin&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">GetUserRoutes</span><span class="hljs-params">(route *gin.RouterGroup)</span></span> &#123;<br>    user := route.Group(<span class="hljs-string">&quot;/users&quot;</span>)<br>    &#123;<br>       user.GET(<span class="hljs-string">&quot;/getUserId&quot;</span>, handler.GetUserId)<br>    &#125;<br>&#125;<br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;ApiService/handler&quot;</span><br>    <span class="hljs-string">&quot;github.com/gin-gonic/gin&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">GetVideoRoutes</span><span class="hljs-params">(route *gin.RouterGroup)</span></span> &#123;<br>    video := route.Group(<span class="hljs-string">&quot;/videos&quot;</span>)<br>    &#123;<br>       video.GET(<span class="hljs-string">&quot;/getVideoId&quot;</span>, handler.GetVideoId)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="全局路由规则统一">全局路由规则统一</h2>
+<p>设置Gin路由<strong>统一收集的</strong>
+<strong><code>CollectRoute</code>的函数</strong>，它的作用是将一系列的路由规则注册到
+Gin 路由器实例中。r <strong>是 Gin
+的路由器实例</strong>，这部分内容可以忽略（svc
+是某个服务接口的实例，这里是指 IUserService 接口的实例）。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">package</span> route<br><br><span class="hljs-keyword">import</span> (<br>    . <span class="hljs-string">&quot;ApiService/handler&quot;</span><br>    . <span class="hljs-string">&quot;ApiService/services&quot;</span><br>    <span class="hljs-string">&quot;ApiService/transports&quot;</span><br>    <span class="hljs-string">&quot;github.com/gin-gonic/gin&quot;</span><br>    httptransport <span class="hljs-string">&quot;github.com/go-kit/kit/transport/http&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">CollectRoute</span><span class="hljs-params">(r *gin.Engine, svc IUserService)</span></span> *gin.Engine &#123;<br>    r.Use(gin.Logger())<br>    r.Use(gin.Recovery())<br><br>    handler := httptransport.NewServer(MakeGinHandler(svc), transports.DecodeUserRequest, transports.EncodeUserResponse)<br>    api := r.Group(<span class="hljs-string">&quot;&quot;</span>)<br>    &#123;<br>       GetUserRoutes(api)<br>       GetVideoRoutes(api)<br>       api.GET(<span class="hljs-string">&quot;/hello&quot;</span>, gin.WrapH(handler))<br>    &#125;<br>    api.POST(<span class="hljs-string">&quot;/ping&quot;</span>, Ping)<br>    api.GET(<span class="hljs-string">&quot;/ping&quot;</span>, Ping)<br><br>    <span class="hljs-keyword">return</span> r<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="主函数初始化调用">主函数初始化调用</h2>
+<p>在 Gin Web 框架中，<code>gin.Default()</code> 创建了一个默认的 Gin
+路由器实例</p>
+<p><code>r = route.CollectRoute(r, userSvc)</code>这行代码的作用是将一系列的路由规则注册到
+Gin 路由器实例中</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">// 创建 Go kit 服务</span><br>    userSvc := UserService&#123;&#125;<br>    <span class="hljs-comment">// 创建 Gin 路由并绑定服务</span><br>    r := gin.Default()<br>    r = route.CollectRoute(r, userSvc)<br>    <span class="hljs-comment">//r := MakeGinHandler(userSvc)</span><br>    <span class="hljs-comment">// 启动 Gin 服务器</span><br>    <span class="hljs-keyword">if</span> err := r.Run(<span class="hljs-string">&quot;:8080&quot;</span>); err != <span class="hljs-literal">nil</span> &#123;<br>       log.Fatal(err)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="实际运行结果">实际运行结果</h2>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240127180429934.png" srcset="/img/loading.gif" lazyload alt="根据不同的url地址选择不同的输出" style="zoom:67%;" /></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="print-no-link">#后端开发</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【后端开发】Go-kit与Gin框架</div>
+      <div>https://lihaibineric.github.io/2024/01/23/develop_go_kit/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Haibin Li</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>January 23, 2024</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>February 22, 2024</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/30/dl_summary/" title="【深度学习】知识汇总">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【深度学习】知识汇总</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/19/marl_pymarl_code/" title="【多智能体强化学习】Pymarl代码分析">
+                        <span class="hidden-mobile">【多智能体强化学习】Pymarl代码分析</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
