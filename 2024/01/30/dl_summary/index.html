@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240222173542613.png">
 <meta property="article:published_time" content="2024-01-30T14:43:32.000Z">
-<meta property="article:modified_time" content="2024-02-22T15:20:22.605Z">
+<meta property="article:modified_time" content="2024-02-28T06:10:59.853Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="深度学习">
@@ -211,7 +211,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.7k words
+          9k words
         
       </span>
     
@@ -222,7 +222,7 @@
         
         
         
-          48 mins
+          75 mins
         
       </span>
     
@@ -264,7 +264,7 @@
               <p class="note note-info">
                 
                   
-                    Last updated on February 22, 2024 pm
+                    Last updated on February 28, 2024 pm
                   
                 
               </p>
@@ -296,6 +296,21 @@ target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/93643523">http
 target="_blank" rel="noopener" href="https://blog.csdn.net/kebu12345678/article/details/103084851">https://blog.csdn.net/kebu12345678/article/details/103084851</a></p>
 <p><a
 target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/667048896">https://zhuanlan.zhihu.com/p/667048896</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/643560888">https://zhuanlan.zhihu.com/p/643560888</a></p>
+<p>bert模型细节 <a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/534763354">https://www.zhihu.com/question/534763354</a></p>
+<p>为什么Bert三个embedding可以相加 <a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/374835153/answer/1080315948">https://www.zhihu.com/question/374835153/answer/1080315948</a></p>
+<p>LLAMA2结构<a
+target="_blank" rel="noopener" href="https://blog.csdn.net/sikh_0529/article/details/134375318">https://blog.csdn.net/sikh_0529/article/details/134375318</a></p>
+<p>旋转位置嵌入<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/zm/art/647109286?source_id=1005">https://www.zhihu.com/tardis/zm/art/647109286?source_id=1005</a></p>
+<p>Qlora <a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/618894919">https://zhuanlan.zhihu.com/p/618894919</a></p>
+<p>RLHF <a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/631238431">https://zhuanlan.zhihu.com/p/631238431</a></p>
+<pre><code class="hljs">    [https://zhuanlan.zhihu.com/p/599016986](https://zhuanlan.zhihu.com/p/599016986)</code></pre>
 <h3 id="逻辑回归和线性回归"><strong>逻辑回归和线性回归</strong></h3>
 <p><strong>线性回归解决的是回归问题，逻辑回归相当于是线性回归的基础上，来解决分类问题</strong>。</p>
 线性回归(Linear Regression) <span class="math display">\[
@@ -355,7 +370,6 @@ mapping），快捷连接使得残差变得可能，而恒等映射使得网络�
 <li>学习率过大</li>
 <li>训练样本中有坏数据</li>
 </ol></li>
-<li></li>
 <li><p><strong>model.eval vs和torch.no_grad区别</strong></p></li>
 <li><ul>
 <li>model.eval():
@@ -384,6 +398,31 @@ norm测试时期望的方差和训练时统计的有偏差。</p></li>
 <li><p>解决方法：1、梯度裁剪 2、权重L1/L2正则化 3、残差结构 4、batch
 norm</p></li>
 <li></li>
+<li></li>
+<li><p><strong>Batch Normalization（Batch Norm）</strong>：
+<strong>缺点</strong>：在处理序列数据（如文本）时，Batch
+Norm可能不会表现得很好，因为序列数据通常长度不一，并且一次训练的Batch中的句子的长度可能会有很大的差异；此外，Batch
+Norm对于Batch大小也非常敏感。对于较小的Batch大小，Batch
+Norm可能会表现得不好，因为每个Batch的统计特性可能会有较大的波动。</p></li>
+<li><p><strong>Layer Normalization（Layer Norm）</strong>：
+<strong>优点</strong>：Layer
+Norm是对每个样本进行归一化，因此它对Batch大小不敏感，这使得它在处理序列数据时表现得更好；另外，Layer
+Norm在处理不同长度的序列时也更为灵活。</p></li>
+<li><p><strong>Instance Normalization（Instance Norm）</strong>：
+<strong>优点</strong>：Instance
+Norm是对每个样本的每个特征进行归一化，因此它可以捕捉到更多的细节信息。Instance
+Norm在某些任务，如风格迁移，中表现得很好，因为在这些任务中，细节信息很重要。
+<strong>缺点</strong>：Instance
+Norm可能会过度强调细节信息，忽视了更宏观的信息。此外，Instance
+Norm的计算成本相比Batch Norm和Layer Norm更高。</p></li>
+<li><p><strong>Group Normalization（Group Norm）</strong>：
+<strong>优点</strong>：Group Norm是Batch Norm和Instance
+Norm的折中方案，它在Batch的一个子集（即组）上进行归一化。这使得Group
+Norm既可以捕捉到Batch的统计特性，又可以捕捉到样本的细节信息。此外，Group
+Norm对Batch大小也不敏感。 <strong>缺点</strong>：Group
+Norm的性能取决于组的大小，需要通过实验来确定最优的组大小。此外，Group
+Norm的计算成本也比Batch Norm和Layer Norm更高。</p></li>
+<li></li>
 </ol>
 <h3
 id="pytorch实现自注意力和多头注意力">pytorch实现自注意力和多头注意力</h3>
@@ -393,6 +432,8 @@ id="pytorch实现自注意力和多头注意力">pytorch实现自注意力和多
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> math <span class="hljs-keyword">import</span> sqrt<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MultiHeadAttention</span>(nn.Module):<br>  <span class="hljs-comment">#dim_in input dimention</span><br>  <span class="hljs-comment">#dim_k kq dimention</span><br>  <span class="hljs-comment">#dim_v value dimention</span><br>  <span class="hljs-comment">#num_heads number of heads</span><br>  <br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, dim_in, dim_k, dim_v, num_heads=<span class="hljs-number">8</span></span>):<br>    <span class="hljs-built_in">super</span>(MultiHeadAttention, self).__init__()<br>    <span class="hljs-keyword">assert</span> dim_k% num_heads ==<span class="hljs-number">0</span> <span class="hljs-keyword">and</span> dim_v% num_heads ==<span class="hljs-number">0</span><br>    <br>    self.dim_in = dim_in<br>    self.dim_k = dim_k<br>    self.dim_v = dim_v<br>    self.num_heads = num_heads<br>    self.linear_q = nn.Linear(dim_in, dim_k, bias==<span class="hljs-literal">False</span>)<br>    self.linear_k = nn.Linear(dim_in, dim_k, bias==<span class="hljs-literal">False</span>)<br>    self.linear_v = nn.Linear(dim_in, dim_v, bias==<span class="hljs-literal">False</span>)<br>    self._norm_fact = <span class="hljs-number">1</span>/sqrt(dim_k//num_heads)<br>    <br>   <span class="hljs-keyword">def</span> <span class="hljs-title function_">forwards</span>(<span class="hljs-params">self, x</span>):<br>    <span class="hljs-comment"># x: tensor of shape(batch, n, dim_in)</span><br>    batch, n, dim_in = x.shape<br>    <span class="hljs-keyword">assert</span> dim_in = self.dim_in<br>    <br>    nh = self.num_heads<br>    dk = self.dim_k // nh<br>    dv = self.dim_v // nh<br>    <br>    q = self.linear_q(x).reshape(batch, n, nh, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    k = self.linear_k(x).reshape(batch, n, nh, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    v = self.linear_v(x).reshape(batch, n, nk, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    <br>    dist = torch.matmul(q, k.transpose(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>))*self._norm_fact<br>    dist = torch.softmax(dist, dim=-<span class="hljs-number">1</span>)<br>    <br>    att = torch.matmul(dist, v)<br>    att = att.transpose(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>).reshape(batch, n, self.dim_v)<br></code></pre></td></tr></table></figure>
 <h3 id="batch-normalization">Batch Normalization</h3>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyBN</span>:<br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, momentum=<span class="hljs-number">0.01</span>, eps=<span class="hljs-number">1e-5</span>, feat_dim=<span class="hljs-number">2</span></span>):<br>    self._running_mean = np.zeros(shape = (feat_dim,))<br>    self._running_var = np.ones(shape = (fear_dim,))<br>    self._momentum = momentum<br>    <span class="hljs-comment">#防止分母计算为0</span><br>    self._eps = eps<br>    <br>    <span class="hljs-comment">#对应batch norm中需要更新beta 和 gamma， 采用pytorch文档中的初始化</span><br>    self._beta = np.zeros(shape=(feat_dim,))<br>    self._gamma = np.ones(shape=(feat_dim,))<br>    <br>    <br>   <span class="hljs-keyword">def</span> <span class="hljs-title function_">batch_norm</span>(<span class="hljs-params">self, x</span>):<br>    <span class="hljs-keyword">if</span> self.training:<br>      x_mean = x.mean(axis=<span class="hljs-number">0</span>)<br>      x_var = x.var(axis=<span class="hljs-number">0</span>)<br>      <span class="hljs-comment">#对应running_mean的更新公式</span><br>      self._running_mean = (<span class="hljs-number">1</span>-self._momentum)*x_mean +self._momentum*self._running_mean<br>      self._running_var = (<span class="hljs-number">1</span>-self._momentum)*x_var + self._momentum*self._running_var<br>      <span class="hljs-comment">#对应论文中计算BN公式</span><br>      x_hat = (x-x_mean)/np.sqrt(x_var+self._eps)<br>    <span class="hljs-keyword">else</span>:<br>      x_hat = (x-self._running_mean)/np.sqrt(self._running_var+self._eps)<br>    <span class="hljs-keyword">return</span> self._gamma*x_hat + self._beta<br></code></pre></td></tr></table></figure>
+<h3 id="transformer结构">Transformer结构</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MultiHeadAttention</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, d_model, num_heads</span>):<br>        <span class="hljs-built_in">super</span>(MultiHeadAttention, self).__init__()<br>        <span class="hljs-keyword">assert</span> d_model % num_heads == <span class="hljs-number">0</span><br>        self.d_model = d_model<br>        self.num_heads = num_heads<br>        self.depth = d_model // num_heads<br>        <br>        self.wq = nn.Linear(d_model, d_model)<br>        self.wk = nn.Linear(d_model, d_model)<br>        self.wv = nn.Linear(d_model, d_model)<br>        <br>        self.dense = nn.Linear(d_model, d_model)<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">split_heads</span>(<span class="hljs-params">self, x, batch_size</span>):<br>        x = x.view(batch_size, -<span class="hljs-number">1</span>, self.num_heads, self.depth)<br>        <span class="hljs-keyword">return</span> x.permute(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>)<br>    <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, q, k, v, mask=<span class="hljs-literal">None</span></span>):<br>        batch_size = q.size(<span class="hljs-number">0</span>)<br>        <br>        q = self.wq(q)<br>        k = self.wk(k)<br>        v = self.wv(v)<br>        <br>        q = self.split_heads(q, batch_size)<br>        k = self.split_heads(k, batch_size)<br>        v = self.split_heads(v, batch_size)<br>        <br>        scaled_attention_logits = torch.matmul(q, k.transpose(-<span class="hljs-number">1</span>, -<span class="hljs-number">2</span>)) / torch.sqrt(torch.tensor(self.depth, dtype=torch.float32))<br>        <span class="hljs-keyword">if</span> mask <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:<br>            scaled_attention_logits += (mask * -<span class="hljs-number">1e9</span>)<br>        <br>        attention_weights = torch.softmax(scaled_attention_logits, dim=-<span class="hljs-number">1</span>)<br>        output = torch.matmul(attention_weights, v)<br>        <br>        output = output.permute(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>).contiguous().view(batch_size, -<span class="hljs-number">1</span>, self.d_model)<br>        output = self.dense(output)<br>        <br>        <span class="hljs-keyword">return</span> output, attention_weights<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">PositionwiseFeedForward</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, d_model, dff</span>):<br>        <span class="hljs-built_in">super</span>(PositionwiseFeedForward, self).__init__()<br>        self.fc1 = nn.Linear(d_model, dff)<br>        self.fc2 = nn.Linear(dff, d_model)<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = self.fc1(x)<br>        x = torch.relu(x)<br>        x = self.fc2(x)<br>        <span class="hljs-keyword">return</span> x<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">TransformerBlock</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, d_model, num_heads, dff, dropout_rate=<span class="hljs-number">0.1</span></span>):<br>        <span class="hljs-built_in">super</span>(TransformerBlock, self).__init__()<br>        <br>        self.mha = MultiHeadAttention(d_model, num_heads)<br>        self.ffn = PositionwiseFeedForward(d_model, dff)<br>        <br>        self.layernorm1 = nn.LayerNorm(d_model)<br>        self.layernorm2 = nn.LayerNorm(d_model)<br>        <br>        self.dropout1 = nn.Dropout(dropout_rate)<br>        self.dropout2 = nn.Dropout(dropout_rate)<br>        <br>        self.dropout_rate = dropout_rate<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x, mask=<span class="hljs-literal">None</span></span>):<br>        attn_output, _ = self.mha(x, x, x, mask)<br>        attn_output = self.dropout1(attn_output)<br>        out1 = self.layernorm1(x + attn_output)<br>        <br>        ffn_output = self.ffn(out1)<br><br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -459,7 +500,7 @@ id="pytorch实现自注意力和多头注意力">pytorch实现自注意力和多
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>February 22, 2024</div>
+          <div>February 28, 2024</div>
         </div>
       
       
