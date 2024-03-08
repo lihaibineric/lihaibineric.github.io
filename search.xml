@@ -8168,7 +8168,8 @@ alt="Infilling task具体示意图" />
   <entry>
     <title>llm_model</title>
     <url>/2024/03/08/llm-model/</url>
-    <content><![CDATA[<h1 id="chatglm系列模型">chatglm系列模型</h1>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h1 id="chatglm系列模型">chatglm系列模型</h1>
 <h1 id="chatglm">1.ChatGLM</h1>
 <h2 id="背景">1.1 背景</h2>
 <p>主流的预训练框架主要有三种：</p>

@@ -16,15 +16,15 @@
   <meta name="author" content="Haibin Li">
   <meta name="keywords" content="">
   
-    <meta name="description" content="chatglm系列模型 1.ChatGLM 1.1 背景 主流的预训练框架主要有三种：  autoregressive自回归模型（AR模型）：代表作GPT。本质上是一个left-to-right的语言模型。通常用于生成式任务，在长文本生成方面取得了巨大的成功，比如自然语言生成（NLG）领域的任务：摘要、翻译或抽象问答。当扩展到十亿级别参数时，表现出了少样本学习能力。缺点是单向注意力机制，在NLU任">
+    <meta name="description" content="chatglm系列模型 1.ChatGLM 1.1 背景 主流的预训练框架主要有三种：  autoregressive自回归模型（AR模型）：代表作GPT。本质上是一个left-to-right的语言模型。通常用于生成式任务，在长文本生成方面取得了巨大的成功，比如自然语言生成（NLG）领域的任务：摘要、翻译或抽象问答。当扩展到十亿级别参数时，表现出了少样本学习能力。缺点是单向注意力机制，在NLU">
 <meta property="og:type" content="article">
 <meta property="og:title" content="llm_model">
 <meta property="og:url" content="https://lihaibineric.github.io/2024/03/08/llm-model/index.html">
 <meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
-<meta property="og:description" content="chatglm系列模型 1.ChatGLM 1.1 背景 主流的预训练框架主要有三种：  autoregressive自回归模型（AR模型）：代表作GPT。本质上是一个left-to-right的语言模型。通常用于生成式任务，在长文本生成方面取得了巨大的成功，比如自然语言生成（NLG）领域的任务：摘要、翻译或抽象问答。当扩展到十亿级别参数时，表现出了少样本学习能力。缺点是单向注意力机制，在NLU任">
+<meta property="og:description" content="chatglm系列模型 1.ChatGLM 1.1 背景 主流的预训练框架主要有三种：  autoregressive自回归模型（AR模型）：代表作GPT。本质上是一个left-to-right的语言模型。通常用于生成式任务，在长文本生成方面取得了巨大的成功，比如自然语言生成（NLG）领域的任务：摘要、翻译或抽象问答。当扩展到十亿级别参数时，表现出了少样本学习能力。缺点是单向注意力机制，在NLU">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-03-08T03:46:15.000Z">
-<meta property="article:modified_time" content="2024-03-08T03:46:41.199Z">
+<meta property="article:modified_time" content="2024-03-08T03:50:01.447Z">
 <meta property="article:author" content="Haibin Li">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -268,7 +268,8 @@
             
               <div class="markdown-body">
                 
-                <h1 id="chatglm系列模型">chatglm系列模型</h1>
+                <meta name="referrer" content="no-referrer"/>
+<h1 id="chatglm系列模型">chatglm系列模型</h1>
 <h1 id="chatglm">1.ChatGLM</h1>
 <h2 id="背景">1.1 背景</h2>
 <p>主流的预训练框架主要有三种：</p>
@@ -580,6 +581,12 @@ Unit）本质上一半的入参是用来做门控制的，不需要输出到下�
   
 
 
+  
+  
+
+
+
+
 
 
 
@@ -767,6 +774,49 @@ Unit）本质上一半的入参是用来做门控制的，不需要输出到下�
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
