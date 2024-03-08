@@ -8169,6 +8169,218 @@ alt="Infilling task具体示意图" />
     <title>llm_model</title>
     <url>/2024/03/08/llm-model/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h1 id="llama系列模型">llama系列模型</h1>
+<h1 id="llama">1.LLama</h1>
+<h2 id="简介">1.1 简介</h2>
+<p>Open and Efficient Foundation Language Models
+(Open但没完全Open的LLaMA) </p>
+<p>2023年2月，Meta（原Facebook）推出了LLaMA大模型，使用了1.4T
+token进行训练，虽然最大模型只有65B，但在相关评测任务上的效果可以媲美甚至超过千亿级大模型，被认为是近期开源大模型百花⻬放的开端之一，“羊驼”系列模型及其生态快速发展。</p>
+<p>LLaMA 所采用的 Transformer 结构和细节，与标准的 Transformer
+架构不同的地方包括采用了<strong>前置层归一化（Pre-normalization）</strong>并使用
+<strong>RMSNorm 归一化函数</strong> （Normalizing
+Function）、激活函数更换为**
+SwiGLU<strong>，并使用了</strong>旋转位置嵌入（RoP）**，整体 Transformer
+架构与 GPT-2 类似。</p>
+<p><img
+src="../../../../Learn/llm_interview_note/01.大语言模型简介/llama系列模型/image/image_eU6FYCi7tM.png" /></p>
+<h2 id="rmsnorm归一化函数">1.2 RMSNorm归一化函数</h2>
+<p><strong>为了使得模型训练过程更加稳定</strong>，GPT-2 相较于 GPT
+就引入了<strong>前置层归一化方法</strong>，将第一个层归一化移动到多头自注意力层之前，第二个层归一化也移动到了全连接层之前，同时残差连接的位置也调整到了多头自注意力层与全连接层之后。层归一化中也采用了
+<strong>RMSNorm 归一化函数</strong>。 针对输入向量 aRMSNorm
+函数计算公式如下 <span class="math display">\[
+R M S(a)=\sqrt{\frac{1}{n} \sum_{i=1}^{n} a_{i}^{2}}
+\]</span></p>
+<p><span class="math display">\[
+\bar{a}_{i}=\frac{a_{i}}{R M S(\boldsymbol{a})}
+\]</span></p>
+<p>此外，RMSNorm 还可以引入可学习的缩放因子 $ g_ i $和偏移参数 <span
+class="math inline">\(b_i\)</span>，从而得到 <span
+class="math inline">\(\bar{a}_{i}=\frac{a_{i}}{\operatorname{RMS}(\boldsymbol{a})}
+g_{i}+b_{i}\)</span>。 RMSNorm 在 HuggingFace Transformer
+库中代码实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LlamaRMSNorm</span>(nn.Module):<br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, hidden_size, eps=<span class="hljs-number">1e-6</span></span>): <br>    <span class="hljs-string">&quot;&quot;&quot; </span><br><span class="hljs-string">    LlamaRMSNorm is equivalent to T5LayerNorm </span><br><span class="hljs-string">    &quot;&quot;&quot;</span> <br>    <span class="hljs-built_in">super</span>().__init__() <br>    self.weight = nn.Parameter(torch.ones(hidden_size)) <br>    self.variance_epsilon = eps <span class="hljs-comment"># eps 防止取倒数之后分母为 0 </span><br>  <br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, hidden_states</span>): <br>    input_dtype = hidden_states.dtype <br>    variance = hidden_states.to(torch.float32).<span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>).mean(-<span class="hljs-number">1</span>, keepdim=<span class="hljs-literal">True</span>) <br>    hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon) <span class="hljs-comment"># weight 是末尾乘的可训练参数, 即 g_i </span><br>    <br>    <span class="hljs-keyword">return</span> (self.weight * hidden_states).to(input_dtype)<br></code></pre></td></tr></table></figure>
+<h2 id="swiglu计划函数">1.3 SwiGLU计划函数</h2>
+<p>SwiGLU激活函数是相较于 ReLU 函数在大部分评测中都有不少提升。在 LLaMA
+中全连接层 使用带有 SwiGLU 激活函数的 FFN（Position-wise Feed-Forward
+Network）的计算公式如下：</p>
+<p><span class="math display">\[
+\operatorname{FFN}_{\text {SwiGLU }}\left(\boldsymbol{x},
+\boldsymbol{W}, \boldsymbol{V},
+\boldsymbol{W}_{2}\right)=\operatorname{SwiGLU}(\boldsymbol{x},
+\boldsymbol{W}, \boldsymbol{V}) \boldsymbol{W}_{2}
+\]</span></p>
+<p><span class="math display">\[
+\operatorname{SwiGLU}(\boldsymbol{x}, \boldsymbol{W},
+\boldsymbol{V})=\operatorname{Swish}_{\beta}(x \boldsymbol{W}) \otimes
+\boldsymbol{x} \boldsymbol{V}
+\]</span></p>
+<p><span class="math display">\[
+\operatorname{Swish}_{\beta}(\boldsymbol{x})=\boldsymbol{x}
+\sigma(\boldsymbol{\beta} \boldsymbol{x})
+\]</span></p>
+<p>其中，<span class="math inline">\(σ(x)\)</span> 是 Sigmoid
+函数。下图给出了 Swish 激活函数在参数 <span
+class="math inline">\(β\)</span> 不同取值下的形状。可以看 到当 <span
+class="math inline">\(β\)</span> 趋近于 0 时，Swish 函数趋近于线性函数
+<span class="math inline">\(y = x\)</span>，当 $ β <span
+class="math inline">\(趋近于无穷大时，Swish 函数趋近于 ReLU
+函数，\)</span>β$ 取值为 1 时，Swish 函数是光滑且非单调。在 HuggingFace
+的 Transformer 库中 Swish1 函数使用 silu 函数代替。</p>
+<p><img
+src="../../../../Learn/llm_interview_note/01.大语言模型简介/llama系列模型/image/image_3ObxGlGf3u.png" /></p>
+<p>LLaMA中直接将FFN中的ReLU替换为SwiGLU，并将维度放缩为<span
+class="math inline">\((2/3) ⋅ 4d\)</span></p>
+<p><img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image_cH74TcnK85.png" /></p>
+<h2 id="旋转位置嵌入rope">1.4 旋转位置嵌入（RoPE）</h2>
+<p>在位置编码上，使用旋转位置嵌入（Rotary Positional
+Embeddings，RoPE）代替原有的绝对位置编码。RoPE
+借助了<strong>复数的思想</strong>，出发点是<strong>通过绝对位置编码的方式实现相对位置编码</strong>。其目标是通过下述运算来给
+<code>q</code>，<code>k</code> 添加绝对位置信息：</p>
+<p><span class="math display">\[
+\tilde{\boldsymbol{q}}_{m}=f(\boldsymbol{q}, m),
+\tilde{\boldsymbol{k}}_{n}=f(\boldsymbol{k}, n)
+\]</span></p>
+<p>经过上述操作后，<span
+class="math inline">\(\tilde{\boldsymbol{q}}_{m}\)</span>和<span
+class="math inline">\(\tilde{\boldsymbol{k}}_{n}\)</span>就带有位置m和n的绝对位置信息。</p>
+<p>最终可以得到二维情况下用复数表示的 RoPE：</p>
+<p><span class="math display">\[
+f(\boldsymbol{q}, m)=R_{f}(\boldsymbol{q}, m) e^{i
+\Theta_{f}(\boldsymbol{q}, m)}=\|\boldsymbol{q}\|
+e^{i(\Theta(\boldsymbol{q})+m \theta)}=\boldsymbol{q} e^{i m \theta}
+\]</span></p>
+<p>根据复数乘法的几何意义，上述变换实际上是对应向量旋转，所以位置向量称为“旋转式位置编码”。还可以使用矩阵形式表示</p>
+<p><span class="math display">\[
+f(\boldsymbol{q}, m)=\left(\begin{array}{cc}\cos m \theta &amp; -\sin
+\cos m \theta \\ \sin m \theta &amp; \cos m
+\theta\end{array}\right)\left(\begin{array}{l}\boldsymbol{q}_{0} \\
+\boldsymbol{q}_{1}\end{array}\right)
+\]</span></p>
+<p>根据内积满足线性叠加的性质，任意偶数维的
+RoPE，都可以表示为二维情形的拼接，即：</p>
+<p><span class="math display">\[
+f(\boldsymbol{q}, m)=\underbrace{\left(\begin{array}{ccccccc}\cos m
+\theta_{0} &amp; -\sin m \theta_{0} &amp; 0 &amp; 0 &amp; \cdots &amp; 0
+&amp; 0 \\ \sin m \theta_{0} &amp; \cos m \theta_{0} &amp; 0 &amp; 0
+&amp; \cdots &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; \cos m \theta_{1} &amp;
+-\sin m \theta_{1} &amp; \cdots &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; \sin
+m \theta_{1} &amp; \cos m \theta_{1} &amp; \cdots &amp; 0 &amp; 0 \\
+\cdots &amp; \cdots &amp; \cdots &amp; \cdots &amp; \ddots &amp; \cdots
+&amp; \cdots \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; \cos m
+\theta_{d / 2-1} &amp; -\sin m \theta_{d / 2-1} \\ 0 &amp; 0 &amp; 0
+&amp; 0 &amp; \cdots &amp; \sin m \theta_{d / 2-1} &amp; \cos m
+\theta_{d /
+2-1}\end{array}\right)}_{\boldsymbol{R}_{d}}\left(\begin{array}{c}\boldsymbol{q}_{0}
+\\ \boldsymbol{q}_{1} \\ \boldsymbol{q}_{2} \\ \boldsymbol{q}_{3} \\
+\cdots \\ \boldsymbol{q}_{d-2} \\ \boldsymbol{q}_{d-1}\end{array}\right)
+\]</span></p>
+<p><img
+src="../../../../Learn/llm_interview_note/01.大语言模型简介/llama系列模型/image/image_CVZIBvlTcD.png" /></p>
+<p>RoPE 在 HuggingFace Transformer 库中代码实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">precompute_freqs_cis</span>(<span class="hljs-params">dim: <span class="hljs-built_in">int</span>, end: <span class="hljs-built_in">int</span>, constant: <span class="hljs-built_in">float</span> = <span class="hljs-number">10000.0</span></span>):<br>    <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">    计算cos和sin的值，cos值在实部，sin值在虚部，类似于 cosx+j*sinx</span><br><span class="hljs-string">    :param dim: q,k,v的最后一维，一般为emb_dim/head_num</span><br><span class="hljs-string">    :param end: 句长length</span><br><span class="hljs-string">    :param constant： 这里指10000</span><br><span class="hljs-string">    :return:</span><br><span class="hljs-string">    复数计算 torch.polar(a, t)输出， a*(cos(t)+j*sin(t))</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    <span class="hljs-comment"># freqs: 计算 1/(10000^(2i/d) )，将结果作为参数theta</span><br>    <span class="hljs-comment"># 形式化为 [theta_0, theta_1, ..., theta_(d/2-1)]</span><br>    freqs = <span class="hljs-number">1.0</span> / (constant ** (torch.arange(<span class="hljs-number">0</span>, dim, <span class="hljs-number">2</span>)[: (dim // <span class="hljs-number">2</span>)].<span class="hljs-built_in">float</span>() / dim)) <span class="hljs-comment"># [d/2]</span><br><br>    <span class="hljs-comment"># 计算m</span><br>    t = torch.arange(end, device=freqs.device)  <span class="hljs-comment"># [length]</span><br>    <span class="hljs-comment"># 计算m*theta</span><br>    freqs = torch.outer(t, freqs).<span class="hljs-built_in">float</span>()  <span class="hljs-comment"># [length, d/2]</span><br>    <span class="hljs-comment"># freqs形式化为 [m*theta_0, m*theta_1, ..., m*theta_(d/2-1)],其中 m=0,1,...,length-1</span><br><br>    <span class="hljs-comment"># 计算cos(m*theta)+j*sin(m*theta)</span><br>    freqs_cis = torch.polar(torch.ones_like(freqs), freqs)  <span class="hljs-comment"># complex64</span><br>    <span class="hljs-comment"># freqs_cis: [cos(m*theta_0)+j*sin(m*theta_0),  cos(m*theta_1)+j*sin(m*theta_1),), ..., cos(m*theta_(d/2-1))+j*sin(m*theta_(d/2-1))]</span><br>    <span class="hljs-comment"># 其中j为虚数单位， m=0,1,...,length-1</span><br>    <span class="hljs-keyword">return</span> freqs_cis <span class="hljs-comment"># [length, d/2]</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">reshape_for_broadcast</span>(<span class="hljs-params">freqs_cis: torch.Tensor, x: torch.Tensor</span>):<br>    ndim = x.ndim<br>    <span class="hljs-keyword">assert</span> <span class="hljs-number">0</span> &lt;= <span class="hljs-number">1</span> &lt; ndim<br>    <span class="hljs-keyword">assert</span> freqs_cis.shape == (x.shape[<span class="hljs-number">1</span>], x.shape[-<span class="hljs-number">1</span>])<br>    shape = [d <span class="hljs-keyword">if</span> i == <span class="hljs-number">1</span> <span class="hljs-keyword">or</span> i == ndim - <span class="hljs-number">1</span> <span class="hljs-keyword">else</span> <span class="hljs-number">1</span> <span class="hljs-keyword">for</span> i, d <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(x.shape)] <span class="hljs-comment"># (1, length, 1, d/2)</span><br>    <span class="hljs-keyword">return</span> freqs_cis.view(*shape) <span class="hljs-comment"># [1, length, 1, d/2]</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">apply_rotary_emb</span>(<span class="hljs-params">xq: torch.Tensor, xk: torch.Tensor, freqs_cis: torch.Tensor,</span>):<br>    <span class="hljs-comment"># 先将xq维度变为[bs, length, head,  d/2, 2], 利用torch.view_as_complex转变为复数</span><br>    <span class="hljs-comment"># xq:[q0, q1, .., q(d-1)] 转变为 xq_: [q0+j*q1, q2+j*q3, ..., q(d-2)+j*q(d-1)]</span><br>    xq_ = torch.view_as_complex(xq.<span class="hljs-built_in">float</span>().reshape(*xq.shape[:-<span class="hljs-number">1</span>], -<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)) <span class="hljs-comment"># [bs, length, head, d/2]</span><br>    <span class="hljs-comment"># 同样的，xk_:[k0+j*k1, k2+j*k3, ..., k(d-2)+j*k(d-1)]</span><br>    xk_ = torch.view_as_complex(xk.<span class="hljs-built_in">float</span>().reshape(*xk.shape[:-<span class="hljs-number">1</span>], -<span class="hljs-number">1</span>, <span class="hljs-number">2</span>))<br><br>    freqs_cis = reshape_for_broadcast(freqs_cis, xq_) <span class="hljs-comment"># [1, length, 1, d/2]</span><br>    <span class="hljs-comment"># 下式xq_ * freqs_cis形式化输出，以第一个为例, 如下</span><br>    <span class="hljs-comment"># (q0+j*q1)(cos(m*theta_0)+j*sin(m*theta_0)) = q0*cos(m*theta_0)-q1*sin(m*theta_0) + j*(q1*cos(m*theta_0)+q0*sin(m*theta_0))</span><br>    <span class="hljs-comment"># 上式的实部为q0*cos(m*theta_0)-q1*sin(m*theta_0)，虚部为q1*cos(m*theta_0)+q0*sin(m*theta_0)</span><br>    <span class="hljs-comment"># 然后通过torch.view_as_real函数，取出实部和虚部，维度由[bs, length, head, d/2]变为[bs, length, head, d/2, 2]，最后一维放实部与虚部</span><br>    <span class="hljs-comment"># 最后经flatten函数将维度拉平，即[bs, length, head, d]</span><br>    <span class="hljs-comment"># 此时xq_out形式化为 [实部0，虚部0，实部1，虚部1，..., 实部(d/2-1), 虚部(d/2-1)]</span><br>    xq_out = torch.view_as_real(xq_ * freqs_cis).flatten(<span class="hljs-number">3</span>) <span class="hljs-comment"># [bs, length, head, d]</span><br>    <span class="hljs-comment"># 即为新生成的q</span><br><br>    xk_out = torch.view_as_real(xk_ * freqs_cis).flatten(<span class="hljs-number">3</span>)<br>    <span class="hljs-keyword">return</span> xq_out.type_as(xq), xk_out.type_as(xk)<br><br><span class="hljs-keyword">if</span> __name__==<span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    <span class="hljs-comment"># (bs, length, head, d)</span><br>    q = torch.randn((<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>, <span class="hljs-number">32</span>))  <span class="hljs-comment"># q=[q0, q1, .., qd-1]</span><br>    k = torch.randn((<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>, <span class="hljs-number">32</span>))<br>    v = torch.randn((<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>, <span class="hljs-number">32</span>))<br>    freqs_cis= precompute_freqs_cis(dim=<span class="hljs-number">32</span>, end=<span class="hljs-number">10</span>, constant= <span class="hljs-number">10000.0</span>)<br>    <span class="hljs-comment"># print(freqs_cis.detach().numpy())</span><br><br>    q_new, k_new = apply_rotary_emb(xq=q, xk=k, freqs_cis=freqs_cis)<br>    <span class="hljs-built_in">print</span>()<br><br></code></pre></td></tr></table></figure>
+<h1 id="alpaca">2.Alpaca</h1>
+<h2 id="简介-1">2.1 简介</h2>
+<p>Stanford Alpaca: An Instruction-following LLaMA Model</p>
+<p>Alpaca是在<strong>LLaMA基础上使用52K指令数据精调的预训练模型</strong>，作者只用了不到600美元的成本训练出了该模型（数据$500
++ 机器$100）。初步实验结果表明Alpaca可以达到与OpenAI
+text-davinci-003相匹敌的效果</p>
+<h2 id="微调方法">2.2 微调方法</h2>
+<ol type="1">
+<li>第一步：构造175条self-instruct 种子示例任务</li>
+<li>第二步：基于上述种子任务，利 用text-davinci-003爬取指令数据</li>
+<li>第三步：使用爬取下来的52K指令 数据在LLaMA上进行精调，最终
+得到Alpaca</li>
+</ol>
+<p><img
+src="../../../../Learn/llm_interview_note/01.大语言模型简介/llama系列模型/image/image_-j860i8DgK.png" /></p>
+<h2 id="self-instruct数据构造">2.3 Self-instruct数据构造</h2>
+<p>首先由人工构造175条种子数据</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;seed_task_25&quot;</span><span class="hljs-punctuation">,</span> <br>  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;perfect_numbers&quot;</span><span class="hljs-punctuation">,</span> <br>  <span class="hljs-attr">&quot;instruction&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Find the four smallest perfect numbers.&quot;</span><span class="hljs-punctuation">,</span> <br>  <span class="hljs-attr">&quot;instances&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;input&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;output&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6, 28, 496, and 8128”&#125;], </span><br><span class="hljs-string">  &quot;</span>is_classification<span class="hljs-string">&quot;: false</span><br><span class="hljs-string">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>将“爬取要求”和种子数据进行适当组合，送入textdavinci-003，要求生成类似的指令数据。要求包括：提升指令多样性、包含真实数据、字数
+要求、语言要求、拒绝不合适指令等</p>
+<h2 id="指令数据格式">2.4 指令数据格式</h2>
+<ul>
+<li><code>instruction</code>: 描述模型需要执行的指令内容</li>
+<li><code>input</code>（可选）:
+任务上下文或输入信息，例如当指令是“对文章进行总结”，则input是文章内容</li>
+<li><code>output</code>: 由text-davinci-003生成的针对指令的回复</li>
+</ul>
+<p><img
+src="../../../../Learn/llm_interview_note/01.大语言模型简介/llama系列模型/image/image_O1w6c88rjl.png" /></p>
+<h1 id="llama-2">3.Llama-2</h1>
+<h2 id="简介-2">3.1 简介</h2>
+<p>Llama 2: Open Foundation and Fine-Tuned Chat Models </p>
+<p>2023年7月，Meta推出了Llama-2开源大模型，并且推出了Llama-2-Chat对话模型</p>
+<p>与一代LLaMA主要区别体现在<strong>更多的训练数据、更⻓的上下文窗口、GQA技术</strong>等</p>
+<p><img
+src="../../../../Learn/llm_interview_note/01.大语言模型简介/llama系列模型/image/image_24Q7m-usAc.png" /></p>
+<p>模型结构的变动主要是体现在<strong>GQA</strong>和<strong>FFN</strong>缩放上</p>
+<ul>
+<li><strong>MHA改成GQA</strong>：整体参数量会有减少</li>
+<li><strong>FFN模块矩阵维度有扩充</strong>：增强泛化能力，整体参数量增加</li>
+<li><strong>上下文长度是llama两倍</strong>(长度从2048-&gt;4096)
+训练语料增加约 40%，体现在1.4T-&gt;2.0T的Tokens
+llama2-34B和llama2-70B使用了GQA，加速模型训练和推理速度</li>
+</ul>
+<h2 id="gqa">3.2 GQA</h2>
+<p>GQA和MQA都是注意力的变体，其中多个查询头关注相同的键和值头，以减少推理过程中
+KV 缓存的大小，并可以显著提高推理吞吐量。</p>
+<p>MHA、GQA、MQA的区别和联系，具体的优点如下：</p>
+<ul>
+<li><code>Mutil-Head Attention</code>
+因为自回归模型生成回答时，需要前面生成的KV缓存起来，来加速计算。</li>
+<li><code>Multi-Query Attention</code>
+多个头之间可以共享KV对，因此速度上非常有优势，实验验证大约减少30-40%吞吐。</li>
+<li><code>Group Query Attention</code>
+没有像MQA那么极端，将query分组，组内共享KV，效果接近MQA，速度上与MQA可比较。</li>
+</ul>
+<p><img
+src="../../../../Learn/llm_interview_note/01.大语言模型简介/llama系列模型/image/image_E5817qCTJW.png" /></p>
+<p>Llama-2中使用了8个KV映射，即GQA-8，<strong>GQA在多数任务上与MHA效果相当，且平均效果优于MQA；GQA和MQA均比MHA有更好的吞吐量</strong></p>
+<h2 id="源码">3.3 源码</h2>
+<p><img
+src="../../../../Learn/llm_interview_note/01.大语言模型简介/llama系列模型/image/image_XB1zAxr1uE.png" /></p>
+<h1 id="code-llama">4.Code Llama</h1>
+<h2 id="简介-3">4.1 简介</h2>
+<p>2023年8月24日，Meta推出了面向代码的可商用大模型Code
+Llama，包含三个大小版本（7B/13B/34B）</p>
+<p>支持多种编程语言，包括Python、C++、Java、PHP、Typescript
+(Javascript)、C#和Bash</p>
+<p>亮点：</p>
+<ul>
+<li>免费供学术研究和商用</li>
+<li>支持100K上下文</li>
+<li>“神秘”34B版接近GPT-4效果</li>
+</ul>
+<h2 id="模型训练流程">4.2 模型训练流程</h2>
+<p><img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image_5vFo-VwS3Q.png" /></p>
+<h2 id="code-infilling-task-7b13b-only">4.3 Code Infilling Task （7B/13B
+only）</h2>
+<p>任务目标：根据代码的上下文，预测残缺部分的代码</p>
+<p>方法：</p>
+<ul>
+<li>从完整的代码中选择一部分进行掩码（mask）并替换为<code>&lt;MASK&gt;</code>符号，构成上下文</li>
+<li>利用自回归的方法，根据上下文信息预测解码出被mask的代码部分</li>
+</ul>
+<p><img
+src="../../../../Learn/llm_interview_note/01.大语言模型简介/llama系列模型/image/image_TqLGy1fEBx.png" /></p>
+<h1 id="总结">5.总结</h1>
+<p><strong>LLaMA</strong> </p>
+<ul>
+<li>开源大模型繁荣发展的开端，一系列相关工作均基于LLaMA开展</li>
+<li>模型规模7B、13B、33B、65B满足了开发者和研究者的不同需求</li>
+</ul>
+<p><strong>Alpaca</strong>：通过少量的指令精调赋予LLaMA指令理解与执行的能力</p>
+<p><strong>Llama-2</strong></p>
+<ul>
+<li>LLaMA的二代模型，相关模型性能进一步提升，模型可商用</li>
+<li>推出官方对⻬的Chat版本模型，采用了完整的RLHF链条</li>
+</ul>
+<p><strong>Code
+Llama</strong>：专注于代码能力的LLaMA模型，最好的模型代码能力接近GPT-4效果，模型可商用</p>
 <h1 id="chatglm系列模型">chatglm系列模型</h1>
 <h1 id="chatglm">1.ChatGLM</h1>
 <h2 id="背景">1.1 背景</h2>
