@@ -3423,6 +3423,12 @@ href="https://www.kaggle.com/c/criteo-display-ad-challenge/overview">https://www
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">gbdt_lr_model</span>(<span class="hljs-params">data, category_feature, continuous_feature</span>): <span class="hljs-comment"># 0.43616</span><br>    <span class="hljs-comment"># 离散特征one-hot编码</span><br><br>    <span class="hljs-comment"># 划分数据集</span><br>    x_train, x_val, y_train, y_val = train_test_split(train, target, test_size = <span class="hljs-number">0.2</span>, random_state = <span class="hljs-number">2020</span>)<br>    <br>    <span class="hljs-comment">#GBDT模型的搭建和训练过程</span><br>    gbm = lgb.LGBMClassifier(objective=<span class="hljs-string">&#x27;binary&#x27;</span>,<br>                            subsample= <span class="hljs-number">0.8</span>,<br>                            min_child_weight= <span class="hljs-number">0.5</span>,<br>                            colsample_bytree= <span class="hljs-number">0.7</span>,<br>                            num_leaves=<span class="hljs-number">100</span>,<br>                            max_depth = <span class="hljs-number">12</span>,<br>                            learning_rate=<span class="hljs-number">0.01</span>,<br>                            n_estimators=<span class="hljs-number">1000</span>,<br>                            )<br><br>    gbm.fit(x_train, y_train,<br>            eval_set = [(x_train, y_train), (x_val, y_val)],<br>            eval_names = [<span class="hljs-string">&#x27;train&#x27;</span>, <span class="hljs-string">&#x27;val&#x27;</span>],<br>            eval_metric = <span class="hljs-string">&#x27;binary_logloss&#x27;</span>,<br>            early_stopping_rounds = <span class="hljs-number">100</span>,<br>            )<br>    <br>    model = gbm.booster_<br>    <br>    gbdt_feats_train = model.predict(train, pred_leaf = <span class="hljs-literal">True</span>)<br>    gbdt_feats_test = model.predict(test, pred_leaf = <span class="hljs-literal">True</span>)<br>    gbdt_feats_name = [<span class="hljs-string">&#x27;gbdt_leaf_&#x27;</span> + <span class="hljs-built_in">str</span>(i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(gbdt_feats_train.shape[<span class="hljs-number">1</span>])]<br>    df_train_gbdt_feats = pd.DataFrame(gbdt_feats_train, columns = gbdt_feats_name) <br>    df_test_gbdt_feats = pd.DataFrame(gbdt_feats_test, columns = gbdt_feats_name)<br>    <br>    train = pd.concat([train, df_train_gbdt_feats], axis = <span class="hljs-number">1</span>)<br>    test = pd.concat([test, df_test_gbdt_feats], axis = <span class="hljs-number">1</span>)<br>    train_len = train.shape[<span class="hljs-number">0</span>]<br>    data = pd.concat([train, test])<br>    <span class="hljs-keyword">del</span> train<br>    <span class="hljs-keyword">del</span> test<br>    gc.collect()<br><br>    <span class="hljs-comment"># # 连续特征归一化</span><br>    scaler = MinMaxScaler()<br>    <span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> continuous_feature:<br>        data[col] = scaler.fit_transform(data[col].values.reshape(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>))<br><br>    <span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> gbdt_feats_name:<br>        onehot_feats = pd.get_dummies(data[col], prefix = col)<br>        data.drop([col], axis = <span class="hljs-number">1</span>, inplace = <span class="hljs-literal">True</span>)<br>        data = pd.concat([data, onehot_feats], axis = <span class="hljs-number">1</span>)<br><br>    train = data[: train_len]<br>    test = data[train_len:]<br>    <span class="hljs-keyword">del</span> data<br>    gc.collect()<br><br>    x_train, x_val, y_train, y_val = train_test_split(train, target, test_size = <span class="hljs-number">0.3</span>, random_state = <span class="hljs-number">2018</span>)<br>    <br>    <span class="hljs-comment">#再放进LR模型中</span><br>    lr = LogisticRegression()<br>    lr.fit(x_train, y_train)<br>    tr_logloss = log_loss(y_train, lr.predict_proba(x_train)[:, <span class="hljs-number">1</span>])<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;tr-logloss: &#x27;</span>, tr_logloss)<br>    val_logloss = log_loss(y_val, lr.predict_proba(x_val)[:, <span class="hljs-number">1</span>])<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;val-logloss: &#x27;</span>, val_logloss)<br>    y_pred = lr.predict_proba(test)[:, <span class="hljs-number">1</span>]<br>    <span class="hljs-built_in">print</span>(y_pred[:<span class="hljs-number">10</span>])<br></code></pre></td></tr></table></figure>
 <p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240206000903122.png" alt="GBDT+LR预测结果展示" style="zoom:50%;" /></p>
 <h2 id="深度学习模型rank">深度学习模型(Rank)</h2>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240308111249239.png"
+alt="image-20240308111249239" />
+<figcaption aria-hidden="true">image-20240308111249239</figcaption>
+</figure>
 ]]></content>
       <categories>
         <category>深度学习</category>
@@ -4102,44 +4108,22 @@ system，能够产生极高的精度；直接测量速度和距离，这进一�
     <title>【深度学习】DeepL知识汇总</title>
     <url>/2024/01/30/dl_summary/</url>
     <content><![CDATA[<h1 id="深度学习知识汇总">深度学习知识汇总</h1>
-<p>深度学习八股文，这里将会收集深度学习中的基本概念和常见的问题</p>
-<p><a
-href="https://blog.csdn.net/weixin_42693876/article/details/120345924">https://blog.csdn.net/weixin_42693876/article/details/120345924</a></p>
-<p>L2范数<a
-href="https://blog.csdn.net/u010725283/article/details/79212762">https://blog.csdn.net/u010725283/article/details/79212762</a></p>
-<p>L1L2范数 <a
-href="https://blog.csdn.net/weixin_35849560/article/details/113395018">https://blog.csdn.net/weixin_35849560/article/details/113395018</a></p>
-<p>Transformer为什么用多头 <a
-href="https://www.zhihu.com/question/341222779">https://www.zhihu.com/question/341222779</a></p>
-<p>Transformer里的LN <a
-href="https://blog.csdn.net/weixin_45069761/article/details/107834049">https://blog.csdn.net/weixin_45069761/article/details/107834049</a></p>
-<p><a
-href="https://zhuanlan.zhihu.com/p/560482252">https://zhuanlan.zhihu.com/p/560482252</a></p>
-<p>batch和minibatch <a
-href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/xys430381_1/article/details/80680167">https://link.zhihu.com/?target=https%3A//blog.csdn.net/xys430381_1/article/details/80680167</a></p>
-<p>优化器 <a
-href="https://zhuanlan.zhihu.com/p/78622301">https://zhuanlan.zhihu.com/p/78622301</a></p>
-<p>BN <a
-href="https://zhuanlan.zhihu.com/p/93643523">https://zhuanlan.zhihu.com/p/93643523</a></p>
-<p>神经网络权重初始化 <a
-href="https://blog.csdn.net/kebu12345678/article/details/103084851">https://blog.csdn.net/kebu12345678/article/details/103084851</a></p>
-<p><a
-href="https://zhuanlan.zhihu.com/p/667048896">https://zhuanlan.zhihu.com/p/667048896</a></p>
-<p><a
-href="https://zhuanlan.zhihu.com/p/643560888">https://zhuanlan.zhihu.com/p/643560888</a></p>
-<p>bert模型细节 <a
-href="https://www.zhihu.com/question/534763354">https://www.zhihu.com/question/534763354</a></p>
-<p>为什么Bert三个embedding可以相加 <a
-href="https://www.zhihu.com/question/374835153/answer/1080315948">https://www.zhihu.com/question/374835153/answer/1080315948</a></p>
-<p>LLAMA2结构<a
-href="https://blog.csdn.net/sikh_0529/article/details/134375318">https://blog.csdn.net/sikh_0529/article/details/134375318</a></p>
-<p>旋转位置嵌入<a
-href="https://www.zhihu.com/tardis/zm/art/647109286?source_id=1005">https://www.zhihu.com/tardis/zm/art/647109286?source_id=1005</a></p>
-<p>Qlora <a
-href="https://zhuanlan.zhihu.com/p/618894919">https://zhuanlan.zhihu.com/p/618894919</a></p>
-<p>RLHF <a
-href="https://zhuanlan.zhihu.com/p/631238431">https://zhuanlan.zhihu.com/p/631238431</a></p>
-<pre><code class="hljs">    [https://zhuanlan.zhihu.com/p/599016986](https://zhuanlan.zhihu.com/p/599016986)</code></pre>
+<p>深度学习八股文，这里将会收集深度学习中的基本概念和常见的问题，以下是主要的参考文章</p>
+<ul>
+<li><a
+href="https://zhuanlan.zhihu.com/p/560482252">https://zhuanlan.zhihu.com/p/560482252</a></li>
+<li><a
+href="https://blog.csdn.net/weixin_42693876/article/details/120345924">https://blog.csdn.net/weixin_42693876/article/details/120345924</a></li>
+<li><a
+href="https://zhuanlan.zhihu.com/p/667048896">https://zhuanlan.zhihu.com/p/667048896</a></li>
+</ul>
+<h2 id="训练与模型">训练与模型</h2>
+<ul>
+<li><p>L1L2范数 <a
+href="https://blog.csdn.net/weixin_35849560/article/details/113395018">https://blog.csdn.net/weixin_35849560/article/details/113395018</a></p></li>
+<li><p>L2范数<a
+href="https://blog.csdn.net/u010725283/article/details/79212762">https://blog.csdn.net/u010725283/article/details/79212762</a></p></li>
+</ul>
 <h3 id="逻辑回归和线性回归"><strong>逻辑回归和线性回归</strong></h3>
 <p><strong>线性回归解决的是回归问题，逻辑回归相当于是线性回归的基础上，来解决分类问题</strong>。</p>
 线性回归(Linear Regression) <span class="math display">\[
@@ -4154,29 +4138,72 @@ href="https://zhuanlan.zhihu.com/p/631238431">https://zhuanlan.zhihu.com/p/63123
 <p>$$ 逻辑回归可以理解为在线性回归后加了一个 <code>sigmoid</code>
 函数。将线性回归变成一个<code>0~1</code>输出的分类问题。逻辑回归本质上是一个线性回归模型，因为除去<code>sigmoid</code>映射函数关系，其他的步骤，算法都是线性回归的。可以说，逻辑回归都是以线性回归为理论支持的，只不过逻辑回归可以轻松解决
 <code>0/1</code> 分类问题。</p>
-<h3 id="深度学习模型的参数都在-0-1-之间">深度学习模型的参数都在 0-1
-之间</h3>
+<h3 id="深度学习模型的参数范围">深度学习模型的参数范围</h3>
 <p>因为参数越小代表模型越简单，越是复杂的模型，越是尝试对所有样本进行拟合，包括异常点。这就会造成在较小的区间中产生较大的波动，这个较大的波动也会反映在这个区间的导数比较大。只有越大的参数才可能产生较大的导数。因此参数越小，模型就越简单。</p>
 <h3 id="实现参数稀疏">实现参数稀疏</h3>
 <p>参数的稀疏，在一定程度上实现了特征的选择。一般而言，大部分特征对模型是没有贡献的。这些没有用的特征虽然可以减少训练集上的误差，但是对测试集的样本，反而会产生干扰。稀疏参数的引入，可以将那些无用的特征的权重置为0</p>
-<h3
-id="batch_size的大小对学习率的影响">Batch_size的大小对学习率的影响</h3>
+<h3 id="batch-size的大小对学习率的影响">Batch
+size的大小对学习率的影响</h3>
 <ul>
 <li>batch-size大，学习率也可以取得大一点，而且，batch-size大通常更新次数少，所以需要更多的epoch才能让loss收敛。</li>
 <li>batch-size小，学习率应该取得小一点，取的大会发生nan（梯度爆炸了），batch-size小通常更新次数多，较少的epoch就课可以让loss收敛，但是缺点是训练过程慢。</li>
 </ul>
 <p>为什么batch-size小，学习率取的大会发生nan？
-学习率较高的情况下，直接影响到每次更新值的程度比较大，走的步伐因此也会大起来。如下图，过大的学习率会导致无法顺利地到达最低点，稍有不慎就会跳出可控制区域，此时我们将要面对的就是损失成倍增大(跨量级)</p>
+学习率较高的情况下，直接影响到每次更新值的程度比较大，走的步伐因此也会大起来。过大的学习率会导致无法顺利地到达最低点，稍有不慎就会跳出可控制区域，此时我们将要面对的就是损失成倍增大(跨量级)</p>
+<h3 id="优化器于损失函数">优化器于损失函数</h3>
 <p>优化器<code>optimizer</code>和损失函数<code>loss function</code>的区别：</p>
 <ol type="1">
 <li>优化器定义了哪些参数是要用来更新的，并且设置了更新的方式（学习率、动量、SGD等），还有一些权重衰减的设置。</li>
 <li>损失函数是用来计算损失的，也可以说损失函数是负责反向传播求导用的</li>
 </ol>
-<p>残差结构设计思想：残差网络的本质也是解决梯度消失/爆炸的问题，只不过是在网络结构层面的改变
-残差网络的出现解决了构建深层神经网络时网络退化即梯度消失/爆炸的问题。残差结构主要设计有两个，快捷连接（shortcut
-connection）和恒等映射（identity
-mapping），快捷连接使得残差变得可能，而恒等映射使得网络变深，恒等映射主要有两个：跳跃连接和激活函数</p>
-<p><strong>Adam与SGD的区别</strong></p>
+<h3 id="训练中loss快速增大">训练中loss快速增大</h3>
+<p>训练过程中发现loss快速增大应该从哪些方面考虑?</p>
+<ol type="1">
+<li>学习率过大，导致学习的过程非常不平稳导致的损失值快速增大</li>
+<li>训练的样本中存在坏数据，造成了数据的污染</li>
+</ol>
+<h3 id="梯度消失和梯度爆炸">梯度消失和梯度爆炸</h3>
+<p><strong>梯度消失的原因和解决</strong></p>
+<ol type="1">
+<li><p>隐藏层的层数过多</p>
+<p>反向传播求梯度时的链式求导法则，某部分梯度小于1，则多层连乘后出现梯度消失</p></li>
+<li><p>采用了不合适的激活函数</p>
+<p>如sigmoid函数的最大梯度为1/4，这意味着隐藏层每一层的梯度均小于1（权值小于1时），出现梯度消失</p></li>
+<li><p>解决方法：1、relu激活函数，使导数衡为1 2、batch norm
+3、残差结构</p></li>
+</ol>
+<p><strong>梯度爆炸的原因和解决办法</strong></p>
+<ol type="1">
+<li>隐藏层的层数过多，某部分梯度大于1，则多层连乘后，梯度呈指数增长，产生梯度爆炸。</li>
+<li>权重初始值太大，求导时会乘上权重</li>
+<li>解决方法：1、梯度裁剪 2、权重L1/L2正则化 3、残差结构 4、batch
+norm</li>
+</ol>
+<h3 id="如何取消张量梯度">如何取消张量梯度</h3>
+<p>可以选择使用torch.no_grad来将某个张量的值取消计算梯度，<strong>model.eval
+vs和torch.no_grad区别</strong>：</p>
+<ul>
+<li>model.eval():
+依然计算梯度，但是不反传；dropout层保留概率为1；batchnorm层使用全局的mean和var</li>
+<li>with torch.no_grad: 不计算梯度</li>
+</ul>
+<h3 id="dropout和batchnorm">Dropout和BatchNorm</h3>
+<p><strong>Dropout和Batch norm能否一起使用？</strong></p>
+<p>可以，但是只能将Dropout放在Batch
+norm之后使用。因为Dropout训练时会改变输入X的方差，从而影响Batch
+norm训练过程中统计的滑动方差值；而测试时没有Dropout，输入X的方差和训练时不一致，这就导致Batch
+norm测试时期望的方差和训练时统计的有偏差。</p>
+<h3 id="pytorch实现基础网络">PyTorch实现基础网络</h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.optim <span class="hljs-keyword">as</span> optim<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BasicNet</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim=<span class="hljs-number">784</span>, hidden_dim1=<span class="hljs-number">256</span>, hidden_dim2=<span class="hljs-number">128</span>, output_dim=<span class="hljs-number">10</span></span>):<br>        <span class="hljs-built_in">super</span>(BasicNet, self).__init__()<br>        self.fc1 = nn.Linear(input_dim, hidden_dim1)<br>        self.fc2 = nn.Linear(hidden_dim1, hidden_dim2)<br>        self.fc3 = nn.Linear(hidden_dim2, output_dim)<br>        self.relu = nn.ReLU()<br>        self.batchnorm1 = nn.BatchNorm1d(hidden_dim1)<br>        self.batchnorm2 = nn.BatchNorm1d(hidden_dim2)<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = self.relu(self.batchnorm1(self.fc1(x)))<br>        x = self.relu(self.batchnorm2(self.fc2(x)))<br>        x = self.fc3(x)<br>        <span class="hljs-keyword">return</span> x<br><br><span class="hljs-comment"># 创建模型</span><br>model = BasicNet()<br><br><span class="hljs-comment"># 定义损失函数</span><br>criterion = nn.CrossEntropyLoss()<br><br><span class="hljs-comment"># 定义优化器</span><br>optimizer = optim.Adam(model.parameters(), lr=<span class="hljs-number">0.001</span>)<br><br><span class="hljs-comment"># 训练模型</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params">model, train_loader, criterion, optimizer, num_epochs=<span class="hljs-number">5</span></span>):<br>    model.train()<br>    <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_epochs):<br>        running_loss = <span class="hljs-number">0.0</span><br>        <span class="hljs-keyword">for</span> i, (inputs, labels) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(train_loader):<br>            optimizer.zero_grad()<br>            outputs = model(inputs)<br>            loss = criterion(outputs, labels)<br>            loss.backward()<br>            optimizer.step()<br>            running_loss += loss.item()<br>            <span class="hljs-keyword">if</span> (i+<span class="hljs-number">1</span>) % <span class="hljs-number">100</span> == <span class="hljs-number">0</span>:<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;Epoch [<span class="hljs-subst">&#123;epoch+<span class="hljs-number">1</span>&#125;</span>/<span class="hljs-subst">&#123;num_epochs&#125;</span>], Step [<span class="hljs-subst">&#123;i+<span class="hljs-number">1</span>&#125;</span>/<span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(train_loader)&#125;</span>], Loss: <span class="hljs-subst">&#123;running_loss/<span class="hljs-number">100</span>:<span class="hljs-number">.4</span>f&#125;</span>&#x27;</span>)<br>                running_loss = <span class="hljs-number">0.0</span><br><br><span class="hljs-comment"># 保存模型</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">save_model</span>(<span class="hljs-params">model, filepath</span>):<br>    torch.save(model.state_dict(), filepath)<br><br><span class="hljs-comment"># 加载模型</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">load_model</span>(<span class="hljs-params">model, filepath</span>):<br>    model.load_state_dict(torch.load(filepath))<br>    model.<span class="hljs-built_in">eval</span>()  <span class="hljs-comment"># 设置为评估模式</span><br><br><span class="hljs-comment"># 示例数据加载</span><br><span class="hljs-comment"># train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True)</span><br><br><span class="hljs-comment"># 示例训练过程</span><br><span class="hljs-comment"># train(model, train_loader, criterion, optimizer)</span><br><br><span class="hljs-comment"># 示例模型保存</span><br><span class="hljs-comment"># save_model(model, &#x27;model.pth&#x27;)</span><br><br><span class="hljs-comment"># 示例模型加载</span><br><span class="hljs-comment"># loaded_model = BasicNet()</span><br><span class="hljs-comment"># load_model(loaded_model, &#x27;model.pth&#x27;)</span><br><br></code></pre></td></tr></table></figure>
+<h3 id="section"></h3>
+<h2 id="pytorch几类优化器">PyTorch几类优化器</h2>
+<ul>
+<li>几类优化器的区分<a
+href="https://zhuanlan.zhihu.com/p/78622301">https://zhuanlan.zhihu.com/p/78622301</a></li>
+<li>深度学习基础<a
+href="https://zhuanlan.zhihu.com/p/560482252">https://zhuanlan.zhihu.com/p/560482252</a></li>
+</ul>
+<h3 id="adam与sgd的区别"><strong>Adam与SGD的区别</strong></h3>
 <p>SGD缺点是其更新方向完全依赖于当前batch计算出的梯度，因而十分不稳定。</p>
 <p>Adam的优点主要在于：</p>
 <ul>
@@ -4184,93 +4211,68 @@ mapping），快捷连接使得残差变得可能，而恒等映射使得网络�
 <li>此外经过偏差校正后，每一次迭代学习率都有个确定范围，使得参数比较平稳。</li>
 </ul>
 <p>但是Adam也有其自身问题：可能会对前期出现的特征过拟合，后期才出现的特征很难纠正前期的拟合效果。二者似乎都没法很好避免局部最优问题。</p>
-<p><strong>softmax如何防止指数上溢</strong></p>
-<p>在计算softmax函数时，指数上溢是一个常见的问题，特别是当输入的数值非常大时，指数函数的计算结果可能会溢出。为了解决这个问题，可以采取以下几种方法：</p>
-<ol type="1">
-<li><p><strong>数值稳定性技巧</strong>：为了避免指数函数的溢出，可以将输入的数值减去一个常数，使得输入相对较小，从而减少指数函数的值。通常，可以通过找到输入向量中的最大值，并将所有元素减去这个最大值来实现数值稳定性。</p>
-<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240222173542613.png" alt="image-20240222173542613" style="zoom:67%;" /></p>
-<p>这样做可以保持相对稳定，防止指数函数的溢出。</p></li>
-<li><p><strong>利用性质</strong>：softmax函数的分子和分母同时除以一个相同的常数并不会改变函数的值。因此，我们可以在计算softmax时，将所有输入向量的值都减去向量中的最大值，然后进行softmax计算。</p></li>
-</ol>
-<p>以上两种方法都可以有效地避免指数上溢的问题，并保持softmax函数的数值稳定性。在实际应用中，通常会使用这些技巧来计算softmax函数，以确保模型的稳定性和数值精度。</p>
-<p><strong>训练过程中发现loss快速增大应该从哪些方面考虑?</strong></p>
-<ol type="1">
-<li><ol type="1">
-<li>学习率过大</li>
-<li>训练样本中有坏数据</li>
-</ol></li>
-<li><p><strong>model.eval vs和torch.no_grad区别</strong></p></li>
-<li><ul>
-<li>model.eval():
-依然计算梯度，但是不反传；dropout层保留概率为1；batchnorm层使用全局的mean和var</li>
-<li>with torch.no_grad: 不计算梯度</li>
-</ul></li>
-<li></li>
-<li></li>
-<li><p><strong>Dropout和Batch norm能否一起使用？</strong></p></li>
-<li><p>可以，但是只能将Dropout放在Batch
-norm之后使用。因为Dropout训练时会改变输入X的方差，从而影响Batch
-norm训练过程中统计的滑动方差值；而测试时没有Dropout，输入X的方差和训练时不一致，这就导致Batch
-norm测试时期望的方差和训练时统计的有偏差。</p></li>
-<li></li>
-<li><p><strong>梯度消失和梯度爆炸</strong></p></li>
-<li><p><strong>梯度消失的原因和解决办法</strong></p></li>
-<li><p>（1）隐藏层的层数过多</p></li>
-<li><p>反向传播求梯度时的链式求导法则，某部分梯度小于1，则多层连乘后出现梯度消失</p></li>
-<li><p>（2）采用了不合适的激活函数</p></li>
-<li><p>如sigmoid函数的最大梯度为1/4，这意味着隐藏层每一层的梯度均小于1（权值小于1时），出现梯度消失。</p></li>
-<li><p>解决方法：1、relu激活函数，使导数衡为1 2、batch norm
-3、残差结构</p></li>
-<li><p><strong>梯度爆炸的原因和解决办法</strong></p></li>
-<li><p>（1）隐藏层的层数过多，某部分梯度大于1，则多层连乘后，梯度呈指数增长，产生梯度爆炸。</p></li>
-<li><p>（2）权重初始值太大，求导时会乘上权重</p></li>
-<li><p>解决方法：1、梯度裁剪 2、权重L1/L2正则化 3、残差结构 4、batch
-norm</p></li>
-<li></li>
-<li></li>
-<li><p><strong>Batch Normalization（Batch Norm）</strong>：
+<h2 id="norm归一化">Norm归一化</h2>
+<ul>
+<li>LayerNorm <a
+href="https://blog.csdn.net/weixin_45069761/article/details/107834049">https://blog.csdn.net/weixin_45069761/article/details/107834049</a></li>
+<li>BatchNorm <a
+href="https://zhuanlan.zhihu.com/p/93643523">https://zhuanlan.zhihu.com/p/93643523</a></li>
+<li>Batch和miniBatch <a
+href="https://link.zhihu.com/?target=https%3A//blog.csdn.net/xys430381_1/article/details/80680167">https://link.zhihu.com/?target=https%3A//blog.csdn.net/xys430381_1/article/details/80680167</a></li>
+</ul>
+<h3 id="几类归一化区别与联系">几类归一化区别与联系</h3>
+<p><strong>Batch Normalization（Batch Norm）</strong>：
 <strong>缺点</strong>：在处理序列数据（如文本）时，Batch
 Norm可能不会表现得很好，因为序列数据通常长度不一，并且一次训练的Batch中的句子的长度可能会有很大的差异；此外，Batch
 Norm对于Batch大小也非常敏感。对于较小的Batch大小，Batch
-Norm可能会表现得不好，因为每个Batch的统计特性可能会有较大的波动。</p></li>
-<li><p><strong>Layer Normalization（Layer Norm）</strong>：
+Norm可能会表现得不好，因为每个Batch的统计特性可能会有较大的波动。</p>
+<p><strong>Layer Normalization（Layer Norm）</strong>：
 <strong>优点</strong>：Layer
 Norm是对每个样本进行归一化，因此它对Batch大小不敏感，这使得它在处理序列数据时表现得更好；另外，Layer
-Norm在处理不同长度的序列时也更为灵活。</p></li>
-<li><p><strong>Instance Normalization（Instance Norm）</strong>：
+Norm在处理不同长度的序列时也更为灵活。</p>
+<p><strong>Instance Normalization（Instance Norm）</strong>：
 <strong>优点</strong>：Instance
 Norm是对每个样本的每个特征进行归一化，因此它可以捕捉到更多的细节信息。Instance
 Norm在某些任务，如风格迁移，中表现得很好，因为在这些任务中，细节信息很重要。
 <strong>缺点</strong>：Instance
 Norm可能会过度强调细节信息，忽视了更宏观的信息。此外，Instance
-Norm的计算成本相比Batch Norm和Layer Norm更高。</p></li>
-<li><p><strong>Group Normalization（Group Norm）</strong>：
+Norm的计算成本相比Batch Norm和Layer Norm更高。</p>
+<p><strong>Group Normalization（Group Norm）</strong>：
 <strong>优点</strong>：Group Norm是Batch Norm和Instance
 Norm的折中方案，它在Batch的一个子集（即组）上进行归一化。这使得Group
 Norm既可以捕捉到Batch的统计特性，又可以捕捉到样本的细节信息。此外，Group
 Norm对Batch大小也不敏感。 <strong>缺点</strong>：Group
 Norm的性能取决于组的大小，需要通过实验来确定最优的组大小。此外，Group
-Norm的计算成本也比Batch Norm和Layer Norm更高。</p></li>
-<li></li>
-</ol>
-<h3
-id="pytorch实现自注意力和多头注意力">pytorch实现自注意力和多头注意力</h3>
-<p>自注意力</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> math <span class="hljs-keyword">import</span> sqrt<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SelfAttention</span>(nn.Module):<br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, dim_in, dim_k, dim_v</span>):<br>    <span class="hljs-built_in">super</span>(SelfAttention, self).__init__()<br>    self.dim_in = dim_in<br>    self.dim_k = dim_k<br>    self.dim_v = dim_v<br>    self.linear_q = nn.Linear(dim_in, dim_k, bias=<span class="hljs-literal">False</span>)<br>    self.linear_k = nn.Linear(dim_in, dim_k, bias=<span class="hljs-literal">False</span>)<br>    self.linear_v = nn.Linear(dim_in, dim_v, bias=<span class="hljs-literal">False</span>)<br>    self._norm_fact = <span class="hljs-number">1</span>/sqrt(dim_k)<br>    <br>    <br>   <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>    batch, n, dim_in = x.shape<br>    <span class="hljs-keyword">assert</span> dim_in == self.dim_in<br>    <br>    q = self.linear_q(x) <span class="hljs-comment">#batch, n, dim_k</span><br>    k = self.linear_k(x)<br>    v = self.linear_v(x)<br>    <br>    dist = torch.bmm(q, k.transpose(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>))* self._norm_fact <span class="hljs-comment">#batch, n, n</span><br>    dist = torch.softmax(dist, dim=-<span class="hljs-number">1</span>)<br>    <br>    att = torch.bmm(dist, v)<br>    <span class="hljs-keyword">return</span> att<br>    <br></code></pre></td></tr></table></figure>
-<p>多头注意力机制</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> math <span class="hljs-keyword">import</span> sqrt<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MultiHeadAttention</span>(nn.Module):<br>  <span class="hljs-comment">#dim_in input dimention</span><br>  <span class="hljs-comment">#dim_k kq dimention</span><br>  <span class="hljs-comment">#dim_v value dimention</span><br>  <span class="hljs-comment">#num_heads number of heads</span><br>  <br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, dim_in, dim_k, dim_v, num_heads=<span class="hljs-number">8</span></span>):<br>    <span class="hljs-built_in">super</span>(MultiHeadAttention, self).__init__()<br>    <span class="hljs-keyword">assert</span> dim_k% num_heads ==<span class="hljs-number">0</span> <span class="hljs-keyword">and</span> dim_v% num_heads ==<span class="hljs-number">0</span><br>    <br>    self.dim_in = dim_in<br>    self.dim_k = dim_k<br>    self.dim_v = dim_v<br>    self.num_heads = num_heads<br>    self.linear_q = nn.Linear(dim_in, dim_k, bias==<span class="hljs-literal">False</span>)<br>    self.linear_k = nn.Linear(dim_in, dim_k, bias==<span class="hljs-literal">False</span>)<br>    self.linear_v = nn.Linear(dim_in, dim_v, bias==<span class="hljs-literal">False</span>)<br>    self._norm_fact = <span class="hljs-number">1</span>/sqrt(dim_k//num_heads)<br>    <br>   <span class="hljs-keyword">def</span> <span class="hljs-title function_">forwards</span>(<span class="hljs-params">self, x</span>):<br>    <span class="hljs-comment"># x: tensor of shape(batch, n, dim_in)</span><br>    batch, n, dim_in = x.shape<br>    <span class="hljs-keyword">assert</span> dim_in = self.dim_in<br>    <br>    nh = self.num_heads<br>    dk = self.dim_k // nh<br>    dv = self.dim_v // nh<br>    <br>    q = self.linear_q(x).reshape(batch, n, nh, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    k = self.linear_k(x).reshape(batch, n, nh, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    v = self.linear_v(x).reshape(batch, n, nk, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    <br>    dist = torch.matmul(q, k.transpose(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>))*self._norm_fact<br>    dist = torch.softmax(dist, dim=-<span class="hljs-number">1</span>)<br>    <br>    att = torch.matmul(dist, v)<br>    att = att.transpose(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>).reshape(batch, n, self.dim_v)<br></code></pre></td></tr></table></figure>
-<h3 id="batch-normalization">Batch Normalization</h3>
+Norm的计算成本也比Batch Norm和Layer Norm更高。</p>
+<h3 id="batch-norm代码实现">Batch Norm代码实现</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyBN</span>:<br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, momentum=<span class="hljs-number">0.01</span>, eps=<span class="hljs-number">1e-5</span>, feat_dim=<span class="hljs-number">2</span></span>):<br>    self._running_mean = np.zeros(shape = (feat_dim,))<br>    self._running_var = np.ones(shape = (fear_dim,))<br>    self._momentum = momentum<br>    <span class="hljs-comment">#防止分母计算为0</span><br>    self._eps = eps<br>    <br>    <span class="hljs-comment">#对应batch norm中需要更新beta 和 gamma， 采用pytorch文档中的初始化</span><br>    self._beta = np.zeros(shape=(feat_dim,))<br>    self._gamma = np.ones(shape=(feat_dim,))<br>    <br>    <br>   <span class="hljs-keyword">def</span> <span class="hljs-title function_">batch_norm</span>(<span class="hljs-params">self, x</span>):<br>    <span class="hljs-keyword">if</span> self.training:<br>      x_mean = x.mean(axis=<span class="hljs-number">0</span>)<br>      x_var = x.var(axis=<span class="hljs-number">0</span>)<br>      <span class="hljs-comment">#对应running_mean的更新公式</span><br>      self._running_mean = (<span class="hljs-number">1</span>-self._momentum)*x_mean +self._momentum*self._running_mean<br>      self._running_var = (<span class="hljs-number">1</span>-self._momentum)*x_var + self._momentum*self._running_var<br>      <span class="hljs-comment">#对应论文中计算BN公式</span><br>      x_hat = (x-x_mean)/np.sqrt(x_var+self._eps)<br>    <span class="hljs-keyword">else</span>:<br>      x_hat = (x-self._running_mean)/np.sqrt(self._running_var+self._eps)<br>    <span class="hljs-keyword">return</span> self._gamma*x_hat + self._beta<br></code></pre></td></tr></table></figure>
-<h3 id="transformer结构">Transformer结构</h3>
+<h2 id="transformer部分">Transformer部分</h2>
+<ul>
+<li>Transformer里的LN <a
+href="https://blog.csdn.net/weixin_45069761/article/details/107834049">https://blog.csdn.net/weixin_45069761/article/details/107834049</a></li>
+<li>Transformer为什么用多头 <a
+href="https://www.zhihu.com/question/341222779">https://www.zhihu.com/question/341222779</a></li>
+</ul>
+<h3 id="残差结构的设计">残差结构的设计</h3>
+<p>残差结构设计思想：残差网络的本质也是解决梯度消失/爆炸的问题，只不过是在网络结构层面的改变
+残差网络的出现解决了构建深层神经网络时网络退化即梯度消失/爆炸的问题。残差结构主要设计有两个，快捷连接（shortcut
+connection）和恒等映射（identity
+mapping），快捷连接使得残差变得可能，而恒等映射使得网络变深，恒等映射主要有两个：跳跃连接和激活函数</p>
+<h3 id="pytorch实现attention">PyTorch实现Attention</h3>
+<p>自注意力机制的实现</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> math <span class="hljs-keyword">import</span> sqrt<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SelfAttention</span>(nn.Module):<br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, dim_in, dim_k, dim_v</span>):<br>    <span class="hljs-built_in">super</span>(SelfAttention, self).__init__()<br>    self.dim_in = dim_in<br>    self.dim_k = dim_k<br>    self.dim_v = dim_v<br>    self.linear_q = nn.Linear(dim_in, dim_k, bias=<span class="hljs-literal">False</span>)<br>    self.linear_k = nn.Linear(dim_in, dim_k, bias=<span class="hljs-literal">False</span>)<br>    self.linear_v = nn.Linear(dim_in, dim_v, bias=<span class="hljs-literal">False</span>)<br>    self._norm_fact = <span class="hljs-number">1</span>/sqrt(dim_k)<br>    <br>    <br>   <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>    batch, n, dim_in = x.shape<br>    <span class="hljs-keyword">assert</span> dim_in == self.dim_in<br>    <br>    q = self.linear_q(x) <span class="hljs-comment">#batch, n, dim_k</span><br>    k = self.linear_k(x)<br>    v = self.linear_v(x)<br>    <br>    dist = torch.bmm(q, k.transpose(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>))* self._norm_fact <span class="hljs-comment">#batch, n, n</span><br>    dist = torch.softmax(dist, dim=-<span class="hljs-number">1</span>)<br>    <br>    att = torch.bmm(dist, v)<br>    <span class="hljs-keyword">return</span> att<br>    <br></code></pre></td></tr></table></figure>
+<p>多头注意力机制的实现</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> math <span class="hljs-keyword">import</span> sqrt<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MultiHeadAttention</span>(nn.Module):<br>  <span class="hljs-comment">#dim_in input dimention</span><br>  <span class="hljs-comment">#dim_k kq dimention</span><br>  <span class="hljs-comment">#dim_v value dimention</span><br>  <span class="hljs-comment">#num_heads number of heads</span><br>  <br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, dim_in, dim_k, dim_v, num_heads=<span class="hljs-number">8</span></span>):<br>    <span class="hljs-built_in">super</span>(MultiHeadAttention, self).__init__()<br>    <span class="hljs-keyword">assert</span> dim_k% num_heads ==<span class="hljs-number">0</span> <span class="hljs-keyword">and</span> dim_v% num_heads ==<span class="hljs-number">0</span><br>    <br>    self.dim_in = dim_in<br>    self.dim_k = dim_k<br>    self.dim_v = dim_v<br>    self.num_heads = num_heads<br>    self.linear_q = nn.Linear(dim_in, dim_k, bias==<span class="hljs-literal">False</span>)<br>    self.linear_k = nn.Linear(dim_in, dim_k, bias==<span class="hljs-literal">False</span>)<br>    self.linear_v = nn.Linear(dim_in, dim_v, bias==<span class="hljs-literal">False</span>)<br>    self._norm_fact = <span class="hljs-number">1</span>/sqrt(dim_k//num_heads)<br>    <br>   <span class="hljs-keyword">def</span> <span class="hljs-title function_">forwards</span>(<span class="hljs-params">self, x</span>):<br>    <span class="hljs-comment"># x: tensor of shape(batch, n, dim_in)</span><br>    batch, n, dim_in = x.shape<br>    <span class="hljs-keyword">assert</span> dim_in = self.dim_in<br>    <br>    nh = self.num_heads<br>    dk = self.dim_k // nh<br>    dv = self.dim_v // nh<br>    <br>    q = self.linear_q(x).reshape(batch, n, nh, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    k = self.linear_k(x).reshape(batch, n, nh, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    v = self.linear_v(x).reshape(batch, n, nk, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    <br>    dist = torch.matmul(q, k.transpose(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>))*self._norm_fact<br>    dist = torch.softmax(dist, dim=-<span class="hljs-number">1</span>)<br>    <br>    att = torch.matmul(dist, v)<br>    att = att.transpose(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>).reshape(batch, n, self.dim_v)<br></code></pre></td></tr></table></figure>
+<h3 id="pytorch实现transformer">PyTorch实现Transformer</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.nn.functional <span class="hljs-keyword">as</span> F<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MultiHeadAttention</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, embed_dim, num_heads</span>):<br>        <span class="hljs-built_in">super</span>(MultiHeadAttention, self).__init__()<br>        self.num_heads = num_heads<br>        self.head_dim = embed_dim // num_heads<br>        <br>        self.query_fc = nn.Linear(embed_dim, embed_dim)<br>        self.key_fc = nn.Linear(embed_dim, embed_dim)<br>        self.value_fc = nn.Linear(embed_dim, embed_dim)<br>        self.fc_out = nn.Linear(embed_dim, embed_dim)<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, query, key, value, mask=<span class="hljs-literal">None</span></span>):<br>        batch_size = query.shape[<span class="hljs-number">0</span>]<br>        <br>        <span class="hljs-comment"># Linearly project queries, keys, and values</span><br>        Q = self.query_fc(query)<br>        K = self.key_fc(key)<br>        V = self.value_fc(value)<br>        <br>        <span class="hljs-comment"># Split the embedding into num_heads</span><br>        Q = Q.view(batch_size, -<span class="hljs-number">1</span>, self.num_heads, self.head_dim).permute(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>)<br>        K = K.view(batch_size, -<span class="hljs-number">1</span>, self.num_heads, self.head_dim).permute(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>)<br>        V = V.view(batch_size, -<span class="hljs-number">1</span>, self.num_heads, self.head_dim).permute(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>)<br>        <br>        <span class="hljs-comment"># Calculate the attention scores</span><br>        scores = torch.matmul(Q, K.permute(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>)) / torch.sqrt(torch.tensor(self.head_dim, dtype=torch.float32))<br>        <br>        <span class="hljs-keyword">if</span> mask <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:<br>            scores = scores.masked_fill(mask == <span class="hljs-number">0</span>, <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;-1e20&quot;</span>))<br>        <br>        <span class="hljs-comment"># Apply softmax to get attention probabilities</span><br>        attention_weights = F.softmax(scores, dim=-<span class="hljs-number">1</span>)<br>        <br>        <span class="hljs-comment"># Apply dropout</span><br>        attention_weights = F.dropout(attention_weights, p=<span class="hljs-number">0.1</span>, training=self.training)<br>        <br>        <span class="hljs-comment"># Multiply the attention weights with the values</span><br>        output = torch.matmul(attention_weights, V)<br>        <br>        <span class="hljs-comment"># Concatenate multi-heads and project</span><br>        output = output.permute(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>).contiguous().view(batch_size, -<span class="hljs-number">1</span>, embed_dim)<br>        output = self.fc_out(output)<br>        <br>        <span class="hljs-keyword">return</span> output, attention_weights<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">PositionwiseFeedforward</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, embed_dim, hidden_dim</span>):<br>        <span class="hljs-built_in">super</span>(PositionwiseFeedforward, self).__init__()<br>        self.fc1 = nn.Linear(embed_dim, hidden_dim)<br>        self.fc2 = nn.Linear(hidden_dim, embed_dim)<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = F.relu(self.fc1(x))<br>        x = self.fc2(x)<br>        <span class="hljs-keyword">return</span> x<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">EncoderLayer</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, embed_dim, num_heads, hidden_dim</span>):<br>        <span class="hljs-built_in">super</span>(EncoderLayer, self).__init__()<br>        self.multihead_attention = MultiHeadAttention(embed_dim, num_heads)<br>        self.feed_forward = PositionwiseFeedforward(embed_dim, hidden_dim)<br>        self.layer_norm1 = nn.LayerNorm(embed_dim)<br>        self.layer_norm2 = nn.LayerNorm(embed_dim)<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x, mask=<span class="hljs-literal">None</span></span>):<br>        <span class="hljs-comment"># Multi-Head Attention</span><br>        residual = x<br>        x, _ = self.multihead_attention(x, x, x, mask)<br>        x = self.layer_norm1(x + residual)<br>        <br>        <span class="hljs-comment"># Feed Forward</span><br>        residual = x<br>        x = self.feed_forward(x)<br>        x = self.layer_norm2(x + residual)<br>        <br>        <span class="hljs-keyword">return</span> x<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">TransformerEncoder</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, vocab_size, embed_dim, num_layers, num_heads, hidden_dim</span>):<br>        <span class="hljs-built_in">super</span>(TransformerEncoder, self).__init__()<br>        self.embedding = nn.Embedding(vocab_size, embed_dim)<br>        self.layers = nn.ModuleList([EncoderLayer(embed_dim, num_heads, hidden_dim) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_layers)])<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x, mask=<span class="hljs-literal">None</span></span>):<br>        x = self.embedding(x)<br>        <span class="hljs-keyword">for</span> layer <span class="hljs-keyword">in</span> self.layers:<br>            x = layer(x, mask)<br>        <span class="hljs-keyword">return</span> x<br><br></code></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.optim <span class="hljs-keyword">as</span> optim<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BasicNet</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim=<span class="hljs-number">784</span>, hidden_dim1=<span class="hljs-number">256</span>, hidden_dim2=<span class="hljs-number">128</span>, output_dim=<span class="hljs-number">10</span></span>):<br>        <span class="hljs-built_in">super</span>(BasicNet, self).__init__()<br>        self.fc1 = nn.Linear(input_dim, hidden_dim1)<br>        self.fc2 = nn.Linear(hidden_dim1, hidden_dim2)<br>        self.fc3 = nn.Linear(hidden_dim2, output_dim)<br>        self.relu = nn.ReLU()<br>        self.batchnorm1 = nn.BatchNorm1d(hidden_dim1)<br>        self.batchnorm2 = nn.BatchNorm1d(hidden_dim2)<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = self.relu(self.batchnorm1(self.fc1(x)))<br>        x = self.relu(self.batchnorm2(self.fc2(x)))<br>        x = self.fc3(x)<br>        <span class="hljs-keyword">return</span> x<br><br><span class="hljs-comment"># 创建模型</span><br>model = BasicNet()<br><br><span class="hljs-comment"># 定义损失函数</span><br>criterion = nn.CrossEntropyLoss()<br><br><span class="hljs-comment"># 定义优化器</span><br>optimizer = optim.Adam(model.parameters(), lr=<span class="hljs-number">0.001</span>)<br><br><span class="hljs-comment"># 训练模型</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params">model, train_loader, criterion, optimizer, num_epochs=<span class="hljs-number">5</span></span>):<br>    model.train()<br>    <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_epochs):<br>        running_loss = <span class="hljs-number">0.0</span><br>        <span class="hljs-keyword">for</span> i, (inputs, labels) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(train_loader):<br>            optimizer.zero_grad()<br>            outputs = model(inputs)<br>            loss = criterion(outputs, labels)<br>            loss.backward()<br>            optimizer.step()<br>            running_loss += loss.item()<br>            <span class="hljs-keyword">if</span> (i+<span class="hljs-number">1</span>) % <span class="hljs-number">100</span> == <span class="hljs-number">0</span>:<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;Epoch [<span class="hljs-subst">&#123;epoch+<span class="hljs-number">1</span>&#125;</span>/<span class="hljs-subst">&#123;num_epochs&#125;</span>], Step [<span class="hljs-subst">&#123;i+<span class="hljs-number">1</span>&#125;</span>/<span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(train_loader)&#125;</span>], Loss: <span class="hljs-subst">&#123;running_loss/<span class="hljs-number">100</span>:<span class="hljs-number">.4</span>f&#125;</span>&#x27;</span>)<br>                running_loss = <span class="hljs-number">0.0</span><br><br><span class="hljs-comment"># 保存模型</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">save_model</span>(<span class="hljs-params">model, filepath</span>):<br>    torch.save(model.state_dict(), filepath)<br><br><span class="hljs-comment"># 加载模型</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">load_model</span>(<span class="hljs-params">model, filepath</span>):<br>    model.load_state_dict(torch.load(filepath))<br>    model.<span class="hljs-built_in">eval</span>()  <span class="hljs-comment"># 设置为评估模式</span><br><br><span class="hljs-comment"># 示例数据加载</span><br><span class="hljs-comment"># train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True)</span><br><br><span class="hljs-comment"># 示例训练过程</span><br><span class="hljs-comment"># train(model, train_loader, criterion, optimizer)</span><br><br><span class="hljs-comment"># 示例模型保存</span><br><span class="hljs-comment"># save_model(model, &#x27;model.pth&#x27;)</span><br><br><span class="hljs-comment"># 示例模型加载</span><br><span class="hljs-comment"># loaded_model = BasicNet()</span><br><span class="hljs-comment"># load_model(loaded_model, &#x27;model.pth&#x27;)</span><br><br></code></pre></td></tr></table></figure>
-<h3 id="dqn算法">DQN算法</h3>
+<h2 id="强化学习部分">强化学习部分</h2>
+<h3 id="pytorch实现dqn">PyTorch实现DQN</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.optim <span class="hljs-keyword">as</span> optim<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DQN</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim, output_dim</span>):<br>        <span class="hljs-built_in">super</span>(DQN, self).__init__()<br>        self.fc1 = nn.Linear(input_dim, <span class="hljs-number">128</span>)<br>        self.fc2 = nn.Linear(<span class="hljs-number">128</span>, <span class="hljs-number">128</span>)<br>        self.fc3 = nn.Linear(<span class="hljs-number">128</span>, output_dim)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = torch.relu(self.fc1(x))<br>        x = torch.relu(self.fc2(x))<br>        x = self.fc3(x)<br>        <span class="hljs-keyword">return</span> x<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DQNAgent</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim, output_dim, gamma=<span class="hljs-number">0.99</span>, lr=<span class="hljs-number">0.001</span></span>):<br>        self.input_dim = input_dim<br>        self.output_dim = output_dim<br>        self.gamma = gamma<br>        self.lr = lr<br>        self.device = torch.device(<span class="hljs-string">&quot;cuda&quot;</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;cpu&quot;</span>)<br>        self.policy_net = DQN(input_dim, output_dim).to(self.device)<br>        self.target_net = DQN(input_dim, output_dim).to(self.device)<br>        self.target_net.load_state_dict(self.policy_net.state_dict())<br>        self.target_net.<span class="hljs-built_in">eval</span>()<br>        self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)<br>        self.loss_fn = nn.MSELoss()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">select_action</span>(<span class="hljs-params">self, state, epsilon</span>):<br>        <span class="hljs-keyword">if</span> np.random.rand() &lt; epsilon:<br>            <span class="hljs-keyword">return</span> np.random.randint(self.output_dim)<br>        state = torch.FloatTensor(state).unsqueeze(<span class="hljs-number">0</span>).to(self.device)<br>        <span class="hljs-keyword">with</span> torch.no_grad():<br>            q_values = self.policy_net(state)<br>        <span class="hljs-keyword">return</span> q_values.<span class="hljs-built_in">max</span>(<span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].item()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params">self, replay_buffer, batch_size</span>):<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(replay_buffer) &lt; batch_size:<br>            <span class="hljs-keyword">return</span><br>        transitions = replay_buffer.sample(batch_size)<br>        batch = Transition(*<span class="hljs-built_in">zip</span>(*transitions))<br>        state_batch = torch.FloatTensor(batch.state).to(self.device)<br>        next_state_batch = torch.FloatTensor(batch.next_state).to(self.device)<br>        action_batch = torch.LongTensor(batch.action).unsqueeze(<span class="hljs-number">1</span>).to(self.device)<br>        reward_batch = torch.FloatTensor(batch.reward).unsqueeze(<span class="hljs-number">1</span>).to(self.device)<br>        done_batch = torch.FloatTensor(batch.done).unsqueeze(<span class="hljs-number">1</span>).to(self.device)<br><br>        current_q_values = self.policy_net(state_batch).gather(<span class="hljs-number">1</span>, action_batch)<br>        next_q_values = self.target_net(next_state_batch).<span class="hljs-built_in">max</span>(<span class="hljs-number">1</span>)[<span class="hljs-number">0</span>].unsqueeze(<span class="hljs-number">1</span>)<br>        target_q_values = reward_batch + (<span class="hljs-number">1</span> - done_batch) * self.gamma * next_q_values<br><br>        loss = self.loss_fn(current_q_values, target_q_values.detach())<br>        self.optimizer.zero_grad()<br>        loss.backward()<br>        self.optimizer.step()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">update_target_net</span>(<span class="hljs-params">self</span>):<br>        self.target_net.load_state_dict(self.policy_net.state_dict())<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ReplayBuffer</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, capacity</span>):<br>        self.capacity = capacity<br>        self.buffer = []<br>        self.position = <span class="hljs-number">0</span><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">push</span>(<span class="hljs-params">self, state, action, reward, next_state, done</span>):<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(self.buffer) &lt; self.capacity:<br>            self.buffer.append(<span class="hljs-literal">None</span>)<br>        self.buffer[self.position] = (state, action, reward, next_state, done)<br>        self.position = (self.position + <span class="hljs-number">1</span>) % self.capacity<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">sample</span>(<span class="hljs-params">self, batch_size</span>):<br>        <span class="hljs-keyword">return</span> random.sample(self.buffer, batch_size)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__len__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(self.buffer)<br><br>Transition = namedtuple(<span class="hljs-string">&#x27;Transition&#x27;</span>, (<span class="hljs-string">&#x27;state&#x27;</span>, <span class="hljs-string">&#x27;action&#x27;</span>, <span class="hljs-string">&#x27;reward&#x27;</span>, <span class="hljs-string">&#x27;next_state&#x27;</span>, <span class="hljs-string">&#x27;done&#x27;</span>))<br><br></code></pre></td></tr></table></figure>
-<h3 id="ppo算法">PPO算法</h3>
+<h3 id="pytorch实现ppo">PyTorch实现PPO</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.optim <span class="hljs-keyword">as</span> optim<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ActorCritic</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim, output_dim</span>):<br>        <span class="hljs-built_in">super</span>(ActorCritic, self).__init__()<br>        self.fc1 = nn.Linear(input_dim, <span class="hljs-number">128</span>)<br>        self.fc2 = nn.Linear(<span class="hljs-number">128</span>, <span class="hljs-number">128</span>)<br>        self.fc_actor = nn.Linear(<span class="hljs-number">128</span>, output_dim)<br>        self.fc_critic = nn.Linear(<span class="hljs-number">128</span>, <span class="hljs-number">1</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = torch.relu(self.fc1(x))<br>        x = torch.relu(self.fc2(x))<br>        logits = self.fc_actor(x)<br>        value = self.fc_critic(x)<br>        <span class="hljs-keyword">return</span> logits, value<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">PPOAgent</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim, output_dim, gamma=<span class="hljs-number">0.99</span>, lr=<span class="hljs-number">0.001</span></span>):<br>        self.input_dim = input_dim<br>        self.output_dim = output_dim<br>        self.gamma = gamma<br>        self.lr = lr<br>        self.device = torch.device(<span class="hljs-string">&quot;cuda&quot;</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;cpu&quot;</span>)<br>        self.policy_net = ActorCritic(input_dim, output_dim).to(self.device)<br>        self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)<br>        self.loss_fn = nn.MSELoss()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">select_action</span>(<span class="hljs-params">self, state</span>):<br>        state = torch.FloatTensor(state).unsqueeze(<span class="hljs-number">0</span>).to(self.device)<br>        <span class="hljs-keyword">with</span> torch.no_grad():<br>            logits, _ = self.policy_net(state)<br>        action_probs = torch.softmax(logits, dim=-<span class="hljs-number">1</span>)<br>        action = np.random.choice(np.arange(self.output_dim), p=action_probs.cpu().numpy().ravel())<br>        <span class="hljs-keyword">return</span> action<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params">self, states, actions, rewards, next_states, dones, old_log_probs, epsilon_clip=<span class="hljs-number">0.2</span>, num_epochs=<span class="hljs-number">10</span></span>):<br>        states = torch.FloatTensor(states).to(self.device)<br>        actions = torch.LongTensor(actions).unsqueeze(-<span class="hljs-number">1</span>).to(self.device)<br>        rewards = torch.FloatTensor(rewards).unsqueeze(-<span class="hljs-number">1</span>).to(self.device)<br>        next_states = torch.FloatTensor(next_states).to(self.device)<br>        dones = torch.FloatTensor(dones).unsqueeze(-<span class="hljs-number">1</span>).to(self.device)<br>        old_log_probs = torch.FloatTensor(old_log_probs).unsqueeze(-<span class="hljs-number">1</span>).to(self.device)<br><br>        <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_epochs):<br>            logits, values = self.policy_net(states)<br>            new_log_probs = torch.log_softmax(logits, dim=-<span class="hljs-number">1</span>).gather(<span class="hljs-number">1</span>, actions)<br>            ratio = (new_log_probs - old_log_probs).exp()<br>            advantages = rewards - values.detach()<br><br>            surr1 = ratio * advantages<br>            surr2 = torch.clamp(ratio, <span class="hljs-number">1.0</span> - epsilon_clip, <span class="hljs-number">1.0</span> + epsilon_clip) * advantages<br>            actor_loss = -torch.<span class="hljs-built_in">min</span>(surr1, surr2).mean()<br><br>            critic_loss = <span class="hljs-number">0.5</span> * (rewards - values).<span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>).mean()<br><br>            loss = actor_loss + <span class="hljs-number">0.5</span> * critic_loss<br><br>            self.optimizer.zero_grad()<br>            loss.backward()<br>            self.optimizer.step()<br><br></code></pre></td></tr></table></figure>
-<h3 id="自动驾驶和强化学习">自动驾驶和强化学习</h3>
+<h3 id="自动驾驶和rl联系与设计">自动驾驶和RL联系与设计</h3>
 <p>设计和实现一个基于强化学习的自动驾驶决策规划系统是一个复杂而且需要深入思考的任务。下面是一个基本的设计和实现方案：</p>
-<h5 id="设计方案">设计方案：</h5>
+<h5 id="设计方案">设计方案</h5>
 <ol type="1">
 <li><strong>环境建模：</strong>
 首先，需要对自动驾驶的环境进行建模，包括车辆、道路、交通规则、障碍物、目标等。环境可以使用基于物理的仿真环境，例如CARLA，或者基于虚拟仿真的环境。</li>
@@ -4287,7 +4289,7 @@ id="pytorch实现自注意力和多头注意力">pytorch实现自注意力和多
 <li><strong>评估与测试：</strong>
 在仿真环境中对训练好的智能体进行评估和测试，检查其性能和鲁棒性。</li>
 </ol>
-<h5 id="实现方案">实现方案：</h5>
+<h5 id="实现方案">实现方案</h5>
 <ol type="1">
 <li><strong>环境建模：</strong> 使用CARLA等仿真平台进行环境建模。</li>
 <li><strong>状态空间和动作空间定义：</strong>
@@ -4304,6 +4306,44 @@ id="pytorch实现自注意力和多头注意力">pytorch实现自注意力和多
 根据评估结果，对模型和训练策略进行调整和优化，不断改进智能体的性能和稳定性。</li>
 </ol>
 <p>以上是一个基本的设计和实现方案，实际项目中可能还涉及到更多的细节和挑战，如安全性保障、仿真环境与真实环境的一致性等问题。因此，在实施过程中需要综合考虑各种因素，以确保系统的稳定性和安全性。</p>
+<h2 id="llama2部分">LLAMA2部分</h2>
+<ul>
+<li>LLAMA2结构<a
+href="https://blog.csdn.net/sikh_0529/article/details/134375318">https://blog.csdn.net/sikh_0529/article/details/134375318</a></li>
+<li>旋转位置嵌入<a
+href="https://www.zhihu.com/tardis/zm/art/647109286?source_id=1005">https://www.zhihu.com/tardis/zm/art/647109286?source_id=1005</a></li>
+</ul>
+<p>bert模型细节 <a
+href="https://www.zhihu.com/question/534763354">https://www.zhihu.com/question/534763354</a></p>
+<p>为什么Bert三个embedding可以相加 <a
+href="https://www.zhihu.com/question/374835153/answer/1080315948">https://www.zhihu.com/question/374835153/answer/1080315948</a></p>
+<p>Qlora <a
+href="https://zhuanlan.zhihu.com/p/618894919">https://zhuanlan.zhihu.com/p/618894919</a></p>
+<p>RLHF <a
+href="https://zhuanlan.zhihu.com/p/631238431">https://zhuanlan.zhihu.com/p/631238431</a></p>
+<p>LLAMA2 colabhttps://zhuanlan.zhihu.com/p/652588148</p>
+<p>LLAMA2+QLora微调大模型https://www.bilibili.com/video/BV1594y1y76m/?spm_id_from=333.337.search-card.all.click&amp;vd_source=9710fe8f4dbfeb6bd0b7202815b341c2</p>
+<p>fine-tuning
+llama2https://ukey.co/blog/finetune-llama-2-peft-qlora-huggingface/</p>
+<p>fine-tuning Llama 2 with PEFT's QLoRa<a
+href="https://ukey.co/blog/finetune-llama-2-peft-qlora-huggingface/">https://ukey.co/blog/finetune-llama-2-peft-qlora-huggingface/</a></p>
+<h2 id="常见考察题">常见考察题</h2>
+<p>神经网络权重初始化 <a
+href="https://blog.csdn.net/kebu12345678/article/details/103084851">https://blog.csdn.net/kebu12345678/article/details/103084851</a></p>
+<p><a
+href="https://zhuanlan.zhihu.com/p/667048896">https://zhuanlan.zhihu.com/p/667048896</a></p>
+<p><a
+href="https://zhuanlan.zhihu.com/p/643560888">https://zhuanlan.zhihu.com/p/643560888</a></p>
+<p>https://zhuanlan.zhihu.com/p/599016986)</p>
+<p><strong>softmax如何防止指数上溢</strong></p>
+<p>在计算softmax函数时，指数上溢是一个常见的问题，特别是当输入的数值非常大时，指数函数的计算结果可能会溢出。为了解决这个问题，可以采取以下几种方法：</p>
+<ol type="1">
+<li><p><strong>数值稳定性技巧</strong>：为了避免指数函数的溢出，可以将输入的数值减去一个常数，使得输入相对较小，从而减少指数函数的值。通常，可以通过找到输入向量中的最大值，并将所有元素减去这个最大值来实现数值稳定性。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240222173542613.png" alt="image-20240222173542613" style="zoom:67%;" /></p>
+<p>这样做可以保持相对稳定，防止指数函数的溢出。</p></li>
+<li><p><strong>利用性质</strong>：softmax函数的分子和分母同时除以一个相同的常数并不会改变函数的值。因此，我们可以在计算softmax时，将所有输入向量的值都减去向量中的最大值，然后进行softmax计算。</p></li>
+</ol>
+<p>以上两种方法都可以有效地避免指数上溢的问题，并保持softmax函数的数值稳定性。在实际应用中，通常会使用这些技巧来计算softmax函数，以确保模型的稳定性和数值精度。</p>
 ]]></content>
       <categories>
         <category>深度学习</category>
@@ -7466,6 +7506,661 @@ href="https://so.csdn.net/so/search?q=conda&amp;spm=1001.2101.3001.7020">conda</
       </categories>
       <tags>
         <tag>基础工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【深度学习】LLM基础知识</title>
+    <url>/2024/03/05/dl_llm_summary/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h1 id="llm基础">LLM基础</h1>
+<h1 id="attention">1.Attention</h1>
+<h2 id="讲讲对attention的理解"><strong>1.1
+讲讲对Attention的理解</strong></h2>
+<p>Attention机制是一种在处理时序相关问题的时候常用的技术，主要用于处理序列数据。</p>
+<p>核心思想是在处理序列数据时，网络应该更关注输入中的重要部分，而忽略不重要的部分，它通过学习不同部分的权重，将输入的序列中的重要部分显式地加权，从而使得模型可以更好地关注与输出有关的信息。</p>
+<p>在序列建模任务中，比如机器翻译、文本摘要、语言理解等，输入序列的不同部分可能具有不同的重要性。传统的循环神经网络（RNN）或卷积神经网络（CNN）在处理整个序列时，难以捕捉到序列中不同位置的重要程度，可能导致信息传递不够高效，特别是在处理长序列时表现更明显。</p>
+<p>Attention机制的关键是引入一种机制来动态地计算输入序列中各个位置的权重，从而在每个时间步上，对输入序列的不同部分进行加权求和，得到当前时间步的输出。这样就实现了模型对输入中不同部分的关注度的自适应调整。</p>
+<h2 id="attention的计算步骤"><strong>1.2
+Attention的计算步骤</strong></h2>
+<p>具体的计算步骤如下：</p>
+<ul>
+<li><strong>计算查询（Query）</strong>：查询是当前时间步的输入，用于和序列中其他位置的信息进行比较。</li>
+<li><strong>计算键（Key）和值（Value）</strong>：键表示序列中其他位置的信息，值是对应位置的表示。键和值用来和查询进行比较。</li>
+<li><strong>计算注意力权重</strong>：通过将查询和键进行内积运算，然后应用softmax函数，得到注意力权重。这些权重表示了在当前时间步，模型应该关注序列中其他位置的重要程度。</li>
+<li><strong>加权求和</strong>：根据注意力权重将值进行加权求和，得到当前时间步的输出。</li>
+</ul>
+<p>在Transformer中，Self-Attention 被称为"Scaled Dot-Product
+Attention"，其计算过程如下：</p>
+<ol type="1">
+<li>对于输入序列中的每个位置，通过计算其与所有其他位置之间的相似度得分（通常通过点积计算）。</li>
+<li>对得分进行缩放处理，以防止梯度爆炸。</li>
+<li>将得分用softmax函数转换为注意力权重，以便计算每个位置的加权和。</li>
+<li>使用注意力权重对输入序列中的所有位置进行加权求和，得到每个位置的自注意输出。</li>
+</ol>
+<p><span class="math display">\[
+Attention(Q,K,V)=softmax(\frac{QK^T}{\sqrt{d_k}})V
+\]</span></p>
+<h2 id="attention机制和传统的seq2seq模型的区别"><strong>1.3
+Attention机制和传统的Seq2Seq模型的区别</strong></h2>
+<p>Seq2Seq模型是一种基于编码器-解码器结构的模型，主要用于处理序列到序列的任务，例如机器翻译、语音识别等。</p>
+<p>传统的Seq2Seq模型只使用编码器来捕捉输入序列的信息，而解码器只从编码器的最后状态中获取信息，并将其用于生成输出序列。</p>
+<p>而Attention机制则允许解码器在生成每个输出时，根据输入序列的不同部分给予不同的注意力，从而使得模型更好地关注到输入序列中的重要信息。</p>
+<h2 id="self-attention-和-target-attention的区别"><strong>1.4
+self-attention 和 target-attention的区别</strong></h2>
+<p>self-attention是指在序列数据中，<strong>将当前位置与其他位置之间的关系建模</strong>。它通过计算每个位置与其他所有位置之间的相关性得分，从而为每个位置分配一个权重。这使得模型能够根据输入序列的不同部分的重要性，自适应地选择要关注的信息。</p>
+<p>target-attention则是指将<strong>注意力机制应用于目标（或查询）和一组相关对象之间的关系</strong>。它用于将目标与其他相关对象进行比较，并将注意力分配给与目标最相关的对象。这种类型的注意力通常用于任务如机器翻译中的编码-解码模型，其中需要将源语言的信息对齐到目标语言。</p>
+<p>因此，<strong>自注意力主要关注序列内部的关系，而目标注意力则关注目标与其他对象之间的关系</strong>。这两种注意力机制在不同的上下文中起着重要的作用，帮助模型有效地处理序列数据和相关任务。</p>
+<h2 id="在常规attention中一般有kv那self-attention-可以吗"><strong>1.5
+在常规attention中，一般有k=v，那self-attention 可以吗</strong></h2>
+<p>self-attention实际只是attention中的一种特殊情况，因此k=v是没有问题的，也即K，V参数矩阵相同。实际上，在Transformer模型中，Self-Attention的典型实现就是k等于v的情况。Transformer中的Self-Attention被称为"Scaled
+Dot-Product
+Attention"，其中通过将词向量进行线性变换来得到Q、K、V，并且这三者是相等的。</p>
+<h2 id="目前主流的attention方法有哪些"><strong>1.6
+目前主流的attention方法有哪些？</strong></h2>
+<p>讲自己熟悉的就可：</p>
+<ul>
+<li><strong>Scaled Dot-Product Attention</strong>:
+这是Transformer模型中最常用的Attention机制，用于计算查询向量（Q）与键向量（K）之间的相似度得分，然后使用注意力权重对值向量（V）进行加权求和。</li>
+<li><strong>Multi-Head Attention</strong>:
+这是Transformer中的一个改进，通过同时使用多组独立的注意力头（多个QKV三元组），并在输出时将它们拼接在一起。这样的做法允许模型在<strong>不同的表示空间</strong>上学习不同类型的注意力模式。</li>
+<li><strong>Relative Positional Encoding</strong>:
+传统的Self-Attention机制在处理序列时并未直接考虑位置信息，而相对位置编码引入了位置信息，使得模型能够更好地处理序列中不同位置之间的关系。</li>
+<li><strong>Transformer-XL</strong>:
+一种改进的Transformer模型，通过使用循环机制来扩展Self-Attention的上下文窗口，从而处理更长的序列依赖性。</li>
+</ul>
+<h2 id="self-attention-在计算的过程中如何对padding位做mask"><strong>1.7
+self-attention 在计算的过程中，如何对padding位做mask？</strong></h2>
+<p>在 Attention 机制中，同样需要忽略 padding
+部分的影响，这里以transformer
+encoder中的self-attention为例：self-attention中，Q和K在点积之后，需要先经过mask再进行softmax，因此，<strong>对于要屏蔽的部分，mask之后的输出需要为负无穷</strong>，这样softmax之后输出才为0。</p>
+<h2 id="深度学习中attention与全连接层的区别何在"><strong>1.8
+深度学习中attention与全连接层的区别何在？</strong></h2>
+<p>这是个非常有意思的问题，要回答这个问题，我们必须重新定义一下Attention。</p>
+<p>Transformer
+Paper里重新用QKV定义了Attention。所谓的QKV就是Query，Key，Value。如果我们用这个机制来研究传统的RNN
+attention，就会发现这个过程其实是这样的：RNN最后一步的output是Q，这个Q
+query了每一个中间步骤的K。Q和K共同产生了Attention Score，最后Attention
+Score乘以V加权求和得到context。那如果我们不用Attention，单纯用全连接层呢？很简单，全链接层可没有什么Query和Key的概念，只有一个Value，也就是说给每个V加一个权重再加到一起（如果是Self
+Attention，加权这个过程都免了，因为V就直接是从raw
+input加权得到的。）</p>
+<p><strong>可见Attention和全连接最大的区别就是Query和Key</strong>，而这两者也恰好产生了Attention
+Score这个Attention中最核心的机制。<strong>而在Query和Key中，我认为Query又相对更重要，因为Query是一个锚点，Attention
+Score便是从过计算与这个锚点的距离算出来的</strong>。任何Attention based
+algorithm里都会有Query这个概念，但全连接显然没有。</p>
+<p>最后来一个比较形象的比喻吧。如果一个神经网络的任务是从一堆白色小球中找到一个略微发灰的，那么全连接就是在里面随便乱抓然后凭记忆和感觉找，而attention则是左手拿一个白色小球，右手从袋子里一个一个抓出来，两两对比颜色，你左手抓的那个白色小球就是Query。</p>
+<h2 id="mha">1.9 MHA</h2>
+<p>从多头注意力的结构图中，貌似这个所谓的<strong>多个头就是指多组线性变换层</strong>，其实并不是，只有使用了一组线性变化层，即三个变换张量对Q，K，V分别进行线性变换，<strong>这些变换不会改变原有张量的尺寸</strong>，因此每个变换矩阵都是方阵，得到输出结果后，多头的作用才开始显现，每个头开始从词义层面分割输出的张量，也就是每个头都想获得一组Q，K，V进行注意力机制的计算，但是句子中的每个词的表示只获得一部分，也就是只分割了最后一维的词嵌入向量。这就是所谓的多头，将每个头的获得的输入送到注意力机制中,
+就形成多头注意力机制.</p>
+<p>Multi-head
+attention允许模型<strong>共同关注来自不同位置的不同表示子空间的信息</strong>，如果只有一个attention
+head，它的平均值会削弱这个信息。</p>
+<p><span class="math display">\[
+MultiHead(Q,K,V)=Concat(head_1,...,head_h)W^O \\
+where ~ head_i = Attention(QW_i^Q, KW_i^K, VW_i^V)
+\]</span></p>
+<p>其中映射由权重矩阵完成：$ W^Q_i ^{d_ d_k} $, <span
+class="math inline">\(W^K_i \in \mathbb{R}^{d_{\text{model}} \times
+d_k}\)</span>, <span class="math inline">\(W^V_i \in
+\mathbb{R}^{d_{\text{model}} \times d_v}\)</span>和<span
+class="math inline">\(W^O_i \in \mathbb{R}^{hd_v \times d_{\text{model}}
+}\)</span>。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305210401843.png"
+alt="MHA示意图" />
+<figcaption aria-hidden="true">MHA示意图</figcaption>
+</figure>
+<p><strong>多头注意力作用</strong></p>
+<p>这种结构设计能<strong>让每个注意力机制去优化每个词汇的不同特征部分</strong>，从而均衡同一种注意力机制可能产生的偏差，让词义拥有来自更多元的表达，实验表明可以从而提升模型效果.</p>
+<p><strong>为什么要做多头注意力机制呢</strong>？</p>
+<ul>
+<li>一个 dot product
+的注意力里面，没有什么可以学的参数。具体函数就是内积，为了识别不一样的模式，希望有不一样的计算相似度的办法。加性
+attention 有一个权重可学，也许能学到一些内容。</li>
+<li>multi-head attention 给 h 次机会去学习
+不一样的投影的方法，使得在投影进去的度量空间里面能够去匹配不同模式需要的一些相似函数，然后把
+h 个 heads 拼接起来，最后再做一次投影。</li>
+<li>每一个头 hi 是把 Q,K,V 通过 可以学习的 Wq, Wk, Wv 投影到 dv
+上，再通过注意力函数，得到 headi。</li>
+</ul>
+<h2 id="mqa">1.10 MQA</h2>
+<p>MQA（Multi Query Attention）最早是出现在2019年谷歌的一篇论文 《Fast
+Transformer Decoding: One Write-Head is All You Need》。</p>
+<p>MQA的思想其实比较简单，MQA 与 MHA 不同的是，<strong>MQA
+让所有的头之间共享同一份 Key 和 Value 矩阵，每个头正常的只单独保留了一份
+Query 参数，从而大大减少 Key 和 Value 矩阵的参数量</strong>。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305210627099.png" alt="MQA示意图" style="zoom:50%;" /></p>
+<p>在 Multi-Query Attention
+方法中只会保留一个单独的key-value头，这样<strong>虽然可以提升推理的速度，但是会带来精度上的损失</strong>。《Multi-Head
+Attention:Collaborate Instead of Concatenate
+》这篇论文的第一个思路是<strong>基于多个 MQA 的 checkpoint 进行
+finetuning，来得到了一个质量更高的 MQA 模型</strong>。这个过程也被称为
+Uptraining。</p>
+<p>具体分为两步：</p>
+<ol type="1">
+<li>对多个 MQA 的 checkpoint 文件进行融合，融合的方法是: 通过对 key 和
+value 的 head 头进行 mean pooling 操作，如下图。</li>
+<li>对融合后的模型使用少量数据进行 finetune
+训练，重训后的模型大小跟之前一样，但是效果会更好</li>
+</ol>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305210748093.png" alt="多个MQA的finetune" style="zoom: 50%;" /></p>
+<h2 id="gqa">1.11 GQA</h2>
+<p>Google 在 2023 年发表的一篇 <a
+href="https://arxiv.org/pdf/2305.13245.pdf"
+title="《GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints》">《GQA:
+Training Generalized Multi-Query Transformer Models from Multi-Head
+Checkpoints》</a>的论文</p>
+<p>如下图所示</p>
+<ul>
+<li>在 <strong>MHA（Multi Head Attention）</strong>
+中，每个头有自己单独的 key-value 对；</li>
+<li>在 <strong>MQA（Multi Query Attention）</strong> 中只会有一组
+key-value 对；</li>
+<li>在 <strong>GQA（Grouped Query Attention）</strong> 中，会对
+attention 进行分组操作，query 被分为 N 组，每个组共享一个 Key 和 Value
+矩阵。</li>
+</ul>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305210859405.png"
+alt="MHA,MQA,GQA对比" />
+<figcaption aria-hidden="true">MHA,MQA,GQA对比</figcaption>
+</figure>
+<p>GQA-N 是指具有 N 组的 Grouped Query
+Attention。GQA-1具有单个组，因此具有单个Key 和
+Value，等效于MQA。而GQA-H具有与头数相等的组，等效于MHA。</p>
+<p>在基于 Multi-head 多头结构变为 Grouped-query
+分组结构的时候，也是采用跟上图一样的方法，对每一组的 key-value 对进行
+mean pool 的操作进行参数融合。<strong>融合后的模型能力更综合，精度比
+Multi-query 好，同时速度比 Multi-head 快</strong>。</p>
+<h2 id="mhamqagqa对比总结">1.12 MHA&amp;MQA&amp;GQA对比总结</h2>
+<p>MHA（Multi-head Attention）是标准的多头注意力机制，h个Query、Key 和
+Value 矩阵。</p>
+<p>MQA（Multi-Query
+Attention）是多查询注意力的一种变体，也是用于自回归解码的一种注意力机制。与MHA不同的是，<strong>MQA
+让所有的头之间共享同一份 Key 和 Value 矩阵，每个头只单独保留了一份 Query
+参数，从而大大减少 Key 和 Value 矩阵的参数量</strong>。</p>
+<p>GQA（Grouped-Query
+Attention）是分组查询注意力，<strong>GQA将查询头分成G组，每个组共享一个Key
+和 Value 矩阵</strong>。GQA-G是指具有G组的grouped-query
+attention。GQA-1具有单个组，因此具有单个Key 和
+Value，等效于MQA。而GQA-H具有与头数相等的组，等效于MHA。</p>
+<p>GQA介于MHA和MQA之间。GQA 综合 MHA 和 MQA ，既不损失太多性能，又能利用
+MQA 的推理加速。不是所有 Q 头共享一组 KV，而是分组一定头数 Q 共享一组
+KV，比如上图中就是两组 Q 共享一组 KV。</p>
+<h1 id="transformer">2.Transformer</h1>
+<h2
+id="transformer中multi-head-attention中每个head为什么要进行降维"><strong>2.1
+transformer中multi-head
+attention中每个head为什么要进行降维？</strong></h2>
+<p>在Transformer的Multi-Head
+Attention中，对每个head进行降维是<strong>为了增加模型的表达能力和效率。</strong></p>
+<p>每个head是独立的注意力机制，它们可以学习不同类型的特征和关系。通过使用多个注意力头，Transformer可以并行地学习多种不同的特征表示，从而增强了模型的表示能力。</p>
+<p>然而，在使用多个注意力头的同时，注意力机制的计算复杂度也会增加。原始的Scaled
+Dot-Product Attention的计算复杂度为<span
+class="math inline">\(O(d^2)\)</span>，其中d是输入向量的维度。如果使用h个注意力头，计算复杂度将增加到<span
+class="math inline">\(O(hd^2)\)</span>。这可能会导致Transformer在处理大规模输入时变得非常耗时。</p>
+<p>为了缓解计算复杂度的问题，Transformer中在每个head上进行降维。在每个注意力头中，输入向量通过线性变换被映射到一个较低维度的空间。这个降维过程使用两个矩阵：一个是查询（Q）和键（K）的降维矩阵<span
+class="math inline">\(W_q\)</span>和<span
+class="math inline">\(W_k\)</span>，另一个是值（V）的降维矩阵<span
+class="math inline">\(W_v\)</span>。</p>
+<p>通过降低每个head的维度，Transformer可以在<strong>保持较高的表达能力的同时，大大减少计算复杂度</strong>。降维后的计算复杂度为<span
+class="math inline">\((h\hat d ^ 2)\)</span>，其中<span
+class="math inline">\(\hat d\)</span>是降维后的维度。通常情况下，<span
+class="math inline">\(\hat
+d\)</span>会远小于原始维度d，这样就可以显著提高模型的计算效率。</p>
+<h2 id="transformer在哪里做了权重共享为什么可以做权重共享"><strong>2.2
+transformer在哪里做了权重共享，为什么可以做权重共享？</strong></h2>
+<p>Transformer在Encoder和Decoder中都进行了权重共享。</p>
+<p>在Transformer中，Encoder和Decoder是由多层的Self-Attention
+Layer和前馈神经网络层交叉堆叠而成。<strong>权重共享是指在这些堆叠的层中，相同位置的层共用相同的参数</strong>。</p>
+<p>在Encoder中，所有的自注意力层和前馈神经网络层都共享相同的参数。这意味着每一层的自注意力机制和前馈神经网络都使用相同的权重矩阵来进行计算。这种共享保证了每一层都执行相同的计算过程，使得模型能够更好地捕捉输入序列的不同位置之间的关联性。</p>
+<p>在Decoder中，除了和Encoder相同的权重共享方式外，还存在另一种特殊的权重共享：<strong>Decoder的自注意力层和Encoder的自注意力层之间也进行了共享</strong>。这种共享方式被称为"masked
+self-attention"，因为在解码过程中，当前位置的注意力不能关注到未来的位置（后续位置），以避免信息泄漏。通过这种共享方式，Decoder可以利用Encoder的表示来理解输入序列并生成输出序列。权重共享的好处是大大减少了模型的参数数量，使得Transformer可以更有效地训练，并且更容易进行推理。此外，共享参数还有助于加快训练速度和提高模型的泛化能力，因为模型可以在不同位置共享并学习通用的特征表示。</p>
+<h2 id="transformer的点积模型做缩放的原因是什么">2.3
+Transformer的点积模型做缩放的原因是什么？</h2>
+<p>使用缩放的原因是为了控制注意力权重的尺度，以避免在计算过程中出现梯度爆炸的问题。</p>
+<p>Attention的计算是在内积之后进行softmax，主要涉及的运算是<span
+class="math inline">\(e^{q \cdot
+k}\)</span>，可以大致认为内积之后、softmax之前的数值在<span
+class="math inline">\(-3\sqrt{d}\)</span>到<span
+class="math inline">\(3\sqrt{d}\)</span>这个范围内，由于d通常都至少是64，所以<span
+class="math inline">\(e^{3\sqrt{d}}\)</span>比较大而 <span
+class="math inline">\(e^{-3\sqrt{d}}\)</span>比较小，因此经过softmax之后，Attention的分布非常接近一个one
+hot分布了，这带来严重的梯度消失问题，导致训练效果差。（例如y=softmax(x)在|x|较大时进入了饱和区，x继续变化y值也几乎不变，即饱和区梯度消失）</p>
+<p>相应地，解决方法就有两个:</p>
+<ol type="1">
+<li>像NTK参数化那样，在内积之后除以 <span
+class="math inline">\(\sqrt{d}\)</span>，使q⋅k的方差变为1，对应<span
+class="math inline">\(e^3,e^{−3}\)</span>都不至于过大过小，这样softmax之后也不至于变成one
+hot而梯度消失了，这也是常规的Transformer如BERT里边的Self
+Attention的做法</li>
+<li>另外就是不除以 <span
+class="math inline">\(\sqrt{d}\)</span>，但是初始化q,k的全连接层的时候，其初始化方差要多除以一个d，这同样能使得使q⋅k的初始方差变为1，T5采用了这样的做法。</li>
+</ol>
+<h2 id="transformer和rnn对比">2.4 Transformer和RNN对比</h2>
+<p>最简单情况：没有残差连接、没有 layernorm、 attention
+单头、没有投影。看和 RNN 区别</p>
+<ul>
+<li>attention 对输入做一个加权和，加权和 进入 point-wise
+MLP。（画了多个红色方块 MLP， 是一个权重相同的 MLP）</li>
+<li>point-wise MLP 对 每个输入的点 做计算，得到输出。</li>
+<li>attention 作用：把整个序列里面的信息抓取出来，做一次汇聚
+aggregation</li>
+</ul>
+<p>RNN 跟 transformer <strong>异：如何传递序列的信</strong>息</p>
+<p>RNN 是把上一个时刻的信息输出传入下一个时候做输入。Transformer
+通过一个 attention 层，去全局的拿到整个序列里面信息，再用 MLP
+做语义的转换。</p>
+<p>RNN 跟 transformer <strong>同：语义空间的转换 + 关注点</strong></p>
+<p>用一个线性层 or 一个 MLP 来做语义空间的转换。</p>
+<p><strong>关注点</strong>：怎么有效的去使用序列的信息。</p>
+<h2 id="transformer结构细节">2.5 Transformer结构细节</h2>
+<p><strong>Transformer为何使用多头注意力机制？</strong>（为什么不使用一个头）</p>
+<ul>
+<li>多头保证了transformer可以注意到不同子空间的信息，捕捉到更加丰富的特征信息。可以类比CNN中同时使用<strong>多个滤波器</strong>的作用，直观上讲，多头的注意力<strong>有助于网络捕捉到更丰富的特征/信息。</strong></li>
+</ul>
+<p><strong>Transformer为什么Q和K使用不同的权重矩阵生成，为何不能使用同一个值进行自身的点乘？</strong>
+（注意和第一个问题的区别）</p>
+<ul>
+<li>使用Q/K/V不相同可以保证在不同空间进行投影，增强了表达能力，提高了泛化能力。</li>
+<li>同时，由softmax函数的性质决定，实质做的是一个soft版本的arg
+max操作，得到的向量接近一个one-hot向量（接近程度根据这组数的数量级有所不同）。如果令Q=K，那么得到的模型大概率会得到一个类似单位矩阵的attention矩阵，<strong>这样self-attention就退化成一个point-wise线性映射</strong>。这样至少是违反了设计的初衷。</li>
+</ul>
+<p><strong>Transformer计算attention的时候为何选择点乘而不是加法？两者计算复杂度和效果上有什么区别？</strong></p>
+<ul>
+<li>K和Q的点乘是为了得到一个attention score
+矩阵，用来对V进行提纯。K和Q使用了不同的W_k,
+W_Q来计算，可以理解为是在不同空间上的投影。正因为有了这种不同空间的投影，增加了表达能力，这样计算得到的attention
+score矩阵的泛化能力更高。</li>
+<li>为了计算更快。矩阵加法在加法这一块的计算量确实简单，但是作为一个整体计算attention的时候相当于一个隐层，整体计算量和点积相似。在效果上来说，从实验分析，两者的效果和dk相关，dk越大，加法的效果越显著。</li>
+</ul>
+<p><strong>为什么在进行softmax之前需要对attention进行scaled（为什么除以dk的平方根）</strong>，并使用公式推导进行讲解</p>
+<ul>
+<li>这取决于softmax函数的特性，如果softmax内计算的数数量级太大，会输出近似one-hot编码的形式，导致梯度消失的问题，所以需要scale</li>
+<li>那么至于为什么需要用维度开根号，假设向量q，k满足各分量独立同分布，均值为0，方差为1，那么qk点积均值为0，方差为dk，从统计学计算，若果让qk点积的方差控制在1，需要将其除以dk的平方根，是的softmax更加平滑</li>
+</ul>
+<p><strong>在计算attention
+score的时候如何对padding做mask操作？</strong></p>
+<ul>
+<li>padding位置置为负无穷(一般来说-1000就可以)，再对attention
+score进行相加。对于这一点，涉及到batch_size之类的，具体的大家可以看一下实现的源代码，位置在这里：<a
+href="https://link.zhihu.com/?target=https://github.com/huggingface/transformers/blob/aa6a29bc25b663e1311c5c4fb96b004cf8a6d2b6/src/transformers/modeling_bert.py#L720"
+title="https://github.com/huggingface/transformers/blob/aa6a29bc25b663e1311c5c4fb96b004cf8a6d2b6/src/transformers/modeling_bert.py#L720">https://github.com/huggingface/transformers/blob/aa6a29bc25b663e1311c5c4fb96b004cf8a6d2b6/src/transformers/modeling_bert.py#L720</a></li>
+<li>padding位置置为负无穷而不是0，是因为后续在softmax时，<span
+class="math inline">\(e^0=1\)</span>，不是0，计算会出现错误；而<span
+class="math inline">\(e^{-\infty} = 0\)</span>，所以取负无穷</li>
+</ul>
+<p><strong>为何在获取输入词向量之后需要对矩阵乘以embedding
+size的开方？意义是什么？</strong></p>
+<ul>
+<li>embedding matrix的初始化方式是xavier
+init，这种方式的方差是1/embedding size，因此乘以embedding
+size的开方使得embedding
+matrix的方差是1，在这个scale下可能更有利于embedding matrix的收敛。</li>
+</ul>
+<p><strong>简单介绍一下Transformer的位置编码？有什么意义和优缺点？</strong></p>
+<ul>
+<li>因为self-attention是位置无关的，无论句子的顺序是什么样的，通过self-attention计算的token的hidden
+embedding都是一样的，这显然不符合人类的思维。因此要有一个办法能够在模型中表达出一个token的位置信息，transformer使用了固定的positional
+encoding来表示token在句子中的绝对位置信息。</li>
+</ul>
+<p><strong>你还了解哪些关于位置编码的技术，各自的优缺点是什么？</strong>（参考上一题）</p>
+<ul>
+<li>相对位置编码（RPE）1.在计算attention score和weighted
+value时各加入一个可训练的表示相对位置的参数。2.在生成多头注意力时，把对key来说将绝对位置转换为相对query的位置3.复数域函数，已知一个词在某个位置的词向量表示，可以计算出它在任何位置的词向量表示。前两个方法是词向量+位置编码，属于亡羊补牢，复数域是生成词向量的时候即生成对应的位置信息。</li>
+</ul>
+<p><strong>为什么transformer块使用LayerNorm而不是BatchNorm？LayerNorm
+在Transformer的位置是哪里？</strong></p>
+<ul>
+<li>LN：针对每个样本序列进行Norm，没有样本间的依赖。对一个序列的不同特征维度进行Norm</li>
+<li>CV使用BN是认为channel维度的信息对cv方面有重要意义，如果对channel维度也归一化会造成不同通道信息一定的损失。而同理nlp领域认为句子长度不一致，并且各个batch的信息没什么关系，因此只考虑句子内信息的归一化，也就是LN。</li>
+</ul>
+<p><strong>简答讲一下BatchNorm技术，以及它的优缺点。</strong></p>
+<ul>
+<li>优点：
+<ul>
+<li>第一个就是可以解决内部协变量偏移，简单来说训练过程中，各层分布不同，增大了学习难度，BN缓解了这个问题。当然后来也有论文证明BN有作用和这个没关系，而是可以使<strong>损失平面更加的平滑</strong>，从而加快的收敛速度。</li>
+<li>第二个优点就是缓解了<strong>梯度饱和问题</strong>（如果使用sigmoid激活函数的话），加快收敛。</li>
+</ul></li>
+<li>缺点：
+<ul>
+<li>第一个，batch_size较小的时候，效果差。这一点很容易理解。BN的过程，使用
+整个batch中样本的均值和方差来模拟全部数据的均值和方差，在batch_size
+较小的时候，效果肯定不好。</li>
+<li>第二个缺点就是 BN 在RNN中效果比较差。</li>
+</ul></li>
+</ul>
+<p><strong>Encoder端和Decoder端是如何进行交互的？</strong>（在这里可以问一下关于seq2seq的attention知识）</p>
+<ul>
+<li>Cross Self-Attention，Decoder提供Q，Encoder提供K，V</li>
+</ul>
+<p><strong>Decoder阶段的多头自注意力和encoder的多头自注意力有什么区别？</strong>（为什么需要decoder自注意力需要进行
+sequence mask)</p>
+<ul>
+<li>让输入序列只看到过去的信息，不能让他看到未来的信息</li>
+<li></li>
+</ul>
+<p><strong>引申一个关于bert问题，bert的mask为何不学习transformer在attention处进行屏蔽score的技巧？</strong></p>
+<ul>
+<li>BERT和transformer的目标不一致，bert是语言的预训练模型，需要充分考虑上下文的关系，而transformer主要考虑句子中第i个元素与前i-1个元素的关系。</li>
+</ul>
+<h1 id="bert">3.BERT</h1>
+<h2 id="bert用字粒度和词粒度的优缺点有哪些">3.1
+BERT用字粒度和词粒度的优缺点有哪些？</h2>
+<p>BERT可以使用字粒度（character-level）和词粒度（word-level）两种方式来进行文本表示，它们各自有优缺点：</p>
+<p>字粒度（Character-level）：</p>
+<ul>
+<li><strong>优点</strong>：处理未登录词（Out-of-Vocabulary，OOV）：字粒度可以处理任意字符串，包括未登录词，不需要像词粒度那样遇到未登录词就忽略或使用特殊标记。对于少见词和低频词，字粒度可以学习更丰富的字符级别表示，使得模型能够更好地捕捉词汇的细粒度信息。</li>
+<li><strong>缺点</strong>：计算复杂度高：使用字粒度会导致输入序列的长度大大增加，进而增加模型的计算复杂度和内存消耗。需要更多的训练数据：字粒度模型对于少见词和低频词需要更多的训练数据来学习有效的字符级别表示，否则可能会导致过拟合。</li>
+</ul>
+<p>词粒度（Word-level）：</p>
+<ul>
+<li><strong>优点</strong>：计算效率高：使用词粒度可以大大减少输入序列的长度，从而降低模型的计算复杂度和内存消耗。学习到更加稳定的词级别表示：词粒度模型可以学习到更加稳定的词级别表示，特别是对于高频词和常见词，有更好的表示能力。</li>
+<li><strong>缺点</strong>：处理未登录词（OOV）：词粒度模型无法处理未登录词，遇到未登录词时需要采用特殊处理（如使用未登录词的特殊标记或直接忽略）。对于多音字等形态复杂的词汇，可能无法准确捕捉其细粒度的信息。</li>
+</ul>
+<h2 id="bert的encoder与decoder掩码有什么区别"><strong>3.2
+BERT的Encoder与Decoder掩码有什么区别？</strong></h2>
+<p>Encoder主要使用自注意力掩码和填充掩码，而Decoder除了自注意力掩码外，还需要使用编码器-解码器注意力掩码来避免未来位置信息的泄露。这些掩码操作保证了Transformer在处理自然语言序列时能够准确、有效地进行计算，从而获得更好的表现。</p>
+<h2
+id="bert用的是transformer里面的encoder还是decoder">3.3BERT用的是transformer里面的encoder还是decoder？</h2>
+<p>BERT使用的是Transformer中的<strong>Encoder部分</strong>，而不是Decoder部分。</p>
+<p>Transformer模型由Encoder和Decoder两个部分组成。Encoder用于将输入序列编码为一系列高级表示，而Decoder用于基于这些表示生成输出序列。</p>
+<p>在BERT模型中，只使用了Transformer的Encoder部分，并且对其进行了一些修改和自定义的预训练任务，而没有使用Transformer的Decoder部分。</p>
+<h2 id="为什么bert选择mask掉15这个比例的词可以是其他的比例吗">3.4
+为什么BERT选择mask掉15%这个比例的词，可以是其他的比例吗？</h2>
+<p>BERT选择mask掉15%的词是一种经验性的选择，是原论文中的一种选择，并没有一个固定的理论依据，实际中当然可以尝试不同的比例，15%的比例是由BERT的作者在原始论文中提出，并在实验中发现对于BERT的训练效果是有效的</p>
+<h2 id="为什么bert在第一句前会加一个cls-标志"><strong>3.5
+为什么BERT在第一句前会加一个[CLS] 标志?</strong></h2>
+<p>BERT在第一句前会加一个 [CLS]
+标志，<strong>最后一层该位对应向量可以作为整句话的语义表示，从而用于下游的分类任务等</strong>。为什么选它？因为与文本中已有的其它词相比，这个无明显语义信息的符号会更“公平”地融合文本中各个词的语义信息，从而更好的表示整句话的语义。</p>
+<p>具体来说，self-attention是用文本中的其它词来增强目标词的语义表示，但是目标词本身的语义还是会占主要部分的，因此，经过BERT的12层，每次词的embedding融合了所有词的信息，可以去更好的表示自己的语义。而
+[CLS]
+位本身没有语义，经过12层，得到的是attention后所有词的加权平均，相比其他正常词，可以更好的表征句子语义。</p>
+<h2 id="bert非线性的来源在哪里">3.6 BERT非线性的来源在哪里？</h2>
+<p>主要来自两个地方：<strong>前馈层的gelu激活函数</strong>和<strong>self-attention</strong>。</p>
+<p><strong>前馈神经网络层</strong>：在BERT的Encoder中，每个自注意力层之后都跟着一个前馈神经网络层。前馈神经网络层是全连接的神经网络，通常包括一个线性变换和一个非线性的激活函数，如gelu。这样的非线性激活函数引入了非线性变换，使得模型能够学习更加复杂的特征表示。</p>
+<p><strong>self-attention
+layer</strong>：在自注意力层中，查询（Query）、键（Key）、值（Value）之间的点积得分会经过softmax操作，形成注意力权重，然后将这些权重与值向量相乘得到每个位置的自注意输出。这个过程中涉及了softmax操作，使得模型的计算是非线性的。</p>
+<h2
+id="bert训练时使用的学习率-warm-up-策略是怎样的为什么要这么做"><strong>3.7
+BERT训练时使用的学习率 warm-up
+策略是怎样的？为什么要这么做？</strong></h2>
+<p>在BERT的训练中，使用了学习率warm-up策略，这是<strong>为了在训练的早期阶段增加学习率，以提高训练的稳定性和加快模型收敛</strong>。</p>
+<p>学习率warm-up策略的具体做法是，在训练开始的若干个步骤（通常是一小部分训练数据的迭代次数）内，<strong>将学习率逐渐从一个较小的初始值增加到预定的最大学习率</strong>。在这个过程中，学习率的变化是线性的，即学习率在warm-up阶段的每个步骤按固定的步幅逐渐增加。学习率warm-up的目的是为了解决BERT在训练初期的两个问题：</p>
+<ul>
+<li><strong>不稳定性</strong>：在训练初期，由于模型参数的随机初始化以及模型的复杂性，模型可能处于一个较不稳定的状态。此时使用较大的学习率可能导致模型的参数变动太大，使得模型很难收敛，学习率warm-up可以在这个阶段将学习率保持较小，提高模型训练的稳定性。</li>
+<li><strong>避免过拟合</strong>：BERT模型往往需要较长的训练时间来获得高质量的表示。如果在训练的早期阶段就使用较大的学习率，可能会导致模型在训练初期就过度拟合训练数据，降低模型的泛化能力。通过学习率warm-up，在训练初期使用较小的学习率，可以避免过度拟合，等模型逐渐稳定后再使用较大的学习率进行更快的收敛。</li>
+</ul>
+<h2 id="在bert应用中如何解决长文本问题"><strong>3.8
+在BERT应用中，如何解决长文本问题？</strong></h2>
+<p>在BERT应用中，处理长文本问题有以下几种常见的解决方案：</p>
+<ul>
+<li><strong>截断与填充</strong>：将长文本截断为固定长度或者进行填充。BERT模型的输入是一个固定长度的序列，因此当输入的文本长度超过模型的最大输入长度时，需要进行截断或者填充。通常，可以根据任务的要求，选择适当的最大长度，并对文本进行截断或者填充，使其满足模型输入的要求。</li>
+<li><strong>Sliding
+Window</strong>：将长文本分成多个短文本，然后分别输入BERT模型。这种方法被称为Sliding
+Window技术。具体来说，将长文本按照固定的步长切分成多个片段，然后分别输入BERT模型进行处理。每个片段的输出可以进行进一步的汇总或者融合，得到最终的表示。</li>
+<li><strong>Hierarchical
+Model</strong>：使用分层模型来处理长文本，其中底层模型用于处理短文本片段，然后将不同片段的表示进行汇总或者融合得到整个长文本的表示。这样的分层模型可以充分利用BERT模型的表示能力，同时处理长文本。</li>
+<li><strong>Longformer、BigBird等模型</strong>：使用专门针对长文本的模型，如Longformer和BigBird。这些模型采用了不同的注意力机制，以处理超长序列，并且通常在处理长文本时具有更高的效率。</li>
+<li><strong>Document-Level
+Model</strong>：将文本看作是一个整体，而不是将其拆分成句子或段落，然后输入BERT模型进行处理。这样的文档级模型可以更好地捕捉整个文档的上下文信息，但需要更多的计算资源。</li>
+</ul>
+<h1 id="normalization">4 Normalization</h1>
+<h4 id="batch-norm">1.1 <strong>Batch Norm</strong></h4>
+<p><strong>为什么要进行BN呢？</strong></p>
+<ol type="1">
+<li>在深度神经网络训练的过程中，通常以输入网络的每一个mini-batch进行训练，这样每个batch具有不同的分布，使模型训练起来特别困难。</li>
+<li>Internal Covariate Shift (ICS)
+问题：在训练的过程中，激活函数会改变各层数据的分布，随着网络的加深，这种改变（差异）会越来越大，使模型训练起来特别困难，收敛速度很慢，会出现梯度消失的问题。</li>
+</ol>
+<p><strong>BN的主要思想：</strong>
+针对每个神经元，<strong>使数据在进入激活函数之前，沿着通道计算每个batch的均值、方差，‘强迫’数据保持均值为0，方差为1的正态分布，</strong>
+避免发生梯度消失。具体来说，就是把第1个样本的第1个通道，加上第2个样本第1个通道
+...... 加上第 N 个样本第1个通道，求平均，得到通道 1 的均值（注意是除以
+N×H×W 而不是单纯除以 N，最后得到的是一个代表这个 batch
+第1个通道平均值的数字，而不是一个 H×W 的矩阵）。求通道 1
+的方差也是同理。对所有通道都施加一遍这个操作，就得到了所有通道的均值和方差。</p>
+<p><strong>BN的使用位置：</strong>
+全连接层或卷积操作之后，激活函数之前。</p>
+<p><strong>BN算法过程：</strong></p>
+<ul>
+<li>沿着通道计算每个batch的均值</li>
+<li>沿着通道计算每个batch的方差</li>
+<li>做归一化</li>
+<li>加入缩放和平移变量<span class="math inline">\(\gamma\)</span>和
+<span class="math inline">\(\beta\)</span></li>
+</ul>
+<p><strong>加入缩放和平移变量的原因是：保证每一次数据经过归一化后还保留原有学习来的特征，同时又能完成归一化操作，加速训练。</strong>
+这两个参数是用来学习的参数。</p>
+<h1 id="llama系列模型">llama系列模型</h1>
+<h1 id="llama">1.LLama</h1>
+<h2 id="简介">1.1 简介</h2>
+<p>LLaMA 所采用的 Transformer 结构和细节，与标准的 Transformer
+架构不同的地方包括采用了<strong>前置层归一化（Pre-normalization）</strong>并使用
+<strong>RMSNorm 归一化函数</strong> （Normalizing
+Function）、激活函数更换为
+<strong>SwiGLU</strong>，并使用了<strong>旋转位置嵌入（RoP）</strong>，整体
+Transformer 架构与 GPT-2 类似。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305200623338.png" alt="LLAMA结构" style="zoom: 50%;" /></p>
+<h2 id="rmsnorm归一化函数">1.2 RMSNorm归一化函数</h2>
+<p><strong>为了使得模型训练过程更加稳定</strong>，GPT-2 相较于 GPT
+就引入了<strong>前置层归一化方法</strong>，将第一个层归一化移动到多头自注意力层之前，第二个层归一化也移动到了全连接层之前，同时残差连接的位置也调整到了多头自注意力层与全连接层之后。层归一化中也采用了
+<strong>RMSNorm 归一化函数</strong>。 针对输入向量
+<strong>a</strong>，RMSNorm 函数计算公式如下 <span
+class="math display">\[
+R M S(a)=\sqrt{\frac{1}{n} \sum_{i=1}^{n} a_{i}^{2}}
+\]</span></p>
+<p><span class="math display">\[
+\bar{a}_{i}=\frac{a_{i}}{R M S(\boldsymbol{a})}
+\]</span></p>
+<p>此外，RMSNorm 还可以引入可学习的缩放因子 $ g_ i $和偏移参数 <span
+class="math inline">\(b_i\)</span>，从而得到 <span
+class="math inline">\(\bar{a}_{i}=\frac{a_{i}}{\operatorname{RMS}(\boldsymbol{a})}
+g_{i}+b_{i}\)</span>。 RMSNorm 在 HuggingFace Transformer
+库中代码实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LlamaRMSNorm</span>(nn.Module):<br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, hidden_size, eps=<span class="hljs-number">1e-6</span></span>): <br>    <span class="hljs-string">&quot;&quot;&quot; </span><br><span class="hljs-string">    LlamaRMSNorm is equivalent to T5LayerNorm </span><br><span class="hljs-string">    &quot;&quot;&quot;</span> <br>    <span class="hljs-built_in">super</span>().__init__() <br>    self.weight = nn.Parameter(torch.ones(hidden_size)) <br>    self.variance_epsilon = eps <span class="hljs-comment"># eps 防止取倒数之后分母为 0 </span><br>  <br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, hidden_states</span>): <br>    input_dtype = hidden_states.dtype <br>    variance = hidden_states.to(torch.float32).<span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>).mean(-<span class="hljs-number">1</span>, keepdim=<span class="hljs-literal">True</span>) <br>    hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon) <span class="hljs-comment"># weight 是末尾乘的可训练参数, 即 g_i </span><br>    <br>    <span class="hljs-keyword">return</span> (self.weight * hidden_states).to(input_dtype)<br></code></pre></td></tr></table></figure>
+<p><strong>为什么要用RMSNorm优势在哪里？</strong></p>
+<h2 id="swiglu激活函数">1.3 SwiGLU激活函数</h2>
+<p>SwiGLU激活函数是相较于 ReLU 函数在大部分评测中都有不少提升。在 LLaMA
+中全连接层使用带有 SwiGLU 激活函数的 FFN（Position-wise Feed-Forward
+Network）的计算公式如下：</p>
+<p><span class="math display">\[
+\operatorname{FFN}_{\text {SwiGLU }}\left(\boldsymbol{x},
+\boldsymbol{W}, \boldsymbol{V},
+\boldsymbol{W}_{2}\right)=\operatorname{SwiGLU}(\boldsymbol{x},
+\boldsymbol{W}, \boldsymbol{V}) \boldsymbol{W}_{2}
+\]</span></p>
+<p><span class="math display">\[
+\operatorname{SwiGLU}(\boldsymbol{x}, \boldsymbol{W},
+\boldsymbol{V})=\operatorname{Swish}_{\beta}(x \boldsymbol{W}) \otimes
+\boldsymbol{x} \boldsymbol{V}
+\]</span></p>
+<p><span class="math display">\[
+\operatorname{Swish}_{\beta}(\boldsymbol{x})=\boldsymbol{x}
+\sigma(\boldsymbol{\beta} \boldsymbol{x})
+\]</span></p>
+<p>其中，<span class="math inline">\(σ(x)\)</span> 是 Sigmoid
+函数。下图给出了 Swish 激活函数在参数 <span
+class="math inline">\(β\)</span> 不同取值下的形状。可以看 到当 <span
+class="math inline">\(β\)</span> 趋近于 0 时，Swish 函数趋近于线性函数
+<span class="math inline">\(y = x\)</span>，当 $ β <span
+class="math inline">\(趋近于无穷大时，Swish 函数趋近于 ReLU
+函数，\)</span>β$ 取值为 1 时，Swish 函数是光滑且非单调。在 HuggingFace
+的 Transformer 库中 Swish1 函数使用 silu 函数代替。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305201045943.png" alt="Swish激活函数参数变化" style="zoom:50%;" /></p>
+<p>LLaMA中直接将FFN中的ReLU替换为SwiGLU，并将维度放缩为<span
+class="math inline">\((2/3) ⋅ 4d\)</span></p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305201148810.png" alt="LLAMA中FFN的实现" style="zoom:50%;" /></p>
+<h2 id="旋转位置嵌入rope">1.4 旋转位置嵌入（RoPE）</h2>
+<p>在位置编码上，使用旋转位置嵌入（Rotary Positional
+Embeddings，RoPE）代替原有的绝对位置编码。RoPE
+借助了<strong>复数的思想</strong>，出发点是<strong>通过绝对位置编码的方式实现相对位置编码</strong>。其目标是通过下述运算来给
+<code>q</code>，<code>k</code> 添加绝对位置信息：</p>
+<p><span class="math display">\[
+\tilde{\boldsymbol{q}}_{m}=f(\boldsymbol{q}, m),
+\tilde{\boldsymbol{k}}_{n}=f(\boldsymbol{k}, n)
+\]</span></p>
+<p>经过上述操作后，<span
+class="math inline">\(\tilde{\boldsymbol{q}}_{m}\)</span>和<span
+class="math inline">\(\tilde{\boldsymbol{k}}_{n}\)</span>就带有位置m和n的绝对位置信息。</p>
+<p>最终可以得到二维情况下用复数表示的 RoPE：</p>
+<p><span class="math display">\[
+f(\boldsymbol{q}, m)=R_{f}(\boldsymbol{q}, m) e^{i
+\Theta_{f}(\boldsymbol{q}, m)}=\|\boldsymbol{q}\|
+e^{i(\Theta(\boldsymbol{q})+m \theta)}=\boldsymbol{q} e^{i m \theta}
+\]</span></p>
+<p>根据复数乘法的几何意义，上述变换实际上是对应向量旋转，所以位置向量称为“旋转式位置编码”。还可以使用矩阵形式表示</p>
+<p><span class="math display">\[
+f(\boldsymbol{q}, m)=\left(\begin{array}{cc}\cos m \theta &amp; -\sin
+\cos m \theta \\ \sin m \theta &amp; \cos m
+\theta\end{array}\right)\left(\begin{array}{l}\boldsymbol{q}_{0} \\
+\boldsymbol{q}_{1}\end{array}\right)
+\]</span></p>
+<p>根据内积满足线性叠加的性质，任意偶数维的
+RoPE，都可以表示为二维情形的拼接，即：</p>
+<p><span class="math display">\[
+f(\boldsymbol{q}, m)=\underbrace{\left(\begin{array}{ccccccc}\cos m
+\theta_{0} &amp; -\sin m \theta_{0} &amp; 0 &amp; 0 &amp; \cdots &amp; 0
+&amp; 0 \\ \sin m \theta_{0} &amp; \cos m \theta_{0} &amp; 0 &amp; 0
+&amp; \cdots &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; \cos m \theta_{1} &amp;
+-\sin m \theta_{1} &amp; \cdots &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; \sin
+m \theta_{1} &amp; \cos m \theta_{1} &amp; \cdots &amp; 0 &amp; 0 \\
+\cdots &amp; \cdots &amp; \cdots &amp; \cdots &amp; \ddots &amp; \cdots
+&amp; \cdots \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; \cos m
+\theta_{d / 2-1} &amp; -\sin m \theta_{d / 2-1} \\ 0 &amp; 0 &amp; 0
+&amp; 0 &amp; \cdots &amp; \sin m \theta_{d / 2-1} &amp; \cos m
+\theta_{d /
+2-1}\end{array}\right)}_{\boldsymbol{R}_{d}}\left(\begin{array}{c}\boldsymbol{q}_{0}
+\\ \boldsymbol{q}_{1} \\ \boldsymbol{q}_{2} \\ \boldsymbol{q}_{3} \\
+\cdots \\ \boldsymbol{q}_{d-2} \\ \boldsymbol{q}_{d-1}\end{array}\right)
+\]</span></p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305201608876.png"
+alt="旋转位置编码" />
+<figcaption aria-hidden="true">旋转位置编码</figcaption>
+</figure>
+<p>RoPE 在 HuggingFace Transformer 库中代码实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">precompute_freqs_cis</span>(<span class="hljs-params">dim: <span class="hljs-built_in">int</span>, end: <span class="hljs-built_in">int</span>, constant: <span class="hljs-built_in">float</span> = <span class="hljs-number">10000.0</span></span>):<br>    <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">    计算cos和sin的值，cos值在实部，sin值在虚部，类似于 cosx+j*sinx</span><br><span class="hljs-string">    :param dim: q,k,v的最后一维，一般为emb_dim/head_num</span><br><span class="hljs-string">    :param end: 句长length</span><br><span class="hljs-string">    :param constant： 这里指10000</span><br><span class="hljs-string">    :return:</span><br><span class="hljs-string">    复数计算 torch.polar(a, t)输出， a*(cos(t)+j*sin(t))</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    <span class="hljs-comment"># freqs: 计算 1/(10000^(2i/d) )，将结果作为参数theta</span><br>    <span class="hljs-comment"># 形式化为 [theta_0, theta_1, ..., theta_(d/2-1)]</span><br>    freqs = <span class="hljs-number">1.0</span> / (constant ** (torch.arange(<span class="hljs-number">0</span>, dim, <span class="hljs-number">2</span>)[: (dim // <span class="hljs-number">2</span>)].<span class="hljs-built_in">float</span>() / dim)) <span class="hljs-comment"># [d/2]</span><br><br>    <span class="hljs-comment"># 计算m</span><br>    t = torch.arange(end, device=freqs.device)  <span class="hljs-comment"># [length]</span><br>    <span class="hljs-comment"># 计算m*theta</span><br>    freqs = torch.outer(t, freqs).<span class="hljs-built_in">float</span>()  <span class="hljs-comment"># [length, d/2]</span><br>    <span class="hljs-comment"># freqs形式化为 [m*theta_0, m*theta_1, ..., m*theta_(d/2-1)],其中 m=0,1,...,length-1</span><br><br>    <span class="hljs-comment"># 计算cos(m*theta)+j*sin(m*theta)</span><br>    freqs_cis = torch.polar(torch.ones_like(freqs), freqs)  <span class="hljs-comment"># complex64</span><br>    <span class="hljs-comment"># freqs_cis: [cos(m*theta_0)+j*sin(m*theta_0),  cos(m*theta_1)+j*sin(m*theta_1),), ..., cos(m*theta_(d/2-1))+j*sin(m*theta_(d/2-1))]</span><br>    <span class="hljs-comment"># 其中j为虚数单位， m=0,1,...,length-1</span><br>    <span class="hljs-keyword">return</span> freqs_cis <span class="hljs-comment"># [length, d/2]</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">reshape_for_broadcast</span>(<span class="hljs-params">freqs_cis: torch.Tensor, x: torch.Tensor</span>):<br>    ndim = x.ndim<br>    <span class="hljs-keyword">assert</span> <span class="hljs-number">0</span> &lt;= <span class="hljs-number">1</span> &lt; ndim<br>    <span class="hljs-keyword">assert</span> freqs_cis.shape == (x.shape[<span class="hljs-number">1</span>], x.shape[-<span class="hljs-number">1</span>])<br>    shape = [d <span class="hljs-keyword">if</span> i == <span class="hljs-number">1</span> <span class="hljs-keyword">or</span> i == ndim - <span class="hljs-number">1</span> <span class="hljs-keyword">else</span> <span class="hljs-number">1</span> <span class="hljs-keyword">for</span> i, d <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(x.shape)] <span class="hljs-comment"># (1, length, 1, d/2)</span><br>    <span class="hljs-keyword">return</span> freqs_cis.view(*shape) <span class="hljs-comment"># [1, length, 1, d/2]</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">apply_rotary_emb</span>(<span class="hljs-params">xq: torch.Tensor, xk: torch.Tensor, freqs_cis: torch.Tensor,</span>):<br>    <span class="hljs-comment"># 先将xq维度变为[bs, length, head,  d/2, 2], 利用torch.view_as_complex转变为复数</span><br>    <span class="hljs-comment"># xq:[q0, q1, .., q(d-1)] 转变为 xq_: [q0+j*q1, q2+j*q3, ..., q(d-2)+j*q(d-1)]</span><br>    xq_ = torch.view_as_complex(xq.<span class="hljs-built_in">float</span>().reshape(*xq.shape[:-<span class="hljs-number">1</span>], -<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)) <span class="hljs-comment"># [bs, length, head, d/2]</span><br>    <span class="hljs-comment"># 同样的，xk_:[k0+j*k1, k2+j*k3, ..., k(d-2)+j*k(d-1)]</span><br>    xk_ = torch.view_as_complex(xk.<span class="hljs-built_in">float</span>().reshape(*xk.shape[:-<span class="hljs-number">1</span>], -<span class="hljs-number">1</span>, <span class="hljs-number">2</span>))<br><br>    freqs_cis = reshape_for_broadcast(freqs_cis, xq_) <span class="hljs-comment"># [1, length, 1, d/2]</span><br>    <span class="hljs-comment"># 下式xq_ * freqs_cis形式化输出，以第一个为例, 如下</span><br>    <span class="hljs-comment"># (q0+j*q1)(cos(m*theta_0)+j*sin(m*theta_0)) = q0*cos(m*theta_0)-q1*sin(m*theta_0) + j*(q1*cos(m*theta_0)+q0*sin(m*theta_0))</span><br>    <span class="hljs-comment"># 上式的实部为q0*cos(m*theta_0)-q1*sin(m*theta_0)，虚部为q1*cos(m*theta_0)+q0*sin(m*theta_0)</span><br>    <span class="hljs-comment"># 然后通过torch.view_as_real函数，取出实部和虚部，维度由[bs, length, head, d/2]变为[bs, length, head, d/2, 2]，最后一维放实部与虚部</span><br>    <span class="hljs-comment"># 最后经flatten函数将维度拉平，即[bs, length, head, d]</span><br>    <span class="hljs-comment"># 此时xq_out形式化为 [实部0，虚部0，实部1，虚部1，..., 实部(d/2-1), 虚部(d/2-1)]</span><br>    xq_out = torch.view_as_real(xq_ * freqs_cis).flatten(<span class="hljs-number">3</span>) <span class="hljs-comment"># [bs, length, head, d]</span><br>    <span class="hljs-comment"># 即为新生成的q</span><br><br>    xk_out = torch.view_as_real(xk_ * freqs_cis).flatten(<span class="hljs-number">3</span>)<br>    <span class="hljs-keyword">return</span> xq_out.type_as(xq), xk_out.type_as(xk)<br><br><span class="hljs-keyword">if</span> __name__==<span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    <span class="hljs-comment"># (bs, length, head, d)</span><br>    q = torch.randn((<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>, <span class="hljs-number">32</span>))  <span class="hljs-comment"># q=[q0, q1, .., qd-1]</span><br>    k = torch.randn((<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>, <span class="hljs-number">32</span>))<br>    v = torch.randn((<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">12</span>, <span class="hljs-number">32</span>))<br>    freqs_cis= precompute_freqs_cis(dim=<span class="hljs-number">32</span>, end=<span class="hljs-number">10</span>, constant= <span class="hljs-number">10000.0</span>)<br>    <span class="hljs-comment"># print(freqs_cis.detach().numpy())</span><br><br>    q_new, k_new = apply_rotary_emb(xq=q, xk=k, freqs_cis=freqs_cis)<br>    <span class="hljs-built_in">print</span>()<br><br></code></pre></td></tr></table></figure>
+<h1 id="alpaca">2.Alpaca</h1>
+<h2 id="简介-1">2.1 简介</h2>
+<p>Stanford Alpaca: An Instruction-following LLaMA Model</p>
+<p>Alpaca是在<strong>LLaMA基础上使用52K指令数据精调的预训练模型</strong>，作者只用了不到600美元的成本训练出了该模型（数据$500
++ 机器$100）。初步实验结果表明Alpaca可以达到与OpenAI
+text-davinci-003相匹敌的效果</p>
+<h2 id="微调方法">2.2 微调方法</h2>
+<ol type="1">
+<li>第一步：构造175条self-instruct 种子示例任务</li>
+<li>第二步：基于上述种子任务，利 用text-davinci-003爬取指令数据</li>
+<li>第三步：使用爬取下来的52K指令 数据在LLaMA上进行精调，最终
+得到Alpaca</li>
+</ol>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image_-j860i8DgK.png"
+alt="Alpaca微调方法" />
+<figcaption aria-hidden="true">Alpaca微调方法</figcaption>
+</figure>
+<h2 id="self-instruct数据构造">2.3 Self-instruct数据构造</h2>
+<p>首先由人工构造175条种子数据</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;seed_task_25&quot;</span><span class="hljs-punctuation">,</span> <br>  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;perfect_numbers&quot;</span><span class="hljs-punctuation">,</span> <br>  <span class="hljs-attr">&quot;instruction&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Find the four smallest perfect numbers.&quot;</span><span class="hljs-punctuation">,</span> <br>  <span class="hljs-attr">&quot;instances&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;input&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;output&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;6, 28, 496, and 8128”&#125;], </span><br><span class="hljs-string">  &quot;</span>is_classification<span class="hljs-string">&quot;: false</span><br><span class="hljs-string">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>将“爬取要求”和种子数据进行适当组合，送入textdavinci-003，要求生成类似的指令数据。要求包括：提升指令多样性、包含真实数据、字数
+要求、语言要求、拒绝不合适指令等</p>
+<h2 id="指令数据格式">2.4 指令数据格式</h2>
+<ul>
+<li><code>instruction</code>: 描述模型需要执行的指令内容</li>
+<li><code>input</code>（可选）:
+任务上下文或输入信息，例如当指令是“对文章进行总结”，则input是文章内容</li>
+<li><code>output</code>: 由text-davinci-003生成的针对指令的回复</li>
+</ul>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305202208115.png"
+alt="指令数据格式" />
+<figcaption aria-hidden="true">指令数据格式</figcaption>
+</figure>
+<h1 id="llama-2">3.Llama-2</h1>
+<h2 id="简介-2">3.1 简介</h2>
+<p>Llama 2: Open Foundation and Fine-Tuned Chat Models </p>
+<p>2023年7月，Meta推出了Llama-2开源大模型，并且推出了Llama-2-Chat对话模型</p>
+<p>与一代LLaMA主要区别体现在<strong>更多的训练数据、更⻓的上下文窗口、GQA技术</strong>等</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image_24Q7m-usAc.png"
+alt="LLAMA2与LLAMA的各项指标的对比" />
+<figcaption
+aria-hidden="true">LLAMA2与LLAMA的各项指标的对比</figcaption>
+</figure>
+<p><strong>二次分发是什么？</strong></p>
+<p>模型结构的变动主要是体现在<strong>GQA</strong>和<strong>FFN</strong>缩放上</p>
+<ul>
+<li><strong>MHA改成GQA</strong>：整体参数量会有减少</li>
+<li><strong>FFN模块矩阵维度有扩充</strong>：增强泛化能力，整体参数量增加</li>
+<li><strong>上下文长度是llama两倍</strong>(长度从2048-&gt;4096)
+训练语料增加约 40%，体现在1.4T-&gt;2.0T的Tokens
+llama2-34B和llama2-70B使用了GQA，加速模型训练和推理速度</li>
+</ul>
+<h2 id="gqa-1">3.2 GQA</h2>
+<p>GQA和MQA都是注意力的变体，其中多个查询头关注相同的键和值头，以减少推理过程中
+KV 缓存的大小，并可以显著提高推理吞吐量。</p>
+<p>MHA、GQA、MQA的区别和联系，具体的优点如下：</p>
+<ul>
+<li><code>Mutil-Head Attention</code>
+因为自回归模型生成回答时，需要前面生成的KV缓存起来，来加速计算。</li>
+<li><code>Multi-Query Attention</code>
+多个头之间可以共享KV对，因此速度上非常有优势，实验验证大约减少30-40%吞吐。</li>
+<li><code>Group Query Attention</code>
+没有像MQA那么极端，将query分组，组内共享KV，效果接近MQA，速度上与MQA可比较。</li>
+</ul>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305202602136.png"
+alt="注意力变体" />
+<figcaption aria-hidden="true">注意力变体</figcaption>
+</figure>
+<p>Llama-2中使用了8个KV映射，即GQA-8，<strong>GQA在多数任务上与MHA效果相当，且平均效果优于MQA；GQA和MQA均比MHA有更好的吞吐量</strong></p>
+<h2 id="源码">3.3 源码</h2>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305202807112.png"
+alt="MQA代码示意图" />
+<figcaption aria-hidden="true">MQA代码示意图</figcaption>
+</figure>
+<h1 id="code-llama">4.Code Llama</h1>
+<h2 id="简介-3">4.1 简介</h2>
+<p>2023年8月24日，Meta推出了面向代码的可商用大模型Code
+Llama，包含三个大小版本（7B/13B/34B）</p>
+<p>支持多种编程语言，包括Python、C++、Java、PHP、Typescript
+(Javascript)、C#和Bash</p>
+<p>“神秘”34B版接近GPT-4效果</p>
+<h2 id="模型训练流程">4.2 模型训练流程</h2>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305202932431.png"
+alt="Code_llama训练流程" />
+<figcaption aria-hidden="true">Code_llama训练流程</figcaption>
+</figure>
+<h2 id="code-infilling-task-7b13b-only">4.3 Code Infilling Task （7B/13B
+only）</h2>
+<p>任务目标：根据代码的上下文，预测残缺部分的代码</p>
+<p>方法：</p>
+<ul>
+<li>从完整的代码中选择一部分进行掩码（mask）并替换为<code>&lt;MASK&gt;</code>符号，构成上下文</li>
+<li>利用自回归的方法，根据上下文信息预测解码出被mask的代码部分</li>
+</ul>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305203108049.png"
+alt="Infilling task具体示意图" />
+<figcaption aria-hidden="true">Infilling task具体示意图</figcaption>
+</figure>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
       </tags>
   </entry>
 </search>

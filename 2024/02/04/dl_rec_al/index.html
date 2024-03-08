@@ -44,7 +44,7 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240206000626255.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240206000903122.png">
 <meta property="article:published_time" content="2024-02-03T16:37:51.000Z">
-<meta property="article:modified_time" content="2024-02-22T02:07:36.637Z">
+<meta property="article:modified_time" content="2024-03-08T03:12:57.935Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="深度学习">
@@ -284,7 +284,7 @@
               <p class="note note-info">
                 
                   
-                    Last updated on February 22, 2024 am
+                    Last updated on March 8, 2024 am
                   
                 
               </p>
@@ -1082,6 +1082,12 @@ target="_blank" rel="noopener" href="https://www.kaggle.com/c/criteo-display-ad-
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">gbdt_lr_model</span>(<span class="hljs-params">data, category_feature, continuous_feature</span>): <span class="hljs-comment"># 0.43616</span><br>    <span class="hljs-comment"># 离散特征one-hot编码</span><br><br>    <span class="hljs-comment"># 划分数据集</span><br>    x_train, x_val, y_train, y_val = train_test_split(train, target, test_size = <span class="hljs-number">0.2</span>, random_state = <span class="hljs-number">2020</span>)<br>    <br>    <span class="hljs-comment">#GBDT模型的搭建和训练过程</span><br>    gbm = lgb.LGBMClassifier(objective=<span class="hljs-string">&#x27;binary&#x27;</span>,<br>                            subsample= <span class="hljs-number">0.8</span>,<br>                            min_child_weight= <span class="hljs-number">0.5</span>,<br>                            colsample_bytree= <span class="hljs-number">0.7</span>,<br>                            num_leaves=<span class="hljs-number">100</span>,<br>                            max_depth = <span class="hljs-number">12</span>,<br>                            learning_rate=<span class="hljs-number">0.01</span>,<br>                            n_estimators=<span class="hljs-number">1000</span>,<br>                            )<br><br>    gbm.fit(x_train, y_train,<br>            eval_set = [(x_train, y_train), (x_val, y_val)],<br>            eval_names = [<span class="hljs-string">&#x27;train&#x27;</span>, <span class="hljs-string">&#x27;val&#x27;</span>],<br>            eval_metric = <span class="hljs-string">&#x27;binary_logloss&#x27;</span>,<br>            early_stopping_rounds = <span class="hljs-number">100</span>,<br>            )<br>    <br>    model = gbm.booster_<br>    <br>    gbdt_feats_train = model.predict(train, pred_leaf = <span class="hljs-literal">True</span>)<br>    gbdt_feats_test = model.predict(test, pred_leaf = <span class="hljs-literal">True</span>)<br>    gbdt_feats_name = [<span class="hljs-string">&#x27;gbdt_leaf_&#x27;</span> + <span class="hljs-built_in">str</span>(i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(gbdt_feats_train.shape[<span class="hljs-number">1</span>])]<br>    df_train_gbdt_feats = pd.DataFrame(gbdt_feats_train, columns = gbdt_feats_name) <br>    df_test_gbdt_feats = pd.DataFrame(gbdt_feats_test, columns = gbdt_feats_name)<br>    <br>    train = pd.concat([train, df_train_gbdt_feats], axis = <span class="hljs-number">1</span>)<br>    test = pd.concat([test, df_test_gbdt_feats], axis = <span class="hljs-number">1</span>)<br>    train_len = train.shape[<span class="hljs-number">0</span>]<br>    data = pd.concat([train, test])<br>    <span class="hljs-keyword">del</span> train<br>    <span class="hljs-keyword">del</span> test<br>    gc.collect()<br><br>    <span class="hljs-comment"># # 连续特征归一化</span><br>    scaler = MinMaxScaler()<br>    <span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> continuous_feature:<br>        data[col] = scaler.fit_transform(data[col].values.reshape(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>))<br><br>    <span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> gbdt_feats_name:<br>        onehot_feats = pd.get_dummies(data[col], prefix = col)<br>        data.drop([col], axis = <span class="hljs-number">1</span>, inplace = <span class="hljs-literal">True</span>)<br>        data = pd.concat([data, onehot_feats], axis = <span class="hljs-number">1</span>)<br><br>    train = data[: train_len]<br>    test = data[train_len:]<br>    <span class="hljs-keyword">del</span> data<br>    gc.collect()<br><br>    x_train, x_val, y_train, y_val = train_test_split(train, target, test_size = <span class="hljs-number">0.3</span>, random_state = <span class="hljs-number">2018</span>)<br>    <br>    <span class="hljs-comment">#再放进LR模型中</span><br>    lr = LogisticRegression()<br>    lr.fit(x_train, y_train)<br>    tr_logloss = log_loss(y_train, lr.predict_proba(x_train)[:, <span class="hljs-number">1</span>])<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;tr-logloss: &#x27;</span>, tr_logloss)<br>    val_logloss = log_loss(y_val, lr.predict_proba(x_val)[:, <span class="hljs-number">1</span>])<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;val-logloss: &#x27;</span>, val_logloss)<br>    y_pred = lr.predict_proba(test)[:, <span class="hljs-number">1</span>]<br>    <span class="hljs-built_in">print</span>(y_pred[:<span class="hljs-number">10</span>])<br></code></pre></td></tr></table></figure>
 <p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240206000903122.png" srcset="/img/loading.gif" lazyload alt="GBDT+LR预测结果展示" style="zoom:50%;" /></p>
 <h2 id="深度学习模型rank">深度学习模型(Rank)</h2>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240308111249239.png" srcset="/img/loading.gif" lazyload
+alt="image-20240308111249239" />
+<figcaption aria-hidden="true">image-20240308111249239</figcaption>
+</figure>
 
                 
               </div>
@@ -1150,7 +1156,7 @@ target="_blank" rel="noopener" href="https://www.kaggle.com/c/criteo-display-ad-
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>February 22, 2024</div>
+          <div>March 8, 2024</div>
         </div>
       
       
@@ -1180,6 +1186,12 @@ target="_blank" rel="noopener" href="https://www.kaggle.com/c/criteo-display-ad-
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2024/03/05/dl_llm_summary/" title="【深度学习】LLM基础知识">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【深度学习】LLM基础知识</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
