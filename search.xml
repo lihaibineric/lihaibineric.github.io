@@ -3683,6 +3683,15 @@ src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240308111249239
 alt="image-20240308111249239" />
 <figcaption aria-hidden="true">image-20240308111249239</figcaption>
 </figure>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240311120735173.png"
+alt="image-20240311120735173" />
+<figcaption aria-hidden="true">image-20240311120735173</figcaption>
+</figure>
+<p>对于1层cross和1层deep的DCN网络输入经过embedding和stack处理后维度为d，Cross部分网络参数为2d，Deep为d*d，当MLP的层数增多时，deep部分的参数量也急速增加。DCN网路的绝大部分参数都用于对隐性交叉特征进行建模。Cross部分的表达能力反而受限。</p>
+<p>DCN-v2优化了cross网络的建模方式，增加了cross网络部分的表达能力；deep部分保持不变。</p>
+<p>低维空间的交叉特征建模使得我们可以利用MoE。MoE由两部分组成：experts专家和gating门（一个关于输入x的函数）。我们可以使用多个专家，每个专家学习不同的交叉特征，最后通过gating将各个专家的学习结果整合起来，作为输出。这样就又能进一步增加对交叉特征的建模能力。</p>
 ]]></content>
       <categories>
         <category>深度学习</category>
