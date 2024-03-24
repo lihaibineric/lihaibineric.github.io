@@ -1,0 +1,1512 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/galaxy.png">
+  <link rel="icon" href="/img/galaxy.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Haibin Li">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="大语言模型微调 1. 大模型微调简介 1.1 微调方法定义 微调（Fine-tuning）是一种迁移学习的方法，用于在一个预训练模型的基础上，通过在特定任务的数据上进行有监督训练，来适应该任务的要求并提高模型性能。微调利用了预训练模型在大规模通用数据上学习到的语言知识和表示能力，将其迁移到特定任务上。 下面是一般的微调步骤：  预训练模型选择：选择一个在大规模数据上进行预训练的模型作为基础模型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【大语言模型】有监督微调">
+<meta property="og:url" content="https://lihaibineric.github.io/2024/03/24/dl-llm-ft/index.html">
+<meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
+<meta property="og:description" content="大语言模型微调 1. 大模型微调简介 1.1 微调方法定义 微调（Fine-tuning）是一种迁移学习的方法，用于在一个预训练模型的基础上，通过在特定任务的数据上进行有监督训练，来适应该任务的要求并提高模型性能。微调利用了预训练模型在大规模通用数据上学习到的语言知识和表示能力，将其迁移到特定任务上。 下面是一般的微调步骤：  预训练模型选择：选择一个在大规模数据上进行预训练的模型作为基础模型。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145233005.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145614518.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145819719.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145906704.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150638005.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150741300.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150845885.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150919888.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324151426754.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324151515946.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324151853173.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324153113255.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324153159299.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324153310413.png">
+<meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324153407744.png">
+<meta property="article:published_time" content="2024-03-24T06:34:54.000Z">
+<meta property="article:modified_time" content="2024-03-24T07:36:56.409Z">
+<meta property="article:author" content="Haibin Li">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="大语言模型">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145233005.png">
+  
+  
+  
+  <title>【大语言模型】有监督微调 - LIHAIBIN&#39;S BLOG</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lihaibineric.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 36vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>LIHAIBIN&#39;S HOMEPAGE</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" false
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【大语言模型】有监督微调"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-03-24 14:34" pubdate>
+          March 24, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          26k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          220 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【大语言模型】有监督微调</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    Last updated on March 24, 2024 pm
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <meta name="referrer" content="no-referrer"/>
+<h1 id="大语言模型微调">大语言模型微调</h1>
+<h1 id="大模型微调简介">1. 大模型微调简介</h1>
+<h2 id="微调方法定义">1.1 微调方法定义</h2>
+<p>微调（Fine-tuning）是<strong>一种迁移学习的方法</strong>，用于在一个预训练模型的基础上，通过在特定任务的数据上进行有监督训练，来适应该任务的要求并提高模型性能。微调利用了预训练模型在大规模通用数据上学习到的语言知识和表示能力，将其迁移到特定任务上。</p>
+<p>下面是一般的微调步骤：</p>
+<ol type="1">
+<li><strong>预训练模型选择</strong>：选择一个在大规模数据上进行预训练的模型作为基础模型。例如，可以选择一种预训练的语言模型，如BERT、GPT等。</li>
+<li><strong>数据准备</strong>：准备用于微调的特定任务数据集。这些数据集应包含任务相关的样本和相应的标签或目标。确保数据集与任务的特定领域或问题相关。</li>
+<li><strong>构建任务特定的模型头</strong>：根据任务的要求，构建一个特定的模型头（task-specific
+head）。模型头是添加到预训练模型之上的额外层或结构，用于根据任务要求进行输出预测或分类。例如，对于文本分类任务，可以添加一个全连接层和softmax激活函数。</li>
+<li><strong>参数初始化</strong>：将预训练模型的参数作为初始参数加载到微调模型中。这些参数可以被视为模型已经学习到的通用语言表示。</li>
+<li><strong>微调训练</strong>：使用特定任务的数据集对模型进行有监督训练。这包括将任务数据输入到模型中，计算损失函数，并通过反向传播和优化算法（如梯度下降）更新模型参数。在微调过程中，只有模型头的参数会被更新，而预训练模型的参数会保持不变。</li>
+<li><strong>调整超参数</strong>：微调过程中，可以根据需要调整学习率、批量大小、训练迭代次数等超参数，以达到更好的性能。</li>
+<li><strong>评估和验证</strong>：在微调完成后，使用验证集或测试集对微调模型进行评估，以评估其在特定任务上的性能。可以使用各种指标，如准确率、精确率、召回率等。</li>
+<li><strong>可选的后续微调</strong>：根据实际情况，可以选择在特定任务的数据上进行进一步的微调迭代，以进一步提高模型性能。</li>
+</ol>
+<p>微调的关键是在预训练模型的基础上进行训练，从而将模型的知识迁移到特定任务上。通过这种方式，可以在较少的数据和计算资源下，快速构建和训练高性能的模型。</p>
+<h2 id="为什么需要-peft">1.2 为什么需要 PEFT</h2>
+<p>Parameter-Efficient
+Fine-Tuning（PEFT）是一种微调策略，<strong>旨在仅训练少量参数使模型适应到下游任务</strong>。对大规模PLM（pre-trained
+language models
+）进行微调的成本往往高得令人望而却步。在这方面，PEFT方法只微调了少量(额外的)模型参数，从而大大降低了计算和存储成本。最近最先进的PEFT技术实现了与完全微调相当的性能。</p>
+<p>PEFT<strong>通过冻结预训练模型的某些层，并仅微调特定于下游任务的最后几层来实现这种效率</strong>。这样，模型就可以适应新的任务，计算开销更少，标记的例子也更少。尽管PEFT是一个相对较新的概念，但自从引入迁移学习以来，更新最后一层模型已经在计算机视觉领域得到了实践。即使在NLP中，静态和非静态词嵌入的实验也很早就进行了。</p>
+<p>参数高效微调旨在提高预训练模型(如BERT和RoBERTa)在各种下游任务上的性能，包括情感分析、命名实体识别和问答。它在数据和计算资源有限的低资源设置中实现了这一点。它只修改模型参数的一小部分，并且不容易过度拟合。</p>
+<p>参数高效的微调<strong>在计算资源有限或涉及大型预训练模型的情况下特别有用</strong>。在这种情况下，PEFT可以在不牺牲性能的情况下提供一种更有效的方法来微调模型。然而，需要注意的是，PEFT有时可能会达到与完全微调不同的性能水平，特别是在预训练模型需要进行重大修改才能在新任务上表现良好的情况下。</p>
+<p>高效微调技术可以粗略分为以下三大类：增加额外参数（A）、选取一部分参数更新（S）、引入重参数化（R）。而在增加额外参数这类方法中，又主要分为类适配器（Adapter-like）方法和软提示（Soft
+prompts）两个小类。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324143801117.png" srcset="/img/loading.gif" lazyload
+alt="PEFT 方法汇总联系" />
+<figcaption aria-hidden="true">PEFT 方法汇总联系</figcaption>
+</figure>
+<blockquote>
+<p>Scaling Down to Scale Up: A Guide to Parameter-Efficient
+Fine-Tuning</p>
+</blockquote>
+<h2 id="微调和参数高效微调之间的区别">1.3
+微调和参数高效微调之间的区别</h2>
+<p>微调和参数高效微调是机器学习中用于<strong>提高预训练模型在特定任务上的性能</strong>的两种方法。</p>
+<p><strong>微调</strong>就是把<strong>一个预先训练好的模型用新的数据在一个新的任务上进一步训练它</strong>。整个预训练模型通常在微调中进行训练，包括它的所有层和参数。这个过程在计算上非常昂贵且耗时，特别是对于大型模型。</p>
+<p>另一方面，<strong>参数高效微调</strong>是<strong>一种专注于只训练预训练模型参数的子集的微调方法</strong>。这种方法包括为新任务识别最重要的参数，并且只在训练期间更新这些参数。这样，PEFT可以显著减少微调所需的计算量。</p>
+<h2 id="peft-有什么优点">1.4 PEFT 有什么优点</h2>
+<p>在这里，只讨论PEFT相对于传统微调的好处。因此，理解为什么参数有效的微调比微调更有益。</p>
+<ol type="1">
+<li><strong>减少计算和存储成本</strong>：PEFT只涉及微调少量额外的模型参数，而冻结预训练llm的大部分参数，从而显着降低计算和存储成本</li>
+<li><strong>克服灾难性遗忘</strong>：在LLM的全面微调期间，灾难性遗忘可能发生在模型忘记它在预训练期间学到的知识的地方。PEFT通过只更新几个参数来克服这个问题。</li>
+<li><strong>低数据环境下更好的性能</strong>：PEFT方法在低数据环境下的表现优于完全微调，并且可以更好地推广到域外场景。</li>
+<li><strong>可移植性</strong>：与全面微调的大检查点相比，PEFT方法使用户能够获得价值几mb的小检查点。这使得来自PEFT方法的训练权重易于部署和用于多个任务，而无需替换整个模型。</li>
+<li><strong>与完全微调相当的性能</strong>：PEFT仅使用少量可训练参数即可实现与完全微调相当的性能。</li>
+</ol>
+<h2 id="多种不同的高效微调方法对比">1.5 多种不同的高效微调方法对比</h2>
+<p>参数有效策略可能涉及多种技术：</p>
+<ol type="1">
+<li><strong>选择性层调整</strong>（<strong>Selective Layer
+Tuning</strong>）：可以只微调层的一个子集，而不是微调模型的所有层。这减少了需要更新的参数数量。</li>
+<li><strong>适配器</strong>（<strong>Adapters</strong>）：适配器层是插入预训练模型层之间的小型神经网络。在微调过程中，只训练这些适配器层，保持预先训练的参数冻结。通过这种方式，适配器学习将预先训练的模型提取的特征适应新任务。</li>
+<li><strong>稀疏微调</strong>（<strong>Sparse
+Fine-Tuning</strong>）：传统的微调会略微调整所有参数，但稀疏微调只涉及更改模型参数的一个子集。这通常是基于一些标准来完成的，这些标准标识了与新任务最相关的参数。</li>
+<li><strong>低秩近似</strong>（<strong>Low-Rank
+Approximations</strong>）：另一种策略是用一个参数较少但在任务中表现相似的模型来近似微调后的模型。</li>
+<li><strong>正则化技术</strong>（<strong>Regularization
+Techniques</strong>）：可以将正则化项添加到损失函数中，以阻止参数发生较大变化，从而以更“参数高效”的方式有效地微调模型。</li>
+<li><strong>任务特定的头</strong>（<strong>Task-specific
+Heads</strong>）：有时，在预先训练的模型架构中添加一个任务特定的层或“头”，只对这个头进行微调，从而减少需要学习的参数数量。</li>
+</ol>
+<h2 id="当前高效微调技术存在的一些问题">1.6
+当前高效微调技术存在的一些问题</h2>
+<p>当前的高效微调技术很难在类似方法之间进行直接比较并评估它们的真实性能，主要的原因如下所示：</p>
+<ul>
+<li><strong>参数计算口径不一致</strong>：参数计算可以分为三类：可训练参数的数量、微调模型与原始模型相比改变的参数的数量、微调模型和原始模型之间差异的等级。例如，DiffPruning更新0.5%的参数，但是实际参与训练的参数量是200%。这为比较带来了困难。尽管可训练的参数量是最可靠的存储高效指标，但是也不完美。
+Ladder-side
+Tuning使用一个单独的小网络，参数量高于LoRA或BitFit，但是因为反向传播不经过主网络，其消耗的内存反而更小。</li>
+<li><strong>缺乏模型大小的考虑</strong>：已有工作表明，大模型在微调中需要更新的参数量更小（无论是以百分比相对而论还是以绝对数量而论），因此（基）模型大小在比较不同PEFT方法时也要考虑到。</li>
+<li><strong>缺乏测量基准和评价标准</strong>：不同方法所使用的的模型/数据集组合都不一样，评价指标也不一样，难以得到有意义的结论。</li>
+<li><strong>代码实现可读性差</strong>：很多开源代码都是简单拷贝Transformer代码库，然后进行小修小补。这些拷贝也不使用git
+fork，难以找出改了哪里。即便是能找到，可复用性也比较差（通常指定某个Transformer版本，没有说明如何脱离已有代码库复用这些方法）。</li>
+</ul>
+<h2 id="peft技术实践">1.7 PEFT技术实践</h2>
+<p>针对以上存在的问题，研究高效微调技术时，建议按照最佳实践进行实施：</p>
+<ul>
+<li>明确指出参数数量类型。</li>
+<li>使用不同大小的模型进行评估。</li>
+<li>和类似方法进行比较。</li>
+<li>标准化PEFT测量基准。</li>
+<li>重视代码清晰度，以最小化进行实现。</li>
+</ul>
+<h1 id="微调fine-tune">2. 微调Fine-Tune</h1>
+<h2 id="为什么sft之后感觉llm傻了">2.1 为什么SFT之后感觉LLM傻了?</h2>
+<p>在进行Supervised
+Fine-Tuning（SFT）之后，有时可能会观察到基座模型（如语言模型）的性能下降或产生一些“傻”的行为。这可能是由于以下原因：</p>
+<ol type="1">
+<li><strong>数据偏移</strong>：SFT过程中使用的微调数据集可能与基座模型在预训练阶段接触到的数据分布有所不同。如果微调数据集与预训练数据集之间存在显著的差异，模型可能会在新任务上表现较差。这种数据偏移可能导致模型在新任务上出现错误的预测或不准确的输出。</li>
+<li><strong>非典型标注</strong>：微调数据集的标注可能存在错误或不准确的标签。这些错误的标签可能会对模型的性能产生负面影响，导致模型产生“傻”的行为。</li>
+<li><strong>过拟合</strong>：如果微调数据集相对较小，或者模型的容量（参数数量）较大，模型可能会过拟合微调数据，导致在新的输入上表现不佳。过拟合可能导致模型过于依赖微调数据的特定样本，而无法泛化到更广泛的输入。</li>
+<li><strong>缺乏多样性</strong>：微调数据集可能缺乏多样性，未能涵盖模型在新任务上可能遇到的各种输入情况。这可能导致模型在面对新的、与微调数据集不同的输入时出现困惑或错误的预测。</li>
+</ol>
+<p>为了解决这些问题，可以尝试以下方法：</p>
+<ul>
+<li>收集更多的训练数据，以增加数据的多样性和覆盖范围。</li>
+<li>仔细检查微调数据集的标注，确保标签的准确性和一致性。</li>
+<li>使用正则化技术（如权重衰减、dropout）来减少过拟合的风险。</li>
+<li>进行数据增强，通过对微调数据进行一些变换或扩充来增加多样性。</li>
+<li>使用更复杂的模型架构或调整模型的超参数，以提高模型的性能和泛化能力。</li>
+</ul>
+<p>通过这些方法，可以尽量减少Supervised
+Fine-Tuning之后模型出现“傻”的情况，并提高模型在新任务上的表现。</p>
+<h2 id="sft-指令微调数据-如何构建">2.2 SFT 指令微调数据 如何构建?</h2>
+<p>构建Supervised Fine-Tuning（SFT）的微调数据需要以下步骤：</p>
+<ol type="1">
+<li><strong>收集原始数据</strong>：首先，您需要收集与目标任务相关的原始数据。这可以是对话数据、分类数据、生成任务数据等，具体取决于您的任务类型。确保数据集具有代表性和多样性，以提高模型的泛化能力。</li>
+<li><strong>标注数据</strong>：对原始数据进行标注，为每个样本提供正确的标签或目标输出。标签的类型取决于您的任务，可以是分类标签、生成文本、对话回复等。确保标注的准确性和一致性。</li>
+<li><strong>划分数据集</strong>：将标注数据划分为训练集、验证集和测试集。通常，大部分数据用于训练，一小部分用于验证模型的性能和调整超参数，最后一部分用于最终评估模型的泛化能力。</li>
+<li><strong>数据预处理</strong>：根据任务的要求，对数据进行预处理。这可能包括文本清洗、分词、去除停用词、词干化等处理步骤。确保数据格式和特征表示适合模型的输入要求。</li>
+<li><strong>格式转换</strong>：将数据转换为适合模型训练的格式。这可能涉及将数据转换为文本文件、JSON格式或其他适合模型输入的格式。</li>
+<li><strong>模型微调</strong>：使用转换后的数据对基座模型进行微调。根据任务的要求，选择适当的微调方法和超参数进行训练。这可以使用常见的深度学习框架（如PyTorch、TensorFlow）来实现。</li>
+<li><strong>模型评估</strong>：使用测试集对微调后的模型进行评估，计算模型在任务上的性能指标，如准确率、召回率、生成质量等。根据评估结果对模型进行进一步的优化和调整。</li>
+</ol>
+<h2 id="如何训练自己的大模型">2.3 如何训练自己的大模型？</h2>
+<ol type="1">
+<li><strong>数据收集和准备</strong>：首先，需要收集与目标任务和领域相关的大规模数据集。这可以包括从互联网上爬取数据、使用公开数据集或者与合作伙伴合作获取数据。然后，对数据进行预处理和清洗，包括去除噪声、处理缺失值、标准化数据等。</li>
+<li><strong>模型设计和架构选择</strong>：根据任务的特点和目标，选择适合的模型架构。可以基于已有的模型进行修改和调整，或者设计全新的模型。常见的大模型架构包括深度神经网络（如卷积神经网络、循环神经网络、Transformer等）和预训练语言模型（如BERT、GPT等）。</li>
+<li><strong>数据划分和预处理</strong>：将数据集划分为训练集、验证集和测试集。训练集用于模型的训练，验证集用于调整超参数和模型选择，测试集用于最终评估模型的性能。进行数据预处理，如分词、编码、标记化、特征提取等，以便输入到模型中。</li>
+<li><strong>模型训练</strong>：使用训练集对模型进行训练。训练过程中，需要选择合适的优化算法、损失函数和学习率等超参数，并进行适当的调整和优化。可以使用GPU或者分布式训练来加速训练过程。</li>
+<li><strong>模型调优和验证</strong>：使用验证集对训练过程中的模型进行调优和验证。根据验证集的性能指标，调整模型的超参数、网络结构或者其他相关参数，以提升模型的性能。</li>
+<li><strong>模型评估和测试</strong>：使用测试集对最终训练好的模型进行评估和测试。计算模型的性能指标，如准确率、召回率、F1值等，评估模型的性能和泛化能力。</li>
+<li><strong>模型部署和优化</strong>：将训练好的模型部署到实际应用中。根据实际需求，对模型进行进一步的优化和调整，以提高模型的效率和性能。</li>
+</ol>
+<h2 id="指令微调的好处">2.4 指令微调的好处？</h2>
+<p>指令微调（Instruction
+Fine-Tuning）是一种在预训练模型上进行微调的方法，其中<strong>模型接收指令或约束来生成特定的输出</strong>。指令微调具有以下几个好处：</p>
+<ol type="1">
+<li><strong>控制生成输出</strong>：指令微调使得模型能够根据指定的指令或约束生成特定的输出。这对于需要精确控制模型生成结果的任务非常有用，例如自然语言生成任务中的文本摘要、翻译或对话系统。</li>
+<li><strong>可解释性和可控性</strong>：通过指令微调，可以将任务的要求以指令的形式传达给模型。这增加了模型的可解释性和可控性，使得用户能够更好地理解和干预模型的生成过程。</li>
+<li><strong>避免不符合要求的输出</strong>：通过指令微调，可以避免模型生成不符合任务要求或偏离期望的输出。通过明确的指令或约束，模型能够更好地遵循任务的要求，并生成符合期望的结果。</li>
+<li><strong>提高任务性能</strong>：指令微调可以针对具体任务进行优化，使得模型在该任务上的性能得到提升。通过引入任务特定的指令或约束，模型可以更好地适应特定任务的需求，并生成更准确、更合理的输出。</li>
+<li><strong>灵活性和可扩展性</strong>：指令微调是一种灵活且可扩展的方法，允许在不同任务和场景中进行微调。通过调整和修改指令或约束，可以适应不同的任务需求，并在多个任务上进行微调。</li>
+</ol>
+<p>请注意，指令微调需要提供明确的指令或约束，并对模型进行适当的调整和微调。在实践中，需要根据具体任务和应用场景来决定是否采用指令微调以及如何设计和实施指令。</p>
+<h2 id="多轮对话任务微调调型">2.5 多轮对话任务微调调型</h2>
+<p>在多轮对话任务中，微调模型的<strong>目标是使其能够更好地理解和生成连续的对话内容，并具备上下文理解和一致性回复的能力</strong>。下面是一种常见的微调模型的方法：</p>
+<ol type="1">
+<li><strong>数据准备</strong>：收集或创建适用于多轮对话任务的数据集，包括对话文本和相应的标签或回复。确保数据集中包含上下文信息和对话的连续性。</li>
+<li><strong>构建输入输出格式</strong>：将对话数据转换为适合模型输入的格式。通常情况下，输入可以是包含多个对话轮次的上下文文本，输出可以是下一轮对话的回复或标签。</li>
+<li><strong>模型选择</strong>：选择适合多轮对话任务的预训练模型，如DialoGPT、BERT等。这些模型已经在大规模对话数据上进行了预训练，并具备一定的对话理解和生成能力。</li>
+<li><strong>微调模型</strong>：使用多轮对话数据集对预训练模型进行微调。微调的过程通常包括以下步骤：
+<ol type="1">
+<li>初始化模型参数：将预训练模型的参数加载到模型中。</li>
+<li><strong>定义损失函数</strong>：根据任务要求，定义适当的损失函数，如交叉熵损失函数或生成模型中的对抗损失函数。</li>
+<li><strong>进行反向传播和参数更新</strong>：根据损失函数，通过反向传播算法计算梯度，并更新模型参数。</li>
+<li><strong>重复训练步骤</strong>：重复进行微调步骤，直到模型在验证集上达到满意的性能。</li>
+</ol></li>
+<li><strong>超参数调优</strong>：根据任务需求和数据情况，调整微调过程中的超参数，如学习率、批大小、微调步数等。可以使用验证集来评估模型性能并选择最佳的超参数配置。</li>
+<li><strong>评估和测试</strong>：使用测试集对微调后的模型进行评估和测试，评估模型在多轮对话任务上的性能和表现。</li>
+</ol>
+<p>需要注意的是，微调多轮对话模型时，<strong>除了常规的微调方法，还可以采用一些特定的技巧，如引入对话历史的注意力机制、使用特定的对话策略进行训练等</strong>，以进一步提升模型在多轮对话任务中的性能。</p>
+<h2 id="微调后的模型出现能力劣化">2.6 微调后的模型出现能力劣化</h2>
+<p>灾难性遗忘（Catastrophic
+Forgetting）是指在模型微调过程中，<strong>当模型在新任务上进行训练时，可能会忘记之前学习到的知识，导致在旧任务上的性能下降</strong>。这种现象常见于神经网络模型的迁移学习或连续学习场景中。</p>
+<p>在微调大语言模型时，灾难性遗忘可能出现的原因包括：</p>
+<ol type="1">
+<li><strong>数据分布差异</strong>：微调过程中使用的新任务数据与预训练数据或旧任务数据的分布存在差异。如果新任务的数据分布与预训练数据差异较大，模型可能会过度调整以适应新任务，导致旧任务上的性能下降。</li>
+<li><strong>参数更新冲突</strong>：微调过程中，对新任务进行训练时，模型参数可能会被更新，导致之前学习到的知识被覆盖或丢失。新任务的梯度更新可能会与旧任务的梯度更新发生冲突，导致旧任务的知识被遗忘。</li>
+</ol>
+<p>为了解决灾难性遗忘问题，可以尝试以下方法：</p>
+<ol type="1">
+<li><strong>经验回放（Replay
+Buffer）</strong>：在微调过程中，使用一个缓冲区来存储旧任务的样本，然后将旧任务的样本与新任务的样本一起用于训练。这样可以保留旧任务的知识，减少灾难性遗忘的发生。</li>
+<li><strong>弹性权重共享（Elastic Weight
+Consolidation）</strong>：通过引入正则化项，限制模型参数的变动范围，以保护之前学习到的知识。这种方法可以在微调过程中平衡新任务和旧任务之间的重要性。</li>
+<li><strong>增量学习（Incremental
+Learning）</strong>：将微调过程分为多个阶段，每个阶段只微调一小部分参数。这样可以逐步引入新任务，减少参数更新的冲突，降低灾难性遗忘的风险。</li>
+<li><strong>多任务学习（Multi-Task
+Learning）</strong>：在微调过程中，同时训练多个相关任务，以提高模型的泛化能力和抗遗忘能力。通过共享模型参数，可以在不同任务之间传递知识，减少灾难性遗忘的影响。</li>
+</ol>
+<p>综上所述，灾难性遗忘是在模型微调过程中可能出现的问题。通过合适的方法和技术，可以减少灾难性遗忘的发生，保留之前学习到的知识，提高模型的整体性能。</p>
+<h2 id="预训练和sft操作有什么不同">2.7 预训练和SFT操作有什么不同</h2>
+<p>大语言模型的预训练和有监督微调（Supervised
+Fine-Tuning）是两个不同的操作，它们在目标、数据和训练方式等方面存在一些区别。</p>
+<p><strong>目标</strong>：</p>
+<ul>
+<li><strong>预训练的目标是通过无监督学习从大规模的文本语料库中学习语言模型的表示能力和语言知识</strong>。预训练的目标通常是通过自我预测任务，例如掩码语言模型（Masked
+Language Model，MLM）或下一句预测（Next Sentence
+Prediction，NSP）等，来训练模型。</li>
+<li><strong>有监督微调的目标是在特定的任务上进行训练</strong>，例如文本分类、命名实体识别等。在有监督微调中，模型会利用预训练阶段学到的语言表示和知识，<strong>通过有监督的方式调整模型参数，以适应特定任务的要求。</strong></li>
+</ul>
+<p><strong>数据</strong>：</p>
+<ul>
+<li>在预训练阶段，大语言模型通常使用大规模的<strong>无标签文本数据进行训练</strong>，例如维基百科、网页文本等。这些数据没有特定的标签或任务信息，模型通过自我预测任务来学习语言模型。</li>
+<li>在有监督微调中，模型需要使用<strong>带有标签的任务相关数据进行训练</strong>。这些数据通常是人工标注的，包含了输入文本和对应的标签或目标。模型通过这些标签来进行有监督学习，调整参数以适应特定任务。</li>
+</ul>
+<p><strong>训练方式</strong>：</p>
+<ul>
+<li>预训练阶段通常使用<strong>无监督的方式进行训练</strong>，模型通过最大化预训练任务的目标函数来学习语言模型的表示能力。</li>
+<li>有监督微调阶段则使用<strong>有监督的方式进行训练</strong>，模型通过最小化损失函数来学习任务相关的特征和模式。在微调阶段，通常会使用预训练模型的参数作为初始参数，并在任务相关的数据上进行训练。</li>
+</ul>
+<p>总的来说，预训练和有监督微调是大语言模型训练的两个阶段，目标、数据和训练方式等方面存在差异。预训练阶段通过无监督学习从大规模文本数据中学习语言模型，而有监督微调阶段则在特定任务上使用带有标签的数据进行有监督学习，以适应任务要求。</p>
+<h2 id="大模型llm进行sft-如何对样本进行优化">2.8 大模型LLM进行SFT
+如何对样本进行优化？</h2>
+<p>对于大语言模型进行有监督微调（Supervised
+Fine-Tuning）时，可以采用以下几种方式对样本进行优化：</p>
+<ol type="1">
+<li><strong>数据清洗和预处理</strong>：对于有监督微调的任务，首先需要对样本数据进行清洗和预处理。这包括去除噪声、处理缺失值、进行标准化或归一化等操作，以确保数据的质量和一致性。</li>
+<li><strong>数据增强</strong>：通过数据增强技术可以扩充训练数据，增加样本的多样性和数量。例如，可以使用数据扩充方法如随机裁剪、旋转、翻转、加噪声等来生成新的训练样本，从而提高模型的泛化能力。</li>
+<li><strong>标签平衡</strong>：如果样本标签不平衡，即某些类别的样本数量远远多于其他类别，可以采取一些方法来平衡样本标签。例如，可以通过欠采样、过采样或生成合成样本等技术来平衡不同类别的样本数量。</li>
+<li><strong>样本选择</strong>：在有限的资源和时间下，可以选择一部分具有代表性的样本进行微调训练。可以根据任务的需求和数据分布的特点，选择一些关键样本或难样本进行训练，以提高模型在关键样本上的性能。</li>
+<li><strong>样本权重</strong>：对于一些重要的样本或困难样本，可以给予更高的权重，以便模型更加关注这些样本的学习。可以通过调整损失函数中样本的权重或采用加权采样的方式来实现。</li>
+<li><strong>样本组合和分割</strong>：根据任务的特点和数据的结构，可以将多个样本组合成一个样本，或将一个样本分割成多个子样本。这样可以扩展训练数据，提供更多的信息和多样性。</li>
+<li><strong>样本筛选和策略</strong>：根据任务需求，可以制定一些样本筛选和选择策略。例如，可以根据样本的置信度、难度、多样性等指标进行筛选和选择，以提高模型的性能和泛化能力。</li>
+</ol>
+<p>总的来说，对大语言模型进行有监督微调时，可以通过数据清洗和预处理、数据增强、标签平衡、样本选择、样本权重、样本组合和分割、样本筛选和策略等方式对样本进行优化。这些优化方法可以提高训练样本的质量、多样性和数量，从而提升模型的性能和泛化能力。具体的优化策略需要根据任务需求和数据特点进行选择和调整。</p>
+<h1 id="预训练">3. 预训练</h1>
+<h2 id="为什么要增量预训练">3.1 为什么要增量预训练？</h2>
+<p><strong>预训练学知识</strong>，<strong>指令微调学格式</strong>，<strong>强化学习对齐人类偏好</strong>，所以要想大模型有领域知识，得增量预训练（靠指令微调记知识不靠谱，不是几十w条数据能做到的）。</p>
+<h2 id="进行增量预训练需要做哪些准备工作">3.2
+进行增量预训练需要做哪些准备工作？</h2>
+<ol type="1">
+<li><strong>选取底座模型</strong>：可以根据自己的项目需求和硬件基础来选择合适的底座模型及模型参数量的大小。</li>
+<li><strong>收集数据</strong>：一般来说需要收集大量的文本数据，包含各个领域，主要从互联网上获取，一般预训练数据的大小都是
+TB 级别的。</li>
+<li><strong>数据清洗</strong>：所有的信息都能够在互联网信息中被找到，只是<strong>信息密度</strong>相比「人工精选数据集」要更低。例如「明星信息」、「如何写代码」这些信息都能在新闻网站、或是问答网站中找到，只不过「维基百科」或是「Github」则是将这些信息给「高密度」且「结构化」地进行了存储。这使得我们在使用维基百科作为训练语料的时候，模型能够更快的学习到这些高密度信息（人物的经历、年龄、性别、职业等等），而这些内容在互联网信息（如新闻）中的信息密度则较低，即很少会有一条新闻完整的介绍一个艺人的过往经历。只要我们<strong>对互联网信息进行严格的处理</strong>（去除冗余信息，提高有用信息的密度），就能够加快模型的学习速度。</li>
+</ol>
+<h2 id="增量预训练训练流程是怎么样">3.3
+增量预训练训练流程是怎么样？</h2>
+<ol type="1">
+<li><strong>数据预处理</strong>：参考 LLaMA
+的预训练长度，也把数据处理成2048长度（如果不够，做补全）。</li>
+<li><strong>分词器</strong>：如果使用 LLaMA
+可能需要添加中文词表，目前有不少人做了相关工作，当然也可以自己添加自己需要的词表。</li>
+<li><strong>原始模型</strong>：各家框架的模型层名不太一样，训练时可能需要做一些调整，在预训练时尽量选择基座模型，不选
+Chat 模型。</li>
+<li><strong>训练模型</strong>：跑通只是第一步，根据训练情况反复调整比较重要。</li>
+<li><strong>模型转换</strong>：不同框架的checkpoint格式不同，还会根据并行度分成很多个文件。</li>
+<li><strong>模型测试</strong>：简单测试下续写能力，验证下模型是否正常。</li>
+</ol>
+<h1 id="prompting工程">4. Prompting工程</h1>
+<h2 id="bitfit">4.1 BitFit</h2>
+<h3 id="背景">4.1.1 背景</h3>
+<p>虽然对每个任务进行全量微调非常有效，但它也会为每个预训练任务生成一个独特的大型模型，这使得很难推断微调过程中发生了什么变化，也很难部署，
+特别是随着任务数量的增加，很难维护。</p>
+<p>理想状况下，我们希望有<strong>一种满足以下条件的高效微调方法</strong>：</p>
+<ul>
+<li>到达能够匹配全量微调的效果。</li>
+<li>仅更改一小部分模型参数。</li>
+<li>使数据可以通过流的方式到达，而不是同时到达，便于高效的硬件部署。</li>
+<li>改变的参数在不同下游任务中是一致的。</li>
+</ul>
+<p>上述的问题取决于微调过程能多大程度引导新能力的学习以及暴露在预训练LM中学到的能力。</p>
+<p>虽然，之前的高效微调方法Adapter-Tuning、Diff-Pruning也能够部分满足上述的需求。但是，作者提出了<strong>一种参数量更小的稀疏的微调方法BitFit</strong>，来满足上述的需求。</p>
+<h3 id="技术原理">4.1.2 技术原理</h3>
+<p>BitFit（论文：<strong>BitFit: Simple Parameter-efficient Fine-tuning
+or Transformer-based Masked
+Language-models</strong>）是一种<strong>稀疏的微调方法</strong>，它<strong>训练时只更新bias的参数或者部分bias参数</strong>。</p>
+<p>对于Transformer模型而言，<strong>冻结大部分 transformer-encoder
+参数，只更新bias参数跟特定任务的分类层参数</strong>。涉及到的bias参数有attention模块中计算<code>query</code>,<code>key</code>,<code>value</code>跟合并多个attention结果时涉及到的bias，MLP层中的bias，Layernormalization层的bias参数。</p>
+<p>在Bert-Base/Bert-Large这种模型里，bias参数仅占模型全部参数量的0.08%～0.09%。但是通过在Bert-Large模型上基于GLUE数据集进行了
+BitFit、Adapter和Diff-Pruning的效果对比发现，BitFit在参数量远小于Adapter、Diff-Pruning的情况下，效果与Adapter、Diff-Pruning想当，甚至在某些任务上略优于Adapter、Diff-Pruning。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145058170.png" srcset="/img/loading.gif" lazyload
+alt="BitFit对比图 参数量更加少" />
+<figcaption aria-hidden="true">BitFit对比图 参数量更加少</figcaption>
+</figure>
+<p>同时，通过实验结果还可以看出，<strong>BitFit微调结果相对全量参数微调而言,
+只更新极少量参数的情况下，在多个数据集上都达到了不错的效果</strong>，虽不及全量参数微调，但是远超固定全部模型参数的Frozen方式。</p>
+<p>同时，通过对比BitFit训练前后的参数，<strong>发现很多bias参数并没有太多变化</strong>（例如：跟计算key所涉及到的bias参数）。发现计算query和将特征维度从N放大到4N的FFN层（intermediate）的bias参数变化最为明显，只更新这两类bias参数也能达到不错的效果，反之，固定其中任何一者，模型的效果都有较大损失。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145136374.png" srcset="/img/loading.gif" lazyload
+alt="微调参数量对比" />
+<figcaption aria-hidden="true">微调参数量对比</figcaption>
+</figure>
+<h2 id="prefix-tuning">4.2 Prefix Tuning</h2>
+<h3 id="背景-1">4.2.1 背景</h3>
+<p>在Prefix
+Tuning之前的工作主要是人工设计离散的模版或者自动化搜索离散的模版。对于人工设计的模版，模版的变化对模型最终的性能特别敏感，加一个词、少一个词或者变动位置都会造成比较大的变化。而对于自动化搜索模版，成本也比较高；同时，以前这种离散化的token搜索出来的结果可能并不是最优的。</p>
+<p>除此之外，传统的微调范式利用预训练模型去对不同的下游任务进行微调，对每个任务都要保存一份微调后的模型权重，一方面微调整个模型耗时长；另一方面也会占很多存储空间。</p>
+<p>基于上述两点，Prefix
+Tuning提出<strong>固定预训练LM</strong>，<strong>为LM添加可训练，任务特定的前缀，</strong>
+这样就可以为不同任务保存不同的前缀，微调成本也小；同时，这种Prefix实际就是连续可微的Virtual
+Token（Soft Prompt/Continuous
+Prompt），相比离散的Token，更好优化，效果更好。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145233005.png" srcset="/img/loading.gif" lazyload alt="prefix-tuning对比" style="zoom: 33%;" /></p>
+<h3 id="技术原理-1">4.2.2 技术原理</h3>
+<p>Prefix Tuning（论文：<strong>Prefix-Tuning: Optimizing Continuous
+Prompts for
+Generation</strong>），<strong>在输入token之前构造一段任务相关的virtual
+tokens作为Prefix，然后训练的时候只更新Prefix部分的参数，而PLM中的其他部分参数固定</strong>。</p>
+<p>针对不同的模型结构，需要构造不同的Prefix。</p>
+<ul>
+<li><strong>针对自回归架构模型</strong>：<strong>在句子前面添加前缀</strong>，得到
+<code>z = [PREFIX; x; y]</code>，合适的上文能够在固定 LM
+的情况下去引导生成下文（比如：GPT3的上下文学习）。</li>
+<li><strong>针对编码器-解码器架构模型</strong>：<strong>Encoder和Decoder都增加了前缀</strong>，得到
+<code>z = [PREFIX; x; PREFIX0; y]</code>。Encoder端增加前缀是为了引导输入部分的编码，Decoder
+端增加前缀是为了引导后续token的生成。</li>
+</ul>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145346148.png" srcset="/img/loading.gif" lazyload
+alt="prefix tuning技术细节" />
+<figcaption aria-hidden="true">prefix tuning技术细节</figcaption>
+</figure>
+<p>该方法其实和构造Prompt类似，只是Prompt是人为构造的“显式”的提示，并且无法更新参数，而Prefix则是可以学习的“隐式”的提示。同时，<strong>为了防止直接更新Prefix的参数导致训练不稳定和性能下降的情况，在Prefix层前面加了MLP结构，训练完成后，只保留Prefix的参数</strong>。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145516361.png" srcset="/img/loading.gif" lazyload
+alt="Prefix结构增加MLP结构" />
+<figcaption aria-hidden="true">Prefix结构增加MLP结构</figcaption>
+</figure>
+<p>除此之外，通过消融实验证实，只调整embedding层的表现力不够，将导致性能显著下降，因此，在每层都加了prompt的参数，改动较大。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145614518.png" srcset="/img/loading.gif" lazyload alt="prefix会在每层都加入prompt参数进行调整" style="zoom:33%;" /></p>
+<p>另外，实验还对比了位置对于生成效果的影响，Prefix-tuning也是要略优于Infix-tuning的。其中，Prefix-tuning形式为
+<code>[PREFIX; x; y]</code>，Infix-tuning形式为
+<code>[x; INFIX; y]</code>。</p>
+<h2 id="prompt-tuning">4.3 Prompt Tuning</h2>
+<h3 id="背景-2">4.3.1 背景</h3>
+<p>大模型全量微调对每个任务训练一个模型，开销和部署成本都比较高。同时，离散的prompts（指人工设计prompts提示语加入到模型）方法，成本比较高，并且效果不太好。</p>
+<p>基于此，作者提出了Prompt
+Tuning，<strong>通过反向传播更新参数来学习prompts，而不是人工设计prompts；同时冻结模型原始权重，只训练prompts参数，</strong>
+训练完以后，用同一个模型可以做多任务推理。</p>
+<h3 id="技术原理-2">4.3.2 技术原理</h3>
+<p>Prompt Tuning（论文：<strong>The Power of Scale for
+Parameter-Efficient Prompt Tuning</strong>），该方法可以看作是Prefix
+Tuning的简化版本，它给<strong>每个任务定义了自己的Prompt，然后拼接到数据上作为输入，但只在输入层加入prompt
+tokens</strong>，并且不需要加入 MLP 进行调整来解决难训练的问题。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145735981.png" srcset="/img/loading.gif" lazyload
+alt="Prompt Tuning整体结构题" />
+<figcaption aria-hidden="true">Prompt Tuning整体结构题</figcaption>
+</figure>
+<p>通过实验发现，随着预训练模型参数量的增加，Prompt
+Tuning的方法会逼近全参数微调的结果。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145819719.png" srcset="/img/loading.gif" lazyload alt="Prompt Tuning参数量对比" style="zoom:33%;" /></p>
+<p>同时，Prompt Tuning 还提出了 Prompt
+Ensembling，也就是<strong>在一个批次（Batch）里同时训练同一个任务的不同
+prompt（即采用多种不同方式询问同一个问题）</strong>，这样相当于训练了不同模型，比模型集成的成本小多了。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324145906704.png" srcset="/img/loading.gif" lazyload alt="Prompt Ensembling 示意图" style="zoom:33%;" /></p>
+<h2 id="p-tuning">4.4 <strong>P-Tuning</strong></h2>
+<h3 id="背景-3">4.4.1 背景</h3>
+<p>该方法的提出主要是为了解决这样一个问题：<strong>大模型的Prompt构造方式严重影响下游任务的效果</strong>。比如：GPT-3采用人工构造的模版来做上下文学习（in
+context
+learning），但人工设计的模版的变化特别敏感，加一个词或者少一个词，或者变动位置都会造成比较大的变化。</p>
+<p>同时，近来的自动化搜索模版工作成本也比较高，以前这种离散化的token的搜索出来的结果可能并不是最优的，导致性能不稳定。基于此，作者提出了P-Tuning，设计了一种<strong>连续可微的virtual
+token</strong>（同Prefix-Tuning类似）。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150014462.png" srcset="/img/loading.gif" lazyload
+alt="Prompt Learing提出的P-Tuning" />
+<figcaption aria-hidden="true">Prompt Learing提出的P-Tuning</figcaption>
+</figure>
+<h3 id="技术原理-3">4.4.2 技术原理</h3>
+<p>P-Tuning（论文：<strong>GPT Understands,
+Too</strong>），该方法<strong>将Prompt转换为可以学习的Embedding层，并用MLP+LSTM的方式来对Prompt
+Embedding进行一层处理</strong>。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150115333.png" srcset="/img/loading.gif" lazyload
+alt="P-Tuning算法" />
+<figcaption aria-hidden="true">P-Tuning算法</figcaption>
+</figure>
+<p>相比Prefix Tuning，P-Tuning加入的可微的virtual
+token，<strong>但仅限于输入层，没有在每一层都加；另外，virtual
+token的位置也不一定是前缀，插入的位置是可选的</strong>。这里的出发点实际是把传统人工设计模版中的真实token替换成可微的virtual
+token。</p>
+<p>经过预训练的LM的词嵌入已经变得高度离散，如果随机初始化virtual
+token，容易优化到局部最优值，而这些virtual
+token理论是应该有相关关联的。因此，作者通过实验发现<strong>用一个prompt
+encoder来编码会收敛更快，效果更好</strong>。即用一个LSTM+MLP去编码这些virtual
+token以后，再输入到模型。</p>
+<p>从对比实验证实看出，P-Tuning获得了与全参数一致的效果。甚至在某些任务上优于全参数微调。</p>
+<p>并且在实验中还发现，相同参数规模，如果进行全参数微调，Bert的在NLU任务上的效果，超过GPT很多；但是在P-Tuning下，GPT可以取得超越Bert的效果。</p>
+<h2 id="p-tuning-v2">4.5 <strong>P-Tuning</strong> v2</h2>
+<h3 id="背景-4">4.5.1 背景</h3>
+<p>之前的Prompt Tuning和P-Tuning等方法存在两个主要的问题：</p>
+<p>第一，<strong>缺乏模型参数规模和任务通用性</strong>。</p>
+<ul>
+<li><strong>缺乏规模通用性</strong>：Prompt
+Tuning论文中表明当模型规模超过100亿个参数时，提示优化可以与全量微调相媲美。但是对于那些较小的模型（从100M到1B），提示优化和全量微调的表现有很大差异，这大大限制了提示优化的适用性。</li>
+<li><strong>缺乏任务普遍性</strong>：尽管Prompt Tuning和P-tuning在一些
+NLU
+基准测试中表现出优势，但提示调优对硬序列标记任务（即序列标注）的有效性尚未得到验证。</li>
+</ul>
+<p>第二，<strong>缺少深度提示优化</strong>，在Prompt
+Tuning和P-tuning中，连续提示只被插入transformer第一层的输入embedding序列中，在接下来的transformer层中，插入连续提示的位置的embedding是由之前的transformer层计算出来的，这可能导致两个可能的优化挑战。</p>
+<ul>
+<li>由于序列长度的限制，可调参数的数量是有限的。</li>
+<li>输入embedding对模型预测只有相对间接的影响。</li>
+</ul>
+<p>考虑到这些问题，作者提出了Ptuning
+v2，它<strong>利用深度提示优化（如：Prefix Tuning），对Prompt
+Tuning和P-Tuning进行改进，作为一个跨规模和NLU任务的通用解决方案</strong>。</p>
+<h3 id="技术原理-4">4.5.2 技术原理</h3>
+<p>P-Tuning v2（论文： <strong>P-Tuning v2: Prompt Tuning Can Be
+Comparable to Fine-tuning Universally Across Scales and
+Tasks</strong>），该方法<strong>在每一层都加入了Prompts
+tokens作为输入，而不是仅仅加在输入层</strong>，这带来两个方面的好处：</p>
+<ul>
+<li>更多可学习的参数（从P-tuning和Prompt
+Tuning的0.01%增加到0.1%-3%），同时也足够参数高效。</li>
+<li>加入到更深层结构中的Prompt能给模型预测带来更直接的影响。</li>
+</ul>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150229444.png" srcset="/img/loading.gif" lazyload
+alt="P-Tuning V2" />
+<figcaption aria-hidden="true">P-Tuning V2</figcaption>
+</figure>
+<p>具体做法基本同Prefix Tuning，可以看作是将文本生成的Prefix
+Tuning技术适配到NLU任务中，然后做了一些改进：</p>
+<ul>
+<li><strong>移除重参数化的编码器</strong>。以前的方法利用重参数化功能来提高训练速度和鲁棒性（如：Prefix
+Tuning中的MLP、P-Tuning中的LSTM））。在 P-tuning v2
+中，作者发现重参数化的改进很小，尤其是对于较小的模型，同时还会影响模型的表现。</li>
+<li><strong>针对不同任务采用不同的提示长度</strong>。提示长度在提示优化方法的超参数搜索中起着核心作用。在实验中，我们发现不同的理解任务通常用不同的提示长度来实现其最佳性能，这与Prefix-Tuning中的发现一致，不同的文本生成任务可能有不同的最佳提示长度。</li>
+<li><strong>引入多任务学习</strong>。先在多任务的Prompt上进行预训练，然后再适配下游任务。多任务学习对我们的方法来说是可选的，但可能是相当有帮助的。一方面，连续提示的随机惯性给优化带来了困难，这可以通过更多的训练数据或与任务相关的无监督预训练来缓解；另一方面，连续提示是跨任务和数据集的特定任务知识的完美载体。我们的实验表明，在一些困难的序列任务中，多任务学习可以作为P-tuning
+v2的有益补充。</li>
+<li><strong>回归传统的分类标签范式，而不是映射器</strong>。标签词映射器（Label
+Word
+Verbalizer）一直是提示优化的核心组成部分，它将one-hot类标签变成有意义的词，以利用预训练语言模型头。尽管它在few-shot设置中具有潜在的必要性，但在全数据监督设置中，Verbalizer并不是必须的。它阻碍了提示调优在我们需要无实际意义的标签和句子嵌入的场景中的应用。因此，P-Tuning
+v2回归传统的CLS标签分类范式，采用随机初始化的分类头（Classification
+Head）应用于tokens之上，以增强通用性，可以适配到序列标注任务。</li>
+</ul>
+<p>论文中展示了P-tuning
+v2在不同模型规模下的表现。对于简单的NLU任务，如SST-2（单句分类），Prompt
+Tuning和P-Tuning在较小的规模下没有显示出明显的劣势。但是当涉及到复杂的挑战时，如：自然语言推理（RTE）和多选题回答（BoolQ），它们的性能会非常差。相反，P-Tuning
+v2在较小规模的所有任务中都与微调的性能相匹配。并且，P-tuning
+v2在RTE中的表现明显优于微调，特别是在BERT中。</p>
+<h1 id="adapter-tuning">5. Adapter-Tuning</h1>
+<h2 id="adapter-tuning-1">5.1 Adapter Tuning</h2>
+<h3 id="背景-5">5.1.1 背景</h3>
+<p>预训练模型参数量越来越多，在训练下游任务时进行全量微调变得昂贵且耗时。</p>
+<p>基于此，作者提出了Adapter Tuning，Adapter 的出现缓解了上述问题
+Adapter
+<strong>在预训练模型每层中插入用于下游任务的参数</strong>（针对每个下游任务，仅增加3.6%的参数），<strong>在微调时将模型主体冻结，仅训练特定于任务的参数</strong>，从而减少了训练时的算力开销。</p>
+<h3 id="技术原理-5">5.1.2 技术原理</h3>
+<p>Adapter Tuning（论文：<strong>Parameter-Efficient Transfer Learning
+for
+NLP</strong>），该方法<strong>设计了Adapter结构</strong>，并将其嵌入Transformer的结构里面，<strong>针对每一个Transformer层，增加了两个Adapter结构(分别是多头注意力的投影之后和第二个feed-forward层之后)</strong>，<strong>在训练时，固定住原来预训练模型的参数不变，只对新增的
+==Adapter 结构和 Layer Norm
+层==进行微调，从而保证了训练的高效性</strong>。</p>
+<p>每当出现新的下游任务，通过添加Adapter模块来产生一个易于扩展的下游模型，从而避免全量微调与灾难性遗忘的问题。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150521350.png" srcset="/img/loading.gif" lazyload
+alt="Adapting 微调" />
+<figcaption aria-hidden="true">Adapting 微调</figcaption>
+</figure>
+<h3 id="具体细节">5.1.3 具体细节</h3>
+<p>每个 Adapter
+模块主要由<strong>两个前馈（Feedforward）子层组成</strong>，第一个前馈子层（down-project）将Transformer块的输出作为输入，将原始输入维度<code>d</code>（高维特征）投影到<code>m</code>（低维特征），通过控制m的大小来限制Adapter模块的参数量，通常情况下，<code>m&lt;&lt;d</code>。然后，中间通过一个非线形层。在输出阶段，通过第二个前馈子层（up-project）还原输入维度，将m（低维特征）重新映射回d（原来的高维特征），作为Adapter模块的输出。同时，通过一个skip
+connection来将Adapter的输入重新加到最终的输出中去，这样可以保证，即便
+Adapter 一开始的参数初始化接近0，Adapter也由于skip
+connection的设置而接近于一个恒等映射，从而确保训练的有效性。</p>
+<p><span class="math display">\[
+h \leftarrow h+f\left(h W_{\text {down }}\right) W_{u p}
+\]</span></p>
+<p>通过实验发现，只训练少量参数的Adapter方法的效果可以媲美全量微调，这也验证了Adapter是一种高效的参数训练方法，可以快速将语言模型的能力迁移到下游任务中去。</p>
+<p>总之，Adapter通过引入0.5%～5%的模型参数可以达到不落后全量微调模型1%的性能。</p>
+<h2 id="adapterfusion">5.2 AdapterFusion</h2>
+<h3 id="背景-6">5.2.1 背景</h3>
+<p>为了整合来自多个任务的知识，传统的两个方法是按一定顺序微调（Sequential
+fine-tuning）或者多任务学习（multi-task
+learning）。前者的一大问题是需要先验知识来确定顺序，且模型容易遗忘之前任务学到的知识，后者的问题是不同的任务会互相影响，也难以平衡数据集大小差距很大的任务。</p>
+<p>而之前的工作，Adapter
+Tuning的一个优势就是不用更新预训练模型的参数，而是插入比较少的新的参数就可以很好地学会一个任务。此时，Adapter
+的参数某种程度上就表达了解决这个任务需要的知识。</p>
+<p>作者受此启发，如果<strong>想要把来自多个任务的知识结合起来，是否可以考虑把多个任务的Adapter的参数结合起来</strong>？基于此，作者提出了
+AdapterFusion，这是一种新的两阶段学习算法，可以利用来自多个任务的知识。</p>
+<h3 id="技术原理-6">5.2.2 技术原理</h3>
+<p>Adapter Fusion（论文：<strong>AdapterFusion:Non-Destructive Task
+Composition for Transfer
+Learning</strong>），<strong>一种融合多任务信息的Adapter的变体</strong>，在
+Adapter
+的基础上进行优化，通过将学习过程分为两阶段来提升下游任务表现。</p>
+<ul>
+<li><strong>知识提取阶段</strong>：在不同任务下引入各自的Adapter模块，用于学习特定任务的信息。</li>
+<li><strong>知识组合阶段</strong>：将预训练模型参数与特定于任务的Adapter参数固定，<strong>引入新参数（AdapterFusion）来学习组合多个Adapter中的知识，以提高模型在目标任务中的表现</strong>。</li>
+</ul>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150638005.png" srcset="/img/loading.gif" lazyload alt="Adapter Fusion结构图" style="zoom: 33%;" /></p>
+<p>对于<strong>第一阶段</strong>，有两种训练方式，分别如下：</p>
+<ul>
+<li><strong>Single-Task
+Adapters(ST-A)</strong>：对于N个任务，模型都分别独立进行优化，各个任务之间互不干扰，互不影响。</li>
+<li><strong>Multi-Task
+Adapters(MT-A)</strong>：N个任务通过多任务学习的方式，进行联合优化。</li>
+</ul>
+<p>对于<strong>第二阶段</strong>，为了避免通过引入特定任务参数而带来的灾难性遗忘问题，AdapterFusion提出了<strong>一个共享多任务信息的结构</strong>。针对特定任务<code>m</code>，AdapterFusion联合了第一阶段训练得到的<code>N</code>个Adapter信息。固定语言模型的参数跟<code>N</code>个Adapter的参数，新引入AdapterFusion的参数，目标函数也是学习针对特定任务<code>m</code>的AdapterFusion的参数。</p>
+<h3 id="adapterfusion结构">5.2.3 <strong>AdapterFusion结构</strong></h3>
+<p>AdapterFusion具体结构就是一个Attention，它的参数包括<code>query</code>，<code>key</code>,
+<code>value</code>的矩阵参数，在transformer的每一层都存在，它的query是transformer每个子模块的输出结果，它的key跟value则是N个任务的adapter的输出。通过AdapterFusion，模型可以为不同的任务对应的adapter分配不同的权重，聚合N个任务的信息，从而为特定任务输出更合适的结果。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150741300.png" srcset="/img/loading.gif" lazyload alt="AdapterFusion内部结构" style="zoom:33%;" /></p>
+<p>通过对全量微调、Adapter Tuning、AdapterFusion这三种方法在各个数据集上进行对比实验可以看出，AdapterFusion在大多数情况下性能优于全模型微调和Adapter Tuning，特别在MRPC与RTE数据集中，性能显著优于另外两种方法。</p>
+<p>总之，通过将适配器的训练分为知识提取和知识组合两部分，<strong>解决了灾难性遗忘、任务间干扰和训练不稳定的问题</strong>。但是，Adapter模块的添加也导致模型整体参数量的增加，降低了模型推理时的性能。</p>
+<h2 id="adapterdrop">5.3 AdapterDrop</h2>
+<h3 id="背景-7">5.3.1 背景</h3>
+<p>近年来Adapter已被证明可以很好地用于机器翻译、跨语言迁移、社区问答和迁移学习的任务组合。尽管它们最近很受欢迎，但Adapter的计算效率尚未在参数效率之外得到探索。</p>
+<p>作者通过对Adapter的计算效率进行分析，<strong>发现与全量微调相比，Adapter在训练时快60%，但是在推理时慢4%-6%</strong>。</p>
+<p>基于此，作者提出了<strong>AdapterDrop</strong>方法缓解该问题。</p>
+<h3 id="技术原理-7">5.3.2 技术原理</h3>
+<p>AdapterDrop（论文：AdapterDrop: On the Efficiency of Adapters in
+Transformers），在不影响任务性能的情况下，<strong>对Adapter动态高效的移除，尽可能的减少模型的参数量，提高模型在反向传播（训练）和正向传播（推理）时的效率</strong>。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150845885.png" srcset="/img/loading.gif" lazyload alt="关键位置参数移除" style="zoom:33%;" /></p>
+<p>实验表明，<strong>从较低的 Transformer 层中删除Adapter可以显着提高多任务设置中的推理速度</strong>。
+例如，将前五个Transformer层中的Adapter丢弃，在对 8
+个任务进行推理时，速度提高了 39%。并且即使有多个丢弃层，AdapterDrop
+也能保持良好的结果。</p>
+<p>除此之外，作者还研究了对
+AdapterFusion中的Adapter进行剪枝后的效果。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324150919888.png" srcset="/img/loading.gif" lazyload alt="对AdapterFusion中的Adapter进行剪枝后" style="zoom:33%;" /></p>
+<p>通过实验表明可以移除 AdapterFusion
+中的大多数Adapter而不影响任务性能。使用剩余的两个Adapter，实现了与具有八个Adapter的完整
+AdapterFusion 模型相当的结果，并将推理速度提高了 68%。</p>
+<p>因此，作者建议在实际部署这些模型之前执行 AdaperFusion 剪枝。
+这是一种简单而有效的技术，即使在完全保持性能的情况下也能实现效率提升。</p>
+<p>总之，<strong>AdapterDrop
+通过从较低的 Transformer 层删除可变数量的Adaper来提升推理速度</strong>。
+当对多个任务执行推理时，动态地减少了运行时的计算开销，并在很大程度上保持了任务性能。</p>
+<h2 id="mam-adapter">5.4 MAM Adapter</h2>
+<h3 id="背景-8">5.4.1 背景</h3>
+<p>近年来提出了多种参数高效的迁移学习方法，这些方法<strong>仅微调少量（额外）参数即可获得强大的性能</strong>。虽然有效，但人们对为什么有效的关键要素以及各种高效微调方法之间的联系知之甚少。</p>
+<p>下图展示了不同的微调方法，在Xsum数据集上做英文文本摘要任务的效果（ROUGE-2是该任务的评价指标（越大越好））以及其他高效微调方法参数量相对于全参数微调参数量的百分比。图中的左上角的位置是理想化的方法。从图中发现，<strong>Adapter，Prefix
+Tuning和LoRA</strong>都是性能比较好的方法。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324151426754.png" srcset="/img/loading.gif" lazyload alt="Fine-tuned 参数量对比" style="zoom: 33%;" /></p>
+<p>为什么看起来Adapter、Prefix
+Tuning、LoRA（在结构上和公式上）都不太一样，尤其是Prefix
+Tuning，但是这三种方法有近似的效果？</p>
+<p>基于此，作者分解了当下最先进的参数高效迁移学习方法（Adapter、Prefix
+Tuning和LoRA）的设计，并提出了一种新方法<strong>MAM
+Adapter</strong>，<strong>一个在它们之间建立联系的统一框架</strong>。具体来说，将它们<strong>重新构建为对预训练模型中特定隐藏状态的修改，并定义一组设计维度，不同的方法沿着这些维度变化</strong>。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324151515946.png" srcset="/img/loading.gif" lazyload alt="不同板块具体内部结构的展示" style="zoom: 33%;" /></p>
+<p>首先，作者通过对Prefix Tuning变换，发现Prefix
+Tuning和Adapters的公式高度相似。</p>
+<p>然后，分析不同微调方法的内部结构和结构插入形式的相似之处。下图展示了高效微调方法Adapter、Prefix
+Tuning、LoRA以及新变体（通过更换一些元素，设计了前人的工作里没有的变体）
+Parallel Adapter、 Scaled PA的结构。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324151647197.png" srcset="/img/loading.gif" lazyload
+alt="不同微调方法的对比" />
+<figcaption aria-hidden="true">不同微调方法的对比</figcaption>
+</figure>
+<p>下表展示了高效微调方法Adapter、Prefix
+Tuning、LoRA以及新变体在新增可训练参数结构形式（functional
+form）、结构插入形式（Insertion
+form）、新增结构在PLM修改的具体位置（modified
+representation）、新增结构与PLM的组合函数（composition
+function）。其中，新增可训练参数结构形式为需要学习的部分（注：Prefix
+Tuning为经过转换后的格式）；插入形式有串联或并联；模型修改的具体位置有Attention、FFN层。</p>
+<figure>
+<img
+src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324151719022.png" srcset="/img/loading.gif" lazyload
+alt="需要学习的参数部分" />
+<figcaption aria-hidden="true">需要学习的参数部分</figcaption>
+</figure>
+<h3 id="技术原理-8">5.4.2 技术原理</h3>
+<p>MAM Adapter（论文：TOWARDS A UNIFIED VIEW OF PARAMETER-EFFICIENT
+TRANSFER LEARNING），<strong>一个在Adapter、Prefix
+Tuning和LoRA之间建立联系的统一方法</strong>。</p>
+<p>作者对Adapter的放置和软提示（soft
+prompt）进行了详细的调查。得出如下结论：</p>
+<ul>
+<li>并行放置的Adapter优于顺序放置的Adapter，并且与 FFN
+并行放置的Adapter优于多头注意力（MHA）并行放置的Adapter（模型修改的位置如下图中所示，蓝色表示修改Attention、红色表示修改FFN）。</li>
+<li>软提示可以通过仅更改 0.1% 的参数来有效地修改注意力。</li>
+</ul>
+<p>然后，提出了“mix-and-match”（MAM）。 因此，最终模型 MAM Adapter 是用
+FFN 层的并行Adapter和软提示的组合。</p>
+<p>通过最终的实验结果，可以看到 MAM Adapter
+在仅用了6.7%参数量（相比全量微调）的情况下，在Xsum和MT这两个任务上达到了和全量微调相近的效果，并且该方法大大优于
+BitFit 和 Prompt Tuning，并始终优于 LoRA、Adapter 和 Prefix Tuning。</p>
+<h2 id="unipelt">5.5 UniPELT</h2>
+<h3 id="背景-9">5.5.1 背景</h3>
+<p>近年来，涌现出了许多针对语言模型的参数高效微调（PELT）方法，在模型训练参数极大的减少的情况下，模型效果与全量微调相当。但是不同的PELT方法在同一个任务上表现差异可能都非常大，这让针对特定任务选择合适的方法非常繁琐。</p>
+<p>基于此，作者提出了UniPELT方法，<strong>将不同的PELT方法作为子模块，并通过门控机制学习激活最适合当前数据或任务的方法</strong>。</p>
+<h3 id="技术原理-9">5.5.2 技术原理</h3>
+<p>UniPELT（论文： UNIPELT: A Unified Framework for Parameter-Efficient
+Language Model Tuning）是 LoRA、Prefix Tuning和Adapter的门控组合。</p>
+<p>更具体地说，LoRA 重新参数化用于 WQ 和 WV 注意力矩阵，Prefix
+Tuning应用于每一Transformer层的key和value，并在Transformer块的feed-forward子层之后添加Adapter。
+对于每个模块，门控被实现为线性层，通过GP参数控制Prefix-tuning方法的开关，GL控制LoRA方法的开关，GA控制Adapter方法的开关。可训练参数包括
+LoRA 矩阵
+WA（Down）和WB（Up），提示调优参数Pk和Pv、Adapter参数和门函数权重。即图中蓝颜色的参数为可学习的参数。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324151853173.png" srcset="/img/loading.gif" lazyload alt="UniPELT" style="zoom:50%;" /></p>
+<p>UniPELT 仅用 100 个示例就在低数据场景中展示了相对于单个 LoRA、Adapter
+和 Prefix Tuning 方法的显著改进。在更高数据的场景中，UniPELT
+的性能与这些方法相当或更好。</p>
+<p>实验还对不同 PELT 方法训练时间和推理时间进行了分析。</p>
+<ul>
+<li>从训练速度来看，UniPELT比之前微调的方法多一些，但是还在能接受的范围，</li>
+<li>从推理时间来看，BitFit方法增加的最少，UniPELT方法时间增加了27%。</li>
+<li>从训练参数量来看，LoRA，BitFit，Prefix-tuning都比较小，UniPELT参数量相对会多一些。</li>
+</ul>
+<h1 id="lora">6. lora</h1>
+<h2 id="lora-1">6.1 LoRA</h2>
+<h3 id="背景-10">6.1.1 背景</h3>
+<p>神经网络包含很多全连接层，其借助于矩阵乘法得以实现，然而，很多全连接层的权重矩阵都是满秩的。当针对特定任务进行微调后，<strong>模型中权重矩阵其实具有很低的本征秩</strong>（intrinsic
+rank），因此，论文的作者认为<strong>权重更新的那部分参数矩阵尽管随机投影到较小的子空间，仍然可以有效的学习，可以理解为针对特定的下游任务这些权重矩阵就不要求满秩</strong>。</p>
+<h3 id="技术原理-10">6.1.2 技术原理</h3>
+<p>LoRA（论文：<strong>LoRA: LOW-RANK ADAPTATION OF LARGE LANGUAGE
+MODELS</strong>），该方法的核心思想就是<strong>通过低秩分解来模拟参数的改变量，从而以极小的参数量来实现大模型的间接训练。</strong></p>
+<p>在涉及到矩阵相乘的模块，在原始的PLM旁边增加一个新的通路，通过前后两个矩阵A,B相乘，第一个矩阵A负责降维，第二个矩阵B负责升维，中间层维度为r，从而来模拟所谓的本征秩（intrinsic
+rank）。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324153113255.png" srcset="/img/loading.gif" lazyload alt="Lora基本原理和结构" style="zoom:50%;" /></p>
+<p>可训练层维度和预训练模型层维度一致为<code>d</code>，先将维度<code>d</code>通过全连接层降维至<code>r</code>，再从<code>r</code>通过全连接层映射回<code>d</code>维度，其中，<code>r&lt;&lt;d</code>，r是矩阵的秩，这样矩阵计算就从<code>d x d</code>变为<code>d x r + r x d</code>，参数量减少很多。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324153159299.png" srcset="/img/loading.gif" lazyload alt="Lora微调的基本结构" style="zoom:33%;" /></p>
+<p>在下游任务训练时，固定模型的其他参数，只优化新增的两个矩阵的权重参数，将PLM跟新增的通路两部分的结果加起来作为最终的结果（两边通路的输入跟输出维度是一致的），即<code>h=Wx+BAx</code>。第一个矩阵的A的权重参数会通过高斯函数初始化，而第二个矩阵的B的权重参数则会初始化为零矩阵，这样能保证训练开始时新增的通路BA=0从而对模型结果没有影响。</p>
+<p><span class="math display">\[
+h=W_{0} x+\Delta W x=W_{0} x+B A x
+\]</span></p>
+<p>在推理时，将左右两部分的结果加到一起即可，<code>h=Wx+BAx=(W+BA)x</code>，所以只要将训练完成的矩阵乘积<code>BA</code>跟原本的权重矩阵<code>W</code>加到一起作为新权重参数替换原本PLM的W即可，对于推理来说，不会增加额外的计算资源。</p>
+<p>此外，Transformer的权重矩阵包括Attention模块里用于计算<code>query</code>,
+<code>key</code>,
+<code>value</code>的<code>Wq</code>，<code>Wk</code>，<code>Wv</code>以及多头attention的<code>Wo</code>,以及MLP层的权重矩阵，LoRA只应用于Attention模块中的4种权重矩阵，而且通过消融实验发现同时调整
+Wq 和 Wv 会产生最佳结果。</p>
+<p>实验还发现，保证权重矩阵的种类的数量比起增加隐藏层维度r更为重要，增加r并不一定能覆盖更加有意义的子空间。</p>
+<h2 id="adalora">6.2 AdaLoRA</h2>
+<h3 id="背景-11">6.2.1 背景</h3>
+<p>在NLP领域，对于下游任务进行大型预训练语言模型的微调已经成为一种重要的做法。一般而言，我们会采用对原有的预训练模型进行全量微调的方法来适配下游任务，但这种方法存在两个问题。</p>
+<ul>
+<li><strong>训练阶段</strong>。对于预训练模型进行微调的时候，为了更新权重参数，需要大量的显存来存储参数的梯度和优化器信息，在当今预训练模型的参数变得越来越大的情况下，针对下游任务微调门槛变得越来越高。</li>
+<li><strong>推理阶段</strong>。由于我们训练的时候是对于模型参数进行全量的更新，所以多个下游任务需要为每个任务维护一个大型模型的独立副本，这样就导致我们在实际应用的时候浪费了不必要的存储。</li>
+</ul>
+<p>为了解决这些问题，研究者提出了两个主要研究方向，以减少微调参数的数量，同时保持甚至提高预训练语言模型的性能。</p>
+<ul>
+<li><strong>方向一：添加小型网络模块</strong>：将小型网络模块添加到PLMs中，保持基础模型保持不变的情况下仅针对每个任务微调这些模块，可以用于所有任务。这样，只需引入和更新少量任务特定的参数，就可以适配下游的任务，大大提高了预训练模型的实用性。如：Adapter
+tuning、Prefix tuning、Prompt
+Tuning等，这类方法虽然大大减少了内存消耗。但是这些方法存在一些问题，比如：Adapter
+tuning引入了推理延时；Prefix tuning或Prompt
+tuning直接优化Prefix和Prompt是非单调的，比较难收敛，并且消耗了输入的token。</li>
+<li><strong>方向二：下游任务增量更新</strong>：对预训练权重的增量更新进行建模，而无需修改模型架构，即W=W0+△W。比如：Diff
+pruning、LoRA等，
+此类方法可以达到与完全微调几乎相当的性能，但是也存在一些问题，比如：Diff
+pruning需要底层实现来加速非结构化稀疏矩阵的计算，不能直接使用现有的框架，训练过程中需要存储完整的∆W矩阵，相比于全量微调并没有降低计算成本。
+LoRA则需要预先指定每个增量矩阵的本征秩 r
+相同，忽略了在微调预训练模型时，权重矩阵的重要性在不同模块和层之间存在显著差异，并且只训练了Attention，没有训练FFN，事实上FFN更重要。</li>
+</ul>
+<p>基于以上问题进行总结：</p>
+<ul>
+<li>第一，我们不能预先指定矩阵的秩，需要动态更新增量矩阵的R，因为权重矩阵的重要性在不同模块和层之间存在显著差异。</li>
+<li>第二，需要找到更加重要的矩阵，分配更多的参数，裁剪不重要的矩阵。找到重要的矩阵，可以提升模型效果；而裁剪不重要的矩阵，可以降低参数计算量，降低模型效果差的风险。</li>
+</ul>
+<p>为了弥补这一差距，作者提出了AdaLoRA，它根据权重矩阵的重要性得分，在权重矩阵之间自适应地分配参数预算。</p>
+<h3 id="技术原理-11">6.2.2 技术原理</h3>
+<p>AdaLoRA（论文：<strong>ADAPTIVE BUDGET ALLOCATION FOR
+PARAMETEREFFICIENT
+FINE-TUNING</strong>），是对LoRA的一种改进，它根据<strong>重要性评分动态分配参数预算给权重矩阵</strong>。具体做法如下：</p>
+<ul>
+<li><strong>调整增量矩分配</strong>。AdaLoRA将关键的增量矩阵分配高秩以捕捉更精细和任务特定的信息，而将较不重要的矩阵的秩降低，以防止过拟合并节省计算预算。</li>
+<li><strong>以奇异值分解的形式对增量更新进行参数化，并根据重要性指标裁剪掉不重要的奇异值，同时保留奇异向量</strong>。由于对一个大矩阵进行精确SVD分解的计算消耗非常大，这种方法通过减少它们的参数预算来加速计算，同时，保留未来恢复的可能性并稳定训练。</li>
+</ul>
+<p><span class="math display">\[
+W=W^{(0)}+\Delta=W^{(0)}+P \Lambda Q
+\]</span></p>
+<ul>
+<li><strong>在训练损失中添加了额外的惩罚项</strong>，以规范奇异矩阵P和Q的正交性，从而避免SVD的大量计算并稳定训练。</li>
+</ul>
+<p>通过实验证明，AdaLoRA
+实现了在所有预算、所有数据集上与现有方法相比，性能更好或相当的水平。
+例如，当参数预算为 0.3M 时，AdaLoRA
+在RTE数据集上，比表现最佳的基线（Baseline）高 1.8%。</p>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324153310413.png" srcset="/img/loading.gif" lazyload alt="AdaLoRA和其他算法的对比" style="zoom: 33%;" /></p>
+<h2 id="qlora">6.3 QLoRA</h2>
+<h3 id="背景-12">6.3.1 背景</h3>
+<p>微调大型语言模型 (LLM)
+是提高其性能以及添加所需或删除不需要的行为的一种非常有效的方法。然而，微调非常大的模型非常昂贵；以
+LLaMA 65B 参数模型为例，常规的 16 bit微调需要超过 780 GB 的 GPU
+内存。</p>
+<p>虽然最近的量化方法可以减少 LLM
+的内存占用，但此类技术仅适用于推理场景。</p>
+<p>基于此，作者提出了QLoRA，并首次证明了<strong>可以在不降低任何性能的情况下微调量化为
+4 bit的模型。</strong></p>
+<h3 id="技术原理-12">6.3.2 技术原理</h3>
+<p>QLoRA（论文： <strong>QLORA: Efficient Finetuning of Quantized
+LLMs</strong>），使用<strong>一种新颖的高精度技术将预训练模型量化为 4
+bit，然后添加一小组可学习的低秩适配器权重，这些权重通过量化权重的反向传播梯度进行微调</strong>。QLORA
+有一种低精度存储数据类型（4
+bit），还有一种计算数据类型（BFloat16）。实际上，这意味着无论何时使用
+QLoRA 权重张量，我们都会将张量反量化为 BFloat16，然后执行 16
+位矩阵乘法。QLoRA提出了两种技术实现高保真 4 bit微调——4 bit
+NormalFloat(NF4)
+量化和双量化。此外，还引入了分页优化器，以防止梯度检查点期间的内存峰值，从而导致内存不足的错误，这些错误在过去使得大型模型难以在单台机器上进行微调。具体说明如下：</p>
+<ul>
+<li><strong>4bit
+NormalFloat</strong>（NF4）：对于正态分布权重而言，一种信息理论上最优的新数据类型，该数据类型对正态分布数据产生比
+4 bit整数和 4bit 浮点数更好的实证结果。</li>
+<li><strong>双量化</strong>：对第一次量化后的那些常量再进行一次量化，减少存储空间。</li>
+<li><strong>分页优化器</strong>：使用NVIDIA统一内存特性，该特性可以在在GPU偶尔OOM的情况下，进行CPU和GPU之间自动分页到分页的传输，以实现无错误的
+GPU 处理。该功能的工作方式类似于 CPU
+内存和磁盘之间的常规内存分页。使用此功能为优化器状态（Optimizer）分配分页内存，然后在
+GPU 内存不足时将其自动卸载到 CPU
+内存，并在优化器更新步骤需要时将其加载回 GPU 内存。</li>
+</ul>
+<p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240324153407744.png" srcset="/img/loading.gif" lazyload alt="Qlora和其他微调方法对比" style="zoom: 50%;" /></p>
+<p>实验证明，无论是使用16bit、8bit还是4bit的适配器方法，都能够复制16bit全参数微调的基准性能。这说明，尽管量化过程中会存在性能损失，但通过适配器微调，完全可以恢复这些性能。</p>
+<h1 id="微调方法总结">7. 微调方法总结</h1>
+<h2 id="当前高效微调技术的简述">7.1
+<strong>当前高效微调技术的简述</strong></h2>
+<p>之前对一些常见的高效微调技术进行了背景介绍及技术原理剖析，下面对每一种高效微调技术的特点进行简要的总结。</p>
+<h2 id="bitfit-1">7.2 <strong>BitFit</strong></h2>
+<p>对微调机制的一种积极探索，也很简单，<strong>通过仅调整bias效果就能有不错的效果</strong>，但没有具体阐述原理，就是通过猜测加实验得到的结果。同时，作者提出一个观点：微调的过程不是让模型适应另外的数据分布，而是让模型更好的应用出本身的表征能力。</p>
+<p>特点：</p>
+<ul>
+<li>训练参数量极小（约0.1%）。</li>
+<li>在大部分任务上效果会差于LoRA、Adapter等方法。</li>
+</ul>
+<h2 id="prefix-tuning-1">7.3 <strong>Prefix Tuning</strong></h2>
+<p>在每一个Transformer层都带上一些virtual
+token作为前缀，以适应不同的任务。</p>
+<p>特点：</p>
+<ul>
+<li>前缀Token会占用序列长度，有一定的额外计算开销。</li>
+<li>Prefix Tuning的线性插值是比较复杂的。</li>
+</ul>
+<h2 id="prompt-tuning-1">7.4 <strong>Prompt Tuning</strong></h2>
+<p>该方法可以看着是Prefix
+Tuning的简化版本，针对不同的任务，仅在输入层引入virtual
+token形式的软提示（soft prompt）。</p>
+<p>特点：</p>
+<ul>
+<li>相对于Prefix
+Tuning，参与训练的参数量和改变的参数量更小，更节省显存。</li>
+<li>对一些简单的NLU
+任务还不错，但对硬序列标记任务（即序列标注）表现欠佳。</li>
+</ul>
+<h2 id="p-tuning-1">7.5 <strong>P-Tuning</strong></h2>
+<p>将Prompt转换为可以学习的Embedding层，并用MLP+LSTM的方式来对Prompt
+Embedding进行一层处理。相比Prefix Tuning，仅在输入层加入的可微的virtual
+token；另外，virtual token的位置也不一定是前缀，插入的位置是可选的。</p>
+<p>特点：</p>
+<ul>
+<li>引入一个prompt encoder（由一个双向的LSTM+两层MLP组成）来建模virtual
+token的相互依赖会收敛更快，效果更好。</li>
+</ul>
+<h2 id="p-tuning-v2-1">7.6 <strong>P-Tuning v2</strong></h2>
+<p>该方法在每一个Transformer层都加入了prompt
+token作为输入，引入多任务学习，针对不同任务采用不同的提示长度。并且回归传统的分类标签范式，而不是映射器。</p>
+<p>特点：</p>
+<ul>
+<li>解决了Prompt Tuning无法在小模型上有效提升的问题。</li>
+<li>移除了对模型效果改进较小的重参数化的编码器（如：Prefix
+Tuning中的MLP、P-Tuning中的LSTM）。</li>
+<li>对于一些复杂的硬序列标记任务（即序列标注）取得了不错的效果。</li>
+</ul>
+<h2 id="adapter-tuning-2">7.7 <strong>Adapter Tuning</strong></h2>
+<p>该方法设计了Adapter结构，并将其嵌入Transformer的结构里面，针对每一个Transformer层，增加了两个Adapter结构，在训练时，固定住原来预训练模型的参数不变，只对新增的Adapter结构和Layer
+Norm 层进行微调。</p>
+<p>特点：</p>
+<ul>
+<li>通过在Transformer层中嵌入Adapter结构，在推理时会额外增加推理时长。</li>
+</ul>
+<h2 id="adapterfusion-1">7.8 <strong>AdapterFusion</strong></h2>
+<p>一种融合多任务信息的Adapter的变体，在 Adapter
+的基础上进行优化，通过将学习过程分为两阶段来提升下游任务表现。</p>
+<h2 id="adapterdrop-1">7.9 <strong>AdapterDrop</strong></h2>
+<p>该方法在不影响任务性能的情况下，对Adapter动态高效的移除，尽可能的减少模型的参数量，提高模型在反向传播（训练）和正向传播（推理）时的效率。</p>
+<p>特点：</p>
+<ul>
+<li>通过从较低的 Transformer 层删除可变数量的Adaper来提升推理速度。
+当对多个任务执行推理时，动态地减少了运行时的计算开销，并在很大程度上保持了任务性能。</li>
+</ul>
+<h2 id="lora-2">7.10 <strong>LoRA</strong></h2>
+<p>该方法通过低秩分解来模拟参数的改变量，从而以极小的参数量来实现大模型的间接训练。</p>
+<p>特点：</p>
+<ul>
+<li>将BA加到W上可以消除推理延迟。</li>
+<li>可以通过可插拔的形式切换到不同的任务。</li>
+<li>设计的比较好，简单且效果好。</li>
+</ul>
+<h2 id="adalora-1">7.11 <strong>AdaLoRA</strong></h2>
+<p>对LoRA的一种改进，它根据重要性评分动态分配参数预算给权重矩阵，将关键的增量矩阵分配高秩以捕捉更精细和任务特定的信息，而将较不重要的矩阵的秩降低，以防止过拟合并节省计算预算。</p>
+<h2 id="qlora-1">7.12 <strong>QLoRA</strong></h2>
+<p>使用一种新颖的高精度技术将预训练模型量化为 4
+bit，然后添加一小组可学习的低秩适配器权重，这些权重通过量化权重的反向传播梯度进行微调。</p>
+<p>特点：</p>
+<ul>
+<li>使用 QLoRA
+微调模型，可以显著降低对于显存的要求。同时，模型训练的速度会慢于LoRA。</li>
+</ul>
+<h2 id="mam-adapter-1">7.13 <strong>MAM Adapter</strong></h2>
+<p>一种在 Adapter、Prefix Tuning 和 LoRA
+之间建立联系的统一方法。最终的模型 MAM Adapter 是用于 FFN 的并行 Adapter
+和 软提示的组合。</p>
+<p>特点：</p>
+<ul>
+<li>整体上来说，最终的模型MAM Adapter效果会优于单个高效微调方法。</li>
+</ul>
+<h2 id="unipelt-1">7.14 <strong>UniPELT</strong></h2>
+<p>一种将不同的PELT方法LoRA、Prefix
+Tuning和Adapter作为子模块，并通过门控机制学习激活最适合当前数据或任务的方法。</p>
+<p>特点：</p>
+<ul>
+<li>相对于LoRA，BitFit，Prefix-tuning，训练的参数量更大；同时，推理更耗时；并且，输入会占用额外的序列长度。</li>
+<li>多种 PELT 方法的混合涉及PLM
+的不同部分对模型有效性和鲁棒性都有好处</li>
+</ul>
+<h2 id="总结">7.15 <strong>总结</strong></h2>
+<p>本文针对之前介绍的几种参数高效微调方法进行了简单的概述，主要有如下几类：</p>
+<ul>
+<li>增加额外参数，如：Prefix Tuning、Prompt Tuning、Adapter
+Tuning及其变体。</li>
+<li>选取一部分参数更新，如：BitFit。</li>
+<li>引入重参数化，如：LoRA、AdaLoRA、QLoRA。</li>
+<li>混合高效微调，如：MAM Adapter、UniPELT。</li>
+</ul>
+<p>并比较了不同的高效微调方法之间的差异；同时，还指出当前大多数高效微调方法存在的一些问题并给出了最佳实践。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="category-chain-item">深度学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+      
+        <a href="/tags/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" class="print-no-link">#大语言模型</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【大语言模型】有监督微调</div>
+      <div>https://lihaibineric.github.io/2024/03/24/dl-llm-ft/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Haibin Li</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 24, 2024</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>March 24, 2024</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/03/08/dl_llm_model/" title="【大语言模型】基础模型概念">
+                        <span class="hidden-mobile">【大语言模型】基础模型概念</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
