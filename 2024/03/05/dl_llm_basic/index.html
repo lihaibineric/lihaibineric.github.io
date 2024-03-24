@@ -16,12 +16,12 @@
   <meta name="author" content="Haibin Li">
   <meta name="keywords" content="">
   
-    <meta name="description" content="深度学习&amp;LLM基础 1.Attention 1.1 讲讲对Attention的理解 Attention机制是一种在处理时序相关问题的时候常用的技术，主要用于处理序列数据。 核心思想是在处理序列数据时，网络应该更关注输入中的重要部分，而忽略不重要的部分，它通过学习不同部分的权重，将输入的序列中的重要部分显式地加权，从而使得模型可以更好地关注与输出有关的信息。 在序列建模任务中，比如机器翻">
+    <meta name="description" content="这里将分享深度学习和大语言模型的基础知识和内容 深度学习基础 训练细节 1.逻辑回归和线性回归 线性回归解决的是回归问题，逻辑回归相当于是线性回归的基础上，来解决分类问题。 线性回归(Linear Regression) \[ \begin{aligned} &amp;f_{w, b}(x)&#x3D;\sum_i w_i x_i+b\\ \end{aligned} \] 逻辑回归(Logistic Re">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【深度学习】DeepL｜LLM基础知识">
 <meta property="og:url" content="https://lihaibineric.github.io/2024/03/05/dl_llm_basic/index.html">
 <meta property="og:site_name" content="LIHAIBIN&#39;S BLOG">
-<meta property="og:description" content="深度学习&amp;LLM基础 1.Attention 1.1 讲讲对Attention的理解 Attention机制是一种在处理时序相关问题的时候常用的技术，主要用于处理序列数据。 核心思想是在处理序列数据时，网络应该更关注输入中的重要部分，而忽略不重要的部分，它通过学习不同部分的权重，将输入的序列中的重要部分显式地加权，从而使得模型可以更好地关注与输出有关的信息。 在序列建模任务中，比如机器翻">
+<meta property="og:description" content="这里将分享深度学习和大语言模型的基础知识和内容 深度学习基础 训练细节 1.逻辑回归和线性回归 线性回归解决的是回归问题，逻辑回归相当于是线性回归的基础上，来解决分类问题。 线性回归(Linear Regression) \[ \begin{aligned} &amp;f_{w, b}(x)&#x3D;\sum_i w_i x_i+b\\ \end{aligned} \] 逻辑回归(Logistic Re">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305210627099.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240305210748093.png">
@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240314113451952.png">
 <meta property="og:image" content="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240314113638944.png">
 <meta property="article:published_time" content="2024-03-05T11:56:50.000Z">
-<meta property="article:modified_time" content="2024-03-24T06:36:25.802Z">
+<meta property="article:modified_time" content="2024-03-24T08:19:29.281Z">
 <meta property="article:author" content="Haibin Li">
 <meta property="article:tag" content="深度学习">
 <meta name="twitter:card" content="summary_large_image">
@@ -214,7 +214,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          35k words
+          49k words
         
       </span>
     
@@ -225,7 +225,7 @@
         
         
         
-          290 mins
+          408 mins
         
       </span>
     
@@ -276,7 +276,93 @@
               <div class="markdown-body">
                 
                 <meta name="referrer" content="no-referrer"/>
-<h1 id="深度学习llm基础">深度学习&amp;LLM基础</h1>
+<p>这里将分享深度学习和大语言模型的基础知识和内容</p>
+<h1 id="深度学习基础">深度学习基础</h1>
+<h2 id="训练细节">训练细节</h2>
+<h3 id="逻辑回归和线性回归">1.<strong>逻辑回归和线性回归</strong></h3>
+<p><strong>线性回归解决的是回归问题，逻辑回归相当于是线性回归的基础上，来解决分类问题</strong>。</p>
+线性回归(Linear Regression) <span class="math display">\[
+\begin{aligned}
+&amp;f_{w, b}(x)=\sum_i w_i x_i+b\\
+\end{aligned}
+\]</span> 逻辑回归(Logistic Regression) $$
+<span class="math display">\[\begin{aligned}
+
+&amp;f_{w, b}(x)=\sigma\left(\sum_i w_i x_i+b\right)
+\end{aligned}\]</span>
+<p>$$ 逻辑回归可以理解为在线性回归后加了一个 <code>sigmoid</code>
+函数。将线性回归变成一个<code>0~1</code>输出的分类问题。逻辑回归本质上是一个线性回归模型，因为除去<code>sigmoid</code>映射函数关系，其他的步骤，算法都是线性回归的。可以说，逻辑回归都是以线性回归为理论支持的，只不过逻辑回归可以轻松解决
+<code>0/1</code> 分类问题。</p>
+<h3 id="深度学习模型的参数范围">2. 深度学习模型的参数范围</h3>
+<p>因为参数越小代表模型越简单，越是复杂的模型，越是尝试对所有样本进行拟合，包括异常点。这就会造成在较小的区间中产生较大的波动，这个较大的波动也会反映在这个区间的导数比较大。只有越大的参数才可能产生较大的导数。因此参数越小，模型就越简单。</p>
+<h3 id="实现参数稀疏">3. 实现参数稀疏</h3>
+<p>参数的稀疏，在一定程度上实现了特征的选择。一般而言，大部分特征对模型是没有贡献的。这些没有用的特征虽然可以减少训练集上的误差，但是对测试集的样本，反而会产生干扰。稀疏参数的引入，可以将那些无用的特征的权重置为0</p>
+<h3 id="batch-size的大小对学习率的影响">4. Batch
+size的大小对学习率的影响</h3>
+<ul>
+<li>batch-size大，学习率也可以取得大一点，而且，batch-size大通常更新次数少，所以需要更多的epoch才能让loss收敛。</li>
+<li>batch-size小，学习率应该取得小一点，取的大会发生nan（梯度爆炸了），batch-size小通常更新次数多，较少的epoch就课可以让loss收敛，但是缺点是训练过程慢。</li>
+</ul>
+<p>为什么batch-size小，学习率取的大会发生nan？
+学习率较高的情况下，直接影响到每次更新值的程度比较大，走的步伐因此也会大起来。过大的学习率会导致无法顺利地到达最低点，稍有不慎就会跳出可控制区域，此时我们将要面对的就是损失成倍增大(跨量级)</p>
+<h3 id="优化器于损失函数">5. 优化器于损失函数</h3>
+<p>优化器<code>optimizer</code>和损失函数<code>loss function</code>的区别：</p>
+<ol type="1">
+<li>优化器定义了哪些参数是要用来更新的，并且设置了更新的方式（学习率、动量、SGD等），还有一些权重衰减的设置。</li>
+<li>损失函数是用来计算损失的，也可以说损失函数是负责反向传播求导用的</li>
+</ol>
+<h3 id="训练中loss快速增大">6. 训练中loss快速增大</h3>
+<p>训练过程中发现loss快速增大应该从哪些方面考虑?</p>
+<ol type="1">
+<li>学习率过大，导致学习的过程非常不平稳导致的损失值快速增大</li>
+<li>训练的样本中存在坏数据，造成了数据的污染</li>
+</ol>
+<h3 id="梯度消失和梯度爆炸">7. 梯度消失和梯度爆炸</h3>
+<p><strong>梯度消失的原因和解决</strong></p>
+<ol type="1">
+<li><p>隐藏层的层数过多</p>
+<p>反向传播求梯度时的链式求导法则，某部分梯度小于1，则多层连乘后出现梯度消失</p></li>
+<li><p>采用了不合适的激活函数</p>
+<p>如sigmoid函数的最大梯度为1/4，这意味着隐藏层每一层的梯度均小于1（权值小于1时），出现梯度消失</p></li>
+<li><p>解决方法：1、relu激活函数，使导数衡为1 2、batch norm
+3、残差结构</p></li>
+</ol>
+<p><strong>梯度爆炸的原因和解决办法</strong></p>
+<ol type="1">
+<li>隐藏层的层数过多，某部分梯度大于1，则多层连乘后，梯度呈指数增长，产生梯度爆炸。</li>
+<li>权重初始值太大，求导时会乘上权重</li>
+<li>解决方法：1、梯度裁剪 2、权重L1/L2正则化 3、残差结构 4、batch
+norm</li>
+</ol>
+<h3 id="如何取消张量梯度">8. 如何取消张量梯度</h3>
+<p>可以选择使用torch.no_grad来将某个张量的值取消计算梯度，<strong>model.eval
+vs和torch.no_grad区别</strong>：</p>
+<ul>
+<li>model.eval():
+依然计算梯度，但是不反传；dropout层保留概率为1；batchnorm层使用全局的mean和var</li>
+<li>with torch.no_grad: 不计算梯度</li>
+</ul>
+<h3 id="dropout和batchnorm">9.Dropout和BatchNorm</h3>
+<p><strong>Dropout和Batch norm能否一起使用？</strong></p>
+<p>可以，但是只能将Dropout放在Batch
+norm之后使用。因为Dropout训练时会改变输入X的方差，从而影响Batch
+norm训练过程中统计的滑动方差值；而测试时没有Dropout，输入X的方差和训练时不一致，这就导致Batch
+norm测试时期望的方差和训练时统计的有偏差。</p>
+<h2 id="其余参考">其余参考</h2>
+<p>神经网络权重初始化 <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/kebu12345678/article/details/103084851">https://blog.csdn.net/kebu12345678/article/details/103084851</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/667048896">https://zhuanlan.zhihu.com/p/667048896</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/643560888">https://zhuanlan.zhihu.com/p/643560888</a></p>
+<p>https://zhuanlan.zhihu.com/p/599016986</p>
+<ul>
+<li><p>L1L2范数 <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_35849560/article/details/113395018">https://blog.csdn.net/weixin_35849560/article/details/113395018</a></p></li>
+<li><p>L2范数<a
+target="_blank" rel="noopener" href="https://blog.csdn.net/u010725283/article/details/79212762">https://blog.csdn.net/u010725283/article/details/79212762</a></p></li>
+</ul>
+<h1 id="llm基础">LLM基础</h1>
 <h1 id="attention">1.Attention</h1>
 <h2 id="讲讲对attention的理解"><strong>1.1
 讲讲对Attention的理解</strong></h2>
@@ -785,7 +871,74 @@ Norm结构往往更容易训练，但最终效果通常不如Post Norm</strong>�
 Norm更容易训练好理解，因为它的恒等路径更突出，但为什么它效果反而没那么好呢？这个是解释的链接：<a
 target="_blank" rel="noopener" href="https://kexue.fm/archives/9009">https://kexue.fm/archives/9009</a></p>
 <h1 id="pytorch几类优化器">4 PyTorch几类优化器</h1>
-<h2 id="batch-norm-1">4.1 <strong>Batch Norm</strong></h2>
+<h2 id="梯度下降-gradient-descent-gd">4.1 梯度下降 (Gradient Descent,
+GD):</h2>
+<ul>
+<li><p>公式表达: <span
+class="math inline">\(\theta_{t+1}=\theta_t-\alpha \nabla
+J\left(\theta_t\right)\)</span></p></li>
+<li><p>其中, <span class="math inline">\(\theta_t\)</span> 是第 <span
+class="math inline">\(t\)</span> 步的模型参数, <span
+class="math inline">\(\alpha\)</span> 是学习率, <span
+class="math inline">\(J\left(\theta_t\right)\)</span> 是损失函数, <span
+class="math inline">\(\nabla J\left(\theta_t\right)\)</span>
+是损失函数关于参数的梯度。 ## 4.2 随机梯度下降 (SGD):</p></li>
+<li><p>公式表达: <span
+class="math inline">\(\theta_{t+1}=\theta_t-\alpha \nabla
+J\left(\theta_t ; x^{(i)}, y^{(i)}\right)\)</span></p></li>
+<li><p>与梯度下降不同的是, 每次更新时只随机选取一个样本 <span
+class="math inline">\(\left(x^{(i)}, y^{(i)}\right)\)</span>
+来计算梯度。</p></li>
+<li><p><strong>优点:</strong></p>
+<p>    虽然SGD需要走很多步的样子，但是对梯度的要求很低（计算梯度快）。而对于引入噪声，大量的理论和实践工作证明，只要噪声不是特别大，SGD都能很好地收敛。应用大型数据集时，训练速度很快。比如每次从百万数据样本中，取几百个数据点，算一个SGD梯度，更新一下模型参数。相比于标准梯度下降法的遍历全部样本，每输入一个样本更新一次参数，要快得多。</p>
+<p><strong>缺点:</strong></p>
+<p>    SGD在随机选择梯度的同时会引入噪声，使得权值更新的方向不一定正确。此外，SGD也没能单独克服局部最优解的问题。
+## 4.3 带动量的梯度下降 (Momentum):</p></li>
+<li><p>公式表达: <span class="math inline">\(v_{t+1}=\beta v_t+(1-\beta)
+\nabla J\left(\theta_t\right), \theta_{t+1}=\theta_t-\alpha
+v_{t+1}\)</span></p></li>
+<li><p><span class="math inline">\(v_t\)</span> 是动量, <span
+class="math inline">\(\beta\)</span> 是动量系数。</p></li>
+<li><p>动量主要解决SGD的两个问题：一是随机梯度的方法（引入的噪声）；二是Hessian矩阵病态问题（可以理解为SGD在收敛过程中和正确梯度相比来回摆动比较大的问题）。</p>
+<p>    简单理解：由于当前权值的改变会受到上一次权值改变的影响，类似于小球向下滚动的时候带上了惯性。这样可以加快小球向下滚动的速度。
+## 4.4 自适应学习率优化器 :</p></li>
+</ul>
+<h3 id="rmsprop-root-mean-square-propagation">RMSprop (Root Mean Square
+Propagation):</h3>
+<ul>
+<li><p>公式表达: <span class="math inline">\(v_{t+1}=\beta
+v_t+(1-\beta)\left(\nabla J\left(\theta_t\right)\right)^2,
+\theta_{t+1}=\theta_t-\frac{\alpha}{\sqrt{v_{t+1}}+\epsilon} \nabla
+J\left(\theta_t\right)\)</span></p></li>
+<li><p>更新权重的时候，使用除根号的方法，可以使较大的梯度大幅度变小，而较小的梯度小幅度变小，这样就可以使较大梯度方向上的波动小下来，那么整个梯度下降的过程中摆动就会比较小，就能设置较大的learning-rate，使得学习步子变大，达到加快学习的目的。</p>
+<p>    在实际的应用中，权重W或者b往往是很多维度权重集合，就是多维的，在进行除根号操作中，会将其中大的维度的梯度大幅降低，不是说权重W变化趋势一样。</p></li>
+</ul>
+<h3 id="adam-adaptive-moment-estimation">Adam (Adaptive Moment
+Estimation):</h3>
+<ul>
+<li><p>公式表达: <span class="math inline">\(m_{t+1}=\beta_1
+m_t+\left(1-\beta_1\right) \nabla J\left(\theta_t\right),
+v_{t+1}=\beta_2 v_t+\left(1-\beta_2\right)\left(\nabla
+J\left(\theta_t\right)\right)^2\)</span>, <span
+class="math inline">\(\theta_{t+1}=\theta_t-\frac{\alpha}{\sqrt{v_{t+1}}+\epsilon}
+\frac{m_{t+1}}{1-\beta_1^{t+1}}\)</span></p></li>
+<li><p>在这两种算法中, <span class="math inline">\(v_t\)</span> 和 <span
+class="math inline">\(m_t\)</span>
+分别是平方梯度的指数移动平均和梯度的指数移动平均。 <span
+class="math inline">\(\beta_1\)</span> 和 <span
+class="math inline">\(\beta_2\)</span>是动量和梯度平方的衰减率。</p></li>
+<li><p>Adam的优点主要在于：</p>
+<ul>
+<li>考虑历史步中的梯度更新信息，能够降低梯度更新噪声。</li>
+<li>此外经过偏差校正后，每一次迭代学习率都有个确定范围，使得参数比较平稳。</li>
+</ul>
+<p>但是Adam也有其自身问题：可能会对前期出现的特征过拟合，后期才出现的特征很难纠正前期的拟合效果。二者似乎都没法很好避免局部最优问题。</p></li>
+</ul>
+<p>这些优化器之间的区别主要体现在对梯度的处理方式上,
+以及对学习率的自适应调整。例如,
+动量优化器可以加速收玫并帮助逃离局部最优点,
+而自适应学习率优化器则可以根据梯度情况动态调整学习率,
+适应不同参数的更新速度。</p>
 <h1 id="位置编码">5.位置编码</h1>
 <h2 id="绝对位置编码">5.1 绝对位置编码</h2>
 <p>不同于RNN、CNN等模型，对于Transformer模型来说，位置编码的加入是必不可少的，因为<strong>纯粹的Attention模块是无法捕捉输入顺序的，即无法区分不同位置的Token</strong>。为此我们大体有两个选择：</p>
@@ -1526,6 +1679,47 @@ src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240314113741425
 alt="进制转换的示意图" />
 <figcaption aria-hidden="true">进制转换的示意图</figcaption>
 </figure>
+<h1 id="其他文章参考">其他文章参考</h1>
+<p>深度学习八股文，这里将会收集深度学习中的基本概念和常见的问题，以下是主要的参考文章</p>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/560482252">https://zhuanlan.zhihu.com/p/560482252</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42693876/article/details/120345924">https://blog.csdn.net/weixin_42693876/article/details/120345924</a></li>
+<li>[https://zhuanlan.zhihu.com/p/667048896</li>
+</ul>
+<p>LLAMA2结构<a
+target="_blank" rel="noopener" href="https://blog.csdn.net/sikh_0529/article/details/134375318">https://blog.csdn.net/sikh_0529/article/details/134375318</a></p>
+<p>旋转位置嵌入<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/zm/art/647109286?source_id=1005">https://www.zhihu.com/tardis/zm/art/647109286?source_id=1005</a></p>
+<p>bert模型细节 <a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/534763354">https://www.zhihu.com/question/534763354</a></p>
+<p>为什么Bert三个embedding可以相加 <a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/374835153/answer/1080315948">https://www.zhihu.com/question/374835153/answer/1080315948</a></p>
+<p>Qlora <a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/618894919">https://zhuanlan.zhihu.com/p/618894919</a></p>
+<p>RLHF <a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/631238431">https://zhuanlan.zhihu.com/p/631238431</a></p>
+<p>LLAMA2 colabhttps://zhuanlan.zhihu.com/p/652588148</p>
+<p>LLAMA2+QLora微调大模型https://www.bilibili.com/video/BV1594y1y76m/?spm_id_from=333.337.search-card.all.click&amp;vd_source=9710fe8f4dbfeb6bd0b7202815b341c2</p>
+<p>fine-tuning
+llama2https://ukey.co/blog/finetune-llama-2-peft-qlora-huggingface/</p>
+<p>fine-tuning Llama 2 with PEFT's
+QLoRa[https://ukey.co/blog/finetune-llama-2-peft-qlora-huggingface/](</p>
+<h1 id="基础代码">基础代码</h1>
+<h2 id="pytorch实现基础网络">PyTorch实现基础网络</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.optim <span class="hljs-keyword">as</span> optim<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BasicNet</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim=<span class="hljs-number">784</span>, hidden_dim1=<span class="hljs-number">256</span>, hidden_dim2=<span class="hljs-number">128</span>, output_dim=<span class="hljs-number">10</span></span>):<br>        <span class="hljs-built_in">super</span>(BasicNet, self).__init__()<br>        self.fc1 = nn.Linear(input_dim, hidden_dim1)<br>        self.fc2 = nn.Linear(hidden_dim1, hidden_dim2)<br>        self.fc3 = nn.Linear(hidden_dim2, output_dim)<br>        self.relu = nn.ReLU()<br>        self.batchnorm1 = nn.BatchNorm1d(hidden_dim1)<br>        self.batchnorm2 = nn.BatchNorm1d(hidden_dim2)<br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = self.relu(self.batchnorm1(self.fc1(x)))<br>        x = self.relu(self.batchnorm2(self.fc2(x)))<br>        x = self.fc3(x)<br>        <span class="hljs-keyword">return</span> x<br><br><span class="hljs-comment"># 创建模型</span><br>model = BasicNet()<br><br><span class="hljs-comment"># 定义损失函数</span><br>criterion = nn.CrossEntropyLoss()<br><br><span class="hljs-comment"># 定义优化器</span><br>optimizer = optim.Adam(model.parameters(), lr=<span class="hljs-number">0.001</span>)<br><br><span class="hljs-comment"># 训练模型</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params">model, train_loader, criterion, optimizer, num_epochs=<span class="hljs-number">5</span></span>):<br>    model.train()<br>    <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_epochs):<br>        running_loss = <span class="hljs-number">0.0</span><br>        <span class="hljs-keyword">for</span> i, (inputs, labels) <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(train_loader):<br>            optimizer.zero_grad()<br>            outputs = model(inputs)<br>            loss = criterion(outputs, labels)<br>            loss.backward()<br>            optimizer.step()<br>            running_loss += loss.item()<br>            <span class="hljs-keyword">if</span> (i+<span class="hljs-number">1</span>) % <span class="hljs-number">100</span> == <span class="hljs-number">0</span>:<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;Epoch [<span class="hljs-subst">&#123;epoch+<span class="hljs-number">1</span>&#125;</span>/<span class="hljs-subst">&#123;num_epochs&#125;</span>], Step [<span class="hljs-subst">&#123;i+<span class="hljs-number">1</span>&#125;</span>/<span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(train_loader)&#125;</span>], Loss: <span class="hljs-subst">&#123;running_loss/<span class="hljs-number">100</span>:<span class="hljs-number">.4</span>f&#125;</span>&#x27;</span>)<br>                running_loss = <span class="hljs-number">0.0</span><br><br><span class="hljs-comment"># 保存模型</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">save_model</span>(<span class="hljs-params">model, filepath</span>):<br>    torch.save(model.state_dict(), filepath)<br><br><span class="hljs-comment"># 加载模型</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">load_model</span>(<span class="hljs-params">model, filepath</span>):<br>    model.load_state_dict(torch.load(filepath))<br>    model.<span class="hljs-built_in">eval</span>()  <span class="hljs-comment"># 设置为评估模式</span><br><br><span class="hljs-comment"># 示例数据加载</span><br><span class="hljs-comment"># train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True)</span><br><br><span class="hljs-comment"># 示例训练过程</span><br><span class="hljs-comment"># train(model, train_loader, criterion, optimizer)</span><br><br><span class="hljs-comment"># 示例模型保存</span><br><span class="hljs-comment"># save_model(model, &#x27;model.pth&#x27;)</span><br><br><span class="hljs-comment"># 示例模型加载</span><br><span class="hljs-comment"># loaded_model = BasicNet()</span><br><span class="hljs-comment"># load_model(loaded_model, &#x27;model.pth&#x27;)</span><br><br></code></pre></td></tr></table></figure>
+<h2 id="batch-norm代码实现">Batch Norm代码实现</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyBN</span>:<br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, momentum=<span class="hljs-number">0.01</span>, eps=<span class="hljs-number">1e-5</span>, feat_dim=<span class="hljs-number">2</span></span>):<br>    self._running_mean = np.zeros(shape = (feat_dim,))<br>    self._running_var = np.ones(shape = (fear_dim,))<br>    self._momentum = momentum<br>    <span class="hljs-comment">#防止分母计算为0</span><br>    self._eps = eps<br>    <br>    <span class="hljs-comment">#对应batch norm中需要更新beta 和 gamma， 采用pytorch文档中的初始化</span><br>    self._beta = np.zeros(shape=(feat_dim,))<br>    self._gamma = np.ones(shape=(feat_dim,))<br>    <br>    <br>   <span class="hljs-keyword">def</span> <span class="hljs-title function_">batch_norm</span>(<span class="hljs-params">self, x</span>):<br>    <span class="hljs-keyword">if</span> self.training:<br>      x_mean = x.mean(axis=<span class="hljs-number">0</span>)<br>      x_var = x.var(axis=<span class="hljs-number">0</span>)<br>      <span class="hljs-comment">#对应running_mean的更新公式</span><br>      self._running_mean = (<span class="hljs-number">1</span>-self._momentum)*x_mean +self._momentum*self._running_mean<br>      self._running_var = (<span class="hljs-number">1</span>-self._momentum)*x_var + self._momentum*self._running_var<br>      <span class="hljs-comment">#对应论文中计算BN公式</span><br>      x_hat = (x-x_mean)/np.sqrt(x_var+self._eps)<br>    <span class="hljs-keyword">else</span>:<br>      x_hat = (x-self._running_mean)/np.sqrt(self._running_var+self._eps)<br>    <span class="hljs-keyword">return</span> self._gamma*x_hat + self._beta<br></code></pre></td></tr></table></figure>
+<h2 id="pytorch实现attention">PyTorch实现Attention</h2>
+<p>自注意力机制的实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> math <span class="hljs-keyword">import</span> sqrt<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SelfAttention</span>(nn.Module):<br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, dim_in, dim_k, dim_v</span>):<br>    <span class="hljs-built_in">super</span>(SelfAttention, self).__init__()<br>    self.dim_in = dim_in<br>    self.dim_k = dim_k<br>    self.dim_v = dim_v<br>    self.linear_q = nn.Linear(dim_in, dim_k, bias=<span class="hljs-literal">False</span>)<br>    self.linear_k = nn.Linear(dim_in, dim_k, bias=<span class="hljs-literal">False</span>)<br>    self.linear_v = nn.Linear(dim_in, dim_v, bias=<span class="hljs-literal">False</span>)<br>    self._norm_fact = <span class="hljs-number">1</span>/sqrt(dim_k)<br>    <br>    <br>   <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>    batch, n, dim_in = x.shape<br>    <span class="hljs-keyword">assert</span> dim_in == self.dim_in<br>    <br>    q = self.linear_q(x) <span class="hljs-comment">#batch, n, dim_k</span><br>    k = self.linear_k(x)<br>    v = self.linear_v(x)<br>    <br>    dist = torch.bmm(q, k.transpose(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>))* self._norm_fact <span class="hljs-comment">#batch, n, n</span><br>    dist = torch.softmax(dist, dim=-<span class="hljs-number">1</span>)<br>    <br>    att = torch.bmm(dist, v)<br>    <span class="hljs-keyword">return</span> att<br>    <br></code></pre></td></tr></table></figure>
+<p>多头注意力机制的实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> math <span class="hljs-keyword">import</span> sqrt<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MultiHeadAttention</span>(nn.Module):<br>  <span class="hljs-comment">#dim_in input dimention</span><br>  <span class="hljs-comment">#dim_k kq dimention</span><br>  <span class="hljs-comment">#dim_v value dimention</span><br>  <span class="hljs-comment">#num_heads number of heads</span><br>  <br>  <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, dim_in, dim_k, dim_v, num_heads=<span class="hljs-number">8</span></span>):<br>    <span class="hljs-built_in">super</span>(MultiHeadAttention, self).__init__()<br>    <span class="hljs-keyword">assert</span> dim_k% num_heads ==<span class="hljs-number">0</span> <span class="hljs-keyword">and</span> dim_v% num_heads ==<span class="hljs-number">0</span><br>    <br>    self.dim_in = dim_in<br>    self.dim_k = dim_k<br>    self.dim_v = dim_v<br>    self.num_heads = num_heads<br>    self.linear_q = nn.Linear(dim_in, dim_k, bias==<span class="hljs-literal">False</span>)<br>    self.linear_k = nn.Linear(dim_in, dim_k, bias==<span class="hljs-literal">False</span>)<br>    self.linear_v = nn.Linear(dim_in, dim_v, bias==<span class="hljs-literal">False</span>)<br>    self._norm_fact = <span class="hljs-number">1</span>/sqrt(dim_k//num_heads)<br>    <br>   <span class="hljs-keyword">def</span> <span class="hljs-title function_">forwards</span>(<span class="hljs-params">self, x</span>):<br>    <span class="hljs-comment"># x: tensor of shape(batch, n, dim_in)</span><br>    batch, n, dim_in = x.shape<br>    <span class="hljs-keyword">assert</span> dim_in = self.dim_in<br>    <br>    nh = self.num_heads<br>    dk = self.dim_k // nh<br>    dv = self.dim_v // nh<br>    <br>    q = self.linear_q(x).reshape(batch, n, nh, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    k = self.linear_k(x).reshape(batch, n, nh, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    v = self.linear_v(x).reshape(batch, n, nk, dk).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)<br>    <br>    dist = torch.matmul(q, k.transpose(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>))*self._norm_fact<br>    dist = torch.softmax(dist, dim=-<span class="hljs-number">1</span>)<br>    <br>    att = torch.matmul(dist, v)<br>    att = att.transpose(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>).reshape(batch, n, self.dim_v)<br></code></pre></td></tr></table></figure>
+<h3 id="pytorch实现dqn">PyTorch实现DQN</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.optim <span class="hljs-keyword">as</span> optim<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DQN</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim, output_dim</span>):<br>        <span class="hljs-built_in">super</span>(DQN, self).__init__()<br>        self.fc1 = nn.Linear(input_dim, <span class="hljs-number">128</span>)<br>        self.fc2 = nn.Linear(<span class="hljs-number">128</span>, <span class="hljs-number">128</span>)<br>        self.fc3 = nn.Linear(<span class="hljs-number">128</span>, output_dim)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = torch.relu(self.fc1(x))<br>        x = torch.relu(self.fc2(x))<br>        x = self.fc3(x)<br>        <span class="hljs-keyword">return</span> x<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DQNAgent</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim, output_dim, gamma=<span class="hljs-number">0.99</span>, lr=<span class="hljs-number">0.001</span></span>):<br>        self.input_dim = input_dim<br>        self.output_dim = output_dim<br>        self.gamma = gamma<br>        self.lr = lr<br>        self.device = torch.device(<span class="hljs-string">&quot;cuda&quot;</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;cpu&quot;</span>)<br>        self.policy_net = DQN(input_dim, output_dim).to(self.device)<br>        self.target_net = DQN(input_dim, output_dim).to(self.device)<br>        self.target_net.load_state_dict(self.policy_net.state_dict())<br>        self.target_net.<span class="hljs-built_in">eval</span>()<br>        self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)<br>        self.loss_fn = nn.MSELoss()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">select_action</span>(<span class="hljs-params">self, state, epsilon</span>):<br>        <span class="hljs-keyword">if</span> np.random.rand() &lt; epsilon:<br>            <span class="hljs-keyword">return</span> np.random.randint(self.output_dim)<br>        state = torch.FloatTensor(state).unsqueeze(<span class="hljs-number">0</span>).to(self.device)<br>        <span class="hljs-keyword">with</span> torch.no_grad():<br>            q_values = self.policy_net(state)<br>        <span class="hljs-keyword">return</span> q_values.<span class="hljs-built_in">max</span>(<span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].item()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params">self, replay_buffer, batch_size</span>):<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(replay_buffer) &lt; batch_size:<br>            <span class="hljs-keyword">return</span><br>        transitions = replay_buffer.sample(batch_size)<br>        batch = Transition(*<span class="hljs-built_in">zip</span>(*transitions))<br>        state_batch = torch.FloatTensor(batch.state).to(self.device)<br>        next_state_batch = torch.FloatTensor(batch.next_state).to(self.device)<br>        action_batch = torch.LongTensor(batch.action).unsqueeze(<span class="hljs-number">1</span>).to(self.device)<br>        reward_batch = torch.FloatTensor(batch.reward).unsqueeze(<span class="hljs-number">1</span>).to(self.device)<br>        done_batch = torch.FloatTensor(batch.done).unsqueeze(<span class="hljs-number">1</span>).to(self.device)<br><br>        current_q_values = self.policy_net(state_batch).gather(<span class="hljs-number">1</span>, action_batch)<br>        next_q_values = self.target_net(next_state_batch).<span class="hljs-built_in">max</span>(<span class="hljs-number">1</span>)[<span class="hljs-number">0</span>].unsqueeze(<span class="hljs-number">1</span>)<br>        target_q_values = reward_batch + (<span class="hljs-number">1</span> - done_batch) * self.gamma * next_q_values<br><br>        loss = self.loss_fn(current_q_values, target_q_values.detach())<br>        self.optimizer.zero_grad()<br>        loss.backward()<br>        self.optimizer.step()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">update_target_net</span>(<span class="hljs-params">self</span>):<br>        self.target_net.load_state_dict(self.policy_net.state_dict())<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ReplayBuffer</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, capacity</span>):<br>        self.capacity = capacity<br>        self.buffer = []<br>        self.position = <span class="hljs-number">0</span><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">push</span>(<span class="hljs-params">self, state, action, reward, next_state, done</span>):<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(self.buffer) &lt; self.capacity:<br>            self.buffer.append(<span class="hljs-literal">None</span>)<br>        self.buffer[self.position] = (state, action, reward, next_state, done)<br>        self.position = (self.position + <span class="hljs-number">1</span>) % self.capacity<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">sample</span>(<span class="hljs-params">self, batch_size</span>):<br>        <span class="hljs-keyword">return</span> random.sample(self.buffer, batch_size)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__len__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(self.buffer)<br><br>Transition = namedtuple(<span class="hljs-string">&#x27;Transition&#x27;</span>, (<span class="hljs-string">&#x27;state&#x27;</span>, <span class="hljs-string">&#x27;action&#x27;</span>, <span class="hljs-string">&#x27;reward&#x27;</span>, <span class="hljs-string">&#x27;next_state&#x27;</span>, <span class="hljs-string">&#x27;done&#x27;</span>))<br><br></code></pre></td></tr></table></figure>
+<h3 id="pytorch实现ppo">PyTorch实现PPO</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.optim <span class="hljs-keyword">as</span> optim<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ActorCritic</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim, output_dim</span>):<br>        <span class="hljs-built_in">super</span>(ActorCritic, self).__init__()<br>        self.fc1 = nn.Linear(input_dim, <span class="hljs-number">128</span>)<br>        self.fc2 = nn.Linear(<span class="hljs-number">128</span>, <span class="hljs-number">128</span>)<br>        self.fc_actor = nn.Linear(<span class="hljs-number">128</span>, output_dim)<br>        self.fc_critic = nn.Linear(<span class="hljs-number">128</span>, <span class="hljs-number">1</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = torch.relu(self.fc1(x))<br>        x = torch.relu(self.fc2(x))<br>        logits = self.fc_actor(x)<br>        value = self.fc_critic(x)<br>        <span class="hljs-keyword">return</span> logits, value<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">PPOAgent</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, input_dim, output_dim, gamma=<span class="hljs-number">0.99</span>, lr=<span class="hljs-number">0.001</span></span>):<br>        self.input_dim = input_dim<br>        self.output_dim = output_dim<br>        self.gamma = gamma<br>        self.lr = lr<br>        self.device = torch.device(<span class="hljs-string">&quot;cuda&quot;</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">&quot;cpu&quot;</span>)<br>        self.policy_net = ActorCritic(input_dim, output_dim).to(self.device)<br>        self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)<br>        self.loss_fn = nn.MSELoss()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">select_action</span>(<span class="hljs-params">self, state</span>):<br>        state = torch.FloatTensor(state).unsqueeze(<span class="hljs-number">0</span>).to(self.device)<br>        <span class="hljs-keyword">with</span> torch.no_grad():<br>            logits, _ = self.policy_net(state)<br>        action_probs = torch.softmax(logits, dim=-<span class="hljs-number">1</span>)<br>        action = np.random.choice(np.arange(self.output_dim), p=action_probs.cpu().numpy().ravel())<br>        <span class="hljs-keyword">return</span> action<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">train</span>(<span class="hljs-params">self, states, actions, rewards, next_states, dones, old_log_probs, epsilon_clip=<span class="hljs-number">0.2</span>, num_epochs=<span class="hljs-number">10</span></span>):<br>        states = torch.FloatTensor(states).to(self.device)<br>        actions = torch.LongTensor(actions).unsqueeze(-<span class="hljs-number">1</span>).to(self.device)<br>        rewards = torch.FloatTensor(rewards).unsqueeze(-<span class="hljs-number">1</span>).to(self.device)<br>        next_states = torch.FloatTensor(next_states).to(self.device)<br>        dones = torch.FloatTensor(dones).unsqueeze(-<span class="hljs-number">1</span>).to(self.device)<br>        old_log_probs = torch.FloatTensor(old_log_probs).unsqueeze(-<span class="hljs-number">1</span>).to(self.device)<br><br>        <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_epochs):<br>            logits, values = self.policy_net(states)<br>            new_log_probs = torch.log_softmax(logits, dim=-<span class="hljs-number">1</span>).gather(<span class="hljs-number">1</span>, actions)<br>            ratio = (new_log_probs - old_log_probs).exp()<br>            advantages = rewards - values.detach()<br><br>            surr1 = ratio * advantages<br>            surr2 = torch.clamp(ratio, <span class="hljs-number">1.0</span> - epsilon_clip, <span class="hljs-number">1.0</span> + epsilon_clip) * advantages<br>            actor_loss = -torch.<span class="hljs-built_in">min</span>(surr1, surr2).mean()<br><br>            critic_loss = <span class="hljs-number">0.5</span> * (rewards - values).<span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>).mean()<br><br>            loss = actor_loss + <span class="hljs-number">0.5</span> * critic_loss<br><br>            self.optimizer.zero_grad()<br>            loss.backward()<br>            self.optimizer.step()<br><br></code></pre></td></tr></table></figure>
 
                 
               </div>
