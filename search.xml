@@ -4826,6 +4826,10 @@ alt="编译错误" />
 <p><img src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20240106145218372.png" alt="错误二" style="zoom:67%;" /></p>
 <p>解决方法：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7<br></code></pre></td></tr></table></figure>
+<p>需要更新linux依赖包</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs baba">sudo apt-get update<br></code></pre></td></tr></table></figure>
+<p>如果出现无法编译的情况如：<code>subprocess-exited-with-error</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">pip install setuptools==65.5.0<br>pip install --user wheel==0.38.0<br></code></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>强化学习</category>
