@@ -7444,6 +7444,10 @@ href="https://link.zhihu.com/?target=https%3A//git-scm.com/download">https://lin
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git config --list<br>git config --global user.email <span class="hljs-built_in">test</span>@163.com<br>git config --global user.name <span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure>
 <h4 id="检查是否安装成功">检查是否安装成功</h4>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git version<br></code></pre></td></tr></table></figure>
+<h3 id="密钥连接">密钥连接</h3>
+<p>生成本地的ssh密钥连接到远端的git仓库</p>
+<p><a
+href="https://blog.csdn.net/weixin_42310154/article/details/118340458">https://blog.csdn.net/weixin_42310154/article/details/118340458</a></p>
 <h2 id="git的基本控制">Git的基本控制</h2>
 <h3 id="初始化git仓库">初始化Git仓库</h3>
 <p>当完成上述的配置之后，就能开始初始化Git仓库，进入需要创建<strong>工作区</strong>workspace的文件夹输出git初始化的操作</p>
@@ -7455,12 +7459,6 @@ href="https://link.zhihu.com/?target=https%3A//git-scm.com/download">https://lin
 graph插件</strong>来可视化git分支目录的全貌</p>
 <ul>
 <li><h5 id="在github端新建仓库">在Github端新建仓库</h5>
-<figure>
-<img
-src="https://gitee.com/lihaibineric/picgo/raw/master/pic/image-20231206215455986.png"
-alt="Github端新建仓库" />
-<figcaption aria-hidden="true">Github端新建仓库</figcaption>
-</figure>
 <p>根据需要可以设置为公有的或者是私有的，最好不要设置README.md，因为初始化的国过程可能会出现冲突，设置也没关系</p></li>
 <li><h5
 id="本地的git和远端github的连接">本地的Git和远端github的连接</h5>
@@ -7575,12 +7573,13 @@ alt="远端和本地的不同分支" />
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
 <h2 id="conda安装">Conda安装</h2>
 <h3 id="直接安装">直接安装</h3>
-<p>安装网址https://www.anaconda.com/，但是下载速度很慢</p>
+<p>安装网址<a
+href="https://www.anaconda.com/">https://www.anaconda.com/</a>，但是下载速度很慢</p>
 <h3 id="镜像安装">镜像安装</h3>
-<p>清华源网址https://mirrors.tuna.tsinghua.edu.cn/anaconda/</p>
-<p>下载速度会比较快</p>
-<p>如果觉得anacodna的包非常大，可以选择安装miniconda
-https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/</p>
+<p>清华源网址<a
+href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/">https://mirrors.tuna.tsinghua.edu.cn/anaconda/</a>下载速度会比较快</p>
+<p>如果觉得anacodna的包非常大，可以选择安装miniconda <a
+href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/">https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/</a></p>
 <h2 id="conda-常用命令">Conda 常用命令</h2>
 <h3 id="查看conda版本">查看conda版本</h3>
 <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">conda --version/ conda -V<br></code></pre></td></tr></table></figure>
