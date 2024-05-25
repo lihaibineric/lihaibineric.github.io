@@ -6881,6 +6881,10 @@ filename.zip</strong></li>
 <li>压缩文件：同理进入需要解压的文件夹的上一级 zip filename.zip</li>
 </ul></li>
 </ul>
+<h4 id="远程连接服务器配置免密">远程连接服务器配置免密</h4>
+<p><a
+href="https://zhuanlan.zhihu.com/p/350160634">https://zhuanlan.zhihu.com/p/350160634</a></p>
+<p>本质上就是在本地的计算机上<em>创建自己的</em>私钥<em>、</em>公钥，然后在服务器的.ssh文件夹中产生一个authorized_keys文件，再将本地的公钥复制进去即可</p>
 <h4 id="linux中查看系统使用情况">Linux中查看系统使用情况</h4>
 <ul>
 <li><p>Top 来显示CPU的占用情况：</p>
@@ -6984,7 +6988,7 @@ time) ；wa: IO等待时间百分比； id: 空闲时间百分比</p></li>
 <p>实时查看GPU使用情况</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">watch -n 1 nvidia-smi <br></code></pre></td></tr></table></figure>
 <p>行代码的意思是只选择指定标号GPU进行使用，执行完该行代码之后python环境无法检测到指定GPU之外的其他</p>
-<h3 id="安装nvidia驱动">安装Nvidia驱动</h3>
+<h4 id="安装nvidia驱动">安装Nvidia驱动</h4>
 <p>查看已经安装的nvdia驱动版本：<code>ls /usr/src | grep nvidia</code></p>
 <p><a
 href="https://blog.csdn.net/sinat_34686158/article/details/106845208">https://blog.csdn.net/sinat_34686158/article/details/106845208</a></p>
